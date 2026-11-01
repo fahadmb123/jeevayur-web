@@ -325,11 +325,103 @@
   color: var(--text-secondary, #A6C2B4);
 }
 
-/* 5 Programs Section (Animated Open/Close Like Treatment Cards) */
+/* 5 Programs Section (Rich Visual Showcase with Images & Details) */
 .yoga-programs-section {
   margin-bottom: clamp(60px, 7vw, 90px);
 }
 
+.yoga-programs-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+  position: relative;
+  margin-top: 36px;
+}
+
+@media (max-width: 992px) {
+  .yoga-programs-showcase-grid {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    margin: 30px auto 0;
+    gap: 20px;
+  }
+}
+
+/* Live Practice Atmosphere Gallery */
+.yoga-live-gallery-section {
+  margin: clamp(50px, 6vw, 85px) 0;
+}
+
+.yoga-live-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-top: 32px;
+}
+
+.yoga-live-gallery-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 10px 28px rgba(18, 76, 56, 0.08);
+  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
+  background-color: #172D24;
+}
+
+.yoga-live-gallery-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.yoga-live-gallery-card:hover img {
+  transform: scale(1.05);
+}
+
+.yoga-live-gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 24px 16px 14px;
+  background: linear-gradient(180deg, transparent 0%, rgba(10, 26, 18, 0.88) 100%);
+  color: #FAFBF9;
+}
+
+.yoga-live-gallery-caption h4 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #FAFBF9;
+  margin: 0 0 4px;
+}
+
+.yoga-live-gallery-caption p {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  color: #D3E5DC;
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .yoga-live-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .yoga-live-gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* Legacy Compact Grid Fallback */
 .yoga-programs-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -503,17 +595,59 @@
 @media (max-width: 900px) {
   .yoga-stats-bar {
     grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 680px) {
+  .yoga-hero {
+    padding: 100px 16px 36px;
+  }
   .yoga-hero__title {
-    font-size: 2.2rem;
+    font-size: 1.85rem;
+    line-height: 1.25;
+  }
+  .yoga-hero__tagline {
+    font-size: 0.92rem;
+  }
+  .yoga-hero__desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .yoga-hero__actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+  .yoga-hero__btn-primary,
+  .yoga-hero__btn-secondary {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 20px;
+    font-size: 0.88rem;
   }
   .yoga-stats-bar {
     grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 14px;
+  }
+  .yoga-container {
+    padding: 0 16px;
+  }
+  .yoga-section-title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+  .yoga-section-lead {
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+  .yoga-pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
   }
   .yoga-grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 }

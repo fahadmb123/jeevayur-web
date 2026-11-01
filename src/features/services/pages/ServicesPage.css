@@ -1,68 +1,947 @@
-.services-page {
+/* ==========================================================================
+   Services & Ayurvedic Treatments Showcase Page Styles
+   ========================================================================== */
+
+.services-page-shell {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color, #F8FAFC);
+  background-color: var(--bg-color, #FBFBF9);
+  display: flex;
+  flex-direction: column;
 }
 
-.faq-section {
-  padding: 80px 5% 100px;
-  background-color: var(--surface-color, #FFFFFF);
-  border-top: 1px solid var(--border-color, #E2E8F0);
+.services-page {
+  flex: 1;
+  width: 100%;
+  overflow-x: clip;
 }
 
-.faq-container {
-  max-width: 900px;
+.services-container {
+  max-width: 1260px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
-.faq-list {
+.services-container--narrow {
+  max-width: 860px;
+}
+
+/* ==========================================================================
+   1. HERO HEADER
+   ========================================================================== */
+.services-page-hero {
+  padding: clamp(120px, 14vw, 160px) 24px clamp(44px, 6vw, 68px);
+  background: linear-gradient(180deg, rgba(27, 107, 80, 0.08) 0%, rgba(201, 141, 59, 0.05) 50%, transparent 100%);
+  text-align: center;
+  position: relative;
+}
+
+.services-hero-container {
+  max-width: 880px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.services-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(27, 107, 80, 0.1);
+  border: 1px solid rgba(27, 107, 80, 0.25);
+  border-radius: 999px;
+  color: var(--primary-green, #1B6B50);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+
+.badge-sparkle {
+  color: var(--accent-gold, #C98D3B);
+}
+
+.services-hero-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px;
+}
+
+.services-hero-desc {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  line-height: 1.7;
+  color: var(--text-secondary, #485E53);
+  max-width: 720px;
+  margin: 0 0 28px;
+}
+
+.services-hero-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.services-hero-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  color: #17833e;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.services-hero-whatsapp-btn:hover {
+  background: #25D366;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+}
+
+/* ==========================================================================
+   2. FILTER & SEARCH CONTROL STRIP
+   ========================================================================== */
+.services-filter-section {
+  padding: 10px 0 32px;
+}
+
+.services-control-bar {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 48px 0 64px;
 }
 
-.faq-card {
-  padding: 24px 28px;
+/* Category Pills Bar */
+.services-category-tabs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 2px 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.services-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.services-category-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.16));
+  color: var(--text-secondary, #485E53);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.services-category-pill:hover {
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+}
+
+.services-category-pill.is-active {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(27, 107, 80, 0.25);
+}
+
+.services-pill-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  color: inherit;
+}
+
+/* Search Box */
+.services-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 520px;
+}
+
+.services-search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-light, #7E9387);
+  pointer-events: none;
+}
+
+.services-search-input {
+  width: 100%;
+  padding: 11px 40px 11px 40px;
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.18));
+  border-radius: 12px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  color: var(--text-primary, #14241C);
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.services-search-input:focus {
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.12);
+}
+
+.services-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  color: var(--text-light, #7E9387);
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   3. TREATMENTS CATALOG GRID (Images & Details)
+   ========================================================================== */
+.services-catalog-section {
+  padding: 10px 0 70px;
+}
+
+.services-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 28px;
+}
+
+/* Individual Card */
+.treatment-detail-card {
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
+  border-radius: 22px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 10px 30px rgba(18, 76, 56, 0.05);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+
+.treatment-detail-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 141, 59, 0.45);
+  box-shadow: 0 20px 48px rgba(18, 76, 56, 0.12);
+}
+
+/* Media Container */
+.treatment-detail-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 280px;
+  overflow: hidden;
+  background-color: #284436;
+}
+
+.treatment-detail-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.treatment-detail-card:hover .treatment-detail-card__img {
+  transform: scale(1.04);
+}
+
+.treatment-detail-card__gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.25) 0%, transparent 40%, rgba(14, 30, 22, 0.65) 100%);
+  pointer-events: none;
+}
+
+.treatment-detail-card__category-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(14, 34, 25, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  color: #FAFBF9;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(8px);
+  text-transform: uppercase;
+  z-index: 2;
+}
+
+.treatment-detail-card__duration-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+  color: var(--primary-green, #1B6B50);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+/* Body */
+.treatment-detail-card__body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.treatment-detail-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  line-height: 1.25;
+  margin: 0 0 10px;
+}
+
+.treatment-detail-card__desc {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.92rem;
+  line-height: 1.62;
+  color: var(--text-secondary, #485E53);
+  margin: 0 0 18px;
+}
+
+/* Benefits Checklist */
+.treatment-detail-card__benefits-wrap {
+  background: rgba(27, 107, 80, 0.04);
+  border: 1px solid rgba(27, 107, 80, 0.08);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 22px;
+}
+
+.treatment-detail-card__benefits-title {
+  display: block;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary-green, #1B6B50);
+  margin-bottom: 8px;
+}
+
+.treatment-detail-card__benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.treatment-detail-card__benefits-list li {
+  display: flex;
+  align-items: flex-start;
   gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text-secondary, #3C5146);
+  line-height: 1.45;
 }
 
-.faq-card__question {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--text-primary, #0F172A);
+.treatment-detail-card__check-icon {
+  color: var(--primary-green, #1B6B50);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Actions Row */
+.treatment-detail-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 8px;
+  flex-wrap: wrap;
+}
+
+.treatment-detail-btn-whatsapp {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 11px 16px;
+  background: rgba(37, 211, 102, 0.12);
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  color: #17833e;
+  border-radius: 10px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-height: 42px;
+  white-space: nowrap;
+}
+
+.treatment-detail-btn-whatsapp:hover {
+  background: #25D366;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.treatment-detail-btn-book {
+  flex: 1;
+  min-height: 42px;
+}
+
+/* ==========================================================================
+   4. CLINICAL PILLARS STRIP
+   ========================================================================== */
+.services-pillars-strip {
+  padding: 60px 0;
+  background: linear-gradient(180deg, rgba(27, 107, 80, 0.05) 0%, rgba(27, 107, 80, 0.08) 100%);
+  border-top: 1px solid rgba(27, 107, 80, 0.12);
+  border-bottom: 1px solid rgba(27, 107, 80, 0.12);
+}
+
+.services-pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.services-pillar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+}
+
+.services-pillar-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--primary-green, #1B6B50);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  box-shadow: 0 8px 20px rgba(27, 107, 80, 0.25);
+}
+
+.services-pillar-item h3 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 8px;
+}
+
+.services-pillar-item p {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--text-secondary, #485E53);
   margin: 0;
 }
 
-.faq-card__answer {
-  color: var(--text-secondary, #475569);
+/* ==========================================================================
+   5. FAQS ACCORDION
+   ========================================================================== */
+.services-faq-section {
+  padding: 80px 0 70px;
+}
+
+.services-faq-header {
+  margin-bottom: 40px;
+}
+
+.services-section-tag {
+  display: inline-block;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-gold, #C98D3B);
+  margin-bottom: 8px;
+}
+
+.services-section-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 10px;
+}
+
+.services-section-subtitle {
+  font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-secondary, #485E53);
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.services-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.services-faq-card {
+  background: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all 0.25s ease;
+}
+
+.services-faq-card.is-open {
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 8px 24px rgba(27, 107, 80, 0.08);
+}
+
+.services-faq-question-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  gap: 16px;
+}
+
+.services-faq-q-text {
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  line-height: 1.4;
+}
+
+.services-faq-chevron-wrap {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  background: rgba(27, 107, 80, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-green, #1B6B50);
+}
+
+.services-faq-chevron {
+  transition: transform 0.3s ease;
+}
+
+.services-faq-chevron.is-rotated {
+  transform: rotate(180deg);
+}
+
+.services-faq-answer-wrap {
+  overflow: hidden;
+}
+
+.services-faq-answer-text {
+  padding: 0 20px 18px;
+  padding-top: 10px;
+  margin: 0;
+  font-size: 0.92rem;
   line-height: 1.7;
+  color: var(--text-secondary, #485E53);
+  border-top: 1px solid rgba(27, 107, 80, 0.08);
+}
+
+/* ==========================================================================
+   6. BOTTOM CTA BANNER
+   ========================================================================== */
+.services-bottom-cta {
+  padding: 0 0 90px;
+}
+
+.services-cta-card {
+  background: linear-gradient(135deg, #164E3A 0%, #113C2D 100%);
+  border-radius: 26px;
+  padding: clamp(34px, 5vw, 56px);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 36px;
+  box-shadow: 0 20px 48px rgba(10, 46, 32, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.services-cta-content {
+  flex: 1;
+  max-width: 680px;
+}
+
+.services-cta-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(201, 141, 59, 0.2);
+  border: 1px solid rgba(201, 141, 59, 0.45);
+  border-radius: 999px;
+  color: #F8D8A0;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.services-cta-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  font-weight: 700;
+  color: #FAFBF9;
+  line-height: 1.25;
+  margin: 0 0 12px;
+}
+
+.services-cta-desc {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: #D3E5DC;
   margin: 0;
 }
 
-.services-cta {
-  background-color: var(--surface-secondary, #F8FAFC);
-  border: 1px solid var(--border-color, #E2E8F0);
-  border-radius: 16px;
-  padding: 48px 24px;
+.services-cta-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 240px;
+}
+
+.services-cta-whatsapp-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #25D366;
+  color: #ffffff;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  transition: all 0.25s ease;
+}
+
+.services-cta-whatsapp-link:hover {
+  background: #20BD5A;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+
+/* Empty & Loading States */
+.services-loading-state,
+.services-empty-state {
+  text-align: center;
+  padding: 60px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
 }
 
-.services-cta h3 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--text-primary, #0F172A);
-  margin: 0;
+.services-empty-icon {
+  color: var(--accent-gold, #C98D3B);
 }
 
-.services-cta p {
-  color: var(--text-secondary, #475569);
-  font-size: 1rem;
-  margin-bottom: 16px;
+.services-reset-btn {
+  margin-top: 8px;
+  padding: 9px 20px;
+  border-radius: 999px;
+  background: var(--primary-green, #1B6B50);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   7. DARK MODE ACCOMMODATIONS
+   ========================================================================== */
+[data-theme='dark'] .services-page-shell {
+  background-color: var(--bg-color, #0A140F);
+}
+
+[data-theme='dark'] .services-hero-title,
+[data-theme='dark'] .treatment-detail-card__title,
+[data-theme='dark'] .services-pillar-item h3,
+[data-theme='dark'] .services-section-title,
+[data-theme='dark'] .services-faq-q-text {
+  color: #F2F7F4;
+}
+
+[data-theme='dark'] .services-hero-desc,
+[data-theme='dark'] .treatment-detail-card__desc,
+[data-theme='dark'] .services-pillar-item p,
+[data-theme='dark'] .services-section-subtitle,
+[data-theme='dark'] .services-faq-answer-text {
+  color: #A6C2B4;
+}
+
+[data-theme='dark'] .treatment-detail-card,
+[data-theme='dark'] .services-category-pill,
+[data-theme='dark'] .services-search-input,
+[data-theme='dark'] .services-faq-card {
+  background-color: var(--surface-color, #11221B);
+  border-color: rgba(65, 186, 145, 0.16);
+}
+
+[data-theme='dark'] .treatment-detail-card__benefits-wrap {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='dark'] .treatment-detail-card__benefits-list li {
+  color: #C3D8CE;
+}
+
+[data-theme='dark'] .services-pillars-strip {
+  background: rgba(14, 28, 22, 0.6);
+  border-color: rgba(65, 186, 145, 0.15);
+}
+
+/* ==========================================================================
+   8. RESPONSIVE BREAKPOINTS (Mobile-First Optimization)
+   ========================================================================== */
+@media (max-width: 992px) {
+  .services-detail-grid {
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .services-pillars-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .services-cta-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 36px 24px;
+  }
+
+  .services-cta-actions {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .services-page-hero {
+    padding: 100px 16px 36px;
+  }
+
+  .services-hero-badge {
+    padding: 4px 12px;
+    font-size: 0.68rem;
+    margin-bottom: 12px;
+  }
+
+  .services-hero-title {
+    font-size: 1.85rem;
+    margin-bottom: 12px;
+  }
+
+  .services-hero-desc {
+    font-size: 0.88rem;
+    line-height: 1.55;
+    margin-bottom: 22px;
+  }
+
+  .services-hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .services-hero-actions button,
+  .services-hero-whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 20px;
+    font-size: 0.88rem;
+  }
+
+  .services-container {
+    padding: 0 16px;
+  }
+
+  .services-filter-section {
+    padding: 0 0 24px;
+  }
+
+  .services-category-tabs {
+    gap: 8px;
+    padding-bottom: 6px;
+  }
+
+  .services-category-pill {
+    padding: 7px 13px;
+    font-size: 0.78rem;
+  }
+
+  .services-search-box {
+    max-width: 100%;
+  }
+
+  .services-search-input {
+    padding: 9px 36px 9px 36px;
+    font-size: 0.84rem;
+  }
+
+  .services-detail-grid {
+    gap: 18px;
+  }
+
+  .treatment-detail-card {
+    border-radius: 16px;
+  }
+
+  .treatment-detail-card__media {
+    aspect-ratio: 16 / 10;
+    max-height: 210px;
+  }
+
+  .treatment-detail-card__body {
+    padding: 16px 14px;
+  }
+
+  .treatment-detail-card__title {
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+  }
+
+  .treatment-detail-card__desc {
+    font-size: 0.84rem;
+    line-height: 1.52;
+    margin-bottom: 14px;
+  }
+
+  .treatment-detail-card__benefits-wrap {
+    padding: 12px 12px;
+    margin-bottom: 16px;
+  }
+
+  .treatment-detail-card__benefits-title {
+    font-size: 0.72rem;
+  }
+
+  .treatment-detail-card__benefits-list li {
+    font-size: 0.78rem;
+  }
+
+  .treatment-detail-card__actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+
+  .treatment-detail-btn-whatsapp,
+  .treatment-detail-btn-book,
+  .treatment-detail-card__actions button {
+    width: 100% !important;
+    justify-content: center;
+    font-size: 0.84rem;
+    padding: 10px 14px;
+  }
+
+  .services-faq-section {
+    padding: 50px 0 40px;
+  }
+
+  .services-faq-question-btn {
+    padding: 14px 16px;
+  }
+
+  .services-faq-q-text {
+    font-size: 0.92rem;
+  }
+
+  .services-faq-answer-text {
+    padding: 0 16px 14px;
+    font-size: 0.84rem;
+  }
+
+  .services-bottom-cta {
+    padding-bottom: 50px;
+  }
+
+  .services-cta-card {
+    padding: 24px 16px;
+    border-radius: 18px;
+  }
+
+  .services-cta-title {
+    font-size: 1.35rem;
+  }
+
+  .services-cta-desc {
+    font-size: 0.84rem;
+  }
 }

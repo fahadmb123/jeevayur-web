@@ -17,7 +17,7 @@ import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaClassCard } from '../components/YogaClassCard';
 import { YogaClassModal } from '../components/YogaClassModal';
 import { YogaFilterBar } from '../components/YogaFilterBar';
-import { YogaProgramCard } from '../components/YogaProgramCard';
+import { YogaProgramShowcaseCard } from '../components/YogaProgramShowcaseCard';
 import { YogaLearningSection } from '../components/YogaLearningSection';
 import { YogaStepsSection } from '../components/YogaStepsSection';
 import { YogaBookingCard } from '../components/YogaBookingCard';
@@ -183,7 +183,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
           </motion.section>
 
-          {/* Our Yoga Programs: Open & Close Animated Cards Like Treatment */}
+          {/* Our Yoga Programs: Rich Showcase with Images & Details */}
           <motion.section
             id="yoga-programs"
             className="yoga-programs-section"
@@ -196,13 +196,13 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               <span className="yoga-section-tag">CURATED PATHWAYS</span>
               <h2 className="yoga-section-title">Our Yoga Programs</h2>
               <p className="yoga-section-lead">
-                Hover over any card to reveal session details, individual focus areas, and direct WhatsApp booking.
+                Explore our physician-guided yoga disciplines, restorative asana practices, breath regulation, and mindfulness meditation.
               </p>
             </div>
 
-            <div className="yoga-programs-grid">
+            <div className="yoga-programs-showcase-grid">
               {programs.map((program, index) => (
-                <YogaProgramCard
+                <YogaProgramShowcaseCard
                   key={program.id}
                   program={program}
                   index={index}
@@ -210,6 +210,53 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               ))}
             </div>
           </motion.section>
+
+          {/* Live Studio & Practice Atmosphere Gallery */}
+          <section className="yoga-live-gallery-section">
+            <div className="yoga-section-header text-center">
+              <span className="yoga-section-tag">PRACTICE ATMOSPHERE</span>
+              <h2 className="yoga-section-title">In the Shala &amp; Live Practice</h2>
+              <p className="yoga-section-lead">
+                Glimpses into our doctor-guided yoga sessions, restorative movement, and tranquil meditation spaces.
+              </p>
+            </div>
+
+            <div className="yoga-live-gallery-grid">
+              {[
+                {
+                  id: 'live-1',
+                  src: '/yoga/yoga-1.jpg',
+                  title: 'Therapeutic Asana Alignment',
+                  desc: 'Gentle, individualized posture guidance in a tranquil healing setting.',
+                },
+                {
+                  id: 'live-2',
+                  src: '/yoga/yoga-2.jpg',
+                  title: 'Pranayama & Breath Awareness',
+                  desc: 'Restorative respiratory techniques to calm autonomic nervous strain.',
+                },
+                {
+                  id: 'live-3',
+                  src: '/yoga/yoga-3.jpg',
+                  title: 'Restorative Mind-Body Recovery',
+                  desc: 'Harmonizing movement, conscious breathing, and deep relaxation.',
+                },
+              ].map((item) => (
+                <article key={item.id} className="yoga-live-gallery-card">
+                  <img
+                    src={item.src}
+                    alt={item.title}
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <div className="yoga-live-gallery-caption">
+                    <h4>{item.title}</h4>
+                    <p>{item.desc}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </section>
 
           {/* What You'll Learn & Individual Health Needs */}
           <YogaLearningSection />
