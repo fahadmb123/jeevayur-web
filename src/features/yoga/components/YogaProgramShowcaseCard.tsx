@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Check, MessageCircle, Clock, Video, ArrowRight } from 'lucide-react';
+import { MessageCircle, Clock, Video, MapPin, ArrowRight } from 'lucide-react';
 import type { YogaProgram } from '../data/yogaathmaData';
 import { fadeUpVariants } from '@/shared/lib/animations';
 import './YogaProgramShowcaseCard.css';
@@ -15,105 +15,84 @@ export const YogaProgramShowcaseCard: React.FC<YogaProgramShowcaseCardProps> = R
   index,
 }) => {
   const whatsappUrl = `https://wa.me/918970695250?text=${encodeURIComponent(
-    `Hello Jeevayurniketan | Yogaathma, I would like to enquire about the "${program.title}" program.`
+    `Hello Jeevayurniketan | Yogaathma, I would like to book or enquire about the "${program.title}" program.`
   )}`;
 
   return (
     <motion.article
-      className="yoga-showcase-card"
+      className="yoga-editorial-card"
       variants={fadeUpVariants}
       custom={index}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.12 }}
     >
-      {/* Visual Image Header */}
-      <div className="yoga-showcase-card__media">
+      {/* Visual Photography */}
+      <div className="yoga-card-media">
         <img
           src={program.image}
-          alt={`${program.title} - Jeevayurniketan | Yogaathma`}
-          className="yoga-showcase-card__img"
+          alt={`${program.title} - Authentic Yogic Practice at Jeevayurniketan`}
+          className="yoga-card-img"
           loading="lazy"
           decoding="async"
         />
-        <div className="yoga-showcase-card__overlay" />
+        <div className="yoga-card-overlay" />
 
-        {/* Category Badge */}
-        <span className="yoga-showcase-card__category-badge">
-          <Sparkles size={11} />
-          <span>{program.categoryTag}</span>
-        </span>
+        {/* Top Badges */}
+        <div className="yoga-card-meta-top">
+          <span className="yoga-program-num">{program.number}</span>
+          <span className="yoga-program-category">{program.categoryTag}</span>
+        </div>
 
-        {/* Format Badge */}
-        <span className="yoga-showcase-card__format-badge">
-          <Video size={11} />
+        {/* Format Pill */}
+        <div className="yoga-card-format-pill">
+          {program.format.toLowerCase().includes('online') ? (
+            <Video size={12} />
+          ) : (
+            <MapPin size={12} />
+          )}
           <span>{program.format}</span>
-        </span>
+        </div>
       </div>
 
       {/* Card Content */}
-      <div className="yoga-showcase-card__body">
-        <div className="yoga-showcase-card__header">
-          <span className="yoga-showcase-card__number">{program.number}</span>
-          <h3 className="yoga-showcase-card__title">{program.title}</h3>
-        </div>
+      <div className="yoga-card-body">
+        <h3 className="yoga-card-title">{program.title}</h3>
+        <p className="yoga-card-tagline">{program.tagline}</p>
+        <p className="yoga-card-desc">{program.description}</p>
 
-        <p className="yoga-showcase-card__tagline">
-          {program.tagline}
-        </p>
-
-        <p className="yoga-showcase-card__desc">
-          {program.description}
-        </p>
-
-        {/* Highlights / Ideal For List */}
+        {/* Focused Benefits / Ideal For as Botanical Chips */}
         {program.idealFor && program.idealFor.length > 0 && (
-          <div className="yoga-showcase-card__highlights">
-            <span className="yoga-showcase-card__highlights-title">
-              {program.idealForTitle || 'Program Focus & Ideal For:'}
-            </span>
-            <ul className="yoga-showcase-card__list">
-              {program.idealFor.map((item, i) => (
-                <li key={i}>
-                  <Check size={14} className="yoga-showcase-card__check" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Clinical Practice Focus */}
-        {program.focus && (
-          <div className="yoga-showcase-card__focus-box">
-            <strong>Our Focus:</strong> {program.focus}
+          <div className="yoga-card-focus-chips">
+            {program.idealFor.slice(0, 3).map((item, i) => (
+              <span key={i} className="yoga-focus-chip">
+                <em>✦</em> {item}
+              </span>
+            ))}
           </div>
         )}
 
         {/* Duration Meta */}
-        <div className="yoga-showcase-card__duration-row">
-          <Clock size={14} className="yoga-showcase-card__clock-icon" />
-          <span>Session Duration: {program.duration}</span>
+        <div className="yoga-card-meta-row">
+          <Clock size={13} className="text-accent-gold" />
+          <span>{program.duration}</span>
         </div>
 
-        {/* Action Buttons */}
-        <div className="yoga-showcase-card__actions">
+        {/* Actions */}
+        <div className="yoga-card-actions">
           <a
             href={whatsappUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="yoga-showcase-btn-whatsapp"
+            className="yoga-btn-reserve"
           >
-            <MessageCircle size={16} />
-            <span>Book on WhatsApp</span>
+            <MessageCircle size={15} />
+            <span>Reserve Mat on WhatsApp</span>
           </a>
 
-          <a
-            href="#timetable"
-            className="yoga-showcase-btn-schedule"
-          >
-            <span>View Schedule</span>
-            <ArrowRight size={14} />
+          <a href="#yoga-schedule" className="yoga-btn-timetable">
+            <span>Timetable</span>
+            <ArrowRight size={13} />
           </a>
         </div>
       </div>
@@ -122,4 +101,3 @@ export const YogaProgramShowcaseCard: React.FC<YogaProgramShowcaseCardProps> = R
 });
 
 YogaProgramShowcaseCard.displayName = 'YogaProgramShowcaseCard';
-

@@ -1,8 +1,19 @@
-.yoga-page {
-  padding-top: 110px;
-  padding-bottom: 90px;
+/* ==========================================================================
+   Jeevayurniketan &bull; Yogaathma Dedicated Experience (Editorial Design)
+   ========================================================================== */
+
+.yoga-page-shell {
+  width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color, #FBFBF9);
+  background-color: var(--bg-color, #FBF9F5);
+  display: flex;
+  flex-direction: column;
+}
+
+.yoga-page {
+  flex: 1;
+  width: 100%;
+  overflow-x: clip;
 }
 
 .yoga-container {
@@ -11,86 +22,67 @@
   padding: 0 24px;
 }
 
-/* Page Hero */
-.yoga-hero {
+/* ==========================================================================
+   1. EDITORIAL SANCTUARY HERO
+   ========================================================================== */
+.yoga-hero-section {
+  padding: clamp(110px, 13vw, 150px) 0 clamp(40px, 5vw, 60px);
+  background: radial-gradient(circle at 50% 25%, rgba(201, 141, 59, 0.07) 0%, rgba(27, 107, 80, 0.04) 50%, transparent 80%), #FAF8F4;
   text-align: center;
-  max-width: 860px;
-  margin: 0 auto 48px;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.06);
 }
 
-.yoga-hero__badge {
+.yoga-hero-content {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.yoga-hero-badge {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   padding: 6px 18px;
-  border-radius: 9999px;
-  background-color: rgba(201, 141, 59, 0.12);
-  color: var(--accent-gold, #C98D3B);
-  border: 1px solid rgba(201, 141, 59, 0.35);
+  background: rgba(201, 141, 59, 0.1);
+  border: 1px solid rgba(201, 141, 59, 0.28);
+  border-radius: 999px;
+  color: #99641E;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
-.yoga-hero__title {
+.yoga-hero-title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
+  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
   font-weight: 700;
-  color: var(--text-primary, #14241C);
+  color: #12281E;
+  line-height: 1.18;
   letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 12px 0;
+  margin: 0 0 16px;
 }
 
-[data-theme='dark'] .yoga-hero__title,
-.dark .yoga-hero__title {
-  color: var(--text-primary, #F2F7F4);
-}
-
-.yoga-hero__tagline {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
+.yoga-hero-title-accent {
+  color: #1B6B50;
   font-style: italic;
-  color: var(--primary-green, #1B6B50);
-  margin: 0 0 20px 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-[data-theme='dark'] .yoga-hero__tagline,
-.dark .yoga-hero__tagline {
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-hero__desc {
+.yoga-hero-subtitle {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(1rem, 1.35vw, 1.12rem);
-  color: var(--text-secondary, #485E53);
-  line-height: 1.72;
-  margin: 0 0 14px 0;
+  font-size: clamp(0.96rem, 1.25vw, 1.1rem);
+  line-height: 1.7;
+  color: #435A4F;
+  max-width: 720px;
+  margin: 0 0 28px;
 }
 
-[data-theme='dark'] .yoga-hero__desc,
-.dark .yoga-hero__desc {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-.yoga-hero__subdesc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.94rem;
-  color: var(--text-light, #6C8176);
-  line-height: 1.65;
-  margin: 0 0 28px 0;
-}
-
-[data-theme='dark'] .yoga-hero__subdesc,
-.dark .yoga-hero__subdesc {
-  color: var(--text-secondary, #8BA396);
-}
-
-.yoga-hero__actions {
+.yoga-hero-actions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -98,556 +90,555 @@
   flex-wrap: wrap;
 }
 
-.yoga-hero__btn-primary {
+.yoga-hero-btn-primary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 13px 26px;
-  background: var(--primary-green, #1B6B50);
-  color: #FFFFFF;
-  border-radius: 9999px;
+  background: #143826;
+  color: #FAF9F5;
+  border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.94rem;
   font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 4px 16px rgba(27, 107, 80, 0.28);
   transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(20, 56, 38, 0.2);
 }
 
-.yoga-hero__btn-primary:hover {
-  background: #14523D;
-  color: #FFFFFF;
+.yoga-hero-btn-primary:hover {
+  background: #1B6B50;
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(27, 107, 80, 0.4);
+  box-shadow: 0 8px 24px rgba(20, 56, 38, 0.3);
 }
 
-.yoga-hero__btn-secondary {
+.yoga-hero-btn-secondary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 13px 24px;
-  background: rgba(27, 107, 80, 0.08);
-  border: 1px solid rgba(27, 107, 80, 0.2);
-  color: var(--primary-green, #1B6B50);
-  border-radius: 9999px;
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.18);
+  color: #1B4533;
+  border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.94rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
-[data-theme='dark'] .yoga-hero__btn-secondary,
-.dark .yoga-hero__btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-hero__btn-secondary:hover {
-  background: rgba(27, 107, 80, 0.15);
+.yoga-hero-btn-secondary:hover {
+  background: #F4F1EA;
+  border-color: rgba(27, 67, 50, 0.3);
   transform: translateY(-2px);
 }
 
-/* Quick Stats Bar */
-.yoga-stats-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 56px;
+/* ==========================================================================
+   2. THE 5 FOUNDATIONAL PILLARS
+   ========================================================================== */
+.yoga-pillars-section {
+  padding: 56px 0 60px;
+  background: #FAF8F4;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.06);
 }
 
-.yoga-stat-card {
-  background: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E8EDE5);
-  border-radius: 16px;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 4px 14px -2px rgba(18, 76, 56, 0.04);
-  transition: transform 0.2s, border-color 0.2s;
+.yoga-section-header {
+  max-width: 680px;
+  margin: 0 auto 36px;
 }
 
-[data-theme='dark'] .yoga-stat-card,
-.dark .yoga-stat-card {
-  background: var(--surface-color, #11221B);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.yoga-stat-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(201, 141, 59, 0.4);
-}
-
-.yoga-stat-card__icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(27, 107, 80, 0.08);
-  color: var(--primary-green, #1B6B50);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-[data-theme='dark'] .yoga-stat-card__icon,
-.dark .yoga-stat-card__icon {
-  background: rgba(65, 186, 145, 0.12);
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-stat-card__info {
-  display: flex;
-  flex-direction: column;
-}
-
-.yoga-stat-card__value {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+.yoga-eyebrow {
+  display: inline-block;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.74rem;
   font-weight: 700;
-  color: var(--text-primary, #14241C);
-  line-height: 1.2;
+  letter-spacing: 0.08em;
+  color: #C68B39;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-[data-theme='dark'] .yoga-stat-card__value,
-.dark .yoga-stat-card__value {
-  color: var(--text-primary, #F2F7F4);
+.yoga-section-heading {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 3vw, 2.3rem);
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 10px;
+  line-height: 1.25;
 }
 
-.yoga-stat-card__label {
-  font-size: 0.78rem;
-  color: var(--text-secondary, #485E53);
-}
-
-[data-theme='dark'] .yoga-stat-card__label,
-.dark .yoga-stat-card__label {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-/* Our Approach Section */
-.yoga-page-approach {
-  margin-bottom: clamp(60px, 7vw, 90px);
-}
-
-.yoga-approach-body {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.96rem;
+.yoga-section-desc {
+  font-size: 0.92rem;
   line-height: 1.65;
-  color: var(--text-secondary, #485E53);
-  max-width: 800px;
-  margin: 10px auto 0 auto;
+  color: #4C6256;
+  margin: 0;
 }
 
-[data-theme='dark'] .yoga-approach-body,
-.dark .yoga-approach-body {
-  color: var(--text-secondary, #A6C2B4);
-}
-
+/* 5 Pillars Responsive Grid */
 .yoga-pillars-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  grid-template-columns: repeat(5, 1fr);
   gap: 16px;
-  margin-top: 36px;
 }
 
-.yoga-pillar-card {
-  background: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E8EDE5);
-  border-radius: 16px;
-  padding: 22px 20px;
+@media (max-width: 1080px) {
+  .yoga-pillars-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .yoga-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Center the 5th card on mobile when 2-column */
+  .yoga-pillar-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    max-width: 80%;
+    margin: 0 auto;
+    width: 100%;
+  }
+}
+
+.yoga-pillar-item {
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.09);
+  border-radius: 14px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px -2px rgba(18, 76, 56, 0.04);
+  align-items: flex-start;
+  box-shadow: 0 2px 10px rgba(18, 40, 30, 0.03);
+  transition: all 0.2s ease;
 }
 
-[data-theme='dark'] .yoga-pillar-card,
-.dark .yoga-pillar-card {
-  background: var(--surface-color, #11221B);
-  border-color: rgba(255, 255, 255, 0.08);
+.yoga-pillar-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(27, 107, 80, 0.2);
+  box-shadow: 0 6px 18px rgba(18, 40, 30, 0.06);
 }
 
-.yoga-pillar-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(201, 141, 59, 0.4);
-  box-shadow: 0 10px 24px -4px rgba(18, 76, 56, 0.12);
-}
-
-.yoga-pillar-card__icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+.yoga-pillar-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
   background: rgba(27, 107, 80, 0.08);
-  color: var(--primary-green, #1B6B50);
+  color: #1B6B50;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease, color 0.3s ease;
+  margin-bottom: 12px;
 }
 
-[data-theme='dark'] .yoga-pillar-card__icon,
-.dark .yoga-pillar-card__icon {
-  background: rgba(65, 186, 145, 0.12);
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-pillar-card:hover .yoga-pillar-card__icon {
-  background: var(--accent-gold, #C98D3B);
-  color: #FFFFFF;
-}
-
-.yoga-pillar-card__title {
+.yoga-pillar-text h4 {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+  font-size: 0.98rem;
   font-weight: 700;
-  color: var(--text-primary, #14241C);
+  color: #12281E;
+  margin: 0 0 6px;
+  line-height: 1.3;
+}
+
+.yoga-pillar-text p {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: #556D60;
   margin: 0;
 }
 
-[data-theme='dark'] .yoga-pillar-card__title,
-.dark .yoga-pillar-card__title {
-  color: var(--text-primary, #F2F7F4);
-}
-
-.yoga-pillar-card__desc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.85rem;
-  line-height: 1.55;
-  color: var(--text-secondary, #485E53);
-  margin: 0;
-}
-
-[data-theme='dark'] .yoga-pillar-card__desc,
-.dark .yoga-pillar-card__desc {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-/* 5 Programs Section (Rich Visual Showcase with Images & Details) */
+/* ==========================================================================
+   3. CURATED YOGA PATHWAYS GRID
+   ========================================================================== */
 .yoga-programs-section {
-  margin-bottom: clamp(60px, 7vw, 90px);
+  padding: 60px 0 72px;
 }
 
-.yoga-programs-showcase-grid {
+.yoga-programs-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 28px;
-  position: relative;
-  margin-top: 36px;
 }
 
-@media (max-width: 992px) {
-  .yoga-programs-showcase-grid {
-    grid-template-columns: 1fr;
-    max-width: 640px;
-    margin: 30px auto 0;
-    gap: 20px;
-  }
-}
-
-/* Live Practice Atmosphere Gallery */
-.yoga-live-gallery-section {
-  margin: clamp(50px, 6vw, 85px) 0;
-}
-
-.yoga-live-gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 22px;
-  margin-top: 32px;
-}
-
-.yoga-live-gallery-card {
-  position: relative;
-  border-radius: 18px;
-  overflow: hidden;
-  aspect-ratio: 4 / 3;
-  box-shadow: 0 10px 28px rgba(18, 76, 56, 0.08);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
-  background-color: #172D24;
-}
-
-.yoga-live-gallery-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.yoga-live-gallery-card:hover img {
-  transform: scale(1.05);
-}
-
-.yoga-live-gallery-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 24px 16px 14px;
-  background: linear-gradient(180deg, transparent 0%, rgba(10, 26, 18, 0.88) 100%);
-  color: #FAFBF9;
-}
-
-.yoga-live-gallery-caption h4 {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: #FAFBF9;
-  margin: 0 0 4px;
-}
-
-.yoga-live-gallery-caption p {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.78rem;
-  line-height: 1.4;
-  color: #D3E5DC;
-  margin: 0;
-}
-
-@media (max-width: 900px) {
-  .yoga-live-gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-}
-
-@media (max-width: 600px) {
-  .yoga-live-gallery-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-}
-
-/* Legacy Compact Grid Fallback */
-.yoga-programs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  position: relative;
-  margin-top: 36px;
-}
-
-@media (max-width: 1040px) {
-  .yoga-programs-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 680px) {
+@media (max-width: 820px) {
   .yoga-programs-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 22px;
   }
 }
 
-/* Timetable Section */
-.yoga-timetable-section {
-  margin: clamp(60px, 7vw, 90px) 0;
+/* ==========================================================================
+   4. PATIENT-FACING LIVE & IN-SHALA WEEKLY TIMETABLE
+   ========================================================================== */
+.yoga-schedule-section {
+  padding: 64px 0 76px;
+  background: #F4F1EA;
+  border-top: 1px solid rgba(27, 67, 50, 0.08);
+  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
 }
 
-/* Toast Message */
-.yoga-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--primary-green-deep, #0B3326);
-  color: #FFFFFF;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-shadow: 0 10px 30px rgba(11, 51, 38, 0.35);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 1200;
-  animation: toastFade 0.3s ease-out;
-}
-
-@keyframes toastFade {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-/* Class Grid */
-.yoga-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 28px;
-}
-
-/* Empty State */
-.yoga-empty-state {
-  text-align: center;
-  padding: 64px 24px;
-  background: var(--surface-color, #FFFFFF);
-  border: 1px dashed var(--border-color, #E2E8DE);
-  border-radius: 20px;
+.yoga-schedule-controls {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 16px;
-  max-width: 500px;
-  margin: 0 auto;
+  margin-bottom: 32px;
 }
 
-.yoga-empty-state__icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: var(--surface-secondary, #F3F6F1);
-  color: var(--text-light, #7E9387);
+.yoga-day-tabs {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
-.yoga-empty-state h4 {
-  font-size: 1.25rem;
-  color: var(--text-primary, #14241C);
-  margin: 0;
+.yoga-day-tabs::-webkit-scrollbar {
+  display: none;
 }
 
-.yoga-empty-state p {
-  color: var(--text-secondary, #485E53);
-  font-size: 0.925rem;
-  margin: 0;
-}
-
-/* Booking Card Wrap */
-.yoga-booking-card-wrap {
-  margin: clamp(48px, 6vw, 72px) 0;
-}
-
-/* Philosophy & Disclaimer Footer */
-.yoga-philosophy-footer {
-  max-width: 860px;
-  margin: 0 auto 40px auto;
-  padding: 32px 24px;
-  border-top: 1px solid var(--border-color, #E8EDE5);
-}
-
-[data-theme='dark'] .yoga-philosophy-footer,
-.dark .yoga-philosophy-footer {
-  border-top-color: rgba(255, 255, 255, 0.08);
-}
-
-.yoga-philosophy-title {
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent-gold, #C98D3B);
-  margin: 0 0 12px 0;
-}
-
-.yoga-philosophy-quote {
+.yoga-day-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.12);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--text-secondary, #485E53);
-  margin: 0 0 14px 0;
 }
 
-[data-theme='dark'] .yoga-philosophy-quote,
-.dark .yoga-philosophy-quote {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-.yoga-philosophy-mantra {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
-  font-style: italic;
+.yoga-day-short {
+  display: none;
+  font-size: 0.86rem;
   font-weight: 600;
-  color: var(--primary-green, #1B6B50);
-  margin: 0 0 16px 0;
 }
 
-[data-theme='dark'] .yoga-philosophy-mantra,
-.dark .yoga-philosophy-mantra {
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-philosophy-disclaimer {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--text-light, #7E9387);
-  margin: 0;
-}
-
-[data-theme='dark'] .yoga-philosophy-disclaimer,
-.dark .yoga-philosophy-disclaimer {
-  color: var(--text-light, #6C8176);
-}
-
-@media (max-width: 900px) {
-  .yoga-stats-bar {
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+.yoga-day-full {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #2D4238;
 }
 
 @media (max-width: 680px) {
-  .yoga-hero {
-    padding: 100px 16px 36px;
+  .yoga-day-tabs {
+    justify-content: flex-start;
   }
-  .yoga-hero__title {
-    font-size: 1.85rem;
-    line-height: 1.25;
+  .yoga-day-short {
+    display: inline;
   }
-  .yoga-hero__tagline {
-    font-size: 0.92rem;
+  .yoga-day-full {
+    display: none;
   }
-  .yoga-hero__desc {
-    font-size: 0.88rem;
-    line-height: 1.55;
+  .yoga-day-tab {
+    padding: 8px 14px;
   }
-  .yoga-hero__actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 10px;
+}
+
+.yoga-day-tab:hover {
+  border-color: rgba(27, 67, 50, 0.3);
+  background: #FAF8F4;
+}
+
+.yoga-day-tab.is-active {
+  background: #143826;
+  border-color: #143826;
+}
+
+.yoga-day-tab.is-active .yoga-day-full,
+.yoga-day-tab.is-active .yoga-day-short {
+  color: #FAF9F5;
+}
+
+/* Format filter */
+.yoga-format-filter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.yoga-format-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid rgba(27, 67, 50, 0.15);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #385044;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.yoga-format-btn.is-active {
+  background: rgba(27, 107, 80, 0.12);
+  border-color: #1B6B50;
+  color: #143826;
+}
+
+/* Classes Grid */
+.yoga-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 980px) {
+  .yoga-classes-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-  .yoga-hero__btn-primary,
-  .yoga-hero__btn-secondary {
-    width: 100%;
-    justify-content: center;
-    padding: 11px 20px;
-    font-size: 0.88rem;
-  }
-  .yoga-stats-bar {
+}
+
+@media (max-width: 640px) {
+  .yoga-classes-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 16px 14px;
   }
-  .yoga-container {
-    padding: 0 16px;
-  }
-  .yoga-section-title {
-    font-size: 1.5rem;
-    line-height: 1.25;
-  }
-  .yoga-section-lead {
-    font-size: 0.85rem;
-    line-height: 1.55;
-  }
-  .yoga-pillars-grid {
+}
+
+/* Clean Timetable Card */
+.yoga-timetable-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.09);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.03);
+  transition: all 0.25s ease;
+}
+
+.yoga-timetable-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(27, 107, 80, 0.25);
+  box-shadow: 0 8px 24px rgba(18, 40, 30, 0.07);
+}
+
+.yoga-timetable-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.yoga-time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #1B6B50;
+  background: rgba(27, 107, 80, 0.08);
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.yoga-format-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.yoga-format-chip--online {
+  background: rgba(14, 165, 233, 0.12);
+  color: #0369A1;
+}
+
+.yoga-format-chip--in-person {
+  background: rgba(201, 141, 59, 0.12);
+  color: #8C5919;
+}
+
+.yoga-timetable-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.yoga-timetable-card__desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: #556D60;
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.yoga-timetable-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+  padding: 10px 12px;
+  background: #F9F8F5;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: #5C7266;
+}
+
+.yoga-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.yoga-timetable-card__footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(27, 67, 50, 0.07);
+}
+
+.yoga-price-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2D483A;
+}
+
+.yoga-btn-book-class {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: #143826;
+  color: #FAF9F5;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.yoga-btn-book-class:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+/* Empty & Loading states */
+.yoga-schedule-empty {
+  text-align: center;
+  padding: 48px 20px;
+  background: #FFFFFF;
+  border: 1px dashed rgba(27, 67, 50, 0.2);
+  border-radius: 16px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.yoga-schedule-empty h4 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.25rem;
+  color: #12281E;
+  margin: 10px 0 6px;
+}
+
+.yoga-schedule-empty p {
+  font-size: 0.88rem;
+  color: #556D60;
+  margin: 0 0 16px;
+}
+
+.yoga-empty-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 10px 20px;
+  background: #143826;
+  color: #FAF9F5;
+  border-radius: 999px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.yoga-empty-whatsapp-btn:hover {
+  background: #25D366;
+}
+
+/* ==========================================================================
+   5. ATMOSPHERE & SHALA PRACTICE GALLERY
+   ========================================================================== */
+.yoga-gallery-strip {
+  padding: 68px 0;
+}
+
+.yoga-atmosphere-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 820px) {
+  .yoga-atmosphere-grid {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 16px;
   }
-  .yoga-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
+}
+
+.yoga-atmosphere-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 6px 18px rgba(18, 40, 30, 0.06);
+}
+
+.yoga-atmosphere-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.yoga-atmosphere-item:hover img {
+  transform: scale(1.05);
+}
+
+.atmosphere-caption {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
+  background: linear-gradient(180deg, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
+  color: #FFFFFF;
+}
+
+.atmosphere-caption h4 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.atmosphere-caption p {
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
 }

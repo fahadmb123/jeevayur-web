@@ -1,385 +1,219 @@
 /* ==========================================================================
-   Yoga Program Showcase Card Styles (For Dedicated Yoga Page)
+   Yoga Program Showcase Card &bull; Editorial Sanctuary Design
    ========================================================================== */
 
-.yoga-showcase-card {
-  background: var(--surface-color, #ffffff);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
-  border-radius: 22px;
+.yoga-editorial-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.09);
+  border-radius: 18px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 30px rgba(18, 76, 56, 0.05);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(18, 40, 30, 0.04);
 }
 
-.yoga-showcase-card:hover {
+.yoga-editorial-card:hover {
   transform: translateY(-4px);
-  border-color: rgba(201, 141, 59, 0.45);
-  box-shadow: 0 20px 48px rgba(18, 76, 56, 0.12);
+  box-shadow: 0 12px 32px rgba(18, 40, 30, 0.09);
+  border-color: rgba(27, 107, 80, 0.22);
 }
 
-/* Media Header */
-.yoga-showcase-card__media {
+/* Media */
+.yoga-card-media {
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 10;
-  max-height: 280px;
   overflow: hidden;
-  background-color: #1e3a2e;
+  background-color: #EFECE6;
 }
 
-.yoga-showcase-card__img {
+.yoga-card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.6s ease;
 }
 
-.yoga-showcase-card:hover .yoga-showcase-card__img {
+.yoga-editorial-card:hover .yoga-card-img {
   transform: scale(1.04);
 }
 
-.yoga-showcase-card__overlay {
+.yoga-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.25) 0%, transparent 40%, rgba(14, 30, 22, 0.65) 100%);
-  pointer-events: none;
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.35) 0%, transparent 45%, rgba(14, 30, 22, 0.65) 100%);
 }
 
-.yoga-showcase-card__category-badge {
+.yoga-card-meta-top {
   position: absolute;
   top: 14px;
   left: 14px;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(14, 34, 25, 0.84);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  color: #FAFBF9;
+  gap: 8px;
+}
+
+.yoga-program-num {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 800;
+  background: #143826;
+  color: #D6BA86;
+  padding: 3px 8px;
+  border-radius: 5px;
+  border: 1px solid rgba(214, 186, 134, 0.3);
+}
+
+.yoga-program-category {
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  backdrop-filter: blur(8px);
-  text-transform: uppercase;
-  z-index: 2;
+  color: #FAF9F5;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  padding: 3px 8px;
+  border-radius: 5px;
 }
 
-.yoga-showcase-card__format-badge {
+.yoga-card-format-pill {
   position: absolute;
-  top: 14px;
+  bottom: 12px;
   right: 14px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.92);
+  padding: 3px 10px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
   border-radius: 999px;
-  color: var(--primary-green, #1B6B50);
-  font-family: var(--font-display, 'Outfit', sans-serif);
+  color: #FFFFFF;
   font-size: 0.72rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-  z-index: 2;
+  font-weight: 500;
 }
 
-/* Card Body */
-.yoga-showcase-card__body {
-  padding: 24px;
+/* Body */
+.yoga-card-body {
+  padding: 22px;
   display: flex;
   flex-direction: column;
   flex: 1;
 }
 
-.yoga-showcase-card__header {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  margin-bottom: 4px;
-}
-
-.yoga-showcase-card__number {
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--accent-gold, #C98D3B);
-  letter-spacing: 0.05em;
-}
-
-.yoga-showcase-card__title {
+.yoga-card-title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.55rem;
+  font-size: 1.28rem;
   font-weight: 700;
-  color: var(--text-primary, #14241C);
-  line-height: 1.25;
-  margin: 0;
+  color: #12281E;
+  margin: 0 0 6px;
+  line-height: 1.28;
 }
 
-.yoga-showcase-card__tagline {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-style: italic;
-  font-size: 0.94rem;
-  color: var(--primary-green, #1B6B50);
-  margin: 4px 0 14px;
-}
-
-.yoga-showcase-card__desc {
+.yoga-card-tagline {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.92rem;
-  line-height: 1.62;
-  color: var(--text-secondary, #485E53);
-  margin: 0 0 18px;
-}
-
-/* Highlights Box */
-.yoga-showcase-card__highlights {
-  background: rgba(27, 107, 80, 0.04);
-  border: 1px solid rgba(27, 107, 80, 0.08);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 16px;
-}
-
-.yoga-showcase-card__highlights-title {
-  display: block;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--primary-green, #1B6B50);
-  margin-bottom: 8px;
-}
-
-.yoga-showcase-card__list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.yoga-showcase-card__list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.84rem;
-  color: var(--text-secondary, #3C5146);
-  line-height: 1.45;
-}
-
-.yoga-showcase-card__check {
-  color: var(--primary-green, #1B6B50);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* Focus Note Box */
-.yoga-showcase-card__focus-box {
-  background: rgba(201, 141, 59, 0.08);
-  border-left: 3px solid var(--accent-gold, #C98D3B);
-  border-radius: 4px 8px 8px 4px;
-  padding: 10px 14px;
   font-size: 0.82rem;
-  line-height: 1.5;
-  color: var(--text-secondary, #485E53);
+  font-style: italic;
+  color: #C68B39;
+  margin: 0 0 10px;
+}
+
+.yoga-card-desc {
+  font-size: 0.88rem;
+  line-height: 1.62;
+  color: #4A6155;
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Focus Chips */
+.yoga-card-focus-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-bottom: 18px;
 }
 
-.yoga-showcase-card__focus-box strong {
-  color: var(--text-primary, #14241C);
-}
-
-/* Duration Row */
-.yoga-showcase-card__duration-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: var(--text-light, #7E9387);
-  margin-bottom: 16px;
-}
-
-.yoga-showcase-card__clock-icon {
-  color: var(--primary-green, #1B6B50);
-}
-
-/* Actions */
-.yoga-showcase-card__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  padding-top: 8px;
-  flex-wrap: wrap;
-}
-
-.yoga-showcase-btn-whatsapp {
-  flex: 1.2;
+.yoga-focus-chip {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 11px 18px;
-  background: #25D366;
-  color: #ffffff;
-  border-radius: 999px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.88rem;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.28);
-  transition: all 0.25s ease;
-  min-height: 42px;
+  gap: 4px;
+  padding: 4px 9px;
+  background: #F3F6F4;
+  border: 1px solid rgba(27, 67, 50, 0.08);
+  border-radius: 6px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: #274D3B;
   white-space: nowrap;
 }
 
-.yoga-showcase-btn-whatsapp:hover {
-  background: #20BD5A;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.38);
+.yoga-focus-chip em {
+  color: #C68B39;
+  font-style: normal;
+  font-size: 0.8rem;
 }
 
-.yoga-showcase-btn-schedule {
+.yoga-card-meta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #6C8277;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+/* Actions */
+.yoga-card-actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(27, 67, 50, 0.07);
+}
+
+.yoga-btn-reserve {
   flex: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 11px 16px;
-  background: var(--surface-secondary, rgba(27, 107, 80, 0.08));
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.2));
-  color: var(--primary-green, #1B6B50);
+  gap: 7px;
+  padding: 9px 14px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.25s ease;
-  min-height: 42px;
+  transition: all 0.2s ease;
   white-space: nowrap;
 }
 
-.yoga-showcase-btn-schedule:hover {
-  background: var(--primary-green, #1B6B50);
-  color: #ffffff;
-  border-color: var(--primary-green, #1B6B50);
-  transform: translateY(-2px);
+.yoga-btn-reserve:hover {
+  background: #25D366;
+  color: #FFFFFF;
 }
 
-/* ==========================================================================
-   Dark Mode Accommodations
-   ========================================================================== */
-[data-theme='dark'] .yoga-showcase-card {
-  background-color: var(--surface-color, #11221B);
-  border-color: rgba(65, 186, 145, 0.16);
+.yoga-btn-timetable {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1B6B50;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  white-space: nowrap;
 }
 
-[data-theme='dark'] .yoga-showcase-card__title {
-  color: #F2F7F4;
+.yoga-btn-timetable:hover {
+  color: #C68B39;
 }
-
-[data-theme='dark'] .yoga-showcase-card__tagline {
-  color: var(--primary-green-light, #41BA91);
-}
-
-[data-theme='dark'] .yoga-showcase-card__desc,
-[data-theme='dark'] .yoga-showcase-card__focus-box {
-  color: #A6C2B4;
-}
-
-[data-theme='dark'] .yoga-showcase-card__focus-box strong {
-  color: #F2F7F4;
-}
-
-[data-theme='dark'] .yoga-showcase-card__highlights {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-[data-theme='dark'] .yoga-showcase-card__list li {
-  color: #C3D8CE;
-}
-
-[data-theme='dark'] .yoga-showcase-btn-schedule {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(65, 186, 145, 0.3);
-  color: #EDF7F2;
-}
-
-/* ==========================================================================
-   Mobile Responsive Rules
-   ========================================================================== */
-@media (max-width: 768px) {
-  .yoga-showcase-card {
-    border-radius: 16px;
-  }
-
-  .yoga-showcase-card__media {
-    aspect-ratio: 16 / 10;
-    max-height: 210px;
-  }
-
-  .yoga-showcase-card__body {
-    padding: 16px 14px;
-  }
-
-  .yoga-showcase-card__title {
-    font-size: 1.25rem;
-  }
-
-  .yoga-showcase-card__tagline {
-    font-size: 0.85rem;
-    margin-bottom: 10px;
-  }
-
-  .yoga-showcase-card__desc {
-    font-size: 0.84rem;
-    line-height: 1.52;
-    margin-bottom: 14px;
-  }
-
-  .yoga-showcase-card__highlights {
-    padding: 12px 12px;
-    margin-bottom: 14px;
-  }
-
-  .yoga-showcase-card__highlights-title {
-    font-size: 0.72rem;
-  }
-
-  .yoga-showcase-card__list li {
-    font-size: 0.78rem;
-  }
-
-  .yoga-showcase-card__focus-box {
-    padding: 9px 12px;
-    font-size: 0.78rem;
-    margin-bottom: 14px;
-  }
-
-  .yoga-showcase-card__actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .yoga-showcase-btn-whatsapp,
-  .yoga-showcase-btn-schedule {
-    width: 100%;
-    justify-content: center;
-    font-size: 0.86rem;
-    padding: 11px 16px;
-    min-height: 44px;
-  }
-}
-

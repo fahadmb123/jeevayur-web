@@ -1,11 +1,11 @@
 /* ==========================================================================
-   Services & Ayurvedic Treatments Showcase Page Styles
+   Jeevayurniketan &bull; Ayurvedic Treatments &amp; Chikitsa Catalog (Editorial Design)
    ========================================================================== */
 
 .services-page-shell {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color, #FBFBF9);
+  background-color: var(--bg-color, #FBF9F5);
   display: flex;
   flex-direction: column;
 }
@@ -16,75 +16,73 @@
   overflow-x: clip;
 }
 
-.services-container {
-  max-width: 1260px;
+.treatments-container {
+  max-width: 1240px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-.services-container--narrow {
-  max-width: 860px;
-}
-
 /* ==========================================================================
-   1. HERO HEADER
+   1. EDITORIAL HERO
    ========================================================================== */
-.services-page-hero {
-  padding: clamp(120px, 14vw, 160px) 24px clamp(44px, 6vw, 68px);
-  background: linear-gradient(180deg, rgba(27, 107, 80, 0.08) 0%, rgba(201, 141, 59, 0.05) 50%, transparent 100%);
+.treatments-hero {
+  padding: clamp(110px, 13vw, 150px) 24px clamp(36px, 5vw, 56px);
+  background: radial-gradient(circle at 50% 20%, rgba(27, 107, 80, 0.07) 0%, rgba(201, 141, 59, 0.04) 40%, transparent 80%), #FAF8F4;
   text-align: center;
-  position: relative;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.06);
 }
 
-.services-hero-container {
-  max-width: 880px;
+.treatments-hero__inner {
+  max-width: 860px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.services-hero-badge {
+.treatments-hero__lineage-pill {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 6px 16px;
-  background: rgba(27, 107, 80, 0.1);
-  border: 1px solid rgba(27, 107, 80, 0.25);
+  padding: 6px 18px;
+  background: rgba(27, 67, 50, 0.06);
+  border: 1px solid rgba(27, 67, 50, 0.15);
   border-radius: 999px;
-  color: var(--primary-green, #1B6B50);
+  color: #164432;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.76rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
-.badge-sparkle {
-  color: var(--accent-gold, #C98D3B);
-}
-
-.services-hero-title {
+.treatments-hero__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.2rem, 4.4vw, 3.4rem);
+  font-size: clamp(2.1rem, 4.2vw, 3.4rem);
   font-weight: 700;
-  color: var(--text-primary, #14241C);
+  color: #12281E;
   line-height: 1.18;
   letter-spacing: -0.02em;
   margin: 0 0 16px;
 }
 
-.services-hero-desc {
+.treatments-hero__title-accent {
+  color: #1B6B50;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.treatments-hero__subtitle {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(0.98rem, 1.3vw, 1.12rem);
+  font-size: clamp(0.96rem, 1.25vw, 1.1rem);
   line-height: 1.7;
-  color: var(--text-secondary, #485E53);
+  color: #435A4F;
   max-width: 720px;
   margin: 0 0 28px;
 }
 
-.services-hero-actions {
+.treatments-hero__actions {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -92,856 +90,820 @@
   flex-wrap: wrap;
 }
 
-.services-hero-whatsapp-btn {
+.treatments-hero__whatsapp-btn {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 26px;
-  background: rgba(37, 211, 102, 0.12);
-  border: 1px solid rgba(37, 211, 102, 0.4);
-  color: #17833e;
+  padding: 12px 24px;
+  background: rgba(37, 211, 102, 0.09);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
   transition: all 0.25s ease;
 }
 
-.services-hero-whatsapp-btn:hover {
+.treatments-hero__whatsapp-btn:hover {
   background: #25D366;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
 }
 
 /* ==========================================================================
-   2. FILTER & SEARCH CONTROL STRIP
+   2. BOTANICAL CATEGORY STRIP & SEARCH
    ========================================================================== */
-.services-filter-section {
-  padding: 10px 0 32px;
+.treatments-filter-strip {
+  padding: 24px 0 20px;
+  background-color: #FAF8F4;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.07);
+  position: sticky;
+  top: 72px;
+  z-index: 20;
+  backdrop-filter: blur(12px);
+  background-color: rgba(250, 248, 244, 0.94);
 }
 
-.services-control-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-/* Category Pills Bar */
-.services-category-tabs {
+.treatments-filter-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 6px 2px 10px;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
 }
 
-.services-category-tabs::-webkit-scrollbar {
+.treatments-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 4px 2px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+
+.treatments-tabs::-webkit-scrollbar {
   display: none;
 }
 
-.services-category-pill {
+.treatments-tab-btn {
   display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
-  border-radius: 999px;
-  background: var(--surface-color, #ffffff);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.16));
-  color: var(--text-secondary, #485E53);
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.85rem;
-  font-weight: 600;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 7px 14px;
+  background: transparent;
+  border: 1px solid rgba(27, 67, 50, 0.12);
+  border-radius: 10px;
   cursor: pointer;
   white-space: nowrap;
-  flex-shrink: 0;
   transition: all 0.2s ease;
-  user-select: none;
+  font-family: var(--font-sans, 'Inter', sans-serif);
 }
 
-.services-category-pill:hover {
-  border-color: var(--primary-green, #1B6B50);
-  color: var(--primary-green, #1B6B50);
+.treatments-tab-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2D4238;
+  line-height: 1.2;
 }
 
-.services-category-pill.is-active {
-  background: var(--primary-green, #1B6B50);
-  border-color: var(--primary-green, #1B6B50);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(27, 107, 80, 0.25);
+.treatments-tab-sanskrit {
+  font-size: 0.68rem;
+  color: #7D8F85;
+  font-style: italic;
 }
 
-.services-pill-count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  padding: 1px 6px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.25);
-  color: inherit;
+.treatments-tab-btn:hover {
+  background: rgba(27, 67, 50, 0.05);
+  border-color: rgba(27, 67, 50, 0.25);
+}
+
+.treatments-tab-btn.is-active {
+  background: #143826;
+  border-color: #143826;
+}
+
+.treatments-tab-btn.is-active .treatments-tab-label {
+  color: #FAF9F5;
+}
+
+.treatments-tab-btn.is-active .treatments-tab-sanskrit {
+  color: #D6BA86;
 }
 
 /* Search Box */
-.services-search-box {
+.treatments-search-box {
   position: relative;
   display: flex;
   align-items: center;
-  width: 100%;
-  max-width: 520px;
+  min-width: 280px;
 }
 
-.services-search-icon {
+.treatments-search-icon {
   position: absolute;
   left: 14px;
-  color: var(--text-light, #7E9387);
+  color: #788C82;
   pointer-events: none;
 }
 
-.services-search-input {
+.treatments-search-input {
   width: 100%;
-  padding: 11px 40px 11px 40px;
-  background: var(--surface-color, #ffffff);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.18));
-  border-radius: 12px;
+  height: 40px;
+  padding: 0 34px 0 38px;
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.16);
+  border-radius: 999px;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.9rem;
-  color: var(--text-primary, #14241C);
-  transition: all 0.2s ease;
+  font-size: 0.86rem;
+  color: #1B3328;
   outline: none;
+  transition: all 0.2s ease;
 }
 
-.services-search-input:focus {
-  border-color: var(--primary-green, #1B6B50);
+.treatments-search-input:focus {
+  border-color: #1B6B50;
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.12);
 }
 
-.services-search-clear {
+.treatments-search-clear {
   position: absolute;
   right: 12px;
   background: none;
   border: none;
+  color: #788C82;
   font-size: 1.2rem;
-  color: var(--text-light, #7E9387);
   cursor: pointer;
-  padding: 4px;
   line-height: 1;
 }
 
 /* ==========================================================================
-   3. TREATMENTS CATALOG GRID (Images & Details)
+   3. EDITORIAL TREATMENTS CATALOG GRID
    ========================================================================== */
-.services-catalog-section {
-  padding: 10px 0 70px;
+.treatments-catalog-section {
+  padding: 44px 0 68px;
 }
 
-.services-detail-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
-}
-
-/* Individual Card */
-.treatment-detail-card {
-  background: var(--surface-color, #ffffff);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
-  border-radius: 22px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 30px rgba(18, 76, 56, 0.05);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease;
-}
-
-.treatment-detail-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(201, 141, 59, 0.45);
-  box-shadow: 0 20px 48px rgba(18, 76, 56, 0.12);
-}
-
-/* Media Container */
-.treatment-detail-card__media {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  max-height: 280px;
-  overflow: hidden;
-  background-color: #284436;
-}
-
-.treatment-detail-card__img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.treatment-detail-card:hover .treatment-detail-card__img {
-  transform: scale(1.04);
-}
-
-.treatment-detail-card__gradient-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.25) 0%, transparent 40%, rgba(14, 30, 22, 0.65) 100%);
-  pointer-events: none;
-}
-
-.treatment-detail-card__category-badge {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(14, 34, 25, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 999px;
-  color: #FAFBF9;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  backdrop-filter: blur(8px);
-  text-transform: uppercase;
-  z-index: 2;
-}
-
-.treatment-detail-card__duration-badge {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 999px;
-  color: var(--primary-green, #1B6B50);
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  backdrop-filter: blur(8px);
-  z-index: 2;
-}
-
-/* Body */
-.treatment-detail-card__body {
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.treatment-detail-card__title {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.55rem;
-  font-weight: 700;
-  color: var(--text-primary, #14241C);
-  line-height: 1.25;
-  margin: 0 0 10px;
-}
-
-.treatment-detail-card__desc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.92rem;
-  line-height: 1.62;
-  color: var(--text-secondary, #485E53);
-  margin: 0 0 18px;
-}
-
-/* Benefits Checklist */
-.treatment-detail-card__benefits-wrap {
-  background: rgba(27, 107, 80, 0.04);
-  border: 1px solid rgba(27, 107, 80, 0.08);
-  border-radius: 12px;
-  padding: 14px 16px;
-  margin-bottom: 22px;
-}
-
-.treatment-detail-card__benefits-title {
-  display: block;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.76rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--primary-green, #1B6B50);
-  margin-bottom: 8px;
-}
-
-.treatment-detail-card__benefits-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.treatment-detail-card__benefits-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.84rem;
-  color: var(--text-secondary, #3C5146);
-  line-height: 1.45;
-}
-
-.treatment-detail-card__check-icon {
-  color: var(--primary-green, #1B6B50);
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-/* Actions Row */
-.treatment-detail-card__actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  padding-top: 8px;
-  flex-wrap: wrap;
-}
-
-.treatment-detail-btn-whatsapp {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  padding: 11px 16px;
-  background: rgba(37, 211, 102, 0.12);
-  border: 1px solid rgba(37, 211, 102, 0.4);
-  color: #17833e;
-  border-radius: 10px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.86rem;
-  font-weight: 700;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  min-height: 42px;
-  white-space: nowrap;
-}
-
-.treatment-detail-btn-whatsapp:hover {
-  background: #25D366;
-  color: #ffffff;
-  transform: translateY(-1px);
-}
-
-.treatment-detail-btn-book {
-  flex: 1;
-  min-height: 42px;
-}
-
-/* ==========================================================================
-   4. CLINICAL PILLARS STRIP
-   ========================================================================== */
-.services-pillars-strip {
-  padding: 60px 0;
-  background: linear-gradient(180deg, rgba(27, 107, 80, 0.05) 0%, rgba(27, 107, 80, 0.08) 100%);
-  border-top: 1px solid rgba(27, 107, 80, 0.12);
-  border-bottom: 1px solid rgba(27, 107, 80, 0.12);
-}
-
-.services-pillars-grid {
+.treatments-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 28px;
 }
 
-.services-pillar-item {
+@media (max-width: 1080px) {
+  .treatments-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 22px;
+  }
+}
+
+@media (max-width: 680px) {
+  .treatments-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Editorial Treatment Card */
+.treatment-editorial-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.09);
+  border-radius: 18px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 10px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 16px rgba(18, 40, 30, 0.04);
 }
 
-.services-pillar-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: var(--primary-green, #1B6B50);
-  color: #ffffff;
+.treatment-editorial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(18, 40, 30, 0.08);
+  border-color: rgba(27, 107, 80, 0.22);
+}
+
+/* Card Media */
+.treatment-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: #EFECE6;
+}
+
+.treatment-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.treatment-editorial-card:hover .treatment-card-img {
+  transform: scale(1.04);
+}
+
+.treatment-card-media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.3) 0%, transparent 40%, rgba(14, 30, 22, 0.65) 100%);
+}
+
+.treatment-card-tag {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 4px 10px;
+  background: rgba(20, 56, 38, 0.88);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(214, 186, 134, 0.4);
+  border-radius: 6px;
+  color: #FAF9F5;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.treatment-card-duration {
+  position: absolute;
+  bottom: 12px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  border-radius: 999px;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+/* Card Content */
+.treatment-card-content {
+  padding: 22px 22px 20px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 14px;
-  box-shadow: 0 8px 20px rgba(27, 107, 80, 0.25);
+  flex-direction: column;
+  flex: 1;
 }
 
-.services-pillar-item h3 {
+.treatment-card-title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: 1.25rem;
   font-weight: 700;
-  color: var(--text-primary, #14241C);
-  margin: 0 0 8px;
+  color: #12281E;
+  line-height: 1.3;
+  margin: 0 0 10px;
+  letter-spacing: -0.01em;
 }
 
-.services-pillar-item p {
+.treatment-card-desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.88rem;
-  line-height: 1.6;
-  color: var(--text-secondary, #485E53);
-  margin: 0;
+  line-height: 1.62;
+  color: #4A6155;
+  margin: 0 0 16px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* ==========================================================================
-   5. FAQS ACCORDION
-   ========================================================================== */
-.services-faq-section {
-  padding: 80px 0 70px;
+/* Botanical Chips (Replacing repetitive checklists) */
+.treatment-card-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
 }
 
-.services-faq-header {
-  margin-bottom: 40px;
+.treatment-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 9px;
+  background: #F3F6F4;
+  border: 1px solid rgba(27, 67, 50, 0.08);
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #274D3B;
+  white-space: nowrap;
 }
 
-.services-section-tag {
-  display: inline-block;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent-gold, #C98D3B);
-  margin-bottom: 8px;
+.treatment-chip em {
+  color: #C68B39;
+  font-style: normal;
+  font-size: 0.8rem;
 }
 
-.services-section-title {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.8rem, 3.2vw, 2.5rem);
-  font-weight: 700;
-  color: var(--text-primary, #14241C);
-  margin: 0 0 10px;
-}
-
-.services-section-subtitle {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--text-secondary, #485E53);
-  max-width: 620px;
-  margin: 0 auto;
-}
-
-.services-faq-list {
+/* Footer Action Bar */
+.treatment-card-footer {
+  margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(27, 67, 50, 0.07);
 }
 
-.services-faq-card {
-  background: var(--surface-color, #ffffff);
-  border: 1px solid var(--border-color, rgba(27, 107, 80, 0.14));
-  border-radius: 14px;
-  overflow: hidden;
-  transition: all 0.25s ease;
+.treatment-btn-book {
+  width: 100% !important;
 }
 
-.services-faq-card.is-open {
-  border-color: var(--primary-green, #1B6B50);
-  box-shadow: 0 8px 24px rgba(27, 107, 80, 0.08);
-}
-
-.services-faq-question-btn {
-  width: 100%;
+.treatment-footer-secondary {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
-  background: transparent;
+  gap: 10px;
+}
+
+.treatment-btn-details {
+  background: none;
   border: none;
+  padding: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1B6B50;
   cursor: pointer;
-  text-align: left;
-  gap: 16px;
+  transition: color 0.2s ease;
 }
 
-.services-faq-q-text {
-  font-size: 1.02rem;
-  font-weight: 700;
-  color: var(--text-primary, #14241C);
-  line-height: 1.4;
+.treatment-btn-details:hover {
+  color: #C68B39;
 }
 
-.services-faq-chevron-wrap {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  border-radius: 50%;
-  background: rgba(27, 107, 80, 0.08);
-  display: flex;
+.treatment-btn-whatsapp-icon {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--primary-green, #1B6B50);
+  width: 32px;
+  height: 32px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.3);
+  border-radius: 50%;
+  color: #17833e;
+  text-decoration: none;
+  transition: all 0.2s ease;
 }
 
-.services-faq-chevron {
-  transition: transform 0.3s ease;
-}
-
-.services-faq-chevron.is-rotated {
-  transform: rotate(180deg);
-}
-
-.services-faq-answer-wrap {
-  overflow: hidden;
-}
-
-.services-faq-answer-text {
-  padding: 0 20px 18px;
-  padding-top: 10px;
-  margin: 0;
-  font-size: 0.92rem;
-  line-height: 1.7;
-  color: var(--text-secondary, #485E53);
-  border-top: 1px solid rgba(27, 107, 80, 0.08);
+.treatment-btn-whatsapp-icon:hover {
+  background: #25D366;
+  color: #FFFFFF;
+  transform: translateY(-2px);
 }
 
 /* ==========================================================================
-   6. BOTTOM CTA BANNER
+   4. THE 3-STEP SAMHITA CARE PATHWAY
    ========================================================================== */
-.services-bottom-cta {
-  padding: 0 0 90px;
+.treatments-journey-strip {
+  padding: 64px 0;
+  background: #F4F1EA;
+  border-top: 1px solid rgba(27, 67, 50, 0.08);
+  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
 }
 
-.services-cta-card {
-  background: linear-gradient(135deg, #164E3A 0%, #113C2D 100%);
-  border-radius: 26px;
-  padding: clamp(34px, 5vw, 56px);
-  color: #ffffff;
+.journey-header {
+  max-width: 680px;
+  margin: 0 auto 40px;
+}
+
+.journey-pretitle {
+  display: inline-block;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #C68B39;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.journey-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 12px;
+}
+
+.journey-lead {
+  font-size: 0.94rem;
+  line-height: 1.65;
+  color: #4C6256;
+  margin: 0;
+}
+
+.journey-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 860px) {
+  .journey-steps-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.journey-step-card {
+  background: #FFFFFF;
+  border: 1px solid rgba(27, 67, 50, 0.09);
+  border-radius: 16px;
+  padding: 30px 24px;
+  position: relative;
+  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.03);
+}
+
+.journey-step-num {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: rgba(201, 141, 59, 0.35);
+}
+
+.journey-step-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(27, 107, 80, 0.08);
+  color: #1B6B50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+
+.journey-step-card h3 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.18rem;
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 8px;
+}
+
+.journey-step-card p {
+  font-size: 0.86rem;
+  line-height: 1.6;
+  color: #4D6458;
+  margin: 0;
+}
+
+/* ==========================================================================
+   5. DIRECT CLINICAL CONCIERGE BANNER
+   ========================================================================== */
+.treatments-concierge-strip {
+  padding: 64px 0 80px;
+}
+
+.treatments-concierge-card {
+  background: linear-gradient(135deg, #143826 0%, #1A4D35 100%);
+  border-radius: 20px;
+  padding: clamp(32px, 5vw, 48px);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 36px;
-  box-shadow: 0 20px 48px rgba(10, 46, 32, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #FFFFFF;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 40px rgba(14, 40, 28, 0.18);
 }
 
-.services-cta-content {
-  flex: 1;
-  max-width: 680px;
+.treatments-concierge-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, rgba(201, 141, 59, 0.15) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.services-cta-pill {
+.concierge-content {
+  max-width: 640px;
+  position: relative;
+  z-index: 1;
+}
+
+.concierge-badge {
   display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 5px 12px;
-  background: rgba(201, 141, 59, 0.2);
-  border: 1px solid rgba(201, 141, 59, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
-  color: #F8D8A0;
-  font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  margin-bottom: 12px;
+  letter-spacing: 0.06em;
+  color: #D6BA86;
+  margin-bottom: 16px;
 }
 
-.services-cta-title {
+.concierge-content h2 {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.6rem, 2.6vw, 2.3rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   font-weight: 700;
-  color: #FAFBF9;
-  line-height: 1.25;
   margin: 0 0 12px;
+  line-height: 1.22;
 }
 
-.services-cta-desc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
+.concierge-content p {
   font-size: 0.94rem;
   line-height: 1.65;
-  color: #D3E5DC;
+  color: rgba(255, 255, 255, 0.82);
   margin: 0;
 }
 
-.services-cta-actions {
+.concierge-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  min-width: 240px;
+  min-width: 260px;
+  position: relative;
+  z-index: 1;
 }
 
-.services-cta-whatsapp-link {
+.concierge-whatsapp-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 12px 20px;
+  padding: 13px 22px;
   background: #25D366;
-  color: #ffffff;
+  color: #FFFFFF;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.9rem;
-  font-weight: 700;
+  font-size: 0.92rem;
+  font-weight: 600;
   text-decoration: none;
-  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
   transition: all 0.25s ease;
 }
 
-.services-cta-whatsapp-link:hover {
-  background: #20BD5A;
-  color: #ffffff;
+.concierge-whatsapp-btn:hover {
+  background: #20BA5A;
   transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
 }
 
-/* Empty & Loading States */
-.services-loading-state,
-.services-empty-state {
-  text-align: center;
-  padding: 60px 20px;
+@media (max-width: 900px) {
+  .treatments-concierge-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .concierge-actions {
+    width: 100%;
+  }
+}
+
+/* ==========================================================================
+   6. CLINICAL PROTOCOL MODAL
+   ========================================================================== */
+.treatment-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(14, 30, 22, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.treatment-modal-card {
+  background: #FFFFFF;
+  border-radius: 20px;
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+}
+
+.treatment-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: #FFFFFF;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: background 0.2s ease;
+}
+
+.treatment-modal-close:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.treatment-modal-media {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.treatment-modal-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.treatment-modal-tag {
+  position: absolute;
+  bottom: 12px;
+  left: 16px;
+  padding: 4px 12px;
+  background: #143826;
+  border-radius: 6px;
+  color: #D6BA86;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.treatment-modal-body {
+  padding: 24px;
+}
+
+.treatment-modal-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: #6C8277;
+  margin-bottom: 12px;
+}
+
+.modal-duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 600;
+  color: #1B6B50;
+}
+
+.modal-doctor {
+  font-style: italic;
+}
+
+.treatment-modal-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 12px;
+}
+
+.treatment-modal-desc {
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: #4C6256;
+  margin: 0 0 20px;
+}
+
+.treatment-modal-section h4 {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1B3828;
+  margin: 0 0 10px;
+}
+
+.treatment-modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  gap: 8px;
 }
 
-.services-empty-icon {
-  color: var(--accent-gold, #C98D3B);
-}
-
-.services-reset-btn {
-  margin-top: 8px;
-  padding: 9px 20px;
-  border-radius: 999px;
-  background: var(--primary-green, #1B6B50);
-  color: #ffffff;
-  border: none;
-  font-weight: 600;
+.treatment-modal-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
   font-size: 0.88rem;
+  color: #385043;
+}
+
+.modal-bullet {
+  color: #1B6B50;
+  font-weight: 700;
+}
+
+.treatment-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.treatment-modal-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  border-radius: 999px;
+  color: #147A39;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.treatment-modal-whatsapp:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   LOADING & EMPTY STATES
+   ========================================================================== */
+.treatments-loading {
+  text-align: center;
+  padding: 80px 0;
+  color: #5A7064;
+}
+
+.treatments-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(27, 107, 80, 0.15);
+  border-top-color: #1B6B50;
+  border-radius: 50%;
+  animation: treatments-spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes treatments-spin {
+  to { transform: rotate(360deg); }
+}
+
+.treatments-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  background: #FFFFFF;
+  border: 1px dashed rgba(27, 67, 50, 0.2);
+  border-radius: 16px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.treatments-empty-icon {
+  color: #C68B39;
+  margin-bottom: 12px;
+}
+
+.treatments-empty-state h3 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.35rem;
+  color: #12281E;
+  margin: 0 0 8px;
+}
+
+.treatments-empty-state p {
+  font-size: 0.9rem;
+  color: #5D7266;
+  margin: 0 0 20px;
+}
+
+.treatments-reset-btn {
+  padding: 10px 22px;
+  background: #143826;
+  color: #FAF9F5;
+  border: none;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 600;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-/* ==========================================================================
-   7. DARK MODE ACCOMMODATIONS
-   ========================================================================== */
-[data-theme='dark'] .services-page-shell {
-  background-color: var(--bg-color, #0A140F);
-}
-
-[data-theme='dark'] .services-hero-title,
-[data-theme='dark'] .treatment-detail-card__title,
-[data-theme='dark'] .services-pillar-item h3,
-[data-theme='dark'] .services-section-title,
-[data-theme='dark'] .services-faq-q-text {
-  color: #F2F7F4;
-}
-
-[data-theme='dark'] .services-hero-desc,
-[data-theme='dark'] .treatment-detail-card__desc,
-[data-theme='dark'] .services-pillar-item p,
-[data-theme='dark'] .services-section-subtitle,
-[data-theme='dark'] .services-faq-answer-text {
-  color: #A6C2B4;
-}
-
-[data-theme='dark'] .treatment-detail-card,
-[data-theme='dark'] .services-category-pill,
-[data-theme='dark'] .services-search-input,
-[data-theme='dark'] .services-faq-card {
-  background-color: var(--surface-color, #11221B);
-  border-color: rgba(65, 186, 145, 0.16);
-}
-
-[data-theme='dark'] .treatment-detail-card__benefits-wrap {
-  background-color: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-[data-theme='dark'] .treatment-detail-card__benefits-list li {
-  color: #C3D8CE;
-}
-
-[data-theme='dark'] .services-pillars-strip {
-  background: rgba(14, 28, 22, 0.6);
-  border-color: rgba(65, 186, 145, 0.15);
-}
-
-/* ==========================================================================
-   8. RESPONSIVE BREAKPOINTS (Mobile-First Optimization)
-   ========================================================================== */
-@media (max-width: 992px) {
-  .services-detail-grid {
-    grid-template-columns: 1fr;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
-  .services-pillars-grid {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-
-  .services-cta-card {
-    flex-direction: column;
-    text-align: center;
-    padding: 36px 24px;
-  }
-
-  .services-cta-actions {
-    width: 100%;
-  }
-}
-
-@media (max-width: 768px) {
-  .services-page-hero {
-    padding: 100px 16px 36px;
-  }
-
-  .services-hero-badge {
-    padding: 4px 12px;
-    font-size: 0.68rem;
-    margin-bottom: 12px;
-  }
-
-  .services-hero-title {
-    font-size: 1.85rem;
-    margin-bottom: 12px;
-  }
-
-  .services-hero-desc {
-    font-size: 0.88rem;
-    line-height: 1.55;
-    margin-bottom: 22px;
-  }
-
-  .services-hero-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .services-hero-actions button,
-  .services-hero-whatsapp-btn {
-    width: 100%;
-    justify-content: center;
-    padding: 11px 20px;
-    font-size: 0.88rem;
-  }
-
-  .services-container {
-    padding: 0 16px;
-  }
-
-  .services-filter-section {
-    padding: 0 0 24px;
-  }
-
-  .services-category-tabs {
-    gap: 8px;
-    padding-bottom: 6px;
-  }
-
-  .services-category-pill {
-    padding: 7px 13px;
-    font-size: 0.78rem;
-  }
-
-  .services-search-box {
-    max-width: 100%;
-  }
-
-  .services-search-input {
-    padding: 9px 36px 9px 36px;
-    font-size: 0.84rem;
-  }
-
-  .services-detail-grid {
-    gap: 18px;
-  }
-
-  .treatment-detail-card {
-    border-radius: 16px;
-  }
-
-  .treatment-detail-card__media {
-    aspect-ratio: 16 / 10;
-    max-height: 210px;
-  }
-
-  .treatment-detail-card__body {
-    padding: 16px 14px;
-  }
-
-  .treatment-detail-card__title {
-    font-size: 1.25rem;
-    margin-bottom: 8px;
-  }
-
-  .treatment-detail-card__desc {
-    font-size: 0.84rem;
-    line-height: 1.52;
-    margin-bottom: 14px;
-  }
-
-  .treatment-detail-card__benefits-wrap {
-    padding: 12px 12px;
-    margin-bottom: 16px;
-  }
-
-  .treatment-detail-card__benefits-title {
-    font-size: 0.72rem;
-  }
-
-  .treatment-detail-card__benefits-list li {
-    font-size: 0.78rem;
-  }
-
-  .treatment-detail-card__actions {
-    flex-direction: column;
-    width: 100%;
-    gap: 8px;
-  }
-
-  .treatment-detail-btn-whatsapp,
-  .treatment-detail-btn-book,
-  .treatment-detail-card__actions button {
-    width: 100% !important;
-    justify-content: center;
-    font-size: 0.84rem;
-    padding: 10px 14px;
-  }
-
-  .services-faq-section {
-    padding: 50px 0 40px;
-  }
-
-  .services-faq-question-btn {
-    padding: 14px 16px;
-  }
-
-  .services-faq-q-text {
-    font-size: 0.92rem;
-  }
-
-  .services-faq-answer-text {
-    padding: 0 16px 14px;
-    font-size: 0.84rem;
-  }
-
-  .services-bottom-cta {
-    padding-bottom: 50px;
-  }
-
-  .services-cta-card {
-    padding: 24px 16px;
-    border-radius: 18px;
-  }
-
-  .services-cta-title {
-    font-size: 1.35rem;
-  }
-
-  .services-cta-desc {
-    font-size: 0.84rem;
-  }
+.treatments-reset-btn:hover {
+  background: #1B6B50;
 }

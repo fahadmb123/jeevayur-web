@@ -1,62 +1,60 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Sparkles,
-  Check,
   MessageCircle,
   Clock,
   Search,
-  ChevronDown,
   Leaf,
+  Info,
+  X,
   ShieldCheck,
+  Stethoscope,
   HeartPulse,
-  Calendar,
 } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/features/appointments';
 import { useTreatments } from '../hooks/useTreatments';
+import type { AyurvedaService } from '../types';
 import {
   staggerContainerVariants,
   fadeUpVariants,
-  standardViewport,
 } from '@/shared/lib/animations';
 import './ServicesPage.css';
 
 interface CategoryFilter {
   id: string;
   label: string;
+  sanskrit: string;
   tags?: string[];
 }
 
 const CATEGORY_FILTERS: CategoryFilter[] = [
-  { id: 'all', label: 'All Treatments' },
-  { id: 'metabolic', label: 'Metabolic & Agni', tags: ['metabolic-health', 'digestive-health'] },
-  { id: 'womens', label: "Women's Health", tags: ['womens-health'] },
-  { id: 'joints', label: 'Joints & Spine', tags: ['musculoskeletal-care'] },
-  { id: 'mind', label: 'Mental Wellbeing', tags: ['mental-wellbeing', 'neurological-health'] },
-  { id: 'skin', label: 'Skin & Hair', tags: ['skin-hair-health'] },
-  { id: 'preventive', label: 'Preventive & Aging', tags: ['preventive-healthcare', 'geriatric-health', 'respiratory-health'] },
+  { id: 'all', label: 'All Treatments', sanskrit: 'Sarva Chikitsa' },
+  { id: 'metabolic', label: 'Metabolic & Agni', sanskrit: 'Prameha & Agni', tags: ['metabolic-health', 'digestive-health'] },
+  { id: 'womens', label: "Women's Health", sanskrit: 'Stree Roga', tags: ['womens-health'] },
+  { id: 'joints', label: 'Joints & Spine', sanskrit: 'Sandhi Chikitsa', tags: ['musculoskeletal-care'] },
+  { id: 'mind', label: 'Mental Wellbeing', sanskrit: 'Satvavajaya', tags: ['mental-wellbeing', 'neurological-health'] },
+  { id: 'skin', label: 'Skin & Hair', sanskrit: 'Twak & Kesa', tags: ['skin-hair-health'] },
+  { id: 'preventive', label: 'Preventive & Aging', sanskrit: 'Rasayana', tags: ['preventive-healthcare', 'geriatric-health', 'respiratory-health'] },
 ];
 
 export const ServicesPage: React.FC = React.memo(() => {
-  const { services, faqs, loading } = useTreatments();
+  const { services, loading } = useTreatments();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [expandedFaqId, setExpandedFaqId] = useState<number | null>(0);
+  const [activeDetailService, setActiveDetailService] = useState<AyurvedaService | null>(null);
 
   // Filter treatments by category and search query
   const filteredServices = useMemo(() => {
     return services.filter((service) => {
-      // Category match
       let matchesCategory = true;
       if (selectedCategory !== 'all') {
         const activeFilter = CATEGORY_FILTERS.find((f) => f.id === selectedCategory);
-        if (activeFilter && activeFilter.tags) {
+        if (activeFilter?.tags) {
           matchesCategory = activeFilter.tags.includes(service.id);
         }
       }
 
-      // Search match
       let matchesSearch = true;
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase();
@@ -77,74 +75,73 @@ export const ServicesPage: React.FC = React.memo(() => {
 
       <main className="services-page">
         {/* ==================================================================
-            1. PAGE HERO
+            1. REFINED EDITORIAL HERO
             ================================================================== */}
-        <header className="services-page-hero">
-          <div className="services-hero-container">
+        <header className="treatments-hero">
+          <div className="treatments-hero__inner">
             <motion.div
-              className="services-hero-badge"
+              className="treatments-hero__lineage-pill"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
             >
-              <Sparkles size={14} className="badge-sparkle" />
-              <span>AUTHENTIC AYURVEDIC CHIKITSA</span>
+              <Leaf size={13} className="text-accent-gold" />
+              <span>Classical Kottakkal Heritage &bull; Ashtanga Hridaya Tradition</span>
             </motion.div>
 
             <motion.h1
-              className="services-hero-title"
+              className="treatments-hero__title"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.08 }}
             >
-              Classical Treatments &amp; <span className="text-primary-green">Therapeutic Care</span>
+              Ayurvedic Treatments &amp; <span className="treatments-hero__title-accent">Constitutional Healing</span>
             </motion.h1>
 
             <motion.p
-              className="services-hero-desc"
+              className="treatments-hero__subtitle"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
-              transition={{ delay: 0.15 }}
+              transition={{ delay: 0.14 }}
             >
-              Root-cause clinical healthcare adhering faithfully to classical Samhita wisdom, personalized Prakriti constitution analysis, and doctor-guided herbal restoration under Dr. Ahalya T.S.
+              Root-cause clinical healthcare under the guidance of Dr. Ahalya T.S. Every protocol integrates personalized Prakriti analysis, classical Samhita herbal formulations, and therapeutic rejuvenation.
             </motion.p>
 
-            {/* Quick Action Button */}
             <motion.div
-              className="services-hero-actions"
+              className="treatments-hero__actions"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
               transition={{ delay: 0.2 }}
             >
               <BookAppointmentButton
-                label="Schedule Clinical Consultation"
+                label="Book Clinical Consultation"
                 size="lg"
                 variant="primary"
               />
               <a
-                href="https://wa.me/918590807138?text=Hello,%20I%20would%20like%20to%20enquire%20about%20Ayurvedic%20treatments%20at%20Jeevayurniketan."
+                href="https://wa.me/918590807138?text=Hello%20Dr.%20Ahalya%20/%20Jeevayurniketan,%20I%20would%20like%20to%20enquire%20about%20Ayurvedic%20treatments."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="services-hero-whatsapp-btn"
+                className="treatments-hero__whatsapp-btn"
               >
-                <MessageCircle size={18} />
-                <span>Chat on WhatsApp</span>
+                <MessageCircle size={17} />
+                <span>Physician Desk on WhatsApp</span>
               </a>
             </motion.div>
           </div>
         </header>
 
         {/* ==================================================================
-            2. FILTER & SEARCH CONTROL STRIP
+            2. BOTANICAL CATEGORY STRIP & SEARCH
             ================================================================== */}
-        <section className="services-filter-section">
-          <div className="services-container">
-            <div className="services-control-bar">
-              {/* Category Pills (Horizontally scrollable on mobile) */}
-              <div className="services-category-tabs" role="tablist">
+        <section className="treatments-filter-strip">
+          <div className="treatments-container">
+            <div className="treatments-filter-row">
+              {/* Category Segmented Tabs */}
+              <div className="treatments-tabs" role="tablist">
                 {CATEGORY_FILTERS.map((cat) => {
                   const isActive = selectedCategory === cat.id;
                   return (
@@ -153,33 +150,31 @@ export const ServicesPage: React.FC = React.memo(() => {
                       type="button"
                       role="tab"
                       aria-selected={isActive}
-                      className={`services-category-pill ${isActive ? 'is-active' : ''}`}
+                      className={`treatments-tab-btn ${isActive ? 'is-active' : ''}`}
                       onClick={() => setSelectedCategory(cat.id)}
                     >
-                      <span>{cat.label}</span>
-                      {cat.id === 'all' && (
-                        <span className="services-pill-count">{services.length}</span>
-                      )}
+                      <span className="treatments-tab-label">{cat.label}</span>
+                      <span className="treatments-tab-sanskrit">{cat.sanskrit}</span>
                     </button>
                   );
                 })}
               </div>
 
-              {/* Search Box */}
-              <div className="services-search-box">
-                <Search size={16} className="services-search-icon" />
+              {/* Keyword Search */}
+              <div className="treatments-search-box">
+                <Search size={16} className="treatments-search-icon" />
                 <input
                   type="text"
-                  placeholder="Search by condition, treatment, or symptom..."
+                  placeholder="Search by condition, dosha, or therapy..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="services-search-input"
+                  className="treatments-search-input"
                   aria-label="Search treatments"
                 />
                 {searchQuery && (
                   <button
                     type="button"
-                    className="services-search-clear"
+                    className="treatments-search-clear"
                     onClick={() => setSearchQuery('')}
                     aria-label="Clear search"
                   >
@@ -192,34 +187,34 @@ export const ServicesPage: React.FC = React.memo(() => {
         </section>
 
         {/* ==================================================================
-            3. TREATMENTS CATALOG GRID (Images + Full Details)
+            3. EDITORIAL TREATMENTS CATALOG
             ================================================================== */}
-        <section className="services-catalog-section">
-          <div className="services-container">
+        <section className="treatments-catalog-section">
+          <div className="treatments-container">
             {loading ? (
-              <div className="services-loading-state">
-                <div className="services-loading-spinner" />
-                <p>Loading classical treatment catalog...</p>
+              <div className="treatments-loading">
+                <div className="treatments-spinner" />
+                <p>Curating authentic treatment protocols...</p>
               </div>
             ) : filteredServices.length === 0 ? (
-              <div className="services-empty-state">
-                <Leaf size={36} className="services-empty-icon" />
+              <div className="treatments-empty-state">
+                <Leaf size={40} className="treatments-empty-icon" />
                 <h3>No treatments found</h3>
-                <p>No Ayurvedic treatments matched your search &ldquo;{searchQuery}&rdquo;. Try another term or reset filters.</p>
+                <p>No Ayurvedic treatments matched &ldquo;{searchQuery}&rdquo;. Try another term or reset filters.</p>
                 <button
                   type="button"
-                  className="services-reset-btn"
+                  className="treatments-reset-btn"
                   onClick={() => {
                     setSelectedCategory('all');
                     setSearchQuery('');
                   }}
                 >
-                  Reset All Filters
+                  View All Treatments
                 </button>
               </div>
             ) : (
               <motion.div
-                className="services-detail-grid"
+                className="treatments-grid"
                 variants={staggerContainerVariants}
                 initial="hidden"
                 animate="visible"
@@ -232,82 +227,87 @@ export const ServicesPage: React.FC = React.memo(() => {
                   return (
                     <motion.article
                       key={service.id}
-                      className="treatment-detail-card"
+                      className="treatment-editorial-card"
                       variants={fadeUpVariants}
                       custom={index}
-                      viewport={{ once: true, amount: 0.15 }}
+                      viewport={{ once: true, amount: 0.12 }}
                     >
-                      {/* Image Header with Badge Overlays */}
-                      <div className="treatment-detail-card__media">
+                      {/* Media Image with Organic Crop */}
+                      <div className="treatment-card-media">
                         <img
                           src={service.image}
-                          alt={`${service.title} - Ayurvedic treatment at Jeevayurniketan`}
-                          className="treatment-detail-card__img"
+                          alt={`${service.title} - Classical Ayurvedic treatment`}
+                          className="treatment-card-img"
                           loading="lazy"
                           decoding="async"
                         />
-                        <div className="treatment-detail-card__gradient-overlay" />
+                        <div className="treatment-card-media-overlay" />
 
-                        {/* Category Tag Badge */}
+                        {/* Top Classical Discipline Tag */}
                         {service.categoryTag && (
-                          <span className="treatment-detail-card__category-badge">
-                            <Sparkles size={11} />
+                          <div className="treatment-card-tag">
                             <span>{service.categoryTag}</span>
-                          </span>
-                        )}
-
-                        {/* Duration Pill */}
-                        <span className="treatment-detail-card__duration-badge">
-                          <Clock size={12} />
-                          <span>{service.duration}</span>
-                        </span>
-                      </div>
-
-                      {/* Content Area */}
-                      <div className="treatment-detail-card__body">
-                        <h2 className="treatment-detail-card__title">
-                          {service.title}
-                        </h2>
-
-                        <p className="treatment-detail-card__desc">
-                          {service.description}
-                        </p>
-
-                        {/* Therapeutic Benefits Checklist */}
-                        {service.benefits && service.benefits.length > 0 && (
-                          <div className="treatment-detail-card__benefits-wrap">
-                            <span className="treatment-detail-card__benefits-title">
-                              Clinical Benefits &amp; Focus:
-                            </span>
-                            <ul className="treatment-detail-card__benefits-list">
-                              {service.benefits.map((benefit, i) => (
-                                <li key={i}>
-                                  <Check size={14} className="treatment-detail-card__check-icon" />
-                                  <span>{benefit}</span>
-                                </li>
-                              ))}
-                            </ul>
                           </div>
                         )}
 
-                        {/* Card Actions */}
-                        <div className="treatment-detail-card__actions">
-                          <a
-                            href={whatsappUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="treatment-detail-btn-whatsapp"
-                          >
-                            <MessageCircle size={17} />
-                            <span>Enquire on WhatsApp</span>
-                          </a>
+                        {/* Duration Pill */}
+                        <div className="treatment-card-duration">
+                          <Clock size={12} />
+                          <span>{service.duration}</span>
+                        </div>
+                      </div>
 
+                      {/* Card Content */}
+                      <div className="treatment-card-content">
+                        <h2 className="treatment-card-title">
+                          {service.title}
+                        </h2>
+
+                        <p className="treatment-card-desc">
+                          {service.description}
+                        </p>
+
+                        {/* Botanical Key Focus Chips (clean tags instead of repetitive bullet points) */}
+                        {service.benefits && service.benefits.length > 0 && (
+                          <div className="treatment-card-chips">
+                            {service.benefits.slice(0, 3).map((benefit, i) => (
+                              <span key={i} className="treatment-chip">
+                                <em>✦</em> {benefit}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Action Bar */}
+                        <div className="treatment-card-footer">
                           <BookAppointmentButton
                             label="Book Consultation"
                             size="md"
                             variant="primary"
-                            className="treatment-detail-btn-book"
+                            className="treatment-btn-book"
                           />
+
+                          <div className="treatment-footer-secondary">
+                            <button
+                              type="button"
+                              className="treatment-btn-details"
+                              onClick={() => setActiveDetailService(service)}
+                            >
+                              <span>Clinical Details</span>
+                              <Info size={14} />
+                            </button>
+
+                            <a
+                              href={whatsappUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="treatment-btn-whatsapp-icon"
+                              title="Enquire on WhatsApp"
+                              aria-label={`Enquire about ${service.title} on WhatsApp`}
+                            >
+                              <MessageCircle size={16} />
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </motion.article>
@@ -319,138 +319,175 @@ export const ServicesPage: React.FC = React.memo(() => {
         </section>
 
         {/* ==================================================================
-            4. CLINICAL PILLARS STRIP
+            4. THE 3-STEP SAMHITA CARE PATHWAY
             ================================================================== */}
-        <section className="services-pillars-strip">
-          <div className="services-container">
-            <div className="services-pillars-grid">
-              <div className="services-pillar-item">
-                <div className="services-pillar-icon">
-                  <Leaf size={22} />
-                </div>
-                <h3>Classical Herbal Formulations</h3>
-                <p>Authentic Kashayams, Arishtams, and medicated oils adhering strictly to ancient Samhita texts.</p>
-              </div>
-
-              <div className="services-pillar-item">
-                <div className="services-pillar-icon">
-                  <ShieldCheck size={22} />
-                </div>
-                <h3>Root-Cause Prakriti Assessment</h3>
-                <p>Evaluating unique Dosha baselines, metabolic fire (Agni), and tissue imbalances for tailored healing.</p>
-              </div>
-
-              <div className="services-pillar-item">
-                <div className="services-pillar-icon">
-                  <HeartPulse size={22} />
-                </div>
-                <h3>Yoga &amp; Lifestyle Integration</h3>
-                <p>Doctor-prescribed therapeutic movement, Dinacharya routines, and mindful recovery practices.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ==================================================================
-            5. FREQUENTLY ASKED QUESTIONS
-            ================================================================== */}
-        <section className="services-faq-section" id="faq">
-          <div className="services-container services-container--narrow">
-            <div className="text-center services-faq-header">
-              <span className="services-section-tag">CLINICAL INQUIRIES</span>
-              <h2 className="services-section-title">Frequently Asked Questions</h2>
-              <p className="services-section-subtitle">
-                Clear answers regarding our consultation process, medicine safety, and holistic treatment methodology.
+        <section className="treatments-journey-strip">
+          <div className="treatments-container">
+            <div className="journey-header text-center">
+              <span className="journey-pretitle">OUR CLINICAL METHODOLOGY</span>
+              <h2 className="journey-title">The Three Pillars of Ayurvedic Chikitsa</h2>
+              <p className="journey-lead">
+                Every consultation adheres strictly to the authentic diagnostic principles laid down in Charaka Samhita and Ashtanga Hridaya.
               </p>
             </div>
 
-            <div className="services-faq-list">
-              {faqs.map((item, index) => {
-                const isOpen = expandedFaqId === index;
-                return (
-                  <div
-                    key={index}
-                    className={`services-faq-card ${isOpen ? 'is-open' : ''}`}
-                  >
-                    <button
-                      type="button"
-                      className="services-faq-question-btn"
-                      onClick={() => setExpandedFaqId(isOpen ? null : index)}
-                      aria-expanded={isOpen}
-                    >
-                      <span className="services-faq-q-text">{item.q}</span>
-                      <span className="services-faq-chevron-wrap">
-                        <ChevronDown
-                          size={18}
-                          className={`services-faq-chevron ${isOpen ? 'is-rotated' : ''}`}
-                        />
-                      </span>
-                    </button>
+            <div className="journey-steps-grid">
+              <div className="journey-step-card">
+                <span className="journey-step-num">01</span>
+                <div className="journey-step-icon">
+                  <Stethoscope size={22} />
+                </div>
+                <h3>Prakriti &amp; Dosha Diagnostic</h3>
+                <p>
+                  Comprehensive pulse examination (Nadi Pariksha), constitution assessment (Prakriti vs. Vikriti), and identifying metabolic toxin accumulation (Ama).
+                </p>
+              </div>
 
-                    <AnimatePresence initial={false}>
-                      {isOpen && (
-                        <motion.div
-                          className="services-faq-answer-wrap"
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <p className="services-faq-answer-text">{item.a}</p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
+              <div className="journey-step-card">
+                <span className="journey-step-num">02</span>
+                <div className="journey-step-icon">
+                  <Leaf size={22} />
+                </div>
+                <h3>Classical Samhita Formulations</h3>
+                <p>
+                  Prescription of authentic medicinal oils (Thailams), decoctions (Kashayams), and arishtams sourced from the revered Kottakkal lineage.
+                </p>
+              </div>
+
+              <div className="journey-step-card">
+                <span className="journey-step-num">03</span>
+                <div className="journey-step-icon">
+                  <HeartPulse size={22} />
+                </div>
+                <h3>Guided Ahara &amp; Smriti Healing</h3>
+                <p>
+                  Integrating therapeutic dietary guidance (Ahara), lifestyle harmonization (Vihara), and guided Smriti meditation for root-cause psychosomatic wellness.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* ==================================================================
-            6. BOTTOM CONSULTATION BANNER
+            5. DIRECT CLINICAL CONCIERGE BANNER
             ================================================================== */}
-        <section className="services-bottom-cta">
-          <div className="services-container">
-            <motion.div
-              className="services-cta-card"
-              variants={fadeUpVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={standardViewport}
-            >
-              <div className="services-cta-content">
-                <span className="services-cta-pill">
-                  <Calendar size={13} />
-                  <span>START YOUR RECOVERY</span>
-                </span>
-                <h2 className="services-cta-title">
-                  Begin Your Personalized Ayurvedic Healing Journey
-                </h2>
-                <p className="services-cta-desc">
-                  Schedule an in-depth video or in-clinic consultation with Dr. Ahalya T.S. to evaluate your constitution and receive a structured treatment protocol.
+        <section className="treatments-concierge-strip">
+          <div className="treatments-container">
+            <div className="treatments-concierge-card">
+              <div className="concierge-content">
+                <div className="concierge-badge">
+                  <ShieldCheck size={14} />
+                  <span>DIRECT PHYSICIAN DESK</span>
+                </div>
+                <h2>Unsure which treatment suits your condition?</h2>
+                <p>
+                  Discuss your symptoms, lab reports, or health history directly with Dr. Ahalya T.S. to receive an honest, personalized Ayurvedic treatment evaluation.
                 </p>
               </div>
-
-              <div className="services-cta-actions">
+              <div className="concierge-actions">
                 <BookAppointmentButton
+                  label="Schedule Consultation"
                   size="lg"
                   variant="primary"
-                  label="Schedule Consultation Now"
                 />
                 <a
-                  href="https://wa.me/918590807138?text=Hello,%20I%20would%20like%20to%20schedule%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S."
+                  href="https://wa.me/918590807138?text=Hello%20Dr.%20Ahalya,%20I%20would%20like%20guidance%20on%20which%20treatment%20is%20suitable%20for%20my%20health%20condition."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="services-cta-whatsapp-link"
+                  className="concierge-whatsapp-btn"
                 >
                   <MessageCircle size={18} />
-                  <span>Chat on WhatsApp</span>
+                  <span>Direct WhatsApp Guidance</span>
                 </a>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
+
+        {/* ==================================================================
+            6. MODAL: DETAILED CLINICAL PROTOCOL
+            ================================================================== */}
+        <AnimatePresence>
+          {activeDetailService && (
+            <div
+              className="treatment-modal-backdrop"
+              onClick={() => setActiveDetailService(null)}
+              role="dialog"
+              aria-modal="true"
+            >
+              <motion.div
+                className="treatment-modal-card"
+                initial={{ opacity: 0, scale: 0.94, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.94, y: 20 }}
+                transition={{ duration: 0.25 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  className="treatment-modal-close"
+                  onClick={() => setActiveDetailService(null)}
+                  aria-label="Close dialog"
+                >
+                  <X size={20} />
+                </button>
+
+                <div className="treatment-modal-media">
+                  <img
+                    src={activeDetailService.image}
+                    alt={activeDetailService.title}
+                  />
+                  <div className="treatment-modal-tag">
+                    {activeDetailService.categoryTag || 'Ayurvedic Chikitsa'}
+                  </div>
+                </div>
+
+                <div className="treatment-modal-body">
+                  <div className="treatment-modal-meta">
+                    <span className="modal-duration">
+                      <Clock size={13} /> {activeDetailService.duration}
+                    </span>
+                    <span className="modal-doctor">Guided by Dr. Ahalya T.S.</span>
+                  </div>
+
+                  <h2 className="treatment-modal-title">{activeDetailService.title}</h2>
+                  <p className="treatment-modal-desc">{activeDetailService.description}</p>
+
+                  <div className="treatment-modal-section">
+                    <h4>Clinical Benefits &amp; Therapeutic Targets:</h4>
+                    <ul className="treatment-modal-list">
+                      {(activeDetailService.benefits || []).map((b, i) => (
+                        <li key={i}>
+                          <span className="modal-bullet">✓</span>
+                          <span>{b}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="treatment-modal-actions">
+                    <BookAppointmentButton
+                      label="Book Clinical Consultation"
+                      size="lg"
+                      variant="primary"
+                    />
+                    <a
+                      href={`https://wa.me/918590807138?text=${encodeURIComponent(
+                        `Hello Dr. Ahalya, I am enquiring about clinical treatment details for ${activeDetailService.title}.`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="treatment-modal-whatsapp"
+                    >
+                      <MessageCircle size={16} />
+                      <span>Enquire on WhatsApp</span>
+                    </a>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
       </main>
 
       <Footer />
