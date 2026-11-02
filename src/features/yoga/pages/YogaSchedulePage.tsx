@@ -5,27 +5,24 @@ import {
   Video,
   MapPin,
   Clock,
-  Compass,
   Award,
-  Heart,
-  Sparkles,
-  ShieldCheck,
   MessageCircle,
   Inbox,
   User,
 } from 'lucide-react';
 import { useYogaSchedule } from '../hooks/useYogaSchedule';
-import { YogaProgramShowcaseCard } from '../components/YogaProgramShowcaseCard';
+import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
+import { YogaProgramDetailsCard } from '../components/YogaProgramDetailsCard';
 import { YogaBookingCard } from '../components/YogaBookingCard';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
+import type { YogaProgram } from '../data/yogaathmaData';
 import { Navbar, Footer } from '@/shared/layout';
 import type { DayOfWeek, YogaFormat } from '../types/yoga.types';
 import {
+  staggerContainerVariants,
   fadeUpVariants,
 } from '@/shared/lib/animations';
 import './YogaSchedulePage.css';
-
-const PILLAR_ICONS = [Compass, Award, Heart, Sparkles, ShieldCheck];
 
 const DAYS_OF_WEEK: { key: DayOfWeek; label: string }[] = [
   { key: 'Monday', label: 'Mon' },
@@ -45,14 +42,28 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
   const [activeDay, setActiveDay] = useState<DayOfWeek>('Monday');
   const [activeFormat, setActiveFormat] = useState<YogaFormat | 'all'>('all');
+  const [selectedProgramId, setSelectedProgramId] = useState<string>(
+    YOGAATHMA_DATA.programs[0]?.id || ''
+  );
 
-  const { hero, approach, programs } = YOGAATHMA_DATA;
+  const { hero, programs } = YOGAATHMA_DATA;
 
   const whatsappHeroUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
     hero.whatsappMessage
   )}`;
 
-  // Filter schedule sessions for the customer
+  const activeProgram = useMemo(() => {
+    return programs.find((p) => p.id === selectedProgramId) || programs[0];
+  }, [programs, selectedProgramId]);
+
+  const handleSelectProgram = (program: YogaProgram) => {
+    setSelectedProgramId(program.id);
+    const element = document.getElementById('yoga-program-details');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const filteredSessions = useMemo(() => {
     return sessions.filter((session) => {
       const matchesDay = session.days.includes(activeDay);
@@ -66,28 +77,14 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
       <Navbar />
 
       <main className="yoga-page">
-        {/* ==================================================================
-            1. EDITORIAL SANCTUARY HERO
-            ================================================================== */}
         <header className="yoga-hero-section">
           <div className="yoga-container">
             <div className="yoga-hero-content">
-              <motion.div
-                className="yoga-hero-badge"
-                variants={fadeUpVariants}
-                initial="hidden"
-                animate="visible"
-              >
-                <Sparkles size={13} className="text-accent-gold" />
-                <span>YOGAATHMA &bull; CLASSICAL AYURVEDIC SWASTHYA</span>
-              </motion.div>
-
               <motion.h1
                 className="yoga-hero-title"
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
-                transition={{ delay: 0.08 }}
               >
                 Yoga for Mind, Body <span className="yoga-hero-title-accent">&amp; Spirit</span>
               </motion.h1>
@@ -97,9 +94,9 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
-                transition={{ delay: 0.14 }}
+                transition={{ delay: 0.08 }}
               >
-                Authentic, physician-guided yogic sadhana combining classical Asana alignment, conscious Pranayama breath regulation, and restorative Smriti mindfulness under experienced Yogacharyas.
+                Personalized yoga practices, therapeutic movement, and breath awareness guided by experienced Yogacharyas.
               </motion.p>
 
               <motion.div
@@ -107,7 +104,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                 variants={fadeUpVariants}
                 initial="hidden"
                 animate="visible"
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.14 }}
               >
                 <a
                   href={whatsappHeroUrl}
@@ -128,79 +125,66 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
           </div>
         </header>
 
-        {/* ==================================================================
-            2. THE 5 FOUNDATIONAL PILLARS
-            ================================================================== */}
-        <section className="yoga-pillars-section">
-          <div className="yoga-container">
-            <div className="yoga-section-header text-center">
-              <span className="yoga-eyebrow">OUR YOGIC PHILOSOPHY</span>
-              <h2 className="yoga-section-heading">Yoga That Connects Body, Mind &amp; Soul</h2>
-              <p className="yoga-section-desc">
-                Rooted in authentic shastras, our sessions emphasize mindfulness, movement safety, and constitutional balance tailored to individual needs.
-              </p>
-            </div>
-
-            <div className="yoga-pillars-grid">
-              {approach.pillars.map((pillar, idx) => {
-                const IconComp = PILLAR_ICONS[idx % PILLAR_ICONS.length];
-                return (
-                  <div key={idx} className="yoga-pillar-item">
-                    <div className="yoga-pillar-icon-box">
-                      <IconComp size={18} />
-                    </div>
-                    <div className="yoga-pillar-text">
-                      <h4>{pillar.title}</h4>
-                      <p>{pillar.desc}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ==================================================================
-            3. CURATED YOGA PATHWAYS (EDITORIAL SHOWCASE)
-            ================================================================== */}
         <section id="yoga-programs" className="yoga-programs-section">
           <div className="yoga-container">
             <div className="yoga-section-header text-center">
-              <span className="yoga-eyebrow">SIGNATURE DISCIPLINES</span>
               <h2 className="yoga-section-heading">Our Yoga Programs</h2>
               <p className="yoga-section-desc">
-                From 1-on-1 personalized sadhana to therapeutic rehabilitation, discover a practice that resonates with your current physical and mental state.
+                Select a program to view full details and practice structure below.
               </p>
             </div>
 
-            <div className="yoga-programs-grid">
+            <motion.div
+              className="yoga-images-grid"
+              variants={staggerContainerVariants}
+              initial="hidden"
+              animate="visible"
+            >
               {programs.map((program, index) => (
-                <YogaProgramShowcaseCard
+                <motion.div
                   key={program.id}
-                  program={program}
-                  index={index}
-                />
+                  variants={fadeUpVariants}
+                  custom={index}
+                  viewport={{ once: true, amount: 0.1 }}
+                >
+                  <YogaProgramImageCard
+                    program={program}
+                    isSelected={activeProgram?.id === program.id}
+                    onSelect={() => handleSelectProgram(program)}
+                  />
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
+
+            {activeProgram && (
+              <div className="yoga-program-details-wrap">
+                <div className="yoga-section-header text-center">
+                  <h2 className="yoga-section-heading">Program Details</h2>
+                  <p className="yoga-section-desc">
+                    Full curriculum, therapeutic focus, and reservation options.
+                  </p>
+                </div>
+
+                <YogaProgramDetailsCard
+                  program={activeProgram}
+                  programs={programs}
+                  onSelectProgram={handleSelectProgram}
+                />
+              </div>
+            )}
           </div>
         </section>
 
-        {/* ==================================================================
-            4. PATIENT-FACING LIVE & IN-SHALA WEEKLY TIMETABLE
-            ================================================================== */}
         <section id="yoga-schedule" className="yoga-schedule-section">
           <div className="yoga-container">
             <div className="yoga-section-header text-center">
-              <span className="yoga-eyebrow">PRACTICE TIMINGS</span>
-              <h2 className="yoga-section-heading">Weekly Live &amp; Shala Timetable</h2>
+              <h2 className="yoga-section-heading">Weekly Timetable</h2>
               <p className="yoga-section-desc">
-                Join us in our tranquil Kottakkal Shala or attend live online sessions from anywhere in the world.
+                Attend sessions in our Kottakkal Shala or join live online from anywhere.
               </p>
             </div>
 
-            {/* Timetable Controls: Day Selector + Format Filter */}
             <div className="yoga-schedule-controls">
-              {/* Day Selector Chips */}
               <div className="yoga-day-tabs" role="tablist">
                 {DAYS_OF_WEEK.map((d) => {
                   const isActive = activeDay === d.key;
@@ -220,7 +204,6 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                 })}
               </div>
 
-              {/* Format Filter */}
               <div className="yoga-format-filter">
                 <button
                   type="button"
@@ -248,7 +231,6 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </div>
             </div>
 
-            {/* Sessions Grid */}
             {isLoading ? (
               <div className="yoga-schedule-loading">
                 <p>Loading weekly timetable...</p>
@@ -276,7 +258,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               <div className="yoga-classes-grid">
                 {filteredSessions.map((session) => {
                   const sessionWhatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
-                    `Hello Jeevayurniketan | Yogaathma, I would like to book a spot for the "${session.title}" on ${activeDay} (${session.time}).`
+                    `Hello Jeevayurniketan | Yogaathma, I would like to book a spot for "${session.title}" on ${activeDay} (${session.time}).`
                   )}`;
 
                   return (
@@ -293,7 +275,6 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                       </div>
 
                       <h3 className="yoga-timetable-card__title">{session.title}</h3>
-
                       <p className="yoga-timetable-card__desc">{session.description}</p>
 
                       <div className="yoga-timetable-card__meta">
@@ -331,33 +312,29 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
           </div>
         </section>
 
-        {/* ==================================================================
-            5. ATMOSPHERE & SHALA PRACTICE GALLERY
-            ================================================================== */}
         <section className="yoga-gallery-strip">
           <div className="yoga-container">
             <div className="yoga-section-header text-center">
-              <span className="yoga-eyebrow">PRACTICE ATMOSPHERE</span>
-              <h2 className="yoga-section-heading">In the Shala &amp; Live Practice</h2>
+              <h2 className="yoga-section-heading">Practice Atmosphere</h2>
               <p className="yoga-section-desc">
-                Tranquil natural surroundings, traditional teakwood flooring, and compassionate guidance to nurture your sadhana.
+                Tranquil natural surroundings and compassionate guidance to nurture your practice.
               </p>
             </div>
 
             <div className="yoga-atmosphere-grid">
               <div className="yoga-atmosphere-item">
-                <img src="/yoga/yoga-1.jpg" alt="Therapeutic Asana Alignment at Yogaathma" loading="lazy" />
+                <img src="/yoga/yoga-1.jpg" alt="Therapeutic Asana Alignment" loading="lazy" />
                 <div className="atmosphere-caption">
                   <h4>Therapeutic Asana Alignment</h4>
-                  <p>Gentle, individualized posture guidance in a tranquil healing setting.</p>
+                  <p>Gentle posture guidance in a tranquil healing setting.</p>
                 </div>
               </div>
 
               <div className="yoga-atmosphere-item">
-                <img src="/yoga/yoga-2.jpg" alt="Pranayama & Breath Awareness practice" loading="lazy" />
+                <img src="/yoga/yoga-2.jpg" alt="Pranayama & Breath Awareness" loading="lazy" />
                 <div className="atmosphere-caption">
                   <h4>Pranayama &amp; Breath Awareness</h4>
-                  <p>Restorative respiratory techniques to calm autonomic nervous strain.</p>
+                  <p>Breathing techniques to calm nervous strain.</p>
                 </div>
               </div>
 
@@ -372,9 +349,6 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
           </div>
         </section>
 
-        {/* ==================================================================
-            6. SANCTUARY BOOKING CARD BANNER
-            ================================================================== */}
         <YogaBookingCard />
       </main>
 
