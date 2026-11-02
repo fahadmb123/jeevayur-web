@@ -34,3 +34,4 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
 };
 
 PrivateRoute.displayName = 'PrivateRoute';
+
