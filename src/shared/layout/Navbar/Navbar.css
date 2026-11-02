@@ -130,16 +130,10 @@
   transform: translateY(-1px);
 }
 
-.profile-leaf-badge {
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #5eb135 0%, #1B6B50 100%);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 6px rgba(94, 177, 53, 0.35);
+.navbar-icon-btn.active-icon {
+  background: var(--primary-green-tint, rgba(27, 107, 80, 0.1));
+  color: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .navbar-cta-wrap {
@@ -393,9 +387,25 @@
   transition: all 0.2s ease;
 }
 
-.mobile-menu-links a:hover {
+.mobile-menu-links a:hover,
+.mobile-menu-links a.is-active {
   background: var(--primary-green-tint, #EDF6F1);
   color: var(--primary-green, #1B6B50);
+  font-weight: 600;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: var(--border-color, #E2E8DE);
+  margin: 6px 12px;
+}
+
+.mobile-menu-portal-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #1B6B50 !important;
+  font-weight: 600 !important;
 }
 
 .mobile-menu-footer {
