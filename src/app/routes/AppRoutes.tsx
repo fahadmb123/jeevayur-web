@@ -2,11 +2,9 @@ import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { LoadingScreen } from '@/shared/ui';
-
-// Layouts
 import { DoctorLayout } from '@/shared/layout';
+import { PublicRoute, PrivateRoute } from './guards';
 
-// Public & Marketing Feature Pages (Code-split with React.lazy)
 const HomePage = lazy(() =>
   import('@/features/home/pages/HomePage').then((m) => ({ default: m.HomePage }))
 );
@@ -32,7 +30,6 @@ const NotFoundPage = lazy(() =>
   import('@/features/home/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
 );
 
-// Auth Feature Pages (Code-split with React.lazy)
 const LoginPage = lazy(() =>
   import('@/features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage }))
 );
@@ -46,7 +43,6 @@ const ResetPasswordPage = lazy(() =>
   import('@/features/auth/pages/ResetPasswordPage').then((m) => ({ default: m.ResetPasswordPage }))
 );
 
-// Domain-Specific Portal Feature Pages (Code-split with React.lazy)
 const DoctorDashboardPage = lazy(() =>
   import('@/features/doctor/pages/DoctorDashboardPage').then((m) => ({ default: m.DoctorDashboardPage }))
 );
@@ -73,7 +69,6 @@ export const AppRoutes: React.FC = React.memo(() => {
   return (
     <Suspense fallback={<LoadingScreen fullScreen message="Loading Jeevayurniketan..." />}>
       <Routes>
-        {/* Public Pages */}
         <Route path={ROUTES.HOME} element={<HomePage />} />
         <Route path={ROUTES.ABOUT} element={<AboutPage />} />
         <Route path={ROUTES.SERVICES} element={<ServicesPage />} />
@@ -83,26 +78,25 @@ export const AppRoutes: React.FC = React.memo(() => {
         <Route path={ROUTES.CONTACT} element={<ContactPage />} />
         <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
 
-        {/* Auth Pages */}
-        <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-        <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
-        <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
-        <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
-
-        {/* Doctor Portal Routes (Structured with persistent DoctorLayout & Outlet) */}
-        <Route element={<DoctorLayout />}>
-          <Route path={ROUTES.DOCTOR} element={<DoctorDashboardPage />} />
-          <Route path={ROUTES.DOCTOR_REQUESTS} element={<DoctorRequestsPage />} />
-          <Route path={ROUTES.DOCTOR_PATIENTS} element={<DoctorPatientsPage />} />
-          <Route path={ROUTES.DOCTOR_YOGA} element={<DoctorYogaSchedulePage />} />
-          <Route path={ROUTES.DOCTOR_GALLERY} element={<DoctorGalleryPage />} />
-          <Route path={ROUTES.DOCTOR_SETTINGS} element={<DoctorSettingsPage />} />
+        <Route element={<PublicRoute />}>
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+          <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
+          <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>
 
-        {/* Dev Preview Routes */}
-        <Route path="/dev/loading" element={<LoadingScreen fullScreen />} />
+        <Route element={<PrivateRoute allowedRoles={['doctor']} />}>
+          <Route element={<DoctorLayout />}>
+            <Route path={ROUTES.DOCTOR} element={<DoctorDashboardPage />} />
+            <Route path={ROUTES.DOCTOR_REQUESTS} element={<DoctorRequestsPage />} />
+            <Route path={ROUTES.DOCTOR_PATIENTS} element={<DoctorPatientsPage />} />
+            <Route path={ROUTES.DOCTOR_YOGA} element={<DoctorYogaSchedulePage />} />
+            <Route path={ROUTES.DOCTOR_GALLERY} element={<DoctorGalleryPage />} />
+            <Route path={ROUTES.DOCTOR_SETTINGS} element={<DoctorSettingsPage />} />
+          </Route>
+        </Route>
 
-        {/* 404 Fallback */}
+        <Route path="/dev/loading" element={<LoadingScreen fullScreen />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
