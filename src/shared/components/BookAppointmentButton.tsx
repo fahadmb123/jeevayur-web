@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@/shared/ui/button';
 import { BookAppointmentModal } from './BookAppointmentModal';
-import type { BookingFormData } from '../types';
+import type { BookingFormData } from '@/features/appointments/types';
 
 export interface BookAppointmentButtonProps {
   label?: string;
@@ -20,11 +20,11 @@ export const BookAppointmentButton: React.FC<BookAppointmentButtonProps> = React
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleOpen = React.useCallback(() => {
+  const handleOpen = useCallback(() => {
     setIsOpen(true);
   }, []);
 
-  const handleClose = React.useCallback(() => {
+  const handleClose = useCallback(() => {
     setIsOpen(false);
   }, []);
 

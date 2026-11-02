@@ -12,7 +12,7 @@ import {
   HeartPulse,
 } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { useTreatments } from '../hooks/useTreatments';
 import type { AyurvedaService } from '../types';
 import {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Sparkles, Heart, Compass, CheckCircle2, Activity, Brain, Leaf } from 'lucide-react';
 import { DR_AHALYA_DATA } from '../data/drAhalyaData';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import './DrAhalyaSpotlightSection.css';
 
 const DEVADARSAN_SPOTLIGHT_DATA = {

@@ -3,7 +3,7 @@ import { LazyMotion, domAnimation, m } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import heroFlatlayExact from '@/assets/hero_flatlay_exact.png';
 import { Calendar } from 'lucide-react';
-import { BookAppointmentModal } from '@/features/appointments/components/BookAppointmentModal';
+import { BookAppointmentModal } from '@/shared/components/BookAppointmentModal';
 import { useInitialLoading } from '@/shared/ui/LoadingScreen';
 import './HeroSection.css';
 

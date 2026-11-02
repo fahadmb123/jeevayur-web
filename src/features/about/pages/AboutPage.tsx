@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Navbar, Footer } from '@/shared/layout';
 import { AboutSection } from '../components/AboutSection';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { Card } from '@/shared/ui/card';
 import { useAbout } from '../hooks/useAbout';
 import './AboutPage.css';

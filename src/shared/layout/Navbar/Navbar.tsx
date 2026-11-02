@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { SearchModal } from './SearchModal';

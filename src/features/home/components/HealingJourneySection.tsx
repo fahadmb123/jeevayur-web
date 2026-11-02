@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ROUTES } from '@/shared/config/routes';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './HealingJourneySection.css';
