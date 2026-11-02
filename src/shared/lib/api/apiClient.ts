@@ -2,6 +2,8 @@ import { environment } from '@/shared/config/environment';
 import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
 import { ApiError } from './ApiError';
 
+let refreshPromise: Promise<string | null> | null = null;
+
 function buildHeaders(customHeaders?: HeadersInit): HeadersInit {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
@@ -16,7 +18,39 @@ function buildHeaders(customHeaders?: HeadersInit): HeadersInit {
   };
 }
 
-async function request<TResponse>(path: string, options: RequestInit = {}): Promise<TResponse> {
+async function requestRefreshToken(): Promise<string | null> {
+  try {
+    const url = `${environment.apiBaseUrl}/api/auth/refresh`;
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      tokenStorage.clearAccessToken();
+      return null;
+    }
+
+    const data = await response.json().catch(() => null);
+    if (data?.accessToken) {
+      tokenStorage.setAccessToken(data.accessToken);
+      return data.accessToken;
+    }
+
+    tokenStorage.clearAccessToken();
+    return null;
+  } catch {
+    tokenStorage.clearAccessToken();
+    return null;
+  } finally {
+    refreshPromise = null;
+  }
+}
+
+async function request<TResponse>(path: string, options: RequestInit = {}, isRetry = false): Promise<TResponse> {
   let response: Response;
   const url = `${environment.apiBaseUrl}${path}`;
 
@@ -28,6 +62,22 @@ async function request<TResponse>(path: string, options: RequestInit = {}): Prom
     });
   } catch {
     throw new ApiError(0, 'Unable to connect to the API service');
+  }
+
+  const isAuthRoute =
+    path.startsWith('/api/auth/login') ||
+    path.startsWith('/api/auth/refresh') ||
+    path.startsWith('/api/auth/logout');
+
+  if (response.status === 401 && !isRetry && !isAuthRoute) {
+    if (!refreshPromise) {
+      refreshPromise = requestRefreshToken();
+    }
+    const newAccessToken = await refreshPromise;
+
+    if (newAccessToken) {
+      return request<TResponse>(path, options, true);
+    }
   }
 
   if (response.status === 401) {

@@ -24,6 +24,20 @@ export const authService = {
     }
   },
 
+  async refreshToken(): Promise<string | null> {
+    try {
+      const response = await apiClient.post<LoginResponse>('/api/auth/refresh');
+      if (response.accessToken) {
+        tokenStorage.setAccessToken(response.accessToken);
+        return response.accessToken;
+      }
+      return null;
+    } catch {
+      tokenStorage.clearAccessToken();
+      return null;
+    }
+  },
+
   async getCurrentUser(): Promise<User | null> {
     try {
       const response = await apiClient.get<{ user: User }>('/api/auth/me');
