@@ -72,7 +72,3 @@ export const DoctorSettingsPage = lazy(() =>
   import('@/features/doctor/pages/DoctorSettingsPage').then((m) => ({ default: m.DoctorSettingsPage }))
 );
 
-export const GalleryPage = lazy(() =>
-  import('@/features/gallery/pages/GalleryPage').then((m) => ({ default: m.GalleryPage }))
-);
-

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { LoadingScreen } from '@/shared/ui';
 import { DoctorLayout } from '@/shared/layout';
@@ -23,7 +23,6 @@ import {
   DoctorYogaSchedulePage,
   DoctorGalleryPage,
   DoctorSettingsPage,
-  GalleryPage,
 } from './lazy';
 
 export const AppRoutes: React.FC = React.memo(() => {
@@ -37,7 +36,7 @@ export const AppRoutes: React.FC = React.memo(() => {
         <Route path={ROUTES.TEAM} element={<TeamPage />} />
         <Route path={ROUTES.BLOG} element={<BlogPage />} />
         <Route path={ROUTES.CONTACT} element={<ContactPage />} />
-        <Route path={ROUTES.GALLERY} element={<GalleryPage />} />
+        <Route path="/gallery" element={<Navigate to={ROUTES.HOME} replace />} />
 
         <Route element={<PublicRoute />}>
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />

@@ -6,7 +6,6 @@ export const ROUTES = {
   TEAM: '/team',
   BLOG: '/blog',
   CONTACT: '/contact',
-  GALLERY: '/gallery',
   
   // Auth
   LOGIN: '/login',

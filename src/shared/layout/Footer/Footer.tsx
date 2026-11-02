@@ -32,7 +32,6 @@ export const Footer: React.FC = React.memo(() => {
             <li><Link to={ROUTES.SERVICES}>Healthcare Services</Link></li>
             <li><Link to={ROUTES.TEAM}>Our Team</Link></li>
             <li><Link to={ROUTES.BLOG}>Blog</Link></li>
-            <li><Link to={ROUTES.GALLERY}>Gallery</Link></li>
             <li><Link to={ROUTES.CONTACT}>Contact Us</Link></li>
           </ul>
         </motion.div>

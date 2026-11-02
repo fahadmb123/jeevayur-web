@@ -14,7 +14,6 @@ const NAV_LINKS = [
   { label: 'Treatments', path: ROUTES.SERVICES },
   { label: 'Yoga', path: ROUTES.YOGA },
   { label: 'Team', path: ROUTES.TEAM },
-  { label: 'Gallery', path: ROUTES.GALLERY },
   { label: 'Contact', path: ROUTES.CONTACT },
 ];
 
