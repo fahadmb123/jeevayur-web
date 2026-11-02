@@ -194,12 +194,48 @@
     gap: 12px;
   }
 
+  .yoga-pillar-item {
+    align-items: center;
+    text-align: center;
+    padding: 16px 12px;
+  }
+
+  .yoga-pillar-icon-box {
+    margin: 0 auto 8px auto;
+  }
+
+  .yoga-pillar-text {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .yoga-pillar-text h4 {
+    text-align: center;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+
+  .yoga-pillar-text p {
+    text-align: center;
+    font-size: 0.78rem;
+    line-height: 1.45;
+  }
+
   /* Center the 5th card on mobile when 2-column */
   .yoga-pillar-item:last-child:nth-child(odd) {
     grid-column: 1 / -1;
-    max-width: 80%;
+    max-width: 85%;
     margin: 0 auto;
     width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .yoga-pillar-item:last-child:nth-child(odd) .yoga-pillar-text p {
+    max-width: 290px;
+    margin: 0 auto;
   }
 }
 
