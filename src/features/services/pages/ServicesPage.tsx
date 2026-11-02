@@ -5,7 +5,6 @@ import {
   Clock,
   Search,
   Leaf,
-  Info,
   X,
   ShieldCheck,
   Stethoscope,
@@ -15,6 +14,8 @@ import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { useTreatments } from '../hooks/useTreatments';
 import type { AyurvedaService } from '../types';
+import { TreatmentImageCard } from '../components/TreatmentImageCard';
+import { TreatmentDetailsCard } from '../components/TreatmentDetailsCard';
 import {
   staggerContainerVariants,
   fadeUpVariants,
@@ -214,103 +215,33 @@ export const ServicesPage: React.FC = React.memo(() => {
               </div>
             ) : (
               <motion.div
-                className="treatments-grid"
+                className="treatments-pair-list"
                 variants={staggerContainerVariants}
                 initial="hidden"
                 animate="visible"
               >
                 {filteredServices.map((service, index) => {
-                  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
-                    `Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatment for: ${service.title}.`
-                  )}`;
+                  const isReversed = index % 2 === 1;
 
                   return (
-                    <motion.article
+                    <motion.div
                       key={service.id}
-                      className="treatment-editorial-card"
+                      className={`treatment-pair-item ${isReversed ? 'is-reversed' : ''}`}
                       variants={fadeUpVariants}
                       custom={index}
                       viewport={{ once: true, amount: 0.12 }}
                     >
-                      {/* Media Image with Organic Crop */}
-                      <div className="treatment-card-media">
-                        <img
-                          src={service.image}
-                          alt={`${service.title} - Classical Ayurvedic treatment`}
-                          className="treatment-card-img"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        <div className="treatment-card-media-overlay" />
-
-                        {/* Top Classical Discipline Tag */}
-                        {service.categoryTag && (
-                          <div className="treatment-card-tag">
-                            <span>{service.categoryTag}</span>
-                          </div>
-                        )}
-
-                        {/* Duration Pill */}
-                        <div className="treatment-card-duration">
-                          <Clock size={12} />
-                          <span>{service.duration}</span>
-                        </div>
-                      </div>
-
-                      {/* Card Content */}
-                      <div className="treatment-card-content">
-                        <h2 className="treatment-card-title">
-                          {service.title}
-                        </h2>
-
-                        <p className="treatment-card-desc">
-                          {service.description}
-                        </p>
-
-                        {/* Botanical Key Focus Chips (clean tags instead of repetitive bullet points) */}
-                        {service.benefits && service.benefits.length > 0 && (
-                          <div className="treatment-card-chips">
-                            {service.benefits.slice(0, 3).map((benefit, i) => (
-                              <span key={i} className="treatment-chip">
-                                <em>✦</em> {benefit}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-
-                        {/* Action Bar */}
-                        <div className="treatment-card-footer">
-                          <BookAppointmentButton
-                            label="Book Consultation"
-                            size="md"
-                            variant="primary"
-                            className="treatment-btn-book"
-                          />
-
-                          <div className="treatment-footer-secondary">
-                            <button
-                              type="button"
-                              className="treatment-btn-details"
-                              onClick={() => setActiveDetailService(service)}
-                            >
-                              <span>Clinical Details</span>
-                              <Info size={14} />
-                            </button>
-
-                            <a
-                              href={whatsappUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="treatment-btn-whatsapp-icon"
-                              title="Enquire on WhatsApp"
-                              aria-label={`Enquire about ${service.title} on WhatsApp`}
-                            >
-                              <MessageCircle size={16} />
-                            </a>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.article>
+                      <TreatmentImageCard
+                        service={service}
+                        index={index}
+                        onSelect={() => setActiveDetailService(service)}
+                      />
+                      <TreatmentDetailsCard
+                        service={service}
+                        index={index}
+                        onSelectDetails={() => setActiveDetailService(service)}
+                      />
+                    </motion.div>
                   );
                 })}
               </motion.div>
