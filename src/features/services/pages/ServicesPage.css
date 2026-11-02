@@ -623,3 +623,115 @@
   border-color: #1B6B50;
   color: #FFFFFF;
 }
+
+/* ==========================================================================
+   MOBILE RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .treatments-container {
+    padding: 0 16px;
+  }
+
+  .treatments-filter-strip {
+    top: 56px;
+    padding: 14px 0;
+  }
+
+  .treatments-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .treatments-search-box {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .treatments-hero {
+    padding: 84px 16px 28px;
+  }
+
+  .treatments-catalog-section {
+    padding: 28px 0 56px;
+  }
+
+  .treatments-details-section {
+    scroll-margin-top: 110px;
+    margin-top: 40px;
+  }
+
+  .treatment-details-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .treatment-details-card__title {
+    font-size: 1.45rem;
+  }
+
+  .treatment-details-card__benefits-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .treatment-details-card__tabs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .treatment-tabs-scroll {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .treatment-tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .treatment-quick-tab {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .treatments-hero__actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .treatments-hero__actions button,
+  .treatments-hero__whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .treatment-details-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .treatment-details-card__top .treatment-details-card__nav-arrows {
+    align-self: flex-end;
+  }
+
+  .treatment-details-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .treatment-details-card__actions button,
+  .treatment-details-card__whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

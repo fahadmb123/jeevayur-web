@@ -867,3 +867,154 @@
   color: #6C8176;
   margin: 0;
 }
+
+/* ==========================================================================
+   5. MOBILE RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .yoga-container {
+    padding: 0 16px;
+  }
+
+  .yoga-hero-section {
+    padding: 84px 16px 28px;
+  }
+
+  .yoga-programs-section {
+    padding: 32px 0 48px;
+  }
+
+  .yoga-program-details-wrap {
+    scroll-margin-top: 110px;
+    margin-top: 40px;
+  }
+
+  .yoga-details-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .yoga-details-card__title {
+    font-size: 1.45rem;
+  }
+
+  .yoga-details-card__highlights-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .yoga-details-card__tabs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .yoga-tabs-scroll {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .yoga-tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .yoga-quick-tab {
+    flex-shrink: 0;
+  }
+
+  .yoga-schedule-section {
+    padding: 40px 0;
+  }
+
+  .yoga-schedule-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .yoga-day-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .yoga-day-tab {
+    min-width: 52px;
+    padding: 7px 12px;
+  }
+
+  .yoga-format-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .yoga-format-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .yoga-classes-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .yoga-gallery-strip {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .yoga-hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .yoga-hero-btn-primary,
+  .yoga-hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .yoga-details-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .yoga-details-card__top .yoga-details-card__nav-arrows {
+    align-self: flex-end;
+  }
+
+  .yoga-details-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .yoga-details-card__whatsapp-btn,
+  .yoga-details-card__timetable-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .yoga-timetable-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .yoga-btn-book-class {
+    width: 100%;
+    justify-content: center;
+  }
+}

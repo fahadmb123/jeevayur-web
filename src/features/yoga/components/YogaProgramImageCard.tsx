@@ -68,3 +68,4 @@ export const YogaProgramImageCard: React.FC<YogaProgramImageCardProps> = React.m
 });
 
 YogaProgramImageCard.displayName = 'YogaProgramImageCard';
+

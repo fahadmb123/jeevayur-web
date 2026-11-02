@@ -130,3 +130,4 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
 });
 
 YogaProgramDetailsCard.displayName = 'YogaProgramDetailsCard';
+
