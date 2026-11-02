@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Jeevayurniketan &bull; Ayurvedic Treatments &amp; Chikitsa Catalog (Editorial Design)
-   ========================================================================== */
-
 .services-page-shell {
   width: 100%;
   min-height: 100vh;
@@ -17,76 +13,53 @@
 }
 
 .treatments-container {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
 /* ==========================================================================
-   1. EDITORIAL HERO
+   1. HERO SECTION
    ========================================================================== */
 .treatments-hero {
-  padding: clamp(110px, 13vw, 150px) 24px clamp(36px, 5vw, 56px);
-  background: radial-gradient(circle at 50% 20%, rgba(27, 107, 80, 0.07) 0%, rgba(201, 141, 59, 0.04) 40%, transparent 80%), #FAF8F4;
+  padding: clamp(96px, 12vw, 136px) 24px clamp(32px, 4vw, 48px);
+  background: radial-gradient(circle at 50% 20%, rgba(27, 107, 80, 0.06) 0%, rgba(201, 141, 59, 0.03) 40%, transparent 80%), #FAF8F4;
   text-align: center;
   border-bottom: 1px solid rgba(27, 67, 50, 0.06);
 }
 
 .treatments-hero__inner {
-  max-width: 860px;
+  max-width: 780px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.treatments-hero__lineage-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 18px;
-  background: rgba(27, 67, 50, 0.06);
-  border: 1px solid rgba(27, 67, 50, 0.15);
-  border-radius: 999px;
-  color: #164432;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.78rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
-
 .treatments-hero__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.1rem, 4.2vw, 3.4rem);
+  font-size: clamp(2rem, 3.8vw, 3rem);
   font-weight: 700;
   color: #12281E;
-  line-height: 1.18;
+  line-height: 1.2;
   letter-spacing: -0.02em;
-  margin: 0 0 16px;
-}
-
-.treatments-hero__title-accent {
-  color: #1B6B50;
-  font-style: italic;
-  font-weight: 600;
+  margin: 0 0 14px;
 }
 
 .treatments-hero__subtitle {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(0.96rem, 1.25vw, 1.1rem);
-  line-height: 1.7;
-  color: #435A4F;
-  max-width: 720px;
-  margin: 0 0 28px;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.65;
+  color: #4A6155;
+  max-width: 640px;
+  margin: 0 0 24px;
 }
 
 .treatments-hero__actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -94,8 +67,8 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
-  background: rgba(37, 211, 102, 0.09);
+  padding: 12px 22px;
+  background: rgba(37, 211, 102, 0.1);
   border: 1px solid rgba(37, 211, 102, 0.35);
   color: #147A39;
   border-radius: 999px;
@@ -103,35 +76,32 @@
   font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .treatments-hero__whatsapp-btn:hover {
   background: #25D366;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.3);
+  color: #FFFFFF;
 }
 
 /* ==========================================================================
-   2. BOTANICAL CATEGORY STRIP & SEARCH
+   2. CATEGORY FILTER & SEARCH
    ========================================================================== */
 .treatments-filter-strip {
-  padding: 24px 0 20px;
-  background-color: #FAF8F4;
-  border-bottom: 1px solid rgba(27, 67, 50, 0.07);
+  padding: 18px 0;
+  background-color: rgba(250, 248, 244, 0.95);
+  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
   position: sticky;
   top: 72px;
   z-index: 20;
-  backdrop-filter: blur(12px);
-  background-color: rgba(250, 248, 244, 0.94);
+  backdrop-filter: blur(10px);
 }
 
 .treatments-filter-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -140,7 +110,7 @@
   align-items: center;
   gap: 8px;
   overflow-x: auto;
-  padding: 4px 2px;
+  padding: 2px 0;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
   flex: 1;
@@ -151,56 +121,42 @@
 }
 
 .treatments-tab-btn {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 7px 14px;
+  padding: 8px 16px;
   background: transparent;
-  border: 1px solid rgba(27, 67, 50, 0.12);
-  border-radius: 10px;
+  border: 1px solid rgba(27, 67, 50, 0.14);
+  border-radius: 999px;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.2s ease;
-  font-family: var(--font-sans, 'Inter', sans-serif);
-}
-
-.treatments-tab-label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #2D4238;
-  line-height: 1.2;
-}
-
-.treatments-tab-sanskrit {
-  font-size: 0.68rem;
-  color: #7D8F85;
-  font-style: italic;
 }
 
 .treatments-tab-btn:hover {
-  background: rgba(27, 67, 50, 0.05);
-  border-color: rgba(27, 67, 50, 0.25);
+  background: rgba(27, 107, 80, 0.06);
+  border-color: #1B6B50;
 }
 
 .treatments-tab-btn.is-active {
-  background: #143826;
-  border-color: #143826;
+  background: #1B6B50;
+  border-color: #1B6B50;
+}
+
+.treatments-tab-label {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1B3328;
+  transition: color 0.2s ease;
 }
 
 .treatments-tab-btn.is-active .treatments-tab-label {
   color: #FAF9F5;
 }
 
-.treatments-tab-btn.is-active .treatments-tab-sanskrit {
-  color: #D6BA86;
-}
-
-/* Search Box */
 .treatments-search-box {
   position: relative;
   display: flex;
   align-items: center;
-  min-width: 280px;
+  min-width: 260px;
 }
 
 .treatments-search-icon {
@@ -212,8 +168,8 @@
 
 .treatments-search-input {
   width: 100%;
-  height: 40px;
-  padding: 0 34px 0 38px;
+  height: 38px;
+  padding: 0 32px 0 38px;
   background: #FFFFFF;
   border: 1px solid rgba(27, 67, 50, 0.16);
   border-radius: 999px;
@@ -235,79 +191,138 @@
   background: none;
   border: none;
   color: #788C82;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   line-height: 1;
 }
 
 /* ==========================================================================
-   3. EDITORIAL TREATMENTS CATALOG GRID
+   3. CATALOG SECTION
    ========================================================================== */
 .treatments-catalog-section {
-  padding: 44px 0 68px;
+  padding: 40px 0 72px;
 }
 
-.treatments-pair-list {
-  display: flex;
-  flex-direction: column;
-  gap: 36px;
+.treatments-section-title-wrap {
+  margin-bottom: 24px;
 }
 
-.treatment-pair-item {
-  display: grid;
-  grid-template-columns: 1fr 1.15fr;
-  gap: 28px;
-  align-items: stretch;
+.treatments-section-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 700;
+  color: #12281E;
+  margin: 0 0 6px;
 }
 
-.treatment-pair-item.is-reversed {
-  grid-template-columns: 1.15fr 1fr;
+.treatments-section-subtitle {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  color: #6C8176;
+  margin: 0;
 }
 
-.treatment-pair-item.is-reversed .treatment-image-card {
-  order: 2;
+.treatments-loading,
+.treatments-empty-state {
+  text-align: center;
+  padding: 60px 20px;
 }
 
-.treatment-pair-item.is-reversed .treatment-details-card {
-  order: 1;
+.treatments-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid rgba(27, 107, 80, 0.15);
+  border-top-color: #1B6B50;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.treatments-empty-icon {
+  color: #1B6B50;
+  margin-bottom: 12px;
+}
+
+.treatments-reset-btn {
+  margin-top: 14px;
+  padding: 9px 20px;
+  background: #1B6B50;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
 /* ==========================================================================
-   Separate Image Card
+   4. IMAGES SECTION (SEPARATE IMAGES GRID)
    ========================================================================== */
+.treatments-images-section {
+  margin-bottom: 56px;
+}
+
+.treatments-images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .treatments-images-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .treatments-images-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Treatment Image Card */
 .treatment-image-card {
   position: relative;
   background: #FFFFFF;
   border: 1px solid rgba(27, 67, 50, 0.1);
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
-  box-shadow: 0 6px 20px rgba(18, 40, 30, 0.05);
-  display: flex;
-  min-height: 340px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.04);
 }
 
 .treatment-image-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 14px 36px rgba(18, 40, 30, 0.1);
-  border-color: rgba(27, 107, 80, 0.28);
+  box-shadow: 0 10px 24px rgba(18, 40, 30, 0.09);
+  border-color: rgba(27, 107, 80, 0.3);
+}
+
+.treatment-image-card.is-selected {
+  border-color: #1B6B50;
+  box-shadow: 0 0 0 2px #1B6B50, 0 10px 24px rgba(27, 107, 80, 0.12);
 }
 
 .treatment-image-card__media {
   position: relative;
   width: 100%;
-  height: 100%;
-  min-height: 320px;
+  aspect-ratio: 16 / 11;
   overflow: hidden;
-  background-color: #EFECE6;
+  background-color: #EAE6DF;
 }
 
 .treatment-image-card__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.4s ease;
 }
 
 .treatment-image-card:hover .treatment-image-card__img {
@@ -317,721 +332,294 @@
 .treatment-image-card__placeholder {
   width: 100%;
   height: 100%;
-  min-height: 320px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #EBE8E0 0%, #D8D4C8 100%);
-  color: #1B6B50;
+  font-size: 2rem;
+  background: #EFECE6;
 }
 
 .treatment-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.3) 0%, transparent 45%, rgba(14, 30, 22, 0.65) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.15) 0%, transparent 40%, rgba(14, 30, 22, 0.85) 100%);
   pointer-events: none;
 }
 
-.treatment-image-card__tag {
+.treatment-image-card__content {
   position: absolute;
-  top: 18px;
-  left: 18px;
-  padding: 5px 12px;
-  background: rgba(20, 56, 38, 0.9);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(214, 186, 134, 0.45);
-  border-radius: 999px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.treatment-image-card__tag {
+  align-self: flex-start;
+  padding: 3px 8px;
+  background: rgba(20, 56, 38, 0.85);
+  border-radius: 4px;
   color: #FAF9F5;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.74rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-size: 0.72rem;
+  font-weight: 600;
   text-transform: uppercase;
-  z-index: 2;
+  letter-spacing: 0.04em;
+}
+
+.treatment-image-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 2px 0 0;
+  line-height: 1.3;
 }
 
 .treatment-image-card__duration {
-  position: absolute;
-  bottom: 18px;
-  right: 18px;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: rgba(14, 30, 22, 0.75);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  color: #FFFFFF;
-  font-size: 0.75rem;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.76rem;
   font-weight: 500;
-  z-index: 2;
 }
 
-.treatment-image-card__hover-cue {
+.treatment-image-card__selected-badge {
   position: absolute;
-  bottom: 18px;
-  left: 18px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(4px);
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: #1B6B50;
+  color: #FFFFFF;
   border-radius: 999px;
-  color: #1B6B50;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  opacity: 0;
-  transform: translateY(6px);
-  transition: all 0.25s ease;
-  z-index: 2;
-}
-
-.treatment-image-card:hover .treatment-image-card__hover-cue {
-  opacity: 1;
-  transform: translateY(0);
+  z-index: 3;
 }
 
 /* ==========================================================================
-   Separate Details Card
+   5. DETAILS SECTION (SHOWN IN THE LAST)
    ========================================================================== */
+.treatments-details-section {
+  scroll-margin-top: 140px;
+}
+
 .treatment-details-card {
   background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.1);
+  border: 1px solid rgba(27, 67, 50, 0.12);
   border-radius: 20px;
-  padding: 32px 30px 28px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: 0 8px 30px rgba(18, 40, 30, 0.06);
+}
+
+.treatment-details-card__top {
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 6px 20px rgba(18, 40, 30, 0.05);
-  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s ease, border-color 0.28s ease;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
 }
 
-.treatment-details-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 36px rgba(18, 40, 30, 0.1);
-  border-color: rgba(27, 107, 80, 0.28);
-}
-
-.treatment-details-card__header {
-  margin-bottom: 16px;
-}
-
-.treatment-details-card__meta {
+.treatment-details-card__badges {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
 }
 
-.treatment-details-card__number {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
+.treatment-details-card__category {
+  padding: 5px 12px;
   background: rgba(27, 107, 80, 0.08);
+  border-radius: 6px;
   color: #1B6B50;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-.treatment-details-card__tag {
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.76rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  color: #788C82;
+.treatment-details-card__duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #6C8176;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.treatment-details-card__nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.treatment-details-nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid rgba(27, 67, 50, 0.16);
+  background: #FFFFFF;
+  color: #1B3328;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.treatment-details-nav-btn:hover:not(:disabled) {
+  background: #1B6B50;
+  border-color: #1B6B50;
+  color: #FFFFFF;
+}
+
+.treatment-details-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .treatment-details-card__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.55rem;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 700;
   color: #12281E;
+  margin: 0 0 14px;
   line-height: 1.25;
-  margin: 0;
-  letter-spacing: -0.015em;
 }
 
 .treatment-details-card__desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.95rem;
-  line-height: 1.68;
+  font-size: 1rem;
+  line-height: 1.7;
   color: #435A4F;
-  margin: 0 0 20px;
+  margin: 0 0 24px;
 }
 
-.treatment-details-card__chips-section {
-  margin-bottom: 24px;
+.treatment-details-card__benefits {
+  background: #FAF8F4;
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+  border: 1px solid rgba(27, 67, 50, 0.07);
 }
 
-.treatment-details-card__chips-label {
-  display: block;
+.treatment-details-card__benefits-title {
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.74rem;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  font-size: 0.88rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: #6C8176;
-  margin-bottom: 8px;
-}
-
-.treatment-details-card__chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.treatment-details-card__chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 11px;
-  background: #F3F6F4;
-  border: 1px solid rgba(27, 67, 50, 0.09);
-  border-radius: 8px;
-  font-size: 0.8rem;
-  font-weight: 500;
+  letter-spacing: 0.04em;
   color: #1B4E38;
+  margin: 0 0 14px;
 }
 
-.treatment-details-card__chip em {
-  color: #C68B39;
-  font-style: normal;
-  font-size: 0.85rem;
+.treatment-details-card__benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px 18px;
 }
 
-.treatment-details-card__footer {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding-top: 18px;
-  border-top: 1px solid rgba(27, 67, 50, 0.08);
-  flex-wrap: wrap;
-}
-
-.treatment-details-card__btn-book {
-  flex: 1;
-  min-width: 170px;
-}
-
-.treatment-details-card__actions-secondary {
+.treatment-details-benefit-item {
   display: flex;
   align-items: center;
   gap: 8px;
+  font-size: 0.9rem;
+  color: #274D3B;
+  font-weight: 500;
 }
 
-.treatment-details-card__btn-info {
+.treatment-benefit-check {
+  color: #1B6B50;
+  flex-shrink: 0;
+}
+
+.treatment-details-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
+}
+
+.treatment-details-card__whatsapp-btn {
   display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(37, 211, 102, 0.08);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.treatment-details-card__whatsapp-btn:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+.treatment-details-card__tabs {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.treatment-tabs-label {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #788C82;
+  white-space: nowrap;
+}
+
+.treatment-tabs-scroll {
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 16px;
+  flex-wrap: wrap;
+}
+
+.treatment-quick-tab {
+  padding: 5px 12px;
   background: #FAF8F4;
-  border: 1px solid rgba(27, 67, 50, 0.14);
+  border: 1px solid rgba(27, 67, 50, 0.12);
   border-radius: 999px;
-  color: #1B4E38;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.84rem;
-  font-weight: 600;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #274D3B;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
-.treatment-details-card__btn-info:hover {
-  background: #FFFFFF;
+.treatment-quick-tab:hover {
   border-color: #1B6B50;
   color: #1B6B50;
 }
 
-.treatment-details-card__btn-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  background: rgba(37, 211, 102, 0.1);
-  border: 1px solid rgba(37, 211, 102, 0.35);
-  color: #128C7E;
-  border-radius: 50%;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.treatment-details-card__btn-whatsapp:hover {
-  background: #25D366;
-  color: #FFFFFF;
-  transform: scale(1.05);
-}
-
-@media (max-width: 900px) {
-  .treatment-pair-item,
-  .treatment-pair-item.is-reversed {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .treatment-pair-item.is-reversed .treatment-image-card {
-    order: 1;
-  }
-
-  .treatment-pair-item.is-reversed .treatment-details-card {
-    order: 2;
-  }
-
-  .treatment-details-card {
-    padding: 24px 20px;
-  }
-}
-
-/* ==========================================================================
-   4. THE 3-STEP SAMHITA CARE PATHWAY
-   ========================================================================== */
-.treatments-journey-strip {
-  padding: 64px 0;
-  background: #F4F1EA;
-  border-top: 1px solid rgba(27, 67, 50, 0.08);
-  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
-}
-
-.journey-header {
-  max-width: 680px;
-  margin: 0 auto 40px;
-}
-
-.journey-pretitle {
-  display: inline-block;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #C68B39;
-  text-transform: uppercase;
-  margin-bottom: 8px;
-}
-
-.journey-title {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
-  font-weight: 700;
-  color: #12281E;
-  margin: 0 0 12px;
-}
-
-.journey-lead {
-  font-size: 0.94rem;
-  line-height: 1.65;
-  color: #4C6256;
-  margin: 0;
-}
-
-.journey-steps-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-}
-
-@media (max-width: 860px) {
-  .journey-steps-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-.journey-step-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.09);
-  border-radius: 16px;
-  padding: 30px 24px;
-  position: relative;
-  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.03);
-}
-
-.journey-step-num {
-  position: absolute;
-  top: 18px;
-  right: 22px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: rgba(201, 141, 59, 0.35);
-}
-
-.journey-step-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(27, 107, 80, 0.08);
-  color: #1B6B50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-}
-
-.journey-step-card h3 {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.18rem;
-  font-weight: 700;
-  color: #12281E;
-  margin: 0 0 8px;
-}
-
-.journey-step-card p {
-  font-size: 0.86rem;
-  line-height: 1.6;
-  color: #4D6458;
-  margin: 0;
-}
-
-/* ==========================================================================
-   5. DIRECT CLINICAL CONCIERGE BANNER
-   ========================================================================== */
-.treatments-concierge-strip {
-  padding: 64px 0 80px;
-}
-
-.treatments-concierge-card {
-  background: linear-gradient(135deg, #143826 0%, #1A4D35 100%);
-  border-radius: 20px;
-  padding: clamp(32px, 5vw, 48px);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 36px;
-  color: #FFFFFF;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 16px 40px rgba(14, 40, 28, 0.18);
-}
-
-.treatments-concierge-card::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -20%;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(201, 141, 59, 0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.concierge-content {
-  max-width: 640px;
-  position: relative;
-  z-index: 1;
-}
-
-.concierge-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #D6BA86;
-  margin-bottom: 16px;
-}
-
-.concierge-content h2 {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
-  font-weight: 700;
-  margin: 0 0 12px;
-  line-height: 1.22;
-}
-
-.concierge-content p {
-  font-size: 0.94rem;
-  line-height: 1.65;
-  color: rgba(255, 255, 255, 0.82);
-  margin: 0;
-}
-
-.concierge-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-width: 260px;
-  position: relative;
-  z-index: 1;
-}
-
-.concierge-whatsapp-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px 22px;
-  background: #25D366;
-  color: #FFFFFF;
-  border-radius: 999px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.92rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-
-.concierge-whatsapp-btn:hover {
-  background: #20BA5A;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
-}
-
-@media (max-width: 900px) {
-  .treatments-concierge-card {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .concierge-actions {
-    width: 100%;
-  }
-}
-
-/* ==========================================================================
-   6. CLINICAL PROTOCOL MODAL
-   ========================================================================== */
-.treatment-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(14, 30, 22, 0.6);
-  backdrop-filter: blur(8px);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
-
-.treatment-modal-card {
-  background: #FFFFFF;
-  border-radius: 20px;
-  max-width: 580px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
-}
-
-.treatment-modal-close {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
-  color: #FFFFFF;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-  transition: background 0.2s ease;
-}
-
-.treatment-modal-close:hover {
-  background: rgba(0, 0, 0, 0.8);
-}
-
-.treatment-modal-media {
-  position: relative;
-  width: 100%;
-  height: 200px;
-}
-
-.treatment-modal-media img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.treatment-modal-tag {
-  position: absolute;
-  bottom: 12px;
-  left: 16px;
-  padding: 4px 12px;
-  background: #143826;
-  border-radius: 6px;
-  color: #D6BA86;
-  font-size: 0.74rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.treatment-modal-body {
-  padding: 24px;
-}
-
-.treatment-modal-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.78rem;
-  color: #6C8277;
-  margin-bottom: 12px;
-}
-
-.modal-duration {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-weight: 600;
-  color: #1B6B50;
-}
-
-.modal-doctor {
-  font-style: italic;
-}
-
-.treatment-modal-title {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.55rem;
-  font-weight: 700;
-  color: #12281E;
-  margin: 0 0 12px;
-}
-
-.treatment-modal-desc {
-  font-size: 0.92rem;
-  line-height: 1.65;
-  color: #4C6256;
-  margin: 0 0 20px;
-}
-
-.treatment-modal-section h4 {
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #1B3828;
-  margin: 0 0 10px;
-}
-
-.treatment-modal-list {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.treatment-modal-list li {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 0.88rem;
-  color: #385043;
-}
-
-.modal-bullet {
-  color: #1B6B50;
-  font-weight: 700;
-}
-
-.treatment-modal-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.treatment-modal-whatsapp {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 12px;
-  background: rgba(37, 211, 102, 0.1);
-  border: 1px solid rgba(37, 211, 102, 0.35);
-  border-radius: 999px;
-  color: #147A39;
-  font-weight: 600;
-  font-size: 0.9rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.treatment-modal-whatsapp:hover {
-  background: #25D366;
-  color: #FFFFFF;
-}
-
-/* ==========================================================================
-   LOADING & EMPTY STATES
-   ========================================================================== */
-.treatments-loading {
-  text-align: center;
-  padding: 80px 0;
-  color: #5A7064;
-}
-
-.treatments-spinner {
-  width: 36px;
-  height: 36px;
-  border: 3px solid rgba(27, 107, 80, 0.15);
-  border-top-color: #1B6B50;
-  border-radius: 50%;
-  animation: treatments-spin 0.8s linear infinite;
-  margin: 0 auto 16px;
-}
-
-@keyframes treatments-spin {
-  to { transform: rotate(360deg); }
-}
-
-.treatments-empty-state {
-  text-align: center;
-  padding: 60px 20px;
-  background: #FFFFFF;
-  border: 1px dashed rgba(27, 67, 50, 0.2);
-  border-radius: 16px;
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.treatments-empty-icon {
-  color: #C68B39;
-  margin-bottom: 12px;
-}
-
-.treatments-empty-state h3 {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.35rem;
-  color: #12281E;
-  margin: 0 0 8px;
-}
-
-.treatments-empty-state p {
-  font-size: 0.9rem;
-  color: #5D7266;
-  margin: 0 0 20px;
-}
-
-.treatments-reset-btn {
-  padding: 10px 22px;
-  background: #143826;
-  color: #FAF9F5;
-  border: none;
-  border-radius: 999px;
-  font-size: 0.86rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.treatments-reset-btn:hover {
+.treatment-quick-tab.is-active {
   background: #1B6B50;
+  border-color: #1B6B50;
+  color: #FFFFFF;
 }
