@@ -4,7 +4,8 @@ import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { User, Menu, X } from 'lucide-react';
+import { User, Menu, X, LogIn } from 'lucide-react';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import './Navbar.css';
 
 const NAV_LINKS = [
@@ -21,6 +22,7 @@ export const Navbar: React.FC = React.memo(() => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     let ticking = false;
@@ -74,12 +76,26 @@ export const Navbar: React.FC = React.memo(() => {
 
           <div className="navbar-actions">
             <Link
-              to={ROUTES.DOCTOR}
-              className={`navbar-icon-btn profile-trigger ${location.pathname.startsWith(ROUTES.DOCTOR) || location.pathname === ROUTES.LOGIN ? 'active-icon' : ''}`}
-              aria-label="Doctor Portal"
-              title="Doctor Portal"
+              to={isAuthenticated ? ROUTES.DOCTOR : ROUTES.LOGIN}
+              className={`navbar-login-btn ${
+                location.pathname === ROUTES.LOGIN || location.pathname.startsWith(ROUTES.DOCTOR)
+                  ? 'active'
+                  : ''
+              }`}
+              aria-label={isAuthenticated ? 'Doctor Portal' : 'Login'}
+              title={isAuthenticated ? 'Doctor Portal' : 'Doctor & Staff Login'}
             >
-              <User size={18} />
+              {isAuthenticated ? (
+                <>
+                  <User size={15} />
+                  <span>Portal</span>
+                </>
+              ) : (
+                <>
+                  <LogIn size={15} />
+                  <span>Login</span>
+                </>
+              )}
             </Link>
 
             <ThemeToggle />
@@ -137,14 +153,25 @@ export const Navbar: React.FC = React.memo(() => {
 
               <div className="mobile-menu-divider" />
 
-              <Link
-                to={ROUTES.DOCTOR}
-                className={`mobile-menu-portal-link ${location.pathname.startsWith(ROUTES.DOCTOR) ? 'is-active' : ''}`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                <User size={16} />
-                <span>Doctor Portal</span>
-              </Link>
+              {isAuthenticated ? (
+                <Link
+                  to={ROUTES.DOCTOR}
+                  className={`mobile-menu-portal-link ${location.pathname.startsWith(ROUTES.DOCTOR) ? 'is-active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User size={16} />
+                  <span>Doctor Portal</span>
+                </Link>
+              ) : (
+                <Link
+                  to={ROUTES.LOGIN}
+                  className={`mobile-menu-portal-link ${location.pathname === ROUTES.LOGIN ? 'is-active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <LogIn size={16} />
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
 
             <div className="mobile-menu-footer">
