@@ -49,3 +49,4 @@ export const BookAppointmentButton: React.FC<BookAppointmentButtonProps> = React
 });
 
 BookAppointmentButton.displayName = 'BookAppointmentButton';
+

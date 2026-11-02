@@ -22,4 +22,5 @@ export interface RegisterData {
 
 export interface LoginResponse {
   user: User;
+  accessToken?: string;
 }

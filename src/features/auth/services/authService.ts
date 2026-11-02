@@ -1,10 +1,14 @@
 import type { LoginResponse, LoginCredentials, RegisterData, User } from '../types';
 import { apiClient } from '@/shared/lib/api/apiClient';
 import { ApiError } from '@/shared/lib/api/ApiError';
+import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
 
 export const authService = {
   async login(credentials: LoginCredentials): Promise<User> {
     const response = await apiClient.post<LoginResponse, LoginCredentials>('/api/auth/login', credentials);
+    if (response.accessToken) {
+      tokenStorage.setAccessToken(response.accessToken);
+    }
     return response.user;
   },
 
@@ -13,7 +17,11 @@ export const authService = {
   },
 
   async logout(): Promise<void> {
-    await apiClient.post('/api/auth/logout', {});
+    try {
+      await apiClient.post('/api/auth/logout', {});
+    } finally {
+      tokenStorage.clearAccessToken();
+    }
   },
 
   async getCurrentUser(): Promise<User | null> {
@@ -21,7 +29,10 @@ export const authService = {
       const response = await apiClient.get<{ user: User }>('/api/auth/me');
       return response.user;
     } catch (error) {
-      if (error instanceof ApiError && error.status === 401) return null;
+      if (error instanceof ApiError && error.status === 401) {
+        tokenStorage.clearAccessToken();
+        return null;
+      }
       throw error;
     }
   },

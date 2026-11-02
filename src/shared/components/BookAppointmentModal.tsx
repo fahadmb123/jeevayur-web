@@ -157,3 +157,4 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
 });
 
 BookAppointmentModal.displayName = 'BookAppointmentModal';
+
