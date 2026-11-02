@@ -1,7 +1,8 @@
 .yoga-page-shell {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color, #FBF9F5);
+  background-color: var(--bg-color, #FBFBF9);
+  color: var(--text-primary, #14241C);
   display: flex;
   flex-direction: column;
 }
@@ -23,9 +24,9 @@
    ========================================================================== */
 .yoga-hero-section {
   padding: clamp(96px, 12vw, 136px) 24px clamp(32px, 4vw, 48px);
-  background: radial-gradient(circle at 50% 20%, rgba(201, 141, 59, 0.06) 0%, rgba(27, 107, 80, 0.04) 50%, transparent 80%), #FAF8F4;
+  background: radial-gradient(circle at 50% 20%, rgba(201, 141, 59, 0.06) 0%, rgba(27, 107, 80, 0.04) 50%, transparent 80%), var(--surface-color, #FFFFFF);
   text-align: center;
-  border-bottom: 1px solid rgba(27, 67, 50, 0.06);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-hero-content {
@@ -40,14 +41,14 @@
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: clamp(2rem, 3.8vw, 3rem);
   font-weight: 700;
-  color: #12281E;
+  color: var(--text-primary, #14241C);
   line-height: 1.2;
   letter-spacing: -0.02em;
   margin: 0 0 14px;
 }
 
 .yoga-hero-title-accent {
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
   font-style: italic;
   font-weight: 600;
 }
@@ -56,7 +57,7 @@
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: clamp(0.95rem, 1.2vw, 1.08rem);
   line-height: 1.65;
-  color: #4A6155;
+  color: var(--text-secondary, #485E53);
   max-width: 640px;
   margin: 0 0 24px;
 }
@@ -74,7 +75,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 22px;
-  background: #143826;
+  background: var(--primary-green-dark, #124C38);
   color: #FAF9F5;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
@@ -86,7 +87,7 @@
 }
 
 .yoga-hero-btn-primary:hover {
-  background: #1B6B50;
+  background: var(--primary-green, #1B6B50);
   transform: translateY(-2px);
   box-shadow: 0 8px 22px rgba(20, 56, 38, 0.25);
 }
@@ -96,9 +97,9 @@
   align-items: center;
   gap: 8px;
   padding: 12px 22px;
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.18);
-  color: #1B4533;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  color: var(--text-primary, #14241C);
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.92rem;
@@ -108,8 +109,8 @@
 }
 
 .yoga-hero-btn-secondary:hover {
-  background: #F4F1EA;
-  border-color: rgba(27, 67, 50, 0.3);
+  background: var(--surface-secondary, #F3F6F1);
+  border-color: var(--primary-green, #1B6B50);
   transform: translateY(-2px);
 }
 
@@ -128,14 +129,14 @@
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: clamp(1.4rem, 2.4vw, 1.85rem);
   font-weight: 700;
-  color: #12281E;
+  color: var(--text-primary, #14241C);
   margin: 0 0 6px;
 }
 
 .yoga-section-desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.9rem;
-  color: #6C8176;
+  color: var(--text-secondary, #485E53);
   margin: 0;
 }
 
@@ -164,24 +165,24 @@
 /* Program Image Card */
 .yoga-image-card {
   position: relative;
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.1);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 16px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.04);
+  box-shadow: var(--card-shadow);
 }
 
 .yoga-image-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 24px rgba(18, 40, 30, 0.09);
-  border-color: rgba(27, 107, 80, 0.3);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .yoga-image-card.is-selected {
-  border-color: #1B6B50;
-  box-shadow: 0 0 0 2px #1B6B50, 0 10px 24px rgba(27, 107, 80, 0.12);
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 0 0 2px var(--primary-green, #1B6B50), var(--card-shadow-hover);
 }
 
 .yoga-image-card__media {
@@ -189,7 +190,7 @@
   width: 100%;
   aspect-ratio: 16 / 11;
   overflow: hidden;
-  background-color: #EAE6DF;
+  background-color: var(--surface-secondary, #F3F6F1);
 }
 
 .yoga-image-card__img {
@@ -206,7 +207,7 @@
 .yoga-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.2) 0%, transparent 40%, rgba(14, 30, 22, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.18) 0%, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
   pointer-events: none;
 }
 
@@ -224,7 +225,7 @@
 
 .yoga-image-card__tag {
   padding: 3px 8px;
-  background: rgba(20, 56, 38, 0.85);
+  background: rgba(20, 56, 38, 0.88);
   border-radius: 4px;
   color: #FAF9F5;
   font-family: var(--font-display, 'Outfit', sans-serif);
@@ -239,7 +240,7 @@
   align-items: center;
   gap: 4px;
   padding: 3px 8px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.65);
   border-radius: 999px;
   color: #FFFFFF;
   font-size: 0.72rem;
@@ -277,7 +278,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.88);
   font-size: 0.76rem;
   font-weight: 500;
 }
@@ -287,7 +288,7 @@
   bottom: 14px;
   right: 14px;
   padding: 4px 10px;
-  background: #1B6B50;
+  background: var(--primary-green, #1B6B50);
   color: #FFFFFF;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
@@ -302,11 +303,11 @@
 }
 
 .yoga-details-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.12);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 20px;
   padding: clamp(24px, 4vw, 36px);
-  box-shadow: 0 8px 30px rgba(18, 40, 30, 0.06);
+  box-shadow: var(--card-shadow);
 }
 
 .yoga-details-card__top {
@@ -316,7 +317,7 @@
   gap: 16px;
   margin-bottom: 20px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-details-card__badges {
@@ -328,9 +329,9 @@
 
 .yoga-details-card__tag {
   padding: 5px 12px;
-  background: rgba(27, 107, 80, 0.08);
+  background: var(--primary-green-tint, rgba(27, 107, 80, 0.08));
   border-radius: 6px;
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.78rem;
   font-weight: 700;
@@ -343,7 +344,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: #6C8176;
+  color: var(--text-secondary, #485E53);
   font-size: 0.82rem;
   font-weight: 500;
 }
@@ -358,9 +359,9 @@
   width: 34px;
   height: 34px;
   border-radius: 50%;
-  border: 1px solid rgba(27, 67, 50, 0.16);
-  background: #FFFFFF;
-  color: #1B3328;
+  border: 1px solid var(--border-color, #E2E8DE);
+  background: var(--surface-color, #FFFFFF);
+  color: var(--text-primary, #14241C);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -369,8 +370,8 @@
 }
 
 .yoga-details-nav-btn:hover:not(:disabled) {
-  background: #1B6B50;
-  border-color: #1B6B50;
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
   color: #FFFFFF;
 }
 
@@ -383,7 +384,7 @@
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 700;
-  color: #12281E;
+  color: var(--text-primary, #14241C);
   margin: 0 0 6px;
   line-height: 1.25;
 }
@@ -392,7 +393,7 @@
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.95rem;
   font-style: italic;
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
   margin: 0 0 14px;
 }
 
@@ -400,16 +401,16 @@
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 1rem;
   line-height: 1.7;
-  color: #435A4F;
+  color: var(--text-secondary, #485E53);
   margin: 0 0 24px;
 }
 
 .yoga-details-card__highlights {
-  background: #FAF8F4;
+  background: var(--surface-secondary, #F3F6F1);
   border-radius: 14px;
   padding: 20px 22px;
   margin-bottom: 24px;
-  border: 1px solid rgba(27, 67, 50, 0.07);
+  border: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-details-card__highlights-title {
@@ -418,7 +419,7 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #1B4E38;
+  color: var(--primary-green, #1B6B50);
   margin: 0 0 14px;
 }
 
@@ -436,18 +437,18 @@
   align-items: center;
   gap: 8px;
   font-size: 0.9rem;
-  color: #274D3B;
+  color: var(--text-primary, #14241C);
   font-weight: 500;
 }
 
 .yoga-highlight-check {
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
   flex-shrink: 0;
 }
 
 .yoga-details-card__focus-box {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.1);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 12px;
   padding: 14px 18px;
   margin-bottom: 24px;
@@ -460,13 +461,13 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #6C8176;
+  color: var(--text-light, #7E9387);
   margin-bottom: 4px;
 }
 
 .yoga-focus-text {
   font-size: 0.9rem;
-  color: #435A4F;
+  color: var(--text-secondary, #485E53);
   margin: 0;
   line-height: 1.55;
 }
@@ -477,7 +478,7 @@
   gap: 14px;
   flex-wrap: wrap;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(27, 67, 50, 0.08);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-details-card__whatsapp-btn {
@@ -485,7 +486,7 @@
   align-items: center;
   gap: 8px;
   padding: 11px 22px;
-  background: #143826;
+  background: var(--primary-green-dark, #124C38);
   color: #FAF9F5;
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
@@ -496,7 +497,7 @@
 }
 
 .yoga-details-card__whatsapp-btn:hover {
-  background: #1B6B50;
+  background: var(--primary-green, #1B6B50);
 }
 
 .yoga-details-card__timetable-btn {
@@ -504,10 +505,10 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: #FAF8F4;
-  border: 1px solid rgba(27, 67, 50, 0.16);
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 999px;
-  color: #1B4E38;
+  color: var(--text-primary, #14241C);
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.88rem;
   font-weight: 600;
@@ -516,9 +517,9 @@
 }
 
 .yoga-details-card__timetable-btn:hover {
-  background: #FFFFFF;
-  border-color: #1B6B50;
-  color: #1B6B50;
+  background: var(--surface-color, #FFFFFF);
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
 }
 
 .yoga-details-card__tabs {
@@ -535,7 +536,7 @@
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: #788C82;
+  color: var(--text-light, #7E9387);
   white-space: nowrap;
 }
 
@@ -548,25 +549,25 @@
 
 .yoga-quick-tab {
   padding: 5px 12px;
-  background: #FAF8F4;
-  border: 1px solid rgba(27, 67, 50, 0.12);
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 999px;
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.78rem;
   font-weight: 500;
-  color: #274D3B;
+  color: var(--text-primary, #14241C);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .yoga-quick-tab:hover {
-  border-color: #1B6B50;
-  color: #1B6B50;
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
 }
 
 .yoga-quick-tab.is-active {
-  background: #1B6B50;
-  border-color: #1B6B50;
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
   color: #FFFFFF;
 }
 
@@ -575,9 +576,9 @@
    ========================================================================== */
 .yoga-schedule-section {
   padding: 56px 0;
-  background: #F4F1EA;
-  border-top: 1px solid rgba(27, 67, 50, 0.07);
-  border-bottom: 1px solid rgba(27, 67, 50, 0.07);
+  background: var(--surface-secondary, #F3F6F1);
+  border-top: 1px solid var(--border-color, #E2E8DE);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-schedule-controls {
@@ -607,8 +608,8 @@
   flex-direction: column;
   align-items: center;
   padding: 8px 16px;
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.12);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -616,24 +617,24 @@
 }
 
 .yoga-day-tab:hover {
-  border-color: #1B6B50;
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .yoga-day-tab.is-active {
-  background: #1B6B50;
-  border-color: #1B6B50;
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .yoga-day-short {
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.88rem;
   font-weight: 700;
-  color: #1B3328;
+  color: var(--text-primary, #14241C);
 }
 
 .yoga-day-full {
   font-size: 0.68rem;
-  color: #788C82;
+  color: var(--text-light, #7E9387);
 }
 
 .yoga-day-tab.is-active .yoga-day-short,
@@ -645,10 +646,10 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  background: #FFFFFF;
+  background: var(--surface-color, #FFFFFF);
   padding: 4px;
   border-radius: 999px;
-  border: 1px solid rgba(27, 67, 50, 0.12);
+  border: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-format-btn {
@@ -662,13 +663,13 @@
   font-family: var(--font-display, 'Outfit', sans-serif);
   font-size: 0.82rem;
   font-weight: 600;
-  color: #6C8176;
+  color: var(--text-secondary, #485E53);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .yoga-format-btn.is-active {
-  background: #1B6B50;
+  background: var(--primary-green, #1B6B50);
   color: #FFFFFF;
 }
 
@@ -676,9 +677,9 @@
 .yoga-schedule-empty {
   text-align: center;
   padding: 48px 20px;
-  background: #FFFFFF;
+  background: var(--surface-color, #FFFFFF);
   border-radius: 16px;
-  border: 1px solid rgba(27, 67, 50, 0.08);
+  border: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-empty-whatsapp-btn {
@@ -687,7 +688,7 @@
   gap: 6px;
   margin-top: 14px;
   padding: 9px 20px;
-  background: #1B6B50;
+  background: var(--primary-green, #1B6B50);
   color: #FFFFFF;
   border-radius: 999px;
   text-decoration: none;
@@ -703,18 +704,20 @@
 }
 
 .yoga-timetable-card {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.1);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 16px;
   padding: 22px;
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--card-shadow);
 }
 
 .yoga-timetable-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(18, 40, 30, 0.07);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .yoga-timetable-card__header {
@@ -731,7 +734,7 @@
   gap: 5px;
   font-size: 0.84rem;
   font-weight: 600;
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
 }
 
 .yoga-format-chip {
@@ -742,15 +745,15 @@
   border-radius: 999px;
   font-size: 0.72rem;
   font-weight: 600;
-  background: #F4F1EA;
-  color: #435A4F;
+  background: var(--surface-secondary, #F3F6F1);
+  color: var(--text-secondary, #485E53);
 }
 
 .yoga-timetable-card__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: 1.25rem;
   font-weight: 700;
-  color: #12281E;
+  color: var(--text-primary, #14241C);
   margin: 0 0 8px;
 }
 
@@ -758,7 +761,7 @@
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.88rem;
   line-height: 1.55;
-  color: #4A6155;
+  color: var(--text-secondary, #485E53);
   margin: 0 0 16px;
   flex: 1;
 }
@@ -768,10 +771,10 @@
   align-items: center;
   gap: 14px;
   font-size: 0.78rem;
-  color: #6C8176;
+  color: var(--text-secondary, #485E53);
   margin-bottom: 16px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(27, 67, 50, 0.07);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
 .yoga-meta-item {
@@ -790,7 +793,7 @@
 .yoga-price-label {
   font-size: 0.82rem;
   font-weight: 600;
-  color: #1B6B50;
+  color: var(--primary-green, #1B6B50);
 }
 
 .yoga-btn-book-class {
@@ -835,11 +838,11 @@
 }
 
 .yoga-atmosphere-item {
-  background: #FFFFFF;
-  border: 1px solid rgba(27, 67, 50, 0.1);
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(18, 40, 30, 0.04);
+  box-shadow: var(--card-shadow);
 }
 
 .yoga-atmosphere-item img {
@@ -857,19 +860,124 @@
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
   font-size: 1.05rem;
   font-weight: 700;
-  color: #12281E;
+  color: var(--text-primary, #14241C);
   margin: 0 0 4px;
 }
 
 .atmosphere-caption p {
   font-size: 0.84rem;
   line-height: 1.5;
-  color: #6C8176;
+  color: var(--text-secondary, #485E53);
   margin: 0;
 }
 
 /* ==========================================================================
-   5. MOBILE RESPONSIVE ENHANCEMENTS
+   5. DARK MODE THEME ACCOMMODATIONS
+   ========================================================================== */
+[data-theme='dark'] .yoga-hero-section,
+.dark .yoga-hero-section {
+  background: radial-gradient(circle at 50% 20%, rgba(46, 157, 119, 0.12) 0%, rgba(221, 163, 78, 0.05) 50%, transparent 80%), var(--bg-color, #0A140F);
+  border-bottom-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-hero-btn-primary,
+.dark .yoga-hero-btn-primary,
+[data-theme='dark'] .yoga-details-card__whatsapp-btn,
+.dark .yoga-details-card__whatsapp-btn {
+  background: var(--primary-green, #2E9D77);
+  color: #0A140F;
+}
+
+[data-theme='dark'] .yoga-hero-btn-primary:hover,
+.dark .yoga-hero-btn-primary:hover,
+[data-theme='dark'] .yoga-details-card__whatsapp-btn:hover,
+.dark .yoga-details-card__whatsapp-btn:hover {
+  background: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .yoga-image-card,
+.dark .yoga-image-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card,
+.dark .yoga-details-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card__highlights,
+.dark .yoga-details-card__highlights {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card__focus-box,
+.dark .yoga-details-card__focus-box {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-nav-btn,
+.dark .yoga-details-nav-btn {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .yoga-quick-tab,
+.dark .yoga-quick-tab {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .yoga-schedule-section,
+.dark .yoga-schedule-section {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-day-tab,
+.dark .yoga-day-tab {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-format-filter,
+.dark .yoga-format-filter {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-timetable-card,
+.dark .yoga-timetable-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-btn-book-class,
+.dark .yoga-btn-book-class {
+  background: rgba(37, 211, 102, 0.16);
+  border-color: rgba(37, 211, 102, 0.45);
+  color: #4ADE80;
+}
+
+[data-theme='dark'] .yoga-btn-book-class:hover,
+.dark .yoga-btn-book-class:hover {
+  background: #25D366;
+  color: #0A140F;
+}
+
+[data-theme='dark'] .yoga-atmosphere-item,
+.dark .yoga-atmosphere-item {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+/* ==========================================================================
+   6. MOBILE RESPONSIVE ENHANCEMENTS
    ========================================================================== */
 @media (max-width: 768px) {
   .yoga-container {

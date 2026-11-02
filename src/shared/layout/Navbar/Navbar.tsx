@@ -4,8 +4,7 @@ import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { SearchModal } from './SearchModal';
-import { Search, User, Menu, X } from 'lucide-react';
+import { User, Menu, X } from 'lucide-react';
 import './Navbar.css';
 
 const NAV_LINKS = [
@@ -20,7 +19,6 @@ const NAV_LINKS = [
 
 export const Navbar: React.FC = React.memo(() => {
   const [scrolled, setScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -75,16 +73,6 @@ export const Navbar: React.FC = React.memo(() => {
           </ul>
 
           <div className="navbar-actions">
-            <button
-              type="button"
-              className="navbar-icon-btn search-trigger"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search treatments and programs"
-              title="Search"
-            >
-              <Search size={18} />
-            </button>
-
             <Link
               to={ROUTES.DOCTOR}
               className={`navbar-icon-btn profile-trigger ${location.pathname.startsWith(ROUTES.DOCTOR) || location.pathname === ROUTES.LOGIN ? 'active-icon' : ''}`}
@@ -165,8 +153,6 @@ export const Navbar: React.FC = React.memo(() => {
           </div>
         </div>
       )}
-
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 });
