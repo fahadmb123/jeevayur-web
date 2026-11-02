@@ -122,7 +122,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                 variant="primary"
               />
               <a
-                href="https://wa.me/918590807138?text=Hello%20Dr.%20Ahalya%20/%20Jeevayurniketan,%20I%20would%20like%20to%20enquire%20about%20Ayurvedic%20treatments."
+                href="https://wa.me/917356702775?text=Hello%20Dr.%20Ahalya%20/%20Jeevayurniketan,%20I%20would%20like%20to%20enquire%20about%20Ayurvedic%20treatments."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="treatments-hero__whatsapp-btn"
@@ -220,7 +220,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                 animate="visible"
               >
                 {filteredServices.map((service, index) => {
-                  const whatsappUrl = `https://wa.me/918590807138?text=${encodeURIComponent(
+                  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
                     `Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatment for: ${service.title}.`
                   )}`;
 
@@ -391,7 +391,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                   variant="primary"
                 />
                 <a
-                  href="https://wa.me/918590807138?text=Hello%20Dr.%20Ahalya,%20I%20would%20like%20guidance%20on%20which%20treatment%20is%20suitable%20for%20my%20health%20condition."
+                  href="https://wa.me/917356702775?text=Hello%20Dr.%20Ahalya,%20I%20would%20like%20guidance%20on%20which%20treatment%20is%20suitable%20for%20my%20health%20condition."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="concierge-whatsapp-btn"
@@ -472,7 +472,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                       variant="primary"
                     />
                     <a
-                      href={`https://wa.me/918590807138?text=${encodeURIComponent(
+                      href={`https://wa.me/917356702775?text=${encodeURIComponent(
                         `Hello Dr. Ahalya, I am enquiring about clinical treatment details for ${activeDetailService.title}.`
                       )}`}
                       target="_blank"

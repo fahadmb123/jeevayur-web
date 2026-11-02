@@ -143,7 +143,7 @@ export const FAQSection: React.FC = React.memo(() => {
             <p>Our Ayurvedic clinical team is available to assist you with initial consultation guidance.</p>
           </div>
           <a
-            href="https://wa.me/918590807138?text=Hello,%20I%20am%20interested%20in%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S.%20Could%20you%20please%20share%20more%20details"
+            href="https://wa.me/917356702775?text=Hello,%20I%20am%20interested%20in%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S.%20Could%20you%20please%20share%20more%20details"
             target="_blank"
             rel="noopener noreferrer"
             className="faq-whatsapp-btn"

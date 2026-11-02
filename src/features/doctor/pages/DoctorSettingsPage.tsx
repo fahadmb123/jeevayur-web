@@ -12,7 +12,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     name: user?.name || 'Dr. Ahalya T.S.',
     specialty: 'Ayurveda & Wellness Consultant',
     email: user?.email || 'dr.ahalya@jeevayurniketan.com',
-    phone: '+91 9544 260 145',
+    phone: '+91 73567 02775',
     consultDuration: '45 mins',
     emailAlerts: true,
     smsAlerts: false,

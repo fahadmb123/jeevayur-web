@@ -56,7 +56,7 @@ export const YOGAATHMA_DATA = {
       'Our approach combines traditional yogic principles with individualized guidance, taking into account your abilities, lifestyle, comfort, and wellness goals. Whether you are a beginner, looking to establish a regular yoga routine, or seeking a gentle practice that complements your existing healthcare plan, our sessions help you develop a sustainable practice at your own pace.',
     ctaPrimary: 'Book a Yoga Session',
     ctaSecondary: 'Explore Our Programs',
-    phone: '89706 95250',
+    phone: '+91 73567 02775',
     whatsappMessage:
       'Hello Jeevayurniketan | Yogaathma, I would like to enquire about your yoga programs and book a session.',
   },
@@ -393,7 +393,7 @@ export const YOGAATHMA_DATA = {
     description:
       'Develop a yoga practice that fits your needs, respects your abilities, and supports your personal wellness goals. Whether you choose personalized sessions or a small online group, our aim is to help you approach yoga with confidence, consistency, and mindful awareness.',
     encouragement: 'Start where you are. Progress at your own pace. Make wellbeing a part of everyday life.',
-    phone: '89706 95250',
+    phone: '+91 73567 02775',
     options: 'Personalized practice and online group sessions.',
   },
 

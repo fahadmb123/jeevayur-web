@@ -17,7 +17,7 @@ export const YogaProgramCard: React.FC<YogaProgramCardProps> = React.memo(({
 }) => {
   const [isToggled, setIsToggled] = useState(false);
 
-  const whatsappUrl = `https://wa.me/918970695250?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
     `Hello Jeevayurniketan | Yogaathma, I would like to enquire about the "${program.title}" program.`
   )}`;
 

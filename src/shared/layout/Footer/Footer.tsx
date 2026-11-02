@@ -46,7 +46,7 @@ export const Footer: React.FC = React.memo(() => {
             </li>
             <li>
               <span className="contact-icon"><Phone size={18} /></span>
-              <a href="tel:+919544260145">+91 9544 260 145</a>
+              <a href="tel:+917356702775">+91 73567 02775</a>
             </li>
             <li>
               <span className="contact-icon"><Mail size={18} /></span>
@@ -62,7 +62,7 @@ export const Footer: React.FC = React.memo(() => {
 
       {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/918590807138?text=Hello,%20I%20am%20interested%20in%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S.%20Could%20you%20please%20share%20more%20details"
+        href="https://wa.me/917356702775?text=Hello,%20I%20am%20interested%20in%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S.%20Could%20you%20please%20share%20more%20details"
         className="floating-whatsapp"
         target="_blank"
         rel="noopener noreferrer"

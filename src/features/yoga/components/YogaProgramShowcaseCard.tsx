@@ -14,7 +14,7 @@ export const YogaProgramShowcaseCard: React.FC<YogaProgramShowcaseCardProps> = R
   program,
   index,
 }) => {
-  const whatsappUrl = `https://wa.me/918970695250?text=${encodeURIComponent(
+  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
     `Hello Jeevayurniketan | Yogaathma, I would like to book or enquire about the "${program.title}" program.`
   )}`;
 

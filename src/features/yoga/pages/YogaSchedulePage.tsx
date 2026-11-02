@@ -48,7 +48,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
   const { hero, approach, programs } = YOGAATHMA_DATA;
 
-  const whatsappHeroUrl = `https://wa.me/918970695250?text=${encodeURIComponent(
+  const whatsappHeroUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
     hero.whatsappMessage
   )}`;
 
@@ -261,7 +261,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                   No classes scheduled for {activeDay} in this format. Try selecting another day or contact our desk for private sessions.
                 </p>
                 <a
-                  href={`https://wa.me/918970695250?text=${encodeURIComponent(
+                  href={`https://wa.me/917356702775?text=${encodeURIComponent(
                     `Hello, I would like to enquire about yoga sessions available on ${activeDay}.`
                   )}`}
                   target="_blank"
@@ -275,7 +275,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             ) : (
               <div className="yoga-classes-grid">
                 {filteredSessions.map((session) => {
-                  const sessionWhatsappUrl = `https://wa.me/918970695250?text=${encodeURIComponent(
+                  const sessionWhatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
                     `Hello Jeevayurniketan | Yogaathma, I would like to book a spot for the "${session.title}" on ${activeDay} (${session.time}).`
                   )}`;
 
