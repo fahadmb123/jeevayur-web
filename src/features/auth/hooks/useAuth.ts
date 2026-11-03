@@ -13,6 +13,10 @@ export const useAuth = () => {
     loading: isPending,
     error,
     register: async (data: RegisterData) => authService.register(data),
-    logout: async () => { await authService.logout(); queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY }); },
+    logout: async () => {
+      await authService.logout();
+      queryClient.setQueryData(AUTH_QUERY_KEY, null);
+      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
+    },
   };
 };

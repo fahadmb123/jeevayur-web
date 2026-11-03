@@ -1,19 +1,27 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { SearchModal } from './SearchModal';
-import { Search, Sparkles, Menu, X } from 'lucide-react';
+import { User, Menu, X, LogIn } from 'lucide-react';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import './Navbar.css';
+
+const NAV_LINKS = [
+  { label: 'Home', path: ROUTES.HOME },
+  { label: 'About', path: ROUTES.ABOUT },
+  { label: 'Treatments', path: ROUTES.SERVICES },
+  { label: 'Yoga', path: ROUTES.YOGA },
+  { label: 'Team', path: ROUTES.TEAM },
+  { label: 'Contact', path: ROUTES.CONTACT },
+];
 
 export const Navbar: React.FC = React.memo(() => {
   const [scrolled, setScrolled] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     let ticking = false;
@@ -33,120 +41,60 @@ export const Navbar: React.FC = React.memo(() => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleNavAnchor = useCallback((targetId: string) => {
+  useEffect(() => {
     setIsMobileMenuOpen(false);
-    if (location.pathname === ROUTES.HOME) {
-      const el = document.querySelector(targetId);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      navigate(`${ROUTES.HOME}${targetId}`);
-    }
-  }, [location.pathname, navigate]);
+  }, [location.pathname]);
 
   return (
     <>
       <header className={`navbar-wrapper ${scrolled ? 'scrolled' : 'transparent-top'}`}>
         <nav className="navbar" aria-label="Primary Navigation">
-          {/* Brand Logo & Typography */}
           <div className="navbar-brand-section">
             <BrandLogo linkTo={ROUTES.HOME} showDivider={false} size="md" />
           </div>
 
-          {/* Centered Desktop Menu Links */}
           <ul className="navbar-links">
-            <li>
-              <Link
-                to={ROUTES.ABOUT}
-                className={location.pathname === ROUTES.ABOUT ? 'active-link' : ''}
-              >
-                About Heritage
-              </Link>
-            </li>
-            <li>
-              <a
-                href="#treatments"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavAnchor('#treatments');
-                }}
-              >
-                Treatments
-              </a>
-            </li>
-            <li>
-              <a
-                href="#services"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavAnchor('#services');
-                }}
-              >
-                Services
-              </a>
-            </li>
-            <li>
-              <a
-                href="#yoga"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavAnchor('#yoga');
-                }}
-              >
-                Yoga &amp; Meditation
-              </a>
-            </li>
-            <li>
-              <a
-                href="#team"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavAnchor('#team');
-                }}
-              >
-                Team
-              </a>
-            </li>
-            <li>
-              <Link
-                to={ROUTES.LOGIN}
-                className={location.pathname === ROUTES.LOGIN ? 'active-link' : ''}
-              >
-                Sign In
-              </Link>
-            </li>
-            <li>
-              <Link
-                to={ROUTES.DOCTOR}
-                className={location.pathname.startsWith('/doctor') ? 'active-link' : ''}
-              >
-                Doctor Portal
-              </Link>
-            </li>
+            {NAV_LINKS.map((link) => {
+              const isActive =
+                link.path === ROUTES.HOME
+                  ? location.pathname === ROUTES.HOME
+                  : location.pathname.startsWith(link.path);
+
+              return (
+                <li key={link.path}>
+                  <Link
+                    to={link.path}
+                    className={isActive ? 'active-link' : ''}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
 
-          {/* Right Icon Actions matching the reference design */}
           <div className="navbar-actions">
-            <button
-              type="button"
-              className="navbar-icon-btn search-trigger"
-              onClick={() => setIsSearchOpen(true)}
-              aria-label="Search therapies and treatments"
-              title="Search therapies and treatments"
-            >
-              <Search size={19} />
-            </button>
-
             <Link
-              to={ROUTES.LOGIN}
-              className="navbar-icon-btn profile-trigger"
-              aria-label="Patient & Doctor Sign In"
-              title="Patient & Doctor Sign In"
+              to={isAuthenticated ? ROUTES.DOCTOR : ROUTES.LOGIN}
+              className={`navbar-login-btn ${
+                location.pathname === ROUTES.LOGIN || location.pathname.startsWith(ROUTES.DOCTOR)
+                  ? 'active'
+                  : ''
+              }`}
+              aria-label={isAuthenticated ? 'Doctor Portal' : 'Login'}
+              title={isAuthenticated ? 'Doctor Portal' : 'Doctor & Staff Login'}
             >
-              <span className="profile-leaf-badge">
-                <Sparkles size={14} />
-              </span>
+              {isAuthenticated ? (
+                <>
+                  <User size={15} />
+                  <span>Portal</span>
+                </>
+              ) : (
+                <>
+                  <LogIn size={15} />
+                  <span>Login</span>
+                </>
+              )}
             </Link>
 
             <ThemeToggle />
@@ -177,29 +125,52 @@ export const Navbar: React.FC = React.memo(() => {
                 type="button"
                 className="mobile-menu-close"
                 onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Close Menu"
               >
                 <X size={22} />
               </button>
             </div>
 
             <div className="mobile-menu-links">
-              <Link to={ROUTES.HOME} onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
-              <Link to={ROUTES.ABOUT} onClick={() => setIsMobileMenuOpen(false)}>About Heritage</Link>
-              <a href="#treatments" onClick={(e) => { e.preventDefault(); handleNavAnchor('#treatments'); }}>
-                Treatments
-              </a>
-              <a href="#services" onClick={(e) => { e.preventDefault(); handleNavAnchor('#services'); }}>
-                Services
-              </a>
-              <a href="#yoga" onClick={(e) => { e.preventDefault(); handleNavAnchor('#yoga'); }}>
-                Yoga &amp; Meditation
-              </a>
-              <a href="#team" onClick={(e) => { e.preventDefault(); handleNavAnchor('#team'); }}>
-                Our Team
-              </a>
-              <Link to={ROUTES.GALLERY} onClick={() => setIsMobileMenuOpen(false)}>Photo Gallery</Link>
-              <Link to={ROUTES.LOGIN} onClick={() => setIsMobileMenuOpen(false)}>Sign In / Login</Link>
-              <Link to={ROUTES.DOCTOR} onClick={() => setIsMobileMenuOpen(false)}>Doctor Portal</Link>
+              {NAV_LINKS.map((link) => {
+                const isActive =
+                  link.path === ROUTES.HOME
+                    ? location.pathname === ROUTES.HOME
+                    : location.pathname.startsWith(link.path);
+
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={isActive ? 'is-active' : ''}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
+
+              <div className="mobile-menu-divider" />
+
+              {isAuthenticated ? (
+                <Link
+                  to={ROUTES.DOCTOR}
+                  className={`mobile-menu-portal-link ${location.pathname.startsWith(ROUTES.DOCTOR) ? 'is-active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <User size={16} />
+                  <span>Doctor Portal</span>
+                </Link>
+              ) : (
+                <Link
+                  to={ROUTES.LOGIN}
+                  className={`mobile-menu-portal-link ${location.pathname === ROUTES.LOGIN ? 'is-active' : ''}`}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <LogIn size={16} />
+                  <span>Login</span>
+                </Link>
+              )}
             </div>
 
             <div className="mobile-menu-footer">
@@ -208,9 +179,6 @@ export const Navbar: React.FC = React.memo(() => {
           </div>
         </div>
       )}
-
-      {/* Search Modal */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </>
   );
 });

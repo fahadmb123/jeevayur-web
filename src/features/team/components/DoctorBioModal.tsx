@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Award, Calendar } from 'lucide-react';
 import type { TeamMember } from '../types';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import './DoctorBioModal.css';
 
 interface DoctorBioModalProps {

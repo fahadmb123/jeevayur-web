@@ -5,3 +5,4 @@ export * from './avatar';
 export * from './DoctorSearchFilterStrip';
 export * from './BrandLogo';
 export * from './LoadingScreen';
+export * from './ScrollToTop';

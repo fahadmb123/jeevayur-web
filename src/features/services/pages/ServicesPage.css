@@ -1,68 +1,809 @@
-.services-page {
+.services-page-shell {
   width: 100%;
   min-height: 100vh;
-  background-color: var(--bg-color, #F8FAFC);
+  background-color: var(--bg-color, #FBFBF9);
+  color: var(--text-primary, #14241C);
+  display: flex;
+  flex-direction: column;
 }
 
-.faq-section {
-  padding: 80px 5% 100px;
-  background-color: var(--surface-color, #FFFFFF);
-  border-top: 1px solid var(--border-color, #E2E8F0);
+.services-page {
+  flex: 1;
+  width: 100%;
+  overflow-x: clip;
 }
 
-.faq-container {
-  max-width: 900px;
+.treatments-container {
+  max-width: 1200px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 
-.faq-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin: 48px 0 64px;
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+.treatments-hero {
+  padding: clamp(96px, 12vw, 136px) 24px clamp(32px, 4vw, 48px);
+  background: radial-gradient(circle at 50% 20%, rgba(27, 107, 80, 0.06) 0%, rgba(201, 141, 59, 0.03) 40%, transparent 80%), var(--surface-color, #FFFFFF);
+  text-align: center;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
-.faq-card {
-  padding: 24px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.faq-card__question {
-  font-size: 1.15rem;
-  font-weight: 600;
-  color: var(--text-primary, #0F172A);
-  margin: 0;
-}
-
-.faq-card__answer {
-  color: var(--text-secondary, #475569);
-  font-size: 0.95rem;
-  line-height: 1.7;
-  margin: 0;
-}
-
-.services-cta {
-  background-color: var(--surface-secondary, #F8FAFC);
-  border: 1px solid var(--border-color, #E2E8F0);
-  border-radius: 16px;
-  padding: 48px 24px;
+.treatments-hero__inner {
+  max-width: 780px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
 }
 
-.services-cta h3 {
-  font-size: 1.75rem;
+.treatments-hero__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(2rem, 3.8vw, 3rem);
   font-weight: 700;
-  color: var(--text-primary, #0F172A);
+  color: var(--text-primary, #14241C);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+
+.treatments-hero__subtitle {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.65;
+  color: var(--text-secondary, #485E53);
+  max-width: 640px;
+  margin: 0 0 24px;
+}
+
+.treatments-hero__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.treatments-hero__whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.treatments-hero__whatsapp-btn:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   2. CATEGORY FILTER & SEARCH
+   ========================================================================== */
+.treatments-filter-strip {
+  padding: 18px 0;
+  background-color: var(--surface-color, #FFFFFF);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+  position: sticky;
+  top: 72px;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+}
+
+.treatments-filter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.treatments-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  flex: 1;
+}
+
+.treatments-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.treatments-tab-btn {
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.treatments-tab-btn:hover {
+  background: var(--primary-green-tint, rgba(27, 107, 80, 0.08));
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.treatments-tab-btn.is-active {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.treatments-tab-label {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text-primary, #14241C);
+  transition: color 0.2s ease;
+}
+
+.treatments-tab-btn.is-active .treatments-tab-label {
+  color: #FFFFFF;
+}
+
+.treatments-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+}
+
+.treatments-search-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-light, #7E9387);
+  pointer-events: none;
+}
+
+.treatments-search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 32px 0 38px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 999px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.86rem;
+  color: var(--text-primary, #14241C);
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.treatments-search-input:focus {
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 0 0 3px var(--primary-green-tint, rgba(27, 107, 80, 0.12));
+}
+
+.treatments-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: var(--text-light, #7E9387);
+  font-size: 1.1rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   3. CATALOG SECTION
+   ========================================================================== */
+.treatments-catalog-section {
+  padding: 40px 0 72px;
+}
+
+.treatments-section-title-wrap {
+  margin-bottom: 24px;
+}
+
+.treatments-section-title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 6px;
+}
+
+.treatments-section-subtitle {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  color: var(--text-secondary, #485E53);
   margin: 0;
 }
 
-.services-cta p {
-  color: var(--text-secondary, #475569);
+.treatments-loading,
+.treatments-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.treatments-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-color, rgba(27, 107, 80, 0.15));
+  border-top-color: var(--primary-green, #1B6B50);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.treatments-empty-icon {
+  color: var(--primary-green, #1B6B50);
+  margin-bottom: 12px;
+}
+
+.treatments-reset-btn {
+  margin-top: 14px;
+  padding: 9px 20px;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.86rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   4. IMAGES SECTION (SEPARATE IMAGES GRID)
+   ========================================================================== */
+.treatments-images-section {
+  margin-bottom: 56px;
+}
+
+.treatments-images-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1024px) {
+  .treatments-images-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+}
+
+@media (max-width: 640px) {
+  .treatments-images-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* Treatment Image Card */
+.treatment-image-card {
+  position: relative;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.treatment-image-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.treatment-image-card.is-selected {
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 0 0 2px var(--primary-green, #1B6B50), var(--card-shadow-hover);
+}
+
+.treatment-image-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background-color: var(--surface-secondary, #F3F6F1);
+}
+
+.treatment-image-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.treatment-image-card:hover .treatment-image-card__img {
+  transform: scale(1.04);
+}
+
+.treatment-image-card__placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  background: var(--surface-secondary, #F3F6F1);
+}
+
+.treatment-image-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.15) 0%, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
+  pointer-events: none;
+}
+
+.treatment-image-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.treatment-image-card__tag {
+  align-self: flex-start;
+  padding: 3px 8px;
+  background: rgba(20, 56, 38, 0.88);
+  border-radius: 4px;
+  color: #FAF9F5;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.treatment-image-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 2px 0 0;
+  line-height: 1.3;
+}
+
+.treatment-image-card__duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.treatment-image-card__selected-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 4px 10px;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  z-index: 3;
+}
+
+/* ==========================================================================
+   5. DETAILS SECTION (SHOWN IN THE LAST)
+   ========================================================================== */
+.treatments-details-section {
+  scroll-margin-top: 140px;
+}
+
+.treatment-details-card {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 20px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: var(--card-shadow);
+}
+
+.treatment-details-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.treatment-details-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.treatment-details-card__category {
+  padding: 5px 12px;
+  background: var(--primary-green-tint, rgba(27, 107, 80, 0.08));
+  border-radius: 6px;
+  color: var(--primary-green, #1B6B50);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.treatment-details-card__duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text-secondary, #485E53);
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.treatment-details-card__nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.treatment-details-nav-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, #E2E8DE);
+  background: var(--surface-color, #FFFFFF);
+  color: var(--text-primary, #14241C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.treatment-details-nav-btn:hover:not(:disabled) {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+}
+
+.treatment-details-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.treatment-details-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 14px;
+  line-height: 1.25;
+}
+
+.treatment-details-card__desc {
+  font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 1rem;
-  margin-bottom: 16px;
+  line-height: 1.7;
+  color: var(--text-secondary, #485E53);
+  margin: 0 0 24px;
+}
+
+.treatment-details-card__benefits {
+  background: var(--surface-secondary, #F3F6F1);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+  border: 1px solid var(--border-color, #E2E8DE);
+}
+
+.treatment-details-card__benefits-title {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-green, #1B6B50);
+  margin: 0 0 14px;
+}
+
+.treatment-details-card__benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px 18px;
+}
+
+.treatment-details-benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-primary, #14241C);
+  font-weight: 500;
+}
+
+.treatment-benefit-check {
+  color: var(--primary-green, #1B6B50);
+  flex-shrink: 0;
+}
+
+.treatment-details-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.treatment-details-card__whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.treatment-details-card__whatsapp-btn:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+.treatment-details-card__tabs {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.treatment-tabs-label {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-light, #7E9387);
+  white-space: nowrap;
+}
+
+.treatment-tabs-scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.treatment-quick-tab {
+  padding: 5px 12px;
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-primary, #14241C);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.treatment-quick-tab:hover {
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+}
+
+.treatment-quick-tab.is-active {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   6. DARK MODE THEME ACCOMMODATIONS
+   ========================================================================== */
+[data-theme='dark'] .treatments-hero,
+.dark .treatments-hero {
+  background: radial-gradient(circle at 50% 20%, rgba(46, 157, 119, 0.12) 0%, rgba(221, 163, 78, 0.05) 40%, transparent 80%), var(--bg-color, #0A140F);
+  border-bottom-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .treatments-hero__whatsapp-btn,
+.dark .treatments-hero__whatsapp-btn,
+[data-theme='dark'] .treatment-details-card__whatsapp-btn,
+.dark .treatment-details-card__whatsapp-btn {
+  background: rgba(37, 211, 102, 0.16);
+  border-color: rgba(37, 211, 102, 0.45);
+  color: #4ADE80;
+}
+
+[data-theme='dark'] .treatments-hero__whatsapp-btn:hover,
+.dark .treatments-hero__whatsapp-btn:hover,
+[data-theme='dark'] .treatment-details-card__whatsapp-btn:hover,
+.dark .treatment-details-card__whatsapp-btn:hover {
+  background: #25D366;
+  color: #0A140F;
+}
+
+[data-theme='dark'] .treatments-filter-strip,
+.dark .treatments-filter-strip {
+  background-color: rgba(17, 34, 27, 0.95);
+  border-bottom-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .treatments-search-input,
+.dark .treatments-search-input {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .treatment-image-card,
+.dark .treatment-image-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .treatment-details-card,
+.dark .treatment-details-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .treatment-details-card__benefits,
+.dark .treatment-details-card__benefits {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .treatment-details-nav-btn,
+.dark .treatment-details-nav-btn {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .treatment-quick-tab,
+.dark .treatment-quick-tab {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+/* ==========================================================================
+   7. MOBILE RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .treatments-container {
+    padding: 0 16px;
+  }
+
+  .treatments-filter-strip {
+    top: 56px;
+    padding: 14px 0;
+  }
+
+  .treatments-filter-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .treatments-search-box {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .treatments-hero {
+    padding: 84px 16px 28px;
+  }
+
+  .treatments-catalog-section {
+    padding: 28px 0 56px;
+  }
+
+  .treatments-details-section {
+    scroll-margin-top: 110px;
+    margin-top: 40px;
+  }
+
+  .treatment-details-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .treatment-details-card__title {
+    font-size: 1.45rem;
+  }
+
+  .treatment-details-card__benefits-list {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .treatment-details-card__tabs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .treatment-tabs-scroll {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .treatment-tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .treatment-quick-tab {
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .treatments-hero__actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .treatments-hero__actions button,
+  .treatments-hero__whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .treatment-details-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .treatment-details-card__top .treatment-details-card__nav-arrows {
+    align-self: flex-end;
+  }
+
+  .treatment-details-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .treatment-details-card__actions button,
+  .treatment-details-card__whatsapp-btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

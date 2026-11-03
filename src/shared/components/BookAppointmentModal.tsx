@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Calendar, User, Phone, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
-import { useBookAppointment } from '../hooks/useBookAppointment';
-import type { BookingFormData } from '../types';
+import { useBookAppointment } from '@/features/appointments/hooks/useBookAppointment';
+import type { BookingFormData } from '@/features/appointments/types';
 import './BookAppointmentModal.css';
 
 export interface BookAppointmentModalProps {
@@ -28,7 +28,7 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
   const { book, loading } = useBookAppointment();
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = React.useCallback(
+  const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
       if (!formData.fullName || !formData.phone) return;
@@ -41,7 +41,6 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
           onClose();
         }, 1400);
       } catch {
-        // Handled in hook
       }
     },
     [formData, book, onSuccess, onClose]
@@ -158,3 +157,4 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
 });
 
 BookAppointmentModal.displayName = 'BookAppointmentModal';
+

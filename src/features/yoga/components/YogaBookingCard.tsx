@@ -38,7 +38,7 @@ export const YogaBookingCard: React.FC = React.memo(() => {
 
           <div className="yogaathma-booking-card__actions">
             <a
-              href={`https://wa.me/918970695250?text=${encodeURIComponent(
+              href={`https://wa.me/917356702775?text=${encodeURIComponent(
                 'Hello Jeevayurniketan | Yogaathma, I would like to book a yoga session.'
               )}`}
               target="_blank"
@@ -49,7 +49,7 @@ export const YogaBookingCard: React.FC = React.memo(() => {
               <span>WhatsApp: {booking.phone}</span>
             </a>
 
-            <a href={`tel:+918970695250`} className="yogaathma-booking-btn-call">
+            <a href={`tel:+917356702775`} className="yogaathma-booking-btn-call">
               <PhoneCall size={16} />
               <span>Call: {booking.phone}</span>
             </a>

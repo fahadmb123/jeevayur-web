@@ -1,519 +1,1128 @@
-.yoga-page {
-  padding-top: 110px;
-  padding-bottom: 90px;
+.yoga-page-shell {
+  width: 100%;
   min-height: 100vh;
   background-color: var(--bg-color, #FBFBF9);
+  color: var(--text-primary, #14241C);
+  display: flex;
+  flex-direction: column;
+}
+
+.yoga-page {
+  flex: 1;
+  width: 100%;
+  overflow-x: clip;
 }
 
 .yoga-container {
-  max-width: 1240px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 24px;
 }
 
-/* Page Hero */
-.yoga-hero {
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
+.yoga-hero-section {
+  padding: clamp(96px, 12vw, 136px) 24px clamp(32px, 4vw, 48px);
+  background: radial-gradient(circle at 50% 20%, rgba(201, 141, 59, 0.06) 0%, rgba(27, 107, 80, 0.04) 50%, transparent 80%), var(--surface-color, #FFFFFF);
   text-align: center;
-  max-width: 860px;
-  margin: 0 auto 48px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
-.yoga-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 6px 18px;
-  border-radius: 9999px;
-  background-color: rgba(201, 141, 59, 0.12);
-  color: var(--accent-gold, #C98D3B);
-  border: 1px solid rgba(201, 141, 59, 0.35);
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  margin-bottom: 18px;
-}
-
-.yoga-hero__title {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.4rem, 4.5vw, 3.6rem);
-  font-weight: 700;
-  color: var(--text-primary, #14241C);
-  letter-spacing: -0.02em;
-  line-height: 1.15;
-  margin: 0 0 12px 0;
-}
-
-[data-theme='dark'] .yoga-hero__title,
-.dark .yoga-hero__title {
-  color: var(--text-primary, #F2F7F4);
-}
-
-.yoga-hero__tagline {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.2rem, 2vw, 1.5rem);
-  font-style: italic;
-  color: var(--primary-green, #1B6B50);
-  margin: 0 0 20px 0;
-  font-weight: 500;
-}
-
-[data-theme='dark'] .yoga-hero__tagline,
-.dark .yoga-hero__tagline {
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-hero__desc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(1rem, 1.35vw, 1.12rem);
-  color: var(--text-secondary, #485E53);
-  line-height: 1.72;
-  margin: 0 0 14px 0;
-}
-
-[data-theme='dark'] .yoga-hero__desc,
-.dark .yoga-hero__desc {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-.yoga-hero__subdesc {
-  font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.94rem;
-  color: var(--text-light, #6C8176);
-  line-height: 1.65;
-  margin: 0 0 28px 0;
-}
-
-[data-theme='dark'] .yoga-hero__subdesc,
-.dark .yoga-hero__subdesc {
-  color: var(--text-secondary, #8BA396);
-}
-
-.yoga-hero__actions {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 14px;
-  flex-wrap: wrap;
-}
-
-.yoga-hero__btn-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 26px;
-  background: var(--primary-green, #1B6B50);
-  color: #FFFFFF;
-  border-radius: 9999px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.94rem;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 4px 16px rgba(27, 107, 80, 0.28);
-  transition: all 0.25s ease;
-}
-
-.yoga-hero__btn-primary:hover {
-  background: #14523D;
-  color: #FFFFFF;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(27, 107, 80, 0.4);
-}
-
-.yoga-hero__btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 13px 24px;
-  background: rgba(27, 107, 80, 0.08);
-  border: 1px solid rgba(27, 107, 80, 0.2);
-  color: var(--primary-green, #1B6B50);
-  border-radius: 9999px;
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.94rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-
-[data-theme='dark'] .yoga-hero__btn-secondary,
-.dark .yoga-hero__btn-secondary {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-hero__btn-secondary:hover {
-  background: rgba(27, 107, 80, 0.15);
-  transform: translateY(-2px);
-}
-
-/* Quick Stats Bar */
-.yoga-stats-bar {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 56px;
-}
-
-.yoga-stat-card {
-  background: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E8EDE5);
-  border-radius: 16px;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  box-shadow: 0 4px 14px -2px rgba(18, 76, 56, 0.04);
-  transition: transform 0.2s, border-color 0.2s;
-}
-
-[data-theme='dark'] .yoga-stat-card,
-.dark .yoga-stat-card {
-  background: var(--surface-color, #11221B);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.yoga-stat-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(201, 141, 59, 0.4);
-}
-
-.yoga-stat-card__icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: rgba(27, 107, 80, 0.08);
-  color: var(--primary-green, #1B6B50);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-[data-theme='dark'] .yoga-stat-card__icon,
-.dark .yoga-stat-card__icon {
-  background: rgba(65, 186, 145, 0.12);
-  color: var(--primary-green-light, #41BA91);
-}
-
-.yoga-stat-card__info {
+.yoga-hero-content {
+  max-width: 780px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
-.yoga-stat-card__value {
+.yoga-hero-title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+  font-size: clamp(2rem, 3.8vw, 3rem);
   font-weight: 700;
   color: var(--text-primary, #14241C);
   line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
 }
 
-[data-theme='dark'] .yoga-stat-card__value,
-.dark .yoga-stat-card__value {
-  color: var(--text-primary, #F2F7F4);
+.yoga-hero-title-accent {
+  color: var(--primary-green, #1B6B50);
+  font-style: italic;
+  font-weight: 600;
 }
 
-.yoga-stat-card__label {
-  font-size: 0.78rem;
-  color: var(--text-secondary, #485E53);
-}
-
-[data-theme='dark'] .yoga-stat-card__label,
-.dark .yoga-stat-card__label {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-/* Our Approach Section */
-.yoga-page-approach {
-  margin-bottom: clamp(60px, 7vw, 90px);
-}
-
-.yoga-approach-body {
+.yoga-hero-subtitle {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.96rem;
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
   line-height: 1.65;
   color: var(--text-secondary, #485E53);
-  max-width: 800px;
-  margin: 10px auto 0 auto;
+  max-width: 640px;
+  margin: 0 0 24px;
 }
 
-[data-theme='dark'] .yoga-approach-body,
-.dark .yoga-approach-body {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-.yoga-pillars-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-  gap: 16px;
-  margin-top: 36px;
-}
-
-.yoga-pillar-card {
-  background: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E8EDE5);
-  border-radius: 16px;
-  padding: 22px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 14px -2px rgba(18, 76, 56, 0.04);
-}
-
-[data-theme='dark'] .yoga-pillar-card,
-.dark .yoga-pillar-card {
-  background: var(--surface-color, #11221B);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
-.yoga-pillar-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(201, 141, 59, 0.4);
-  box-shadow: 0 10px 24px -4px rgba(18, 76, 56, 0.12);
-}
-
-.yoga-pillar-card__icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: rgba(27, 107, 80, 0.08);
-  color: var(--primary-green, #1B6B50);
+.yoga-hero-actions {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background 0.3s ease, color 0.3s ease;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
-[data-theme='dark'] .yoga-pillar-card__icon,
-.dark .yoga-pillar-card__icon {
-  background: rgba(65, 186, 145, 0.12);
-  color: var(--primary-green-light, #41BA91);
+.yoga-hero-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--primary-green-dark, #124C38);
+  color: #FAF9F5;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(20, 56, 38, 0.18);
 }
 
-.yoga-pillar-card:hover .yoga-pillar-card__icon {
-  background: var(--accent-gold, #C98D3B);
-  color: #FFFFFF;
+.yoga-hero-btn-primary:hover {
+  background: var(--primary-green, #1B6B50);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(20, 56, 38, 0.25);
 }
 
-.yoga-pillar-card__title {
+.yoga-hero-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  color: var(--text-primary, #14241C);
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.yoga-hero-btn-secondary:hover {
+  background: var(--surface-secondary, #F3F6F1);
+  border-color: var(--primary-green, #1B6B50);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   2. YOGA PROGRAMS SECTION (SEPARATE IMAGES GRID + DETAILS CARD)
+   ========================================================================== */
+.yoga-programs-section {
+  padding: 48px 0 64px;
+}
+
+.yoga-section-header {
+  margin-bottom: 28px;
+}
+
+.yoga-section-heading {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+  font-size: clamp(1.4rem, 2.4vw, 1.85rem);
   font-weight: 700;
   color: var(--text-primary, #14241C);
-  margin: 0;
+  margin: 0 0 6px;
 }
 
-[data-theme='dark'] .yoga-pillar-card__title,
-.dark .yoga-pillar-card__title {
-  color: var(--text-primary, #F2F7F4);
-}
-
-.yoga-pillar-card__desc {
+.yoga-section-desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.85rem;
-  line-height: 1.55;
+  font-size: 0.9rem;
   color: var(--text-secondary, #485E53);
   margin: 0;
 }
 
-[data-theme='dark'] .yoga-pillar-card__desc,
-.dark .yoga-pillar-card__desc {
-  color: var(--text-secondary, #A6C2B4);
-}
-
-/* 5 Programs Section (Animated Open/Close Like Treatment Cards) */
-.yoga-programs-section {
-  margin-bottom: clamp(60px, 7vw, 90px);
-}
-
-.yoga-programs-grid {
+/* Images Grid */
+.yoga-images-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  position: relative;
-  margin-top: 36px;
+  gap: 24px;
+  margin-bottom: 56px;
 }
 
-@media (max-width: 1040px) {
-  .yoga-programs-grid {
+@media (max-width: 1024px) {
+  .yoga-images-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
   }
 }
 
-@media (max-width: 680px) {
-  .yoga-programs-grid {
+@media (max-width: 640px) {
+  .yoga-images-grid {
     grid-template-columns: 1fr;
     gap: 16px;
   }
 }
 
-/* Timetable Section */
-.yoga-timetable-section {
-  margin: clamp(60px, 7vw, 90px) 0;
+/* Program Image Card */
+.yoga-image-card {
+  position: relative;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: var(--card-shadow);
 }
 
-/* Toast Message */
-.yoga-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--primary-green-deep, #0B3326);
-  color: #FFFFFF;
-  padding: 14px 28px;
-  border-radius: 30px;
-  font-size: 0.95rem;
+.yoga-image-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.yoga-image-card.is-selected {
+  border-color: var(--primary-green, #1B6B50);
+  box-shadow: 0 0 0 2px var(--primary-green, #1B6B50), var(--card-shadow-hover);
+}
+
+.yoga-image-card__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  overflow: hidden;
+  background-color: var(--surface-secondary, #F3F6F1);
+}
+
+.yoga-image-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.yoga-image-card:hover .yoga-image-card__img {
+  transform: scale(1.04);
+}
+
+.yoga-image-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.18) 0%, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
+  pointer-events: none;
+}
+
+.yoga-image-card__top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  z-index: 2;
+}
+
+.yoga-image-card__tag {
+  padding: 3px 8px;
+  background: rgba(20, 56, 38, 0.88);
+  border-radius: 4px;
+  color: #FAF9F5;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
   font-weight: 600;
-  box-shadow: 0 10px 30px rgba(11, 51, 38, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.yoga-image-card__format {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 999px;
+  color: #FFFFFF;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.yoga-image-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 2;
+}
+
+.yoga-image-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.yoga-image-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yoga-image-card__duration {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.76rem;
+  font-weight: 500;
+}
+
+.yoga-image-card__selected-badge {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  padding: 4px 10px;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 600;
+  z-index: 3;
+}
+
+/* Program Details Card */
+.yoga-program-details-wrap {
+  scroll-margin-top: 140px;
+}
+
+.yoga-details-card {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 20px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: var(--card-shadow);
+}
+
+.yoga-details-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-details-card__badges {
   display: flex;
   align-items: center;
   gap: 10px;
-  z-index: 1200;
-  animation: toastFade 0.3s ease-out;
+  flex-wrap: wrap;
 }
 
-@keyframes toastFade {
-  from {
-    opacity: 0;
-    transform: translate(-50%, 20px);
-  }
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
+.yoga-details-card__tag {
+  padding: 5px 12px;
+  background: var(--primary-green-tint, rgba(27, 107, 80, 0.08));
+  border-radius: 6px;
+  color: var(--primary-green, #1B6B50);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
-/* Class Grid */
-.yoga-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 28px;
-}
-
-/* Empty State */
-.yoga-empty-state {
-  text-align: center;
-  padding: 64px 24px;
-  background: var(--surface-color, #FFFFFF);
-  border: 1px dashed var(--border-color, #E2E8DE);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
+.yoga-details-card__format,
+.yoga-details-card__duration {
+  display: inline-flex;
   align-items: center;
-  gap: 16px;
-  max-width: 500px;
-  margin: 0 auto;
+  gap: 5px;
+  color: var(--text-secondary, #485E53);
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
-.yoga-empty-state__icon {
-  width: 60px;
-  height: 60px;
+.yoga-details-card__nav-arrows {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.yoga-details-nav-btn {
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: var(--surface-secondary, #F3F6F1);
-  color: var(--text-light, #7E9387);
+  border: 1px solid var(--border-color, #E2E8DE);
+  background: var(--surface-color, #FFFFFF);
+  color: var(--text-primary, #14241C);
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.yoga-empty-state h4 {
-  font-size: 1.25rem;
-  color: var(--text-primary, #14241C);
-  margin: 0;
+.yoga-details-nav-btn:hover:not(:disabled) {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
 }
 
-.yoga-empty-state p {
-  color: var(--text-secondary, #485E53);
-  font-size: 0.925rem;
-  margin: 0;
+.yoga-details-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
-/* Booking Card Wrap */
-.yoga-booking-card-wrap {
-  margin: clamp(48px, 6vw, 72px) 0;
-}
-
-/* Philosophy & Disclaimer Footer */
-.yoga-philosophy-footer {
-  max-width: 860px;
-  margin: 0 auto 40px auto;
-  padding: 32px 24px;
-  border-top: 1px solid var(--border-color, #E8EDE5);
-}
-
-[data-theme='dark'] .yoga-philosophy-footer,
-.dark .yoga-philosophy-footer {
-  border-top-color: rgba(255, 255, 255, 0.08);
-}
-
-.yoga-philosophy-title {
-  font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.8rem;
+.yoga-details-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--accent-gold, #C98D3B);
-  margin: 0 0 12px 0;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 6px;
+  line-height: 1.25;
 }
 
-.yoga-philosophy-quote {
+.yoga-details-card__tagline {
   font-family: var(--font-sans, 'Inter', sans-serif);
   font-size: 0.95rem;
+  font-style: italic;
+  color: var(--primary-green, #1B6B50);
+  margin: 0 0 14px;
+}
+
+.yoga-details-card__desc {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 1rem;
   line-height: 1.7;
   color: var(--text-secondary, #485E53);
-  margin: 0 0 14px 0;
+  margin: 0 0 24px;
 }
 
-[data-theme='dark'] .yoga-philosophy-quote,
-.dark .yoga-philosophy-quote {
-  color: var(--text-secondary, #A6C2B4);
+.yoga-details-card__highlights {
+  background: var(--surface-secondary, #F3F6F1);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color, #E2E8DE);
 }
 
-.yoga-philosophy-mantra {
-  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(1.2rem, 1.8vw, 1.45rem);
-  font-style: italic;
+.yoga-details-card__highlights-title {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-green, #1B6B50);
+  margin: 0 0 14px;
+}
+
+.yoga-details-card__highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 10px 18px;
+}
+
+.yoga-details-highlight-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--text-primary, #14241C);
+  font-weight: 500;
+}
+
+.yoga-highlight-check {
+  color: var(--primary-green, #1B6B50);
+  flex-shrink: 0;
+}
+
+.yoga-details-card__focus-box {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 12px;
+  padding: 14px 18px;
+  margin-bottom: 24px;
+}
+
+.yoga-focus-label {
+  display: block;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-light, #7E9387);
+  margin-bottom: 4px;
+}
+
+.yoga-focus-text {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #485E53);
+  margin: 0;
+  line-height: 1.55;
+}
+
+.yoga-details-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-details-card__whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: var(--primary-green-dark, #124C38);
+  color: #FAF9F5;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.yoga-details-card__whatsapp-btn:hover {
+  background: var(--primary-green, #1B6B50);
+}
+
+.yoga-details-card__timetable-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 999px;
+  color: var(--text-primary, #14241C);
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.yoga-details-card__timetable-btn:hover {
+  background: var(--surface-color, #FFFFFF);
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+}
+
+.yoga-details-card__tabs {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.yoga-tabs-label {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-light, #7E9387);
+  white-space: nowrap;
+}
+
+.yoga-tabs-scroll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.yoga-quick-tab {
+  padding: 5px 12px;
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-primary, #14241C);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.yoga-quick-tab:hover {
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+}
+
+.yoga-quick-tab.is-active {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   3. WEEKLY TIMETABLE SECTION
+   ========================================================================== */
+.yoga-schedule-section {
+  padding: 56px 0;
+  background: var(--surface-secondary, #F3F6F1);
+  border-top: 1px solid var(--border-color, #E2E8DE);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-schedule-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
+.yoga-day-tabs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 2px 0;
+  scrollbar-width: none;
+}
+
+.yoga-day-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.yoga-day-tab {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 16px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.yoga-day-tab:hover {
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.yoga-day-tab.is-active {
+  background: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.yoga-day-short {
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+}
+
+.yoga-day-full {
+  font-size: 0.68rem;
+  color: var(--text-light, #7E9387);
+}
+
+.yoga-day-tab.is-active .yoga-day-short,
+.yoga-day-tab.is-active .yoga-day-full {
+  color: #FAF9F5;
+}
+
+.yoga-format-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--surface-color, #FFFFFF);
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-format-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-secondary, #485E53);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.yoga-format-btn.is-active {
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+}
+
+.yoga-schedule-loading,
+.yoga-schedule-empty {
+  text-align: center;
+  padding: 48px 20px;
+  background: var(--surface-color, #FFFFFF);
+  border-radius: 16px;
+  border: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-empty-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  padding: 9px 20px;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border-radius: 999px;
+  text-decoration: none;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.yoga-classes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+.yoga-timetable-card {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 16px;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: var(--card-shadow);
+}
+
+.yoga-timetable-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--primary-green, #1B6B50);
+}
+
+.yoga-timetable-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.yoga-time-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.84rem;
   font-weight: 600;
   color: var(--primary-green, #1B6B50);
-  margin: 0 0 16px 0;
 }
 
-[data-theme='dark'] .yoga-philosophy-mantra,
-.dark .yoga-philosophy-mantra {
-  color: var(--primary-green-light, #41BA91);
+.yoga-format-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--surface-secondary, #F3F6F1);
+  color: var(--text-secondary, #485E53);
 }
 
-.yoga-philosophy-disclaimer {
+.yoga-timetable-card__title {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 8px;
+}
+
+.yoga-timetable-card__desc {
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.8rem;
-  line-height: 1.6;
-  color: var(--text-light, #7E9387);
-  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-secondary, #485E53);
+  margin: 0 0 16px;
+  flex: 1;
 }
 
-[data-theme='dark'] .yoga-philosophy-disclaimer,
-.dark .yoga-philosophy-disclaimer {
-  color: var(--text-light, #6C8176);
+.yoga-timetable-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 0.78rem;
+  color: var(--text-secondary, #485E53);
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+}
+
+.yoga-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.yoga-timetable-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.yoga-price-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--primary-green, #1B6B50);
+}
+
+.yoga-btn-book-class {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.35);
+  color: #147A39;
+  border-radius: 999px;
+  font-family: var(--font-display, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.yoga-btn-book-class:hover {
+  background: #25D366;
+  color: #FFFFFF;
+}
+
+/* ==========================================================================
+   4. ATMOSPHERE GALLERY
+   ========================================================================== */
+.yoga-gallery-strip {
+  padding: 56px 0;
+}
+
+.yoga-atmosphere-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
 @media (max-width: 900px) {
-  .yoga-stats-bar {
-    grid-template-columns: 1fr 1fr;
+  .yoga-atmosphere-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 }
 
-@media (max-width: 600px) {
-  .yoga-hero__title {
-    font-size: 2.2rem;
+.yoga-atmosphere-item {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+}
+
+.yoga-atmosphere-item img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  display: block;
+}
+
+.atmosphere-caption {
+  padding: 16px;
+}
+
+.atmosphere-caption h4 {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 4px;
+}
+
+.atmosphere-caption p {
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #485E53);
+  margin: 0;
+}
+
+/* ==========================================================================
+   5. DARK MODE THEME ACCOMMODATIONS
+   ========================================================================== */
+[data-theme='dark'] .yoga-hero-section,
+.dark .yoga-hero-section {
+  background: radial-gradient(circle at 50% 20%, rgba(46, 157, 119, 0.12) 0%, rgba(221, 163, 78, 0.05) 50%, transparent 80%), var(--bg-color, #0A140F);
+  border-bottom-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-hero-btn-primary,
+.dark .yoga-hero-btn-primary,
+[data-theme='dark'] .yoga-details-card__whatsapp-btn,
+.dark .yoga-details-card__whatsapp-btn {
+  background: var(--primary-green, #2E9D77);
+  color: #0A140F;
+}
+
+[data-theme='dark'] .yoga-hero-btn-primary:hover,
+.dark .yoga-hero-btn-primary:hover,
+[data-theme='dark'] .yoga-details-card__whatsapp-btn:hover,
+.dark .yoga-details-card__whatsapp-btn:hover {
+  background: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .yoga-image-card,
+.dark .yoga-image-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card,
+.dark .yoga-details-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card__highlights,
+.dark .yoga-details-card__highlights {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-card__focus-box,
+.dark .yoga-details-card__focus-box {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-details-nav-btn,
+.dark .yoga-details-nav-btn {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .yoga-quick-tab,
+.dark .yoga-quick-tab {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .yoga-schedule-section,
+.dark .yoga-schedule-section {
+  background: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-day-tab,
+.dark .yoga-day-tab {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-format-filter,
+.dark .yoga-format-filter {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-timetable-card,
+.dark .yoga-timetable-card {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .yoga-btn-book-class,
+.dark .yoga-btn-book-class {
+  background: rgba(37, 211, 102, 0.16);
+  border-color: rgba(37, 211, 102, 0.45);
+  color: #4ADE80;
+}
+
+[data-theme='dark'] .yoga-btn-book-class:hover,
+.dark .yoga-btn-book-class:hover {
+  background: #25D366;
+  color: #0A140F;
+}
+
+[data-theme='dark'] .yoga-atmosphere-item,
+.dark .yoga-atmosphere-item {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+/* ==========================================================================
+   6. MOBILE RESPONSIVE ENHANCEMENTS
+   ========================================================================== */
+@media (max-width: 768px) {
+  .yoga-container {
+    padding: 0 16px;
   }
-  .yoga-stats-bar {
-    grid-template-columns: 1fr;
+
+  .yoga-hero-section {
+    padding: 84px 16px 28px;
   }
-  .yoga-grid {
+
+  .yoga-programs-section {
+    padding: 32px 0 48px;
+  }
+
+  .yoga-program-details-wrap {
+    scroll-margin-top: 110px;
+    margin-top: 40px;
+  }
+
+  .yoga-details-card {
+    padding: 22px 16px;
+    border-radius: 16px;
+  }
+
+  .yoga-details-card__title {
+    font-size: 1.45rem;
+  }
+
+  .yoga-details-card__highlights-list {
     grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .yoga-details-card__tabs {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .yoga-tabs-scroll {
+    width: 100%;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .yoga-tabs-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .yoga-quick-tab {
+    flex-shrink: 0;
+  }
+
+  .yoga-schedule-section {
+    padding: 40px 0;
+  }
+
+  .yoga-schedule-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .yoga-day-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .yoga-day-tab {
+    min-width: 52px;
+    padding: 7px 12px;
+  }
+
+  .yoga-format-filter {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .yoga-format-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .yoga-classes-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .yoga-gallery-strip {
+    padding: 40px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .yoga-hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .yoga-hero-btn-primary,
+  .yoga-hero-btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .yoga-details-card__top {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .yoga-details-card__top .yoga-details-card__nav-arrows {
+    align-self: flex-end;
+  }
+
+  .yoga-details-card__actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .yoga-details-card__whatsapp-btn,
+  .yoga-details-card__timetable-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .yoga-timetable-card__footer {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .yoga-btn-book-class {
+    width: 100%;
+    justify-content: center;
   }
 }

@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { ReactLenis } from 'lenis/react';
 import { AnimatePresence } from 'framer-motion';
 import { ThemeProvider } from '@/shared/context/ThemeContext';
-import { LoadingScreen, useInitialPageLoad, InitialLoadProvider } from '@/shared/ui/LoadingScreen';
+import { LoadingScreen, useInitialPageLoad, InitialLoadProvider, ScrollToTop } from '@/shared/ui';
 import { AppRoutes } from './routes';
 
 const lenisOptions = {
@@ -23,6 +23,7 @@ export const App: React.FC = React.memo(() => {
       <ThemeProvider>
         <InitialLoadProvider isInitialLoading={isInitialLoading}>
           <Router>
+            <ScrollToTop />
             <div className="app">
               {/* Initial App Load Overlay - Stays until components, DOM & fonts settle */}
               <AnimatePresence mode="wait">

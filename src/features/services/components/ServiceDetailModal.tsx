@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, CheckCircle2, Clock, Sparkles, ShieldCheck, HeartPulse, Leaf } from 'lucide-react';
 import type { AyurvedaService } from '../types';
-import { BookAppointmentButton } from '@/features/appointments';
+import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import './ServiceDetailModal.css';
 
 interface ServiceDetailModalProps {
