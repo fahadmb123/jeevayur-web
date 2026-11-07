@@ -8,6 +8,8 @@
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   flex-shrink: 0;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .brand-logo--with-divider {

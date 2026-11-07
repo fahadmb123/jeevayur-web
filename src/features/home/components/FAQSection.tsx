@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
-import { HelpCircle, ChevronDown, MessageCircle } from 'lucide-react';
+import { ChevronDown, MessageCircle } from 'lucide-react';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './FAQSection.css';
 
@@ -77,10 +77,6 @@ export const FAQSection: React.FC = React.memo(() => {
           whileInView="visible"
           viewport={standardViewport}
         >
-          <motion.div className="section-pill" variants={fadeUpVariants}>
-            <HelpCircle size={14} />
-            <span>Frequently Asked Questions</span>
-          </motion.div>
           <motion.h2 className="faq-title" variants={fadeUpVariants}>
             Answers To Help You <span className="text-primary-green">Choose With Confidence</span>
           </motion.h2>

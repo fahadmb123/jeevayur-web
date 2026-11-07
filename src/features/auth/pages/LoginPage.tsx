@@ -29,10 +29,6 @@ export const LoginPage: React.FC = React.memo(() => {
     }
   }, [login, navigate]);
 
-  const handleSwitchToRegister = useCallback(() => {
-    navigate(ROUTES.REGISTER || '/register');
-  }, [navigate]);
-
   return (
     <div className="auth-page-split">
       <div className="auth-split-left">
@@ -46,7 +42,7 @@ export const LoginPage: React.FC = React.memo(() => {
           <div className="auth-split-left-top">
             <Link to={ROUTES.HOME} className="auth-back-link">
               <ArrowLeft size={16} />
-              <span>Back to Sanctuary</span>
+              <span>Back to Home</span>
             </Link>
 
             <div className="auth-sanctuary-pill">
@@ -84,8 +80,13 @@ export const LoginPage: React.FC = React.memo(() => {
             <div className="auth-split-header">
               <div className="auth-brand-row">
                 <BrandLogo linkTo={ROUTES.HOME} size="md" className="auth-brand-logo" />
-                <Link to={ROUTES.HOME} className="auth-mobile-back-link">
-                  <ArrowLeft size={14} />
+                <Link
+                  to={ROUTES.HOME}
+                  className="auth-home-btn"
+                  aria-label="Return to Home page"
+                  title="Return to Home page"
+                >
+                  <ArrowLeft size={15} />
                   <span>Home</span>
                 </Link>
               </div>
@@ -108,7 +109,6 @@ export const LoginPage: React.FC = React.memo(() => {
             <LoginForm
               onSubmit={handleLogin}
               isLoading={loading}
-              onSwitchToRegister={handleSwitchToRegister}
             />
 
             <div className="auth-security-note">

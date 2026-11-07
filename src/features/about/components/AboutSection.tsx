@@ -107,20 +107,32 @@ const pillVariants: Variants = {
 };
 
 export const AboutSection: React.FC = React.memo(() => {
+  const sectionRef = useRef<HTMLElement>(null);
   const cupRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     let ticking = false;
-    let lastScrollY = window.scrollY;
+    let isVisible = false;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        isVisible = entries[0]?.isIntersecting ?? false;
+      },
+      { rootMargin: '200px 0px' }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
 
     const handleScroll = () => {
-      lastScrollY = window.scrollY;
+      if (!isVisible) return;
       if (!ticking) {
         window.requestAnimationFrame(() => {
           if (cupRef.current) {
-            cupRef.current.style.transform = `rotate(${lastScrollY * 0.85}deg)`;
+            cupRef.current.style.transform = `rotate(${window.scrollY * 0.85}deg)`;
           }
           ticking = false;
         });
@@ -129,14 +141,17 @@ export const AboutSection: React.FC = React.memo(() => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (
     <LazyMotion features={domAnimation}>
       <m.section
+        ref={sectionRef}
         id="about"
         className="ayurveda-pure-banner-section"
         aria-label="About Jeevayurniketan Heritage"

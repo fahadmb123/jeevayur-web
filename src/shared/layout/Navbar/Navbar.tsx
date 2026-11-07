@@ -4,7 +4,7 @@ import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { User, Menu, X, LogIn } from 'lucide-react';
+import { User, Menu, X, LogIn, SunMoon } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import './Navbar.css';
 
@@ -53,27 +53,36 @@ export const Navbar: React.FC = React.memo(() => {
             <BrandLogo linkTo={ROUTES.HOME} showDivider={false} size="md" />
           </div>
 
-          <ul className="navbar-links">
-            {NAV_LINKS.map((link) => {
-              const isActive =
-                link.path === ROUTES.HOME
-                  ? location.pathname === ROUTES.HOME
-                  : location.pathname.startsWith(link.path);
+          <div className="navbar-nav-pill">
+            <ul className="navbar-links">
+              {NAV_LINKS.map((link) => {
+                const isActive =
+                  link.path === ROUTES.HOME
+                    ? location.pathname === ROUTES.HOME
+                    : location.pathname.startsWith(link.path);
 
-              return (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className={isActive ? 'active-link' : ''}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={link.path}>
+                    <Link
+                      to={link.path}
+                      className={`navbar-link-item ${isActive ? 'active-link' : ''}`}
+                    >
+                      {isActive && <span className="navbar-link-dot" aria-hidden="true" />}
+                      <span>{link.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
           <div className="navbar-actions">
+            <div className="navbar-theme-toggle-desktop">
+              <ThemeToggle />
+            </div>
+
+            <div className="navbar-action-divider" aria-hidden="true" />
+
             <Link
               to={isAuthenticated ? ROUTES.DOCTOR : ROUTES.LOGIN}
               className={`navbar-login-btn ${
@@ -97,8 +106,6 @@ export const Navbar: React.FC = React.memo(() => {
               )}
             </Link>
 
-            <ThemeToggle />
-
             <div className="navbar-cta-wrap">
               <BookAppointmentButton size="sm" />
             </div>
@@ -109,7 +116,7 @@ export const Navbar: React.FC = React.memo(() => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={isMobileMenuOpen ? 'Close Menu' : 'Open Menu'}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </nav>
@@ -171,6 +178,19 @@ export const Navbar: React.FC = React.memo(() => {
                   <span>Login</span>
                 </Link>
               )}
+
+              <div className="mobile-menu-divider" />
+
+              <div className="mobile-menu-theme-row">
+                <div className="mobile-menu-theme-info">
+                  <SunMoon size={17} className="mobile-menu-theme-icon" />
+                  <div className="mobile-menu-theme-text">
+                    <span className="mobile-menu-theme-title">Appearance</span>
+                    <span className="mobile-menu-theme-sub">Light / Dark</span>
+                  </div>
+                </div>
+                <ThemeToggle />
+              </div>
             </div>
 
             <div className="mobile-menu-footer">

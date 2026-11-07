@@ -7,11 +7,11 @@ import { LoadingScreen, useInitialPageLoad, InitialLoadProvider, ScrollToTop } f
 import { AppRoutes } from './routes';
 
 const lenisOptions = {
-  // Omit duration so Lenis uses pure physics frame-rate independent damping (damp())
-  lerp: 0.04,
+  lerp: 0.1,
   smoothWheel: true,
   wheelMultiplier: 1.0,
-  touchMultiplier: 1.4,
+  touchMultiplier: 1.0,
+  syncTouch: false,
   infinite: false,
 };
 
