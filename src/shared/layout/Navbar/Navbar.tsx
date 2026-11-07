@@ -53,27 +53,34 @@ export const Navbar: React.FC = React.memo(() => {
             <BrandLogo linkTo={ROUTES.HOME} showDivider={false} size="md" />
           </div>
 
-          <ul className="navbar-links">
-            {NAV_LINKS.map((link) => {
-              const isActive =
-                link.path === ROUTES.HOME
-                  ? location.pathname === ROUTES.HOME
-                  : location.pathname.startsWith(link.path);
+          <div className="navbar-nav-pill">
+            <ul className="navbar-links">
+              {NAV_LINKS.map((link) => {
+                const isActive =
+                  link.path === ROUTES.HOME
+                    ? location.pathname === ROUTES.HOME
+                    : location.pathname.startsWith(link.path);
 
-              return (
-                <li key={link.path}>
-                  <Link
-                    to={link.path}
-                    className={isActive ? 'active-link' : ''}
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                return (
+                  <li key={link.path}>
+                    <Link
+                      to={link.path}
+                      className={`navbar-link-item ${isActive ? 'active-link' : ''}`}
+                    >
+                      {isActive && <span className="navbar-link-dot" aria-hidden="true" />}
+                      <span>{link.label}</span>
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
           <div className="navbar-actions">
+            <ThemeToggle />
+
+            <div className="navbar-action-divider" aria-hidden="true" />
+
             <Link
               to={isAuthenticated ? ROUTES.DOCTOR : ROUTES.LOGIN}
               className={`navbar-login-btn ${
@@ -97,8 +104,6 @@ export const Navbar: React.FC = React.memo(() => {
               )}
             </Link>
 
-            <ThemeToggle />
-
             <div className="navbar-cta-wrap">
               <BookAppointmentButton size="sm" />
             </div>
@@ -109,7 +114,7 @@ export const Navbar: React.FC = React.memo(() => {
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               aria-label={isMobileMenuOpen ? 'Close Menu' : 'Open Menu'}
             >
-              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </nav>
