@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, CheckCircle2, HeartPulse, Leaf, Sparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
@@ -94,13 +94,7 @@ export const DoctorIntroSection: React.FC = React.memo(() => {
     offset: ['start end', 'end start'],
   });
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 24,
-    restDelta: 0.001,
-  });
-
-  const imageY = useTransform(smoothProgress, [0, 1], [-20, 20]);
+  const imageY = useTransform(scrollYProgress, [0, 1], [-20, 20]);
 
   // Liquid Wave Cycle: Wipe in (Frames 1-3) -> Swap Image -> Wipe out (Frames 4-5)
   const startWipeCycle = useCallback(async () => {

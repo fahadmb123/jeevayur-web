@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Award, HeartHandshake, ShieldCheck, Sparkles, Stethoscope } from 'lucide-react';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './TrustStatsBar.css';
@@ -57,30 +57,24 @@ export const TrustStatsBar: React.FC = React.memo(() => {
     offset: ['start end', 'end start'],
   });
 
-  // Spring configuration for silky smooth momentum synced with Lenis
-  const springConfig = { stiffness: 90, damping: 22, mass: 0.25 };
-
   // Scroll-linked horizontal translation: initially starts from the left side and glides smoothly into center (0px)
-  const rawTitleX = useTransform(
+  const titleX = useTransform(
     scrollYProgress,
     [0, 0.40, 0.85, 1],
     [isMobile ? -60 : -180, 0, 0, isMobile ? 15 : 25]
   );
-  const titleX = useSpring(rawTitleX, springConfig);
 
-  const rawBadgeX = useTransform(
+  const badgeX = useTransform(
     scrollYProgress,
     [0, 0.40, 0.85, 1],
     [isMobile ? -35 : -100, 0, 0, isMobile ? 10 : 18]
   );
-  const badgeX = useSpring(rawBadgeX, springConfig);
 
-  const rawDescX = useTransform(
+  const descX = useTransform(
     scrollYProgress,
     [0, 0.40, 0.85, 1],
     [isMobile ? -45 : -140, 0, 0, isMobile ? 12 : 20]
   );
-  const descX = useSpring(rawDescX, springConfig);
 
   // Smooth opacity fade-in: starts with low opacity from left side and blossoms to 1 in center
   const headerOpacity = useTransform(
