@@ -17,11 +17,14 @@ export const Footer: React.FC = React.memo(() => {
         whileInView="visible"
         viewport={standardViewport}
       >
-        <motion.div className="footer-col" variants={fadeUpVariants}>
+        <motion.div className="footer-col footer-col--brand" variants={fadeUpVariants}>
           <BrandLogo linkTo={ROUTES.HOME} size="md" className="footer-brand-logo" />
           <p className="footer-desc">
             Providing authentic Ayurvedic healthcare, personalized consultations with Dr. Ahalya T.S., individualized dietary and lifestyle guidance, and classical healing protocols.
           </p>
+          <div className="footer-sanctuary-badge">
+            <span>Kottakkal, Kerala • Classical Ayurveda &amp; Psychotherapy</span>
+          </div>
         </motion.div>
         
         <motion.div className="footer-col" variants={fadeUpVariants}>
