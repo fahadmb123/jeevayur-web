@@ -1,4 +1,4 @@
-import type { LoginResponse, LoginCredentials, RegisterData, User } from '../types';
+import type { LoginResponse, LoginCredentials, User } from '../types';
 import { apiClient } from '@/shared/lib/api/apiClient';
 import { ApiError } from '@/shared/lib/api/ApiError';
 import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
@@ -12,8 +12,20 @@ export const authService = {
     return response.user;
   },
 
-  async register(data: RegisterData): Promise<User> {
-    throw new Error(`Registration is not available for ${data.email}`);
+  async requestPasswordReset(email: string): Promise<string> {
+    const response = await apiClient.post<{ message: string }, { email: string }>(
+      '/api/auth/forgot-password',
+      { email }
+    );
+    return response.message || 'If an account exists with this email, password reset instructions have been sent.';
+  },
+
+  async resetPassword(token: string, newPassword: string): Promise<string> {
+    const response = await apiClient.post<
+      { message: string },
+      { token: string; newPassword: string }
+    >('/api/auth/reset-password', { token, newPassword });
+    return response.message || 'Password has been updated successfully.';
   },
 
   async logout(): Promise<void> {

@@ -1,30 +1,48 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowLeft, CheckCircle2, LockKeyhole, Sparkles, ShieldCheck, Heart } from 'lucide-react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { ArrowLeft, CheckCircle2, LockKeyhole, Sparkles, ShieldCheck, Heart, AlertCircle } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/button';
+import { authService } from '../services/authService';
 import loginSanctuaryImg from '@/assets/login_sanctuary.jpg';
 import './AuthPages.css';
 
 export const ResetPasswordPage: React.FC = React.memo(() => {
-  const [completed, setCompleted] = useState(false);
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token') || '';
+
   const [password, setPassword] = useState('');
   const [confirmation, setConfirmation] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (!token) {
+      setError('Missing password reset token. Please use the exact link sent to your email.');
+      return;
+    }
     if (password.length < 8) {
-      setError('Password must be at least 8 characters long');
+      setError('Password must be at least 8 characters long.');
       return;
     }
     if (password !== confirmation) {
-      setError('Passwords do not match');
+      setError('Passwords do not match.');
       return;
     }
-    setError(null);
-    setCompleted(true);
+
+    try {
+      setLoading(true);
+      setError(null);
+      await authService.resetPassword(token, password);
+      setCompleted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to update password. Your reset link may have expired.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -93,6 +111,13 @@ export const ResetPasswordPage: React.FC = React.memo(() => {
             </p>
           </div>
 
+          {!token && (
+            <div className="auth-alert-error" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertCircle size={18} />
+              <span>No reset token detected in link. Please request a new link.</span>
+            </div>
+          )}
+
           {error && <div className="auth-alert-error">{error}</div>}
 
           {completed ? (
@@ -143,8 +168,8 @@ export const ResetPasswordPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              <Button type="submit" variant="primary" className="auth-form__submit">
-                <span>Update Password</span>
+              <Button type="submit" variant="primary" disabled={loading || !token} className="auth-form__submit">
+                <span>{loading ? 'Updating Password...' : 'Update Password'}</span>
               </Button>
 
               <div className="auth-form__footer" style={{ justifyContent: 'center' }}>

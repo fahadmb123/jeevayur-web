@@ -4,18 +4,30 @@ import { ArrowLeft, Mail, Send, ShieldCheck, Sparkles, Heart } from 'lucide-reac
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/button';
+import { authService } from '../services/authService';
 import loginSanctuaryImg from '@/assets/login_sanctuary.jpg';
 import './AuthPages.css';
 
 export const ForgotPasswordPage: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (email.trim()) {
+    if (!email.trim()) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      await authService.requestPasswordReset(email.trim());
       setSubmitted(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Failed to send reset link. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -85,11 +97,13 @@ export const ForgotPasswordPage: React.FC = React.memo(() => {
             </p>
           </div>
 
+          {error && <div className="auth-alert-error">{error}</div>}
+
           {submitted ? (
             <div className="auth-recovery-success">
               <ShieldCheck size={26} className="text-primary-green" />
               <strong>Check your inbox</strong>
-              <span>If an account exists for <b>{email}</b>, password recovery instructions have been sent.</span>
+              <span>If an account exists for <b>{email}</b>, password recovery instructions with an expiring secure link have been sent.</span>
               <button
                 type="button"
                 onClick={() => navigate(ROUTES.LOGIN)}
@@ -118,9 +132,9 @@ export const ForgotPasswordPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              <Button type="submit" variant="primary" className="auth-form__submit">
+              <Button type="submit" variant="primary" disabled={loading} className="auth-form__submit">
                 <Send size={17} />
-                <span>Send Reset Instructions</span>
+                <span>{loading ? 'Sending Instructions...' : 'Send Reset Instructions'}</span>
               </Button>
 
               <div className="auth-form__footer" style={{ justifyContent: 'center' }}>
