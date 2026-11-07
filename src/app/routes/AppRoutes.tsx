@@ -14,7 +14,6 @@ import {
   ContactPage,
   NotFoundPage,
   LoginPage,
-  RegisterPage,
   ForgotPasswordPage,
   ResetPasswordPage,
   DoctorDashboardPage,
@@ -40,7 +39,7 @@ export const AppRoutes: React.FC = React.memo(() => {
 
         <Route element={<PublicRoute />}>
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
-          <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
+          <Route path={ROUTES.REGISTER} element={<Navigate to={ROUTES.LOGIN} replace />} />
           <Route path={ROUTES.FORGOT_PASSWORD} element={<ForgotPasswordPage />} />
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>

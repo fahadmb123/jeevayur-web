@@ -29,10 +29,6 @@ export const LoginPage: React.FC = React.memo(() => {
     }
   }, [login, navigate]);
 
-  const handleSwitchToRegister = useCallback(() => {
-    navigate(ROUTES.REGISTER || '/register');
-  }, [navigate]);
-
   return (
     <div className="auth-page-split">
       <div className="auth-split-left">
@@ -113,7 +109,6 @@ export const LoginPage: React.FC = React.memo(() => {
             <LoginForm
               onSubmit={handleLogin}
               isLoading={loading}
-              onSwitchToRegister={handleSwitchToRegister}
             />
 
             <div className="auth-security-note">

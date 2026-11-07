@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Mail, Lock, LogIn, ArrowRight, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Lock, LogIn, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { ROUTES } from '@/shared/config/routes';
 import { loginSchema, type LoginFormValues } from '../validation/loginSchema';
@@ -10,10 +10,9 @@ import { loginSchema, type LoginFormValues } from '../validation/loginSchema';
 interface LoginFormProps {
   onSubmit: (credentials: LoginFormValues) => Promise<void>;
   isLoading?: boolean;
-  onSwitchToRegister?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = React.memo(({ onSubmit, isLoading = false, onSwitchToRegister }) => {
+export const LoginForm: React.FC<LoginFormProps> = React.memo(({ onSubmit, isLoading = false }) => {
   const [showPassword, setShowPassword] = useState(false);
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -66,8 +65,6 @@ export const LoginForm: React.FC<LoginFormProps> = React.memo(({ onSubmit, isLoa
       <Button type="submit" variant="primary" disabled={isLoading} className="auth-form__submit">
         {isLoading ? 'Signing in...' : <><LogIn size={18} /><span>Sign In to Sanctuary</span></>}
       </Button>
-
-      {onSwitchToRegister && <div className="auth-form__footer"><span>Don't have an account?</span><button type="button" onClick={onSwitchToRegister} className="auth-form__text-btn">Create an account <ArrowRight size={14} /></button></div>}
     </form>
   );
 });
