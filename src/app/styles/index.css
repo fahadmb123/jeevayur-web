@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,11 +14,12 @@
   --brand-leaf-green: #5eb135;
   --brand-leaf-bright: #68c33b;
 
-  /* Typography Families */
-  --font-serif: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
-  --font-display: 'Outfit', sans-serif;
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-cinzel: 'Cinzel', serif;
+  /* Official Brand Logo Typography (Trebuchet MS - signature bar 'J', single-storey 'a', geometric humanist clarity) */
+  --font-brand: 'Trebuchet MS', 'Fira Sans', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  --font-serif: var(--font-brand);
+  --font-display: var(--font-brand);
+  --font-sans: var(--font-brand);
+  --font-cinzel: var(--font-brand);
   
   /* Sandalwood & Ceremonial Saffron Warm Gold */
   --accent-gold: #C98D3B;
@@ -100,7 +101,7 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-brand);
   background-color: var(--bg-color);
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
@@ -171,7 +172,7 @@ html.theme-transitioning *::after {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--font-brand);
   color: var(--primary-green-deep);
   line-height: 1.25;
   letter-spacing: -0.02em;
@@ -187,6 +188,10 @@ button {
   cursor: pointer;
   border: none;
   outline: none;
+}
+
+input, select, textarea {
+  font-family: inherit;
 }
 
 button, a, input, select, textarea {
