@@ -4,7 +4,7 @@ import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { User, Menu, X, LogIn } from 'lucide-react';
+import { User, Menu, X, LogIn, SunMoon } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import './Navbar.css';
 
@@ -77,7 +77,9 @@ export const Navbar: React.FC = React.memo(() => {
           </div>
 
           <div className="navbar-actions">
-            <ThemeToggle />
+            <div className="navbar-theme-toggle-desktop">
+              <ThemeToggle />
+            </div>
 
             <div className="navbar-action-divider" aria-hidden="true" />
 
@@ -176,6 +178,19 @@ export const Navbar: React.FC = React.memo(() => {
                   <span>Login</span>
                 </Link>
               )}
+
+              <div className="mobile-menu-divider" />
+
+              <div className="mobile-menu-theme-row">
+                <div className="mobile-menu-theme-info">
+                  <SunMoon size={17} className="mobile-menu-theme-icon" />
+                  <div className="mobile-menu-theme-text">
+                    <span className="mobile-menu-theme-title">Appearance</span>
+                    <span className="mobile-menu-theme-sub">Light / Dark</span>
+                  </div>
+                </div>
+                <ThemeToggle />
+              </div>
             </div>
 
             <div className="mobile-menu-footer">
