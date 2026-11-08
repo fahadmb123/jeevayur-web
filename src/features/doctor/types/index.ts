@@ -22,6 +22,7 @@ export interface DoctorNavItem {
 
 export interface DoctorProfile {
   name: string;
+  username?: string;
   specialty: string;
   email: string;
   phone: string;
