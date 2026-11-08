@@ -1,12 +1,14 @@
-import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import {
   Check,
   CheckCircle2,
   Calendar,
   Search,
-  ChevronDown,
   Info,
 } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { AUTH_QUERY_KEY } from '@/features/auth/hooks/useAuthMutation';
@@ -22,8 +24,17 @@ type SettingsTab = 'profile' | 'consultation' | 'social' | 'notifications' | 'de
 interface TabItem {
   id: SettingsTab;
   label: string;
-  badge?: number | string;
 }
+
+const profileSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(100, 'Name must not exceed 100 characters'),
+});
+
+type ProfileFormValues = z.infer<typeof profileSchema>;
 
 const DURATION_OPTIONS = [
   {
@@ -51,7 +62,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [searchQuery, setSearchQuery] = useState('');
-  const [sessionCount, setSessionCount] = useState<number>(1);
   const [showTooltip, setShowTooltip] = useState(false);
 
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
@@ -62,6 +72,25 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty, isSubmitting, isValid },
+  } = useForm<ProfileFormValues>({
+    resolver: zodResolver(profileSchema),
+    mode: 'onChange',
+    defaultValues: {
+      name: user?.name || '',
+    },
+  });
+
+  useEffect(() => {
+    if (user?.name) {
+      reset({ name: user.name });
+    }
+  }, [user?.name, reset]);
 
   const [profile, setProfile] = useState<DoctorProfile>(() => ({
     name: user?.name || '',
@@ -78,47 +107,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     urgentAlerts: true,
     weeklySummary: true,
   }));
-
-  const isDirty = useMemo(() => {
-    const curName = profile.name.trim();
-    const curEmail = profile.email.trim();
-    const curPhone = (profile.phone || '').trim();
-
-    const origName = (user?.name || '').trim();
-    const origEmail = (user?.email || '').trim();
-    const origPhone = (user?.phone || '').trim();
-
-    return curName !== origName || curEmail !== origEmail || curPhone !== origPhone;
-  }, [profile.name, profile.email, profile.phone, user?.name, user?.email, user?.phone]);
-
-  const isDirtyRef = useRef(false);
-  isDirtyRef.current = isDirty;
-
-  useEffect(() => {
-    if (user && !isDirtyRef.current) {
-      setProfile((prev) => ({
-        ...prev,
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || '',
-      }));
-    }
-  }, [user]);
-
-  useEffect(() => {
-    let isMounted = true;
-    authService
-      .getSessions()
-      .then((sessions) => {
-        if (isMounted && Array.isArray(sessions)) {
-          setSessionCount(sessions.length || 1);
-        }
-      })
-      .catch(() => {});
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -155,32 +143,24 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   }, []);
 
   const handleSaveGeneral = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!isDirty || saving) return;
-
-      setSaving(true);
+    async (values: ProfileFormValues) => {
       setGeneralError(null);
       try {
         const updatedUser = await authService.updateProfile({
-          name: profile.name.trim(),
-          email: profile.email.trim(),
-          phone: profile.phone ? profile.phone.trim() : null,
+          name: values.name.trim(),
         });
 
         queryClient.setQueryData(AUTH_QUERY_KEY, updatedUser);
-
+        reset({ name: updatedUser.name });
         setSaved(true);
         setTimeout(() => setSaved(false), 2500);
       } catch (err: unknown) {
         console.error('Failed to update profile:', err);
         const message = err instanceof Error ? err.message : 'Failed to update profile';
         setGeneralError(message);
-      } finally {
-        setSaving(false);
       }
     },
-    [isDirty, saving, profile.name, profile.email, profile.phone, queryClient]
+    [queryClient, reset]
   );
 
   const handleSave = useCallback((e: React.FormEvent) => {
@@ -197,11 +177,11 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     () => [
       { id: 'profile', label: 'General' },
       { id: 'consultation', label: 'Consultation' },
-      { id: 'social', label: 'Social Links', badge: socialLinks.length > 0 ? socialLinks.length : undefined },
+      { id: 'social', label: 'Social Links' },
       { id: 'notifications', label: 'Notifications' },
-      { id: 'devices', label: 'Account & Devices', badge: sessionCount },
+      { id: 'devices', label: 'Account & Devices' },
     ],
-    [sessionCount, socialLinks.length]
+    []
   );
 
   // Keyword-aware search bar auto navigation
@@ -254,11 +234,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                   onClick={() => setActiveTab(tab.id)}
                 >
                   <span className="tab-text">{tab.label}</span>
-                  {tab.badge !== undefined && (
-                    <span className={`tab-badge-pill ${isActive ? 'active' : ''}`}>
-                      {tab.badge}
-                    </span>
-                  )}
                   {isActive && <div className="tab-indicator-bar" />}
                 </button>
               );
@@ -267,7 +242,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
         </nav>
 
         {activeTab === 'profile' && (
-          <form onSubmit={handleSaveGeneral} className="settings-tab-pane">
+          <form onSubmit={handleSubmit(handleSaveGeneral)} className="settings-tab-pane" noValidate>
             <div className="settings-pane-header">
               <div className="pane-header-titles">
                 <h2 className="pane-title">Your Profile</h2>
@@ -313,12 +288,12 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                 ) : (
                   <button
                     type="submit"
-                    disabled={!isDirty || saving}
+                    disabled={!isDirty || isSubmitting || !isValid}
                     className="btn-primary-action"
                     title={!isDirty ? 'No changes to save' : 'Click to save your profile changes'}
                   >
                     <Check size={14} />
-                    <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+                    <span>{isSubmitting ? 'Saving...' : 'Save Changes'}</span>
                   </button>
                 )}
               </div>
@@ -332,66 +307,18 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                   <label htmlFor="name">Name</label>
                 </div>
                 <div className="field-control-cell">
-                  <div className="modern-input-group single">
+                  <div className={`modern-input-group single ${errors.name ? 'has-error' : ''}`}>
                     <input
                       id="name"
                       type="text"
                       className="input-group-text"
-                      value={profile.name}
-                      onChange={(e) => {
-                        setGeneralError(null);
-                        setProfile({ ...profile, name: e.target.value });
-                      }}
                       placeholder="Doctor Name"
+                      {...register('name')}
                     />
                   </div>
-                </div>
-              </div>
-
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="email">Official Email</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="email"
-                      type="email"
-                      className="input-group-text"
-                      value={profile.email}
-                      onChange={(e) => {
-                        setGeneralError(null);
-                        setProfile({ ...profile, email: e.target.value });
-                      }}
-                      placeholder="doctor@jeevayurniketan.com"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="phone">Phone Number</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group">
-                    <div className="country-selector-pill">
-                      <span className="country-emoji">🇮🇳</span>
-                      <ChevronDown size={13} className="country-chevron" />
-                    </div>
-                    <div className="input-vertical-divider" />
-                    <input
-                      id="phone"
-                      type="tel"
-                      className="input-group-text"
-                      value={profile.phone}
-                      onChange={(e) => {
-                        setGeneralError(null);
-                        setProfile({ ...profile, phone: e.target.value });
-                      }}
-                      placeholder="+91 73567 02775"
-                    />
-                  </div>
+                  {errors.name && (
+                    <span className="field-validation-error">{errors.name.message}</span>
+                  )}
                 </div>
               </div>
             </div>

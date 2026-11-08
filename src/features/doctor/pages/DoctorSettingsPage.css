@@ -559,6 +559,31 @@
   box-shadow: 0 0 0 3px rgba(65, 186, 145, 0.18);
 }
 
+.modern-input-group.has-error {
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.14) !important;
+}
+
+[data-theme='dark'] .modern-input-group.has-error,
+.dark .modern-input-group.has-error {
+  border-color: #F87171 !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.2) !important;
+}
+
+.field-validation-error {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #DC2626;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+[data-theme='dark'] .field-validation-error,
+.dark .field-validation-error {
+  color: #F87171;
+}
+
 .input-prefix-label {
   padding: 0 14px;
   font-size: 13.5px;

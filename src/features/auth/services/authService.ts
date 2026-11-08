@@ -35,8 +35,8 @@ export const authService = {
     await apiClient.delete(`/api/auth/sessions/${encodeURIComponent(sessionId)}`);
   },
 
-  async updateProfile(data: { name: string; email: string; phone?: string | null }): Promise<User> {
-    const response = await apiClient.put<{ user: User; data?: { user: User } }, { name: string; email: string; phone?: string | null }>(
+  async updateProfile(data: { name: string; email?: string; phone?: string | null }): Promise<User> {
+    const response = await apiClient.put<{ user: User; data?: { user: User } }, { name: string; email?: string; phone?: string | null }>(
       '/api/auth/profile',
       data
     );
