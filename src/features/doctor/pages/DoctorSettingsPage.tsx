@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import {
   Check,
   CheckCircle2,
@@ -7,7 +7,9 @@ import {
   ChevronDown,
   Info,
 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { AUTH_QUERY_KEY } from '@/features/auth/hooks/useAuthMutation';
 import { authService } from '@/features/auth/services/authService';
 import { DoctorSessionsCard } from '../components/DoctorSessionsCard/index';
 import { DoctorSocialLinksTab } from '../components/DoctorSocialLinksTab/index';
@@ -45,6 +47,7 @@ const DURATION_OPTIONS = [
 ];
 
 export const DoctorSettingsPage: React.FC = React.memo(() => {
+  const queryClient = useQueryClient();
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [searchQuery, setSearchQuery] = useState('');
@@ -56,6 +59,56 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [isSavingSocial, setIsSavingSocial] = useState(false);
   const [savedSocial, setSavedSocial] = useState(false);
   const [socialSaveError, setSocialSaveError] = useState<string | null>(null);
+
+  // Profile management state
+  const [generalError, setGeneralError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  // Initialize profile with current user info
+  const [profile, setProfile] = useState<DoctorProfile>(() => ({
+    name: user?.name || '',
+    username: '',
+    specialty: 'Ayurveda & Wellness Consultant',
+    email: user?.email || '',
+    phone: user?.phone || '',
+    licenseNo: 'AYU-KL-2024-9102',
+    location: 'Kozhikode Sanctuary',
+    bio: '',
+    consultDuration: '45 mins',
+    emailAlerts: true,
+    smsAlerts: false,
+    urgentAlerts: true,
+    weeklySummary: true,
+  }));
+
+  // Detect whether any general profile input box has been modified from saved values
+  const isDirty = useMemo(() => {
+    const curName = profile.name.trim();
+    const curEmail = profile.email.trim();
+    const curPhone = (profile.phone || '').trim();
+
+    const origName = (user?.name || '').trim();
+    const origEmail = (user?.email || '').trim();
+    const origPhone = (user?.phone || '').trim();
+
+    return curName !== origName || curEmail !== origEmail || curPhone !== origPhone;
+  }, [profile.name, profile.email, profile.phone, user?.name, user?.email, user?.phone]);
+
+  const isDirtyRef = useRef(false);
+  isDirtyRef.current = isDirty;
+
+  // When user data is fetched or updated, sync form state if pristine
+  useEffect(() => {
+    if (user && !isDirtyRef.current) {
+      setProfile((prev) => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || '',
+      }));
+    }
+  }, [user]);
 
   // Fetch session count for subnavbar badge (matches "Account 12" badge in reference)
   useEffect(() => {
@@ -110,32 +163,36 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     }
   }, []);
 
-  const initialProfile = useMemo<DoctorProfile>(
-    () => ({
-      name: user?.name || 'Dr. K. V. Krishnadas',
-      username: (user?.name || 'dr-krishnadas')
-        .toLowerCase()
-        .replace(/^dr\.\s*/i, '')
-        .trim()
-        .replace(/\s+/g, '-'),
-      specialty: 'Ayurveda & Wellness Consultant',
-      email: user?.email || 'doctor@jeevayurniketan.com',
-      phone: '+91 73567 02775',
-      licenseNo: 'AYU-KL-2024-9102',
-      location: 'Kozhikode Sanctuary',
-      bio: 'Holistic Ayurvedic consultations specializing in Dosha diagnostics, Nadi Pariksha, and personalized Smriti meditation therapies.',
-      consultDuration: '45 mins',
-      emailAlerts: true,
-      smsAlerts: false,
-      urgentAlerts: true,
-      weeklySummary: true,
-    }),
-    [user?.name, user?.email]
-  );
+  // Save changes handler for General Profile
+  const handleSaveGeneral = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!isDirty || saving) return;
 
-  const [profile, setProfile] = useState<DoctorProfile>(initialProfile);
-  const [saved, setSaved] = useState(false);
-  const [saving, setSaving] = useState(false);
+      setSaving(true);
+      setGeneralError(null);
+      try {
+        const updatedUser = await authService.updateProfile({
+          name: profile.name.trim(),
+          email: profile.email.trim(),
+          phone: profile.phone ? profile.phone.trim() : null,
+        });
+
+        // Update react-query cache so user data immediately synchronizes across UI
+        queryClient.setQueryData(AUTH_QUERY_KEY, updatedUser);
+
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2500);
+      } catch (err: unknown) {
+        console.error('Failed to update profile:', err);
+        const message = err instanceof Error ? err.message : 'Failed to update profile';
+        setGeneralError(message);
+      } finally {
+        setSaving(false);
+      }
+    },
+    [isDirty, saving, profile.name, profile.email, profile.phone, queryClient]
+  );
 
   const handleSave = useCallback((e: React.FormEvent) => {
     e.preventDefault();
@@ -222,7 +279,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
 
         {/* 3. Section Content Pane */}
         {activeTab === 'profile' && (
-          <form onSubmit={handleSave} className="settings-tab-pane">
+          <form onSubmit={handleSaveGeneral} className="settings-tab-pane">
             {/* Section Header: Title + Subtitle on Left, Info Tooltip + Save Button on Right */}
             <div className="settings-pane-header">
               <div className="pane-header-titles">
@@ -250,19 +307,30 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                     <div className="dark-tooltip-bubble" role="tooltip">
                       <div className="tooltip-bubble-title">Practitioner Profile</div>
                       <div className="tooltip-bubble-text">
-                        These credentials, public URL, and contact details appear directly on patient bookings.
+                        These credentials and contact details appear directly on patient bookings.
                       </div>
                       <div className="tooltip-arrow" />
                     </div>
                   )}
                 </div>
 
+                {generalError && (
+                  <span className="settings-error-badge" role="alert">
+                    {generalError}
+                  </span>
+                )}
+
                 {saved ? (
                   <span className="saved-status-badge">
                     <CheckCircle2 size={14} /> Saved
                   </span>
                 ) : (
-                  <button type="submit" disabled={saving} className="btn-primary-action">
+                  <button
+                    type="submit"
+                    disabled={!isDirty || saving}
+                    className="btn-primary-action"
+                    title={!isDirty ? 'No changes to save' : 'Click to save your profile changes'}
+                  >
                     <Check size={14} />
                     <span>{saving ? 'Saving...' : 'Save Changes'}</span>
                   </button>
@@ -287,7 +355,10 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                       type="text"
                       className="input-group-text"
                       value={profile.name}
-                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                      onChange={(e) => {
+                        setGeneralError(null);
+                        setProfile({ ...profile, name: e.target.value });
+                      }}
                       placeholder="Doctor Name"
                     />
                   </div>
@@ -306,7 +377,10 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                       type="email"
                       className="input-group-text"
                       value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      onChange={(e) => {
+                        setGeneralError(null);
+                        setProfile({ ...profile, email: e.target.value });
+                      }}
                       placeholder="doctor@jeevayurniketan.com"
                     />
                   </div>
@@ -330,7 +404,10 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                       type="tel"
                       className="input-group-text"
                       value={profile.phone}
-                      onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+                      onChange={(e) => {
+                        setGeneralError(null);
+                        setProfile({ ...profile, phone: e.target.value });
+                      }}
                       placeholder="+91 73567 02775"
                     />
                   </div>

@@ -35,6 +35,14 @@ export const authService = {
     await apiClient.delete(`/api/auth/sessions/${encodeURIComponent(sessionId)}`);
   },
 
+  async updateProfile(data: { name: string; email: string; phone?: string | null }): Promise<User> {
+    const response = await apiClient.put<{ user: User; data?: { user: User } }, { name: string; email: string; phone?: string | null }>(
+      '/api/auth/profile',
+      data
+    );
+    return response.user ?? response.data?.user ?? (response as unknown as User);
+  },
+
   async requestPasswordReset(email: string): Promise<string> {
     const response = await apiClient.post<{ message: string }, { email: string }>(
       '/api/auth/forgot-password',
