@@ -91,6 +91,13 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
 
   useEffect(() => {
     loadSessions();
+
+    const handleFocus = () => {
+      loadSessions(true);
+    };
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
   }, [loadSessions]);
 
   const handleRevoke = async (sessionId: string, deviceName: string) => {
@@ -188,10 +195,14 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
                       <h4 className="session-device-title">
                         {session.device || 'Web Browser'}
                       </h4>
-                      {isCurrent && (
+                      {isCurrent ? (
                         <span className="session-badge-current">
                           <span className="pulse-indicator" />
                           This Device • Active Now
+                        </span>
+                      ) : (
+                        <span className="session-badge-other">
+                          Connected & Active
                         </span>
                       )}
                     </div>
@@ -261,3 +272,4 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
 });
 
 DoctorSessionsCard.displayName = 'DoctorSessionsCard';
+

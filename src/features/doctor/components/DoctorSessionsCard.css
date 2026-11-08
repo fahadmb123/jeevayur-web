@@ -196,6 +196,18 @@
   border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
+.session-badge-other {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  background-color: var(--bg-color, #F8FAFC);
+  color: var(--text-secondary, #64748B);
+  border: 1px solid var(--border-color, #CBD5E1);
+}
+
 .pulse-indicator {
   width: 6px;
   height: 6px;
@@ -375,3 +387,4 @@
     justify-content: center;
   }
 }
+
