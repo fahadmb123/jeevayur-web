@@ -121,3 +121,4 @@ export const ALL_WORLD_LANGUAGES: LanguageOption[] = [
   { code: 'yo', name: 'Yoruba', nativeName: 'Yorùbá' },
   { code: 'zu', name: 'Zulu', nativeName: 'isiZulu' },
 ];
+
