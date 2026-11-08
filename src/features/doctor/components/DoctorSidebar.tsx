@@ -13,7 +13,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { useRequests } from '@/features/requests';
 import type { DoctorNavItem } from '../types';
-import { useAuth } from '@/features/auth/hooks/useAuth';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import feviconImg from '@/assets/fevicon_rendered.png';
 import './DoctorSidebar.css';
@@ -48,9 +47,6 @@ export const useDoctorSidebar = () => {
 
 export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen, onToggle }) => {
   const location = useLocation();
-  const { user } = useAuth();
-  const doctorName = user?.name || 'Dr. Ahalya T.S.';
-  const doctorInitial = doctorName.replace(/^Dr\.\s*/i, '').charAt(0) || 'A';
   const { pendingCount } = useRequests();
 
   const clinicalItems = useMemo<DoctorNavItem[]>(
@@ -201,26 +197,6 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
           <div className="doctor-sidebar__group-list">{systemItems.map(renderNavItem)}</div>
         </div>
       </nav>
-
-      {/* Doctor Profile Footer */}
-      <div className="doctor-sidebar__footer">
-        <div
-          className={`doctor-sidebar__profile ${!isOpen ? 'doctor-sidebar__profile--collapsed' : ''}`}
-          title={!isOpen ? `${doctorName} • Online` : undefined}
-        >
-          <div className="doctor-sidebar__avatar-wrap">
-            <div className="doctor-sidebar__avatar">{doctorInitial}</div>
-            <span className="doctor-sidebar__status-dot" title="Active on Duty" />
-          </div>
-
-          {isOpen && (
-            <div className="doctor-sidebar__profile-info">
-              <span className="doctor-sidebar__profile-name">{doctorName}</span>
-              <span className="doctor-sidebar__profile-role">Chief Physician</span>
-            </div>
-          )}
-        </div>
-      </div>
     </aside>
   );
 });
