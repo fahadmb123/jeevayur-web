@@ -1,6 +1,8 @@
 import React, { useState, useCallback, useMemo, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import { DoctorSidebar, useDoctorSidebar, DoctorHeader, DoctorBottomNav } from '@/features/doctor/components';
+import { DoctorSidebar, useDoctorSidebar } from '@/features/doctor/components/DoctorSidebar';
+import { DoctorHeader } from '@/features/doctor/components/DoctorHeader';
+import { DoctorBottomNav } from '@/features/doctor/components/DoctorBottomNav';
 import { usePatients, type Patient } from '@/features/patients';
 import { LoadingScreen } from '@/shared/ui';
 import './DoctorLayout.css';

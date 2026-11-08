@@ -11,12 +11,10 @@ import {
   Layers,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import {
-  DoctorProfileCard,
-  DoctorProtocolsCard,
-  DoctorNotificationsCard,
-  DoctorSessionsCard,
-} from '../components';
+import { DoctorProfileCard } from '../components/DoctorProfileCard';
+import { DoctorProtocolsCard } from '../components/DoctorProtocolsCard';
+import { DoctorNotificationsCard } from '../components/DoctorNotificationsCard';
+import { DoctorSessionsCard } from '../components/DoctorSessionsCard';
 import type { DoctorProfile } from '../types';
 import './DoctorSettingsPage.css';
 

@@ -48,7 +48,7 @@ export const DoctorProtocolsCard: React.FC<DoctorProtocolsCardProps> = React.mem
 
       <div className="protocol-duration-options">
         {DURATION_OPTIONS.map((opt) => {
-          const isSelected = consultDuration === opt.id;
+          const isSelected = (consultDuration || '45 mins') === opt.id;
           return (
             <div
               key={opt.id}

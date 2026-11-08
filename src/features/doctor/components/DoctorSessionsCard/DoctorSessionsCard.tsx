@@ -16,8 +16,8 @@ import { Card } from '@/shared/ui/card';
 import { authService, type ActiveSession } from '@/features/auth/services/authService';
 import './DoctorSessionsCard.css';
 
-function getDeviceIcon(deviceStr: string) {
-  const lower = deviceStr.toLowerCase();
+function getDeviceIcon(deviceStr?: string | null) {
+  const lower = (deviceStr || '').toLowerCase();
   if (lower.includes('iphone') || lower.includes('android') || lower.includes('ios') || lower.includes('mobile')) {
     return <Smartphone size={20} />;
   }
@@ -27,7 +27,8 @@ function getDeviceIcon(deviceStr: string) {
   return <Globe size={20} />;
 }
 
-function formatRelativeTime(dateString: string): string {
+function formatRelativeTime(dateString?: string | null): string {
+  if (!dateString) return 'Recently';
   try {
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return 'Recently';

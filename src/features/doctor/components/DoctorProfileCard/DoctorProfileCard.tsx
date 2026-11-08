@@ -28,11 +28,11 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
       <div className="profile-identity-hero">
         <div className="profile-avatar-wrapper">
           <div className="profile-avatar-circle">
-            {profile.name
+            {(profile?.name || 'Dr. Ahalya T.S.')
               .split(' ')
               .filter(Boolean)
               .slice(0, 2)
-              .map((n) => n[0])
+              .map((n) => n[0] || '')
               .join('')
               .toUpperCase() || 'DR'}
           </div>
@@ -43,12 +43,12 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
 
         <div className="profile-identity-details">
           <div className="profile-identity-title-row">
-            <h4 className="profile-doctor-name">{profile.name}</h4>
+            <h4 className="profile-doctor-name">{profile?.name || 'Dr. Ahalya T.S.'}</h4>
             <span className="profile-role-badge">Verified Vaidya</span>
             <span className="profile-role-badge">Reg #AYU-KL-2024-9102</span>
           </div>
           <p className="profile-identity-subtext">
-            {profile.specialty} • Jeevayurniketan Smriti Sanctuary
+            {profile?.specialty || 'Ayurveda & Wellness Consultant'} • Jeevayurniketan Smriti Sanctuary
           </p>
         </div>
       </div>
@@ -62,7 +62,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-name"
             type="text"
             className="modern-field-input"
-            value={profile.name}
+            value={profile?.name || ''}
             onChange={(e) => onChange({ name: e.target.value })}
             placeholder="e.g. Dr. Ahalya T.S."
           />
@@ -76,7 +76,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-license"
             type="text"
             className="modern-field-input"
-            value={profile.licenseNo || 'AYU-KL-2024-9102'}
+            value={profile?.licenseNo || 'AYU-KL-2024-9102'}
             onChange={(e) => onChange({ licenseNo: e.target.value })}
             placeholder="AYU-KL-XXXX-XXXX"
           />
@@ -90,7 +90,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-specialty"
             type="text"
             className="modern-field-input"
-            value={profile.specialty}
+            value={profile?.specialty || ''}
             onChange={(e) => onChange({ specialty: e.target.value })}
             placeholder="e.g. Ayurveda & Wellness Consultant"
           />
@@ -104,7 +104,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-email"
             type="email"
             className="modern-field-input"
-            value={profile.email}
+            value={profile?.email || ''}
             onChange={(e) => onChange({ email: e.target.value })}
             placeholder="doctor@jeevayurniketan.com"
           />
@@ -118,7 +118,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-phone"
             type="tel"
             className="modern-field-input"
-            value={profile.phone}
+            value={profile?.phone || ''}
             onChange={(e) => onChange({ phone: e.target.value })}
             placeholder="+91 XXXXX XXXXX"
           />
@@ -132,7 +132,7 @@ export const DoctorProfileCard: React.FC<DoctorProfileCardProps> = React.memo(({
             id="doc-location"
             type="text"
             className="modern-field-input"
-            value={profile.location || 'Jeevayurniketan Sanctuary, Kozhikode, Kerala'}
+            value={profile?.location || 'Jeevayurniketan Sanctuary, Kozhikode, Kerala'}
             onChange={(e) => onChange({ location: e.target.value })}
             placeholder="Clinic location"
           />

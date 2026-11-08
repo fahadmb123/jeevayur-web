@@ -116,3 +116,4 @@ export const DoctorNotificationsCard: React.FC<DoctorNotificationsCardProps> = R
 });
 
 DoctorNotificationsCard.displayName = 'DoctorNotificationsCard';
+
