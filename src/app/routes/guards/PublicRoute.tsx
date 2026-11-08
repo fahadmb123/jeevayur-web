@@ -19,14 +19,21 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
   const location = useLocation();
 
   if (loading) {
-    return <LoadingScreen fullScreen />;
+    return <LoadingScreen fullScreen message="Verifying session..." />;
   }
 
   if (restricted && isAuthenticated) {
-    const destination =
-      redirectTo ||
-      (location.state as { from?: Location })?.from?.pathname ||
-      (user?.role === 'doctor' ? ROUTES.DOCTOR : ROUTES.HOME);
+    const rawFrom = (location.state as { from?: Location | string })?.from;
+    const fromPath = typeof rawFrom === 'string' ? rawFrom : rawFrom?.pathname;
+    const isAuthPath =
+      fromPath &&
+      (fromPath === ROUTES.LOGIN ||
+        fromPath === ROUTES.REGISTER ||
+        fromPath === ROUTES.FORGOT_PASSWORD ||
+        fromPath === ROUTES.RESET_PASSWORD);
+
+    const fallback = user?.role === 'doctor' ? ROUTES.DOCTOR : ROUTES.HOME;
+    const destination = redirectTo || (!isAuthPath && fromPath) || fallback;
 
     return <Navigate to={destination} replace />;
   }

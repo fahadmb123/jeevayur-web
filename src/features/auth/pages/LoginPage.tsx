@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Sparkles, ShieldCheck, Heart } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
@@ -12,6 +12,7 @@ import './AuthPages.css';
 
 export const LoginPage: React.FC = React.memo(() => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { mutateAsync: login, isPending: loading, error: authError } = useAuthMutation();
   const [localError, setLocalError] = useState<string | null>(null);
 
@@ -19,15 +20,27 @@ export const LoginPage: React.FC = React.memo(() => {
     try {
       setLocalError(null);
       const user = await login(credentials);
-       if (user.role === 'doctor') {
-        navigate(ROUTES.DOCTOR);
+
+      const rawFrom = (location.state as { from?: Location | string })?.from;
+      const fromPath = typeof rawFrom === 'string' ? rawFrom : rawFrom?.pathname;
+      const isAuthPath =
+        fromPath &&
+        (fromPath === ROUTES.LOGIN ||
+          fromPath === ROUTES.REGISTER ||
+          fromPath === ROUTES.FORGOT_PASSWORD ||
+          fromPath === ROUTES.RESET_PASSWORD);
+
+      if (fromPath && !isAuthPath) {
+        navigate(fromPath, { replace: true });
+      } else if (user.role === 'doctor') {
+        navigate(ROUTES.DOCTOR, { replace: true });
       } else {
-        navigate(ROUTES.HOME);
+        navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err: unknown) {
       setLocalError(err instanceof Error ? err.message : 'Invalid credentials. Please try again.');
     }
-  }, [login, navigate]);
+  }, [login, navigate, location.state]);
 
   return (
     <div className="auth-page-split">
