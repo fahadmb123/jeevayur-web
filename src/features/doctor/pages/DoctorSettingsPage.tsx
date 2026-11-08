@@ -70,11 +70,15 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
 
   const initialProfile = useMemo<DoctorProfile>(
     () => ({
-      name: user?.name || 'Dr. Ahalya T.S.',
-      username: 'X-AE-A-19',
+      name: user?.name || 'Dr. K. V. Krishnadas',
+      username: (user?.name || 'dr-krishnadas')
+        .toLowerCase()
+        .replace(/^dr\.\s*/i, '')
+        .trim()
+        .replace(/\s+/g, '-'),
       specialty: 'Ayurveda & Wellness Consultant',
-      email: user?.email || 'dr.ahalya@jeevayurniketan.com',
-      phone: '+44 (158) 008-9987',
+      email: user?.email || 'doctor@jeevayurniketan.com',
+      phone: '+91 73567 02775',
       licenseNo: 'AYU-KL-2024-9102',
       location: 'Kozhikode Sanctuary',
       bio: 'Holistic Ayurvedic consultations specializing in Dosha diagnostics, Nadi Pariksha, and personalized Smriti meditation therapies.',
@@ -256,7 +260,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                 <div className="field-control-cell">
                   <div className="modern-input-group">
                     <div className="country-selector-pill">
-                      <span className="country-emoji">🇬🇧</span>
+                      <span className="country-emoji">🇮🇳</span>
                       <ChevronDown size={13} className="country-chevron" />
                     </div>
                     <div className="input-vertical-divider" />
@@ -266,7 +270,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                       className="input-group-text"
                       value={profile.phone}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                      placeholder="+44 (158) 008-9987"
+                      placeholder="+91 73567 02775"
                     />
                   </div>
                 </div>

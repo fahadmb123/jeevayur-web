@@ -51,15 +51,17 @@ export const DoctorLayout: React.FC = React.memo(() => {
         />
 
         {/* Dynamic Nested Route Content with Contained Suspense */}
-        <Suspense
-          fallback={
-            <div className="doctor-layout__loading-container">
-              <LoadingScreen fullScreen={false} message="Loading view..." />
-            </div>
-          }
-        >
-          <Outlet context={outletContext} />
-        </Suspense>
+        <div className="doctor-layout__content-scroll">
+          <Suspense
+            fallback={
+              <div className="doctor-layout__loading-container">
+                <LoadingScreen fullScreen={false} message="Loading view..." />
+              </div>
+            }
+          >
+            <Outlet context={outletContext} />
+          </Suspense>
+        </div>
       </main>
 
       {/* Mobile Bottom Navigation Bar */}
