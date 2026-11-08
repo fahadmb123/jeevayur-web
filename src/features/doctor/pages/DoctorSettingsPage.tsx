@@ -4,7 +4,8 @@ import {
   CheckCircle2,
   Calendar,
   Search,
-  ExternalLink,
+  HelpCircle,
+  ChevronDown,
   Info,
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -47,8 +48,9 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [activeTab, setActiveTab] = useState<SettingsTab>('profile');
   const [searchQuery, setSearchQuery] = useState('');
   const [sessionCount, setSessionCount] = useState<number>(1);
+  const [showTooltip, setShowTooltip] = useState(false);
 
-  // Fetch session count for subnavbar badge (similar to "Account 12" in reference)
+  // Fetch session count for subnavbar badge (matches "Account 12" badge in reference)
   useEffect(() => {
     let isMounted = true;
     authService
@@ -69,10 +71,10 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const initialProfile = useMemo<DoctorProfile>(
     () => ({
       name: user?.name || 'Dr. Ahalya T.S.',
-      username: 'ahalya-ayur',
+      username: 'X-AE-A-19',
       specialty: 'Ayurveda & Wellness Consultant',
       email: user?.email || 'dr.ahalya@jeevayurniketan.com',
-      phone: '73567 02775',
+      phone: '+44 (158) 008-9987',
       licenseNo: 'AYU-KL-2024-9102',
       location: 'Kozhikode Sanctuary',
       bio: 'Holistic Ayurvedic consultations specializing in Dosha diagnostics, Nadi Pariksha, and personalized Smriti meditation therapies.',
@@ -104,286 +106,321 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
       { id: 'profile', label: 'General' },
       { id: 'consultation', label: 'Consultation' },
       { id: 'notifications', label: 'Notifications' },
-      { id: 'devices', label: 'Connected Devices', badge: sessionCount },
+      { id: 'devices', label: 'Account & Devices', badge: sessionCount },
     ],
     [sessionCount]
   );
 
-  // Auto-switch tab if search matches specific section keywords
+  // Keyword-aware search bar auto navigation
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const q = e.target.value;
     setSearchQuery(q);
     const lower = q.toLowerCase();
-    if (lower.includes('device') || lower.includes('session') || lower.includes('logout') || lower.includes('security')) {
+    if (lower.includes('device') || lower.includes('session') || lower.includes('logout') || lower.includes('security') || lower.includes('account')) {
       setActiveTab('devices');
     } else if (lower.includes('notif') || lower.includes('sms') || lower.includes('alert') || lower.includes('digest')) {
       setActiveTab('notifications');
-    } else if (lower.includes('consult') || lower.includes('duration') || lower.includes('timing') || lower.includes('hour')) {
+    } else if (lower.includes('consult') || lower.includes('duration') || lower.includes('timing') || lower.includes('hour') || lower.includes('buffer')) {
       setActiveTab('consultation');
-    } else if (lower.includes('profile') || lower.includes('user') || lower.includes('phone') || lower.includes('email') || lower.includes('license')) {
+    } else if (lower.includes('profile') || lower.includes('user') || lower.includes('phone') || lower.includes('email') || lower.includes('name')) {
       setActiveTab('profile');
     }
   };
 
   return (
-    <div className="doctor-page-content doctor-settings-page">
-      {/* 1. Top Header Row: Settings Title + Search Pill */}
-      <header className="settings-header-bar">
-        <h1 className="settings-main-title">Settings</h1>
-        <div className="settings-search-wrapper">
-          <input
-            type="text"
-            className="settings-search-input"
-            placeholder="Search settings..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <Search size={15} className="settings-search-icon" />
+    <div className="doctor-page-content doctor-settings-container">
+      {/* Unified White Canvas Card: exactly mirroring reference UI arrangement */}
+      <div className="settings-canvas-card">
+        {/* 1. Header Bar: Settings Title on Left, Search Bar on Right */}
+        <div className="settings-card-topbar">
+          <h1 className="settings-page-title">Settings</h1>
+          <div className="settings-search-pill">
+            <input
+              type="text"
+              className="settings-search-field"
+              placeholder="Search settings..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+            />
+            <Search size={16} className="settings-search-icon" />
+          </div>
         </div>
-      </header>
 
-      {/* 2. Horizontal Subnavbar with active underline indicator & badges */}
-      <nav className="settings-subnavbar" aria-label="Settings sub-navigation">
-        <div className="settings-subnavbar-track">
-          {tabs.map((tab) => {
-            const isActive = activeTab === tab.id;
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                className={`settings-subnav-tab ${isActive ? 'active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span className="tab-label">{tab.label}</span>
-                {tab.badge !== undefined && (
-                  <span className={`tab-badge ${isActive ? 'tab-badge-active' : ''}`}>
-                    {tab.badge}
-                  </span>
-                )}
-                {isActive && <span className="tab-active-indicator" />}
-              </button>
-            );
-          })}
-        </div>
-      </nav>
+        {/* 2. Horizontal Subnavbar with active underline indicator & badges */}
+        <nav className="settings-subnavbar" aria-label="Settings sub-navigation">
+          <div className="settings-tabs-row">
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  className={`settings-tab-btn ${isActive ? 'active' : ''}`}
+                  onClick={() => setActiveTab(tab.id)}
+                >
+                  <span className="tab-text">{tab.label}</span>
+                  {tab.badge !== undefined && (
+                    <span className={`tab-badge-pill ${isActive ? 'active' : ''}`}>
+                      {tab.badge}
+                    </span>
+                  )}
+                  {isActive && <div className="tab-indicator-bar" />}
+                </button>
+              );
+            })}
+          </div>
+        </nav>
 
-      {/* 3. Settings Card Content (Arranged horizontally like reference UI) */}
-      <main className="settings-body-container">
+        {/* 3. Section Content Pane */}
         {activeTab === 'profile' && (
-          <form onSubmit={handleSave} className="settings-section-panel">
-            <div className="settings-panel-header">
-              <div className="panel-header-copy">
-                <h2>Your Profile</h2>
-                <p>Please update your clinical profile and practitioner details here</p>
+          <form onSubmit={handleSave} className="settings-tab-pane">
+            {/* Section Header: Title + Subtitle on Left, Info Tooltip + Save Button on Right */}
+            <div className="settings-pane-header">
+              <div className="pane-header-titles">
+                <h2 className="pane-title">Your Profile</h2>
+                <p className="pane-subtitle">Please update your profile settings here</p>
               </div>
-              <div className="panel-header-actions">
-                {saved && (
-                  <span className="save-feedback-pill">
+
+              <div className="pane-header-actions">
+                {/* Tooltip trigger & popover matching reference */}
+                <div
+                  className="tooltip-container"
+                  onMouseEnter={() => setShowTooltip(true)}
+                  onMouseLeave={() => setShowTooltip(false)}
+                >
+                  <button
+                    type="button"
+                    className="tooltip-trigger-btn"
+                    onClick={() => setShowTooltip((prev) => !prev)}
+                    aria-label="Profile information"
+                  >
+                    <Info size={16} />
+                  </button>
+
+                  {showTooltip && (
+                    <div className="dark-tooltip-bubble" role="tooltip">
+                      <div className="tooltip-bubble-title">Practitioner Profile</div>
+                      <div className="tooltip-bubble-text">
+                        These credentials, public URL, and contact details appear directly on patient bookings.
+                      </div>
+                      <div className="tooltip-arrow" />
+                    </div>
+                  )}
+                </div>
+
+                {saved ? (
+                  <span className="saved-status-badge">
                     <CheckCircle2 size={14} /> Saved
                   </span>
+                ) : (
+                  <button type="submit" disabled={saving} className="btn-primary-action">
+                    <Check size={14} />
+                    <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+                  </button>
                 )}
-                <button type="submit" disabled={saving} className="btn-brand-save">
-                  <Check size={14} />
-                  <span>{saving ? 'Saving...' : 'Save Profile'}</span>
-                </button>
               </div>
             </div>
 
-            <div className="settings-panel-divider" />
+            {/* Subtle Divider Line */}
+            <div className="settings-divider-rule" />
 
-            <div className="settings-rows-list">
-              {/* Row: Practitioner Name */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label htmlFor="name">Practitioner Name</label>
-                  <span className="row-hint-text">Your official clinical title and full name</span>
+            {/* Row-by-Row Form Fields matching reference UI */}
+            <div className="settings-fields-stack">
+              {/* Row 1: Username / URL (slothui style with prefix and helper) */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="username">Username</label>
                 </div>
-                <div className="row-control-col">
-                  <input
-                    id="name"
-                    type="text"
-                    className="row-text-input"
-                    value={profile.name}
-                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  />
-                </div>
-              </div>
-
-              {/* Row: Username / Public Link (Arranged with prefix like reference) */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label htmlFor="username">Username & Profile URL</label>
-                  <span className="row-hint-text">Used for direct patient booking links</span>
-                </div>
-                <div className="row-control-col">
-                  <div className="input-prefix-box">
-                    <span className="prefix-tag">jeevayur.in/dr/</span>
+                <div className="field-control-cell">
+                  <div className="modern-input-group">
+                    <span className="input-prefix-label">jeevayur.com/</span>
                     <input
                       id="username"
                       type="text"
-                      className="prefix-input-field"
+                      className="input-group-text"
                       value={profile.username || 'ahalya-ayur'}
                       onChange={(e) => setProfile({ ...profile, username: e.target.value })}
-                      placeholder="username"
                     />
-                    <a
-                      href={`https://jeevayurniketan.com/dr/${profile.username || 'ahalya-ayur'}`}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="prefix-action-link"
-                      title="Preview public profile"
-                    >
-                      <ExternalLink size={14} />
-                    </a>
+                    <span className="input-suffix-icon" title="Public booking identifier">
+                      <HelpCircle size={15} />
+                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Row: Phone Number (With country flag tag like reference) */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 2: Phone Number (with country flag, chevron, and separator) */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="phone">Phone Number</label>
-                  <span className="row-hint-text">Primary contact for clinic communications</span>
                 </div>
-                <div className="row-control-col">
-                  <div className="input-country-box">
-                    <span className="country-badge">🇮🇳 +91</span>
+                <div className="field-control-cell">
+                  <div className="modern-input-group">
+                    <div className="country-selector-pill">
+                      <span className="country-emoji">🇬🇧</span>
+                      <ChevronDown size={13} className="country-chevron" />
+                    </div>
+                    <div className="input-vertical-divider" />
                     <input
                       id="phone"
                       type="tel"
-                      className="country-input-field"
+                      className="input-group-text"
                       value={profile.phone}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
-                      placeholder="73567 02775"
+                      placeholder="+44 (158) 008-9987"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Row: Official Email */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 3: Practitioner Name */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="name">Practitioner Name</label>
+                </div>
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="name"
+                      type="text"
+                      className="input-group-text"
+                      value={profile.name}
+                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 4: Official Email */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="email">Official Email</label>
-                  <span className="row-hint-text">Used for sign-in and security notifications</span>
                 </div>
-                <div className="row-control-col">
-                  <input
-                    id="email"
-                    type="email"
-                    className="row-text-input"
-                    value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  />
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="email"
+                      type="email"
+                      className="input-group-text"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Row: Medical License */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 5: Medical Registration No */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="license">Medical Registration No.</label>
-                  <span className="row-hint-text">State Ayurvedic Council registration</span>
                 </div>
-                <div className="row-control-col">
-                  <input
-                    id="license"
-                    type="text"
-                    className="row-text-input"
-                    value={profile.licenseNo || ''}
-                    onChange={(e) => setProfile({ ...profile, licenseNo: e.target.value })}
-                  />
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="license"
+                      type="text"
+                      className="input-group-text"
+                      value={profile.licenseNo || ''}
+                      onChange={(e) => setProfile({ ...profile, licenseNo: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Row: Clinical Specialty */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 6: Clinical Specialty */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="specialty">Clinical Specialty</label>
-                  <span className="row-hint-text">Your primary Ayurvedic discipline</span>
                 </div>
-                <div className="row-control-col">
-                  <input
-                    id="specialty"
-                    type="text"
-                    className="row-text-input"
-                    value={profile.specialty}
-                    onChange={(e) => setProfile({ ...profile, specialty: e.target.value })}
-                  />
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="specialty"
+                      type="text"
+                      className="input-group-text"
+                      value={profile.specialty}
+                      onChange={(e) => setProfile({ ...profile, specialty: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Row: Sanctuary Location */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 7: Sanctuary Location */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="location">Sanctuary Location</label>
-                  <span className="row-hint-text">Physical practice or clinic center</span>
                 </div>
-                <div className="row-control-col">
-                  <input
-                    id="location"
-                    type="text"
-                    className="row-text-input"
-                    value={profile.location || ''}
-                    onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                  />
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="location"
+                      type="text"
+                      className="input-group-text"
+                      value={profile.location || ''}
+                      onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
 
-              {/* Row: Bio */}
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              {/* Row 8: Professional Bio */}
+              <div className="settings-field-row align-top">
+                <div className="field-label-cell">
                   <label htmlFor="bio">Professional Bio</label>
-                  <span className="row-hint-text">Clinical summary visible on patient portals</span>
                 </div>
-                <div className="row-control-col">
-                  <textarea
-                    id="bio"
-                    rows={3}
-                    className="row-textarea-input"
-                    value={profile.bio || ''}
-                    onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
-                  />
+                <div className="field-control-cell">
+                  <div className="modern-input-group textarea-wrap">
+                    <textarea
+                      id="bio"
+                      rows={3}
+                      className="input-group-textarea"
+                      value={profile.bio || ''}
+                      onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </form>
         )}
 
+        {/* Consultation Tab */}
         {activeTab === 'consultation' && (
-          <form onSubmit={handleSave} className="settings-section-panel">
-            <div className="settings-panel-header">
-              <div className="panel-header-copy">
-                <h2>Consultation Protocols</h2>
-                <p>Standard appointment durations and clinic scheduling rules</p>
+          <form onSubmit={handleSave} className="settings-tab-pane">
+            <div className="settings-pane-header">
+              <div className="pane-header-titles">
+                <h2 className="pane-title">Consultation Protocols</h2>
+                <p className="pane-subtitle">Manage standard durations, buffers, and scheduling</p>
               </div>
-              <div className="panel-header-actions">
-                {saved && (
-                  <span className="save-feedback-pill">
+
+              <div className="pane-header-actions">
+                {saved ? (
+                  <span className="saved-status-badge">
                     <CheckCircle2 size={14} /> Saved
                   </span>
+                ) : (
+                  <button type="submit" disabled={saving} className="btn-primary-action">
+                    <Check size={14} />
+                    <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+                  </button>
                 )}
-                <button type="submit" disabled={saving} className="btn-brand-save">
-                  <Check size={14} />
-                  <span>{saving ? 'Saving...' : 'Save Protocols'}</span>
-                </button>
               </div>
             </div>
 
-            <div className="settings-panel-divider" />
+            <div className="settings-divider-rule" />
 
-            <div className="settings-rows-list">
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label>Standard Session Duration</label>
-                  <span className="row-hint-text">Default slot allocated per patient appointment</span>
+            <div className="settings-fields-stack">
+              <div className="settings-field-row align-top">
+                <div className="field-label-cell">
+                  <label>Standard Duration</label>
                 </div>
-                <div className="row-control-col">
-                  <div className="duration-options-grid">
+                <div className="field-control-cell">
+                  <div className="duration-pill-group">
                     {DURATION_OPTIONS.map((opt) => {
                       const isSelected = profile.consultDuration === opt.id;
                       return (
                         <div
                           key={opt.id}
-                          className={`duration-card ${isSelected ? 'selected' : ''}`}
+                          className={`duration-select-box ${isSelected ? 'selected' : ''}`}
                           onClick={() => setProfile({ ...profile, consultDuration: opt.id })}
                           role="button"
                           tabIndex={0}
@@ -393,12 +430,12 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                             }
                           }}
                         >
-                          <div className="duration-card-header">
-                            <span className="duration-title">{opt.title}</span>
-                            {isSelected && <Check size={14} className="duration-check" />}
+                          <div className="duration-select-top">
+                            <span className="duration-select-title">{opt.title}</span>
+                            {isSelected && <Check size={14} className="duration-select-check" />}
                           </div>
-                          <span className="duration-type">{opt.type}</span>
-                          <p className="duration-desc">{opt.description}</p>
+                          <span className="duration-select-type">{opt.type}</span>
+                          <p className="duration-select-desc">{opt.description}</p>
                         </div>
                       );
                     })}
@@ -406,27 +443,25 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label>Clinical Buffer Time</label>
-                  <span className="row-hint-text">Automatic buffer between consecutive patients</span>
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label>Buffer Window</label>
                 </div>
-                <div className="row-control-col">
-                  <div className="buffer-info-row">
-                    <Info size={16} className="buffer-icon" />
-                    <span>15 minutes included automatically between consultations for pulse analysis note preparation.</span>
+                <div className="field-control-cell">
+                  <div className="info-callout-pill">
+                    <Info size={15} className="callout-icon" />
+                    <span>15 minutes automated preparation buffer between consultations</span>
                   </div>
                 </div>
               </div>
 
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label>Operating Timings</label>
-                  <span className="row-hint-text">Weekly regular clinic consultation hours</span>
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label>Operating Hours</label>
                 </div>
-                <div className="row-control-col">
-                  <div className="schedule-info-box">
-                    <Calendar size={16} className="schedule-icon" />
+                <div className="field-control-cell">
+                  <div className="info-callout-pill">
+                    <Calendar size={15} className="callout-icon" />
                     <span>Monday – Saturday • 09:00 AM – 05:00 PM IST</span>
                   </div>
                 </div>
@@ -435,97 +470,100 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
           </form>
         )}
 
+        {/* Notifications Tab */}
         {activeTab === 'notifications' && (
-          <form onSubmit={handleSave} className="settings-section-panel">
-            <div className="settings-panel-header">
-              <div className="panel-header-copy">
-                <h2>Notification Preferences</h2>
-                <p>Choose which alerts and patient notifications you receive</p>
+          <form onSubmit={handleSave} className="settings-tab-pane">
+            <div className="settings-pane-header">
+              <div className="pane-header-titles">
+                <h2 className="pane-title">Notification Preferences</h2>
+                <p className="pane-subtitle">Choose which alerts and patient notifications you receive</p>
               </div>
-              <div className="panel-header-actions">
-                {saved && (
-                  <span className="save-feedback-pill">
+
+              <div className="pane-header-actions">
+                {saved ? (
+                  <span className="saved-status-badge">
                     <CheckCircle2 size={14} /> Saved
                   </span>
+                ) : (
+                  <button type="submit" disabled={saving} className="btn-primary-action">
+                    <Check size={14} />
+                    <span>{saving ? 'Saving...' : 'Save Changes'}</span>
+                  </button>
                 )}
-                <button type="submit" disabled={saving} className="btn-brand-save">
-                  <Check size={14} />
-                  <span>{saving ? 'Saving...' : 'Save Preferences'}</span>
-                </button>
               </div>
             </div>
 
-            <div className="settings-panel-divider" />
+            <div className="settings-divider-rule" />
 
-            <div className="settings-rows-list">
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label htmlFor="toggle-email">Email Appointment Alerts</label>
-                  <span className="row-hint-text">Get an email whenever a patient books or reschedules</span>
+            <div className="settings-fields-stack">
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="toggle-email">Email Alerts</label>
                 </div>
-                <div className="row-control-col">
-                  <label className="clean-toggle-switch">
+                <div className="field-control-cell switch-cell">
+                  <span className="switch-hint-label">Receive email alerts when patients book or reschedule</span>
+                  <label className="sloth-switch">
                     <input
                       id="toggle-email"
                       type="checkbox"
                       checked={profile.emailAlerts}
                       onChange={(e) => setProfile({ ...profile, emailAlerts: e.target.checked })}
                     />
-                    <span className="toggle-slider" />
+                    <span className="sloth-switch-track" />
                   </label>
                 </div>
               </div>
 
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label htmlFor="toggle-sms">SMS Patient Check-In</label>
-                  <span className="row-hint-text">Instant SMS message when a patient arrives at the clinic</span>
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="toggle-sms">SMS Check-In</label>
                 </div>
-                <div className="row-control-col">
-                  <label className="clean-toggle-switch">
+                <div className="field-control-cell switch-cell">
+                  <span className="switch-hint-label">Instant SMS notification when patient checks in at the clinic</span>
+                  <label className="sloth-switch">
                     <input
                       id="toggle-sms"
                       type="checkbox"
                       checked={profile.smsAlerts}
                       onChange={(e) => setProfile({ ...profile, smsAlerts: e.target.checked })}
                     />
-                    <span className="toggle-slider" />
+                    <span className="sloth-switch-track" />
                   </label>
                 </div>
               </div>
 
-              <div className="settings-form-row">
-                <div className="row-label-col">
+              <div className="settings-field-row">
+                <div className="field-label-cell">
                   <label htmlFor="toggle-urgent">Urgent Consultations</label>
-                  <span className="row-hint-text">Priority notifications for emergency patient inquiries</span>
                 </div>
-                <div className="row-control-col">
-                  <label className="clean-toggle-switch">
+                <div className="field-control-cell switch-cell">
+                  <span className="switch-hint-label">Priority alert delivery for emergency patient inquiries</span>
+                  <label className="sloth-switch">
                     <input
                       id="toggle-urgent"
                       type="checkbox"
                       checked={Boolean(profile.urgentAlerts)}
                       onChange={(e) => setProfile({ ...profile, urgentAlerts: e.target.checked })}
                     />
-                    <span className="toggle-slider" />
+                    <span className="sloth-switch-track" />
                   </label>
                 </div>
               </div>
 
-              <div className="settings-form-row">
-                <div className="row-label-col">
-                  <label htmlFor="toggle-digest">Weekly Clinical Digest</label>
-                  <span className="row-hint-text">Weekly recap of completed treatments and patient metrics</span>
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="toggle-digest">Weekly Digest</label>
                 </div>
-                <div className="row-control-col">
-                  <label className="clean-toggle-switch">
+                <div className="field-control-cell switch-cell">
+                  <span className="switch-hint-label">Summary email of patient volume and clinical metrics</span>
+                  <label className="sloth-switch">
                     <input
                       id="toggle-digest"
                       type="checkbox"
                       checked={Boolean(profile.weeklySummary)}
                       onChange={(e) => setProfile({ ...profile, weeklySummary: e.target.checked })}
                     />
-                    <span className="toggle-slider" />
+                    <span className="sloth-switch-track" />
                   </label>
                 </div>
               </div>
@@ -533,12 +571,13 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
           </form>
         )}
 
+        {/* Devices Tab */}
         {activeTab === 'devices' && (
-          <div className="settings-section-panel">
+          <div className="settings-tab-pane">
             <DoctorSessionsCard />
           </div>
         )}
-      </main>
+      </div>
     </div>
   );
 });
