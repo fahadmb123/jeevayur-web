@@ -1,0 +1,88 @@
+.error-boundary-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 380px;
+  padding: 32px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.error-boundary-card {
+  max-width: 440px;
+  width: 100%;
+  background-color: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 16px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: var(--card-shadow, 0 4px 16px rgba(0, 0, 0, 0.05));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+[data-theme='dark'] .error-boundary-card,
+.dark .error-boundary-card {
+  background-color: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+}
+
+.error-boundary-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.error-boundary-title {
+  font-family: var(--font-brand, sans-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  margin: 0 0 8px;
+}
+
+[data-theme='dark'] .error-boundary-title,
+.dark .error-boundary-title {
+  color: var(--text-primary, #F2F7F4);
+}
+
+.error-boundary-message {
+  font-size: 0.9rem;
+  color: var(--text-secondary, #485E53);
+  margin: 0 0 24px;
+  line-height: 1.5;
+}
+
+[data-theme='dark'] .error-boundary-message,
+.dark .error-boundary-message {
+  color: var(--text-secondary, #A6C2B4);
+}
+
+.error-boundary-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 9999px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-brand, sans-serif);
+}
+
+.error-boundary-btn:hover {
+  background: var(--primary-green-light, #2A8566);
+  transform: translateY(-1px);
+}

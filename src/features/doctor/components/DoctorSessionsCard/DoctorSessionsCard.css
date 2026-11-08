@@ -388,3 +388,84 @@
   }
 }
 
+/* --------------------------------------------------------------------------
+   Dark Mode Palette Overrides
+   -------------------------------------------------------------------------- */
+[data-theme='dark'] .sessions-header-info h3,
+.dark .sessions-header-info h3 {
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .sessions-header-info p,
+.dark .sessions-header-info p {
+  color: var(--text-secondary, #A6C2B4);
+}
+
+[data-theme='dark'] .sessions-refresh-btn,
+.dark .sessions-refresh-btn {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-secondary, #A6C2B4);
+}
+
+[data-theme='dark'] .sessions-refresh-btn:hover:not(:disabled),
+.dark .sessions-refresh-btn:hover:not(:disabled) {
+  background-color: rgba(46, 157, 119, 0.15);
+  color: var(--primary-green-light, #41BA91);
+  border-color: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .session-row,
+.dark .session-row {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .session-row:hover,
+.dark .session-row:hover {
+  border-color: var(--border-color-hover, #2D5846);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .session-row.current-session,
+.dark .session-row.current-session {
+  background-color: rgba(46, 157, 119, 0.1);
+  border-color: rgba(65, 186, 145, 0.35);
+}
+
+[data-theme='dark'] .session-icon-box,
+.dark .session-icon-box {
+  background-color: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .session-device-title,
+.dark .session-device-title {
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .session-meta,
+.dark .session-meta,
+[data-theme='dark'] .session-meta-item,
+.dark .session-meta-item {
+  color: var(--text-secondary, #A6C2B4);
+}
+
+[data-theme='dark'] .sessions-security-note,
+.dark .sessions-security-note {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+}
+
+[data-theme='dark'] .sessions-security-content strong,
+.dark .sessions-security-content strong {
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .sessions-security-content,
+.dark .sessions-security-content {
+  color: var(--text-secondary, #A6C2B4);
+}
+
+
