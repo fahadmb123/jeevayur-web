@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import {
   Check,
   CheckCircle2,
-  ExternalLink,
   Eye,
   EyeOff,
 } from 'lucide-react';
@@ -160,7 +159,6 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
             {SUPPORTED_PLATFORMS.map((platform) => {
               const currentVal = platformValues[platform.id]?.url || '';
               const isVisible = platformValues[platform.id]?.isVisible ?? true;
-              const hasUrl = currentVal.trim().length > 0;
 
               return (
                 <div
@@ -209,22 +207,6 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
                         </>
                       )}
                     </button>
-
-                    {/* Action: Open link in new tab to test (if URL entered) */}
-                    {hasUrl ? (
-                      <a
-                        href={currentVal}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="social-action-btn"
-                        title={`Test ${platform.label} link in new tab`}
-                        aria-label={`Open ${platform.label} in new tab`}
-                      >
-                        <ExternalLink size={15} />
-                      </a>
-                    ) : (
-                      <span className="social-action-placeholder" title="Enter a URL to test" />
-                    )}
                   </div>
                 </div>
               );

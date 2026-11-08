@@ -4,19 +4,20 @@
    ========================================================================== */
 
 .doctor-settings-container {
-  max-width: 980px;
-  margin: 0 auto;
+  max-width: 100%;
+  margin: 0;
   width: 100%;
-  padding: 8px 0 60px 0;
+  padding: 0 0 60px 0;
   box-sizing: border-box;
 }
 
-/* 1. Main Canvas Card - Seamless Premium Surface */
+/* 1. Main Canvas Card - Seamless Full-Width Premium Surface */
 .settings-canvas-card {
+  width: 100%;
   background-color: var(--surface-color, #FFFFFF);
   border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 16px;
-  padding: 36px 40px;
+  padding: 32px 36px;
   box-shadow: 0 4px 20px -2px rgba(18, 76, 56, 0.05), 0 1px 3px rgba(18, 76, 56, 0.03);
   box-sizing: border-box;
   transition: background-color 0.25s ease, border-color 0.25s ease;
