@@ -16,7 +16,7 @@ const lenisOptions = {
 };
 
 export const App: React.FC = React.memo(() => {
-  const { isInitialLoading } = useInitialPageLoad({ minDuration: 5000, maxTimeout: 6500 });
+  const { isInitialLoading } = useInitialPageLoad({ minDuration: 3000, maxTimeout: 4200 });
 
   return (
     <ReactLenis root options={lenisOptions}>
