@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
-import { LoadingScreen } from '@/shared/ui';
+import { LoadingScreen, DevErrorPreview } from '@/shared/ui';
 import { DoctorLayout } from '@/shared/layout';
 import { PublicRoute } from './guards/PublicRoute';
 import { PrivateRoute } from './guards/PrivateRoute';
@@ -57,6 +57,7 @@ export const AppRoutes: React.FC = React.memo(() => {
         </Route>
 
         <Route path="/dev/loading" element={<LoadingScreen fullScreen />} />
+        <Route path="/dev/error-boundary" element={<DevErrorPreview />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Suspense>
