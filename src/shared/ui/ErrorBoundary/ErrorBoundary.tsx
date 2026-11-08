@@ -31,8 +31,7 @@ export class ErrorBoundary extends Component<Props, State> {
   private handleReset = () => {
     const isChunkError =
       this.state.error?.message?.includes('dynamically imported module') ||
-      this.state.error?.message?.includes('Loading chunk') ||
-      this.state.error?.message?.includes('Failed to fetch');
+      this.state.error?.message?.includes('Loading chunk');
 
     if (isChunkError && typeof window !== 'undefined') {
       window.location.reload();
@@ -53,13 +52,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
       const isChunkError =
         this.state.error?.message?.includes('dynamically imported module') ||
-        this.state.error?.message?.includes('Loading chunk') ||
-        this.state.error?.message?.includes('Failed to fetch');
-
-      const userFriendlyMessage = isChunkError
-        ? 'A new version or component update was applied. Please refresh to load the updated view.'
-        : this.state.error?.message ||
-          'An unexpected error occurred while loading this view. Please try refreshing.';
+        this.state.error?.message?.includes('Loading chunk');
 
       return (
         <div className="error-boundary-fallback" role="alert">
@@ -68,7 +61,10 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertCircle size={32} className="error-boundary-icon" />
             </div>
             <h3 className="error-boundary-title">Something went wrong</h3>
-            <p className="error-boundary-message">{userFriendlyMessage}</p>
+            <p className="error-boundary-message">
+              {this.state.error?.message ||
+                'An unexpected error occurred while loading this view. Please try refreshing.'}
+            </p>
             <button
               type="button"
               className="error-boundary-btn"

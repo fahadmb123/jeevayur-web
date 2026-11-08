@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { authService } from '@/features/auth/services/authService';
-import { DoctorSessionsCard } from '../components/DoctorSessionsCard';
+import { DoctorSessionsCard } from '../components/DoctorSessionsCard/index';
 import type { DoctorProfile } from '../types';
 import './DoctorSettingsPage.css';
 
