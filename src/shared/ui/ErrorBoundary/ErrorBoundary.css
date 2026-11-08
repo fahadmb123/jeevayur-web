@@ -23,78 +23,21 @@
 }
 
 /* --------------------------------------------------------------------------
-   1. Brand Header
+   1. Brand Header & Website Navbar Integration
    -------------------------------------------------------------------------- */
-.full-error-header {
-  height: 72px;
+.full-error-page .navbar-wrapper {
+  background: rgba(251, 251, 249, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-color, #E2E8DE);
-  background-color: var(--glass-bg, rgba(255, 255, 255, 0.85));
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  position: sticky;
-  top: 0;
-  z-index: 40;
-  flex-shrink: 0;
+  box-shadow: 0 4px 20px -2px rgba(10, 36, 25, 0.04);
 }
 
-[data-theme='dark'] .full-error-header,
-.dark .full-error-header {
-  background-color: rgba(17, 34, 27, 0.88);
+[data-theme='dark'] .full-error-page .navbar-wrapper,
+.dark .full-error-page .navbar-wrapper {
+  background: rgba(10, 20, 15, 0.95);
   border-bottom-color: var(--border-color, #1F3C30);
-}
-
-.full-error-header__container {
-  max-width: 1200px;
-  height: 100%;
-  margin: 0 auto;
-  padding: 0 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-.full-error-header__nav {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.full-error-nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  height: 38px;
-  padding: 0 14px;
-  background-color: var(--surface-secondary, #F3F6F1);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 9px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--text-secondary, #485E53);
-  cursor: pointer;
-  transition: all 0.18s ease;
-  font-family: inherit;
-}
-
-[data-theme='dark'] .full-error-nav-link,
-.dark .full-error-nav-link {
-  background-color: var(--surface-secondary, #172D24);
-  border-color: var(--border-color, #1F3C30);
-  color: var(--text-secondary, #A6C2B4);
-}
-
-.full-error-nav-link:hover {
-  background-color: var(--primary-green-tint, #EDF6F1);
-  color: var(--primary-green, #1B6B50);
-  border-color: var(--primary-green-light, #2A8566);
-}
-
-[data-theme='dark'] .full-error-nav-link:hover,
-.dark .full-error-nav-link:hover {
-  background-color: rgba(46, 157, 119, 0.16);
-  color: var(--primary-green-light, #41BA91);
-  border-color: var(--primary-green, #2E9D77);
+  box-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.4);
 }
 
 /* --------------------------------------------------------------------------
@@ -105,7 +48,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 56px 24px 64px;
+  padding: calc(76px + 40px) 24px 64px;
   box-sizing: border-box;
 }
 
