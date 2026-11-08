@@ -3,11 +3,11 @@
    Crafted Kerala Ayurveda palette with responsive 2-column aligned rows
    ========================================================================== */
 
-.doctor-settings-container {
+.doctor-page-content.doctor-settings-container {
+  padding: 32px 32px 64px;
+  width: 100%;
   max-width: 100%;
   margin: 0;
-  width: 100%;
-  padding: 0 0 60px 0;
   box-sizing: border-box;
 }
 
@@ -456,15 +456,16 @@
 
 .settings-field-row {
   display: grid;
-  grid-template-columns: 220px 1fr;
+  grid-template-columns: minmax(180px, 240px) 1fr;
   align-items: center;
-  gap: 28px;
+  gap: 32px;
   padding: 18px 0;
-  border-bottom: 1px solid rgba(226, 232, 222, 0.7);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
-[data-theme='dark'] .settings-field-row {
-  border-bottom-color: rgba(31, 60, 48, 0.7);
+[data-theme='dark'] .settings-field-row,
+.dark .settings-field-row {
+  border-bottom-color: var(--border-color, #1F3C30);
 }
 
 .settings-field-row.align-top {
@@ -485,13 +486,14 @@
   letter-spacing: -0.01em;
 }
 
-[data-theme='dark'] .field-label-cell label {
+[data-theme='dark'] .field-label-cell label,
+.dark .field-label-cell label {
   color: var(--text-primary, #F2F7F4);
 }
 
 .field-control-cell {
-  max-width: 540px;
   width: 100%;
+  max-width: 100%;
 }
 
 /* Modern Input Groups (slothui style with authentic Ayurvedic tones) */
@@ -507,7 +509,8 @@
   box-shadow: 0 1px 2px rgba(18, 76, 56, 0.02);
 }
 
-[data-theme='dark'] .modern-input-group {
+[data-theme='dark'] .modern-input-group,
+.dark .modern-input-group {
   background-color: var(--surface-secondary, #172D24);
   border-color: var(--border-color, #1F3C30);
   box-shadow: none;
@@ -517,7 +520,8 @@
   border-color: var(--border-color-hover, #CCD6C6);
 }
 
-[data-theme='dark'] .modern-input-group:hover {
+[data-theme='dark'] .modern-input-group:hover,
+.dark .modern-input-group:hover {
   border-color: var(--border-color-hover, #2D5846);
 }
 
@@ -526,7 +530,8 @@
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.12);
 }
 
-[data-theme='dark'] .modern-input-group:focus-within {
+[data-theme='dark'] .modern-input-group:focus-within,
+.dark .modern-input-group:focus-within {
   border-color: var(--primary-green-light, #41BA91);
   box-shadow: 0 0 0 3px rgba(65, 186, 145, 0.18);
 }
@@ -546,7 +551,8 @@
   user-select: none;
 }
 
-[data-theme='dark'] .input-prefix-label {
+[data-theme='dark'] .input-prefix-label,
+.dark .input-prefix-label {
   background-color: var(--surface-color, #11221B);
   color: var(--text-secondary, #A6C2B4);
   border-right-color: var(--border-color, #1F3C30);
@@ -563,7 +569,8 @@
   transition: color 0.15s ease;
 }
 
-[data-theme='dark'] .input-suffix-icon {
+[data-theme='dark'] .input-suffix-icon,
+.dark .input-suffix-icon {
   color: var(--text-light, #709483);
 }
 
@@ -571,7 +578,8 @@
   color: var(--primary-green, #1B6B50);
 }
 
-[data-theme='dark'] .input-suffix-icon:hover {
+[data-theme='dark'] .input-suffix-icon:hover,
+.dark .input-suffix-icon:hover {
   color: var(--primary-green-light, #41BA91);
 }
 
@@ -588,7 +596,8 @@
   font-family: var(--font-brand, sans-serif);
 }
 
-[data-theme='dark'] .input-group-text {
+[data-theme='dark'] .input-group-text,
+.dark .input-group-text {
   color: var(--text-primary, #F2F7F4);
 }
 
@@ -605,7 +614,8 @@
   transition: background-color 0.15s ease;
 }
 
-[data-theme='dark'] .country-selector-pill {
+[data-theme='dark'] .country-selector-pill,
+.dark .country-selector-pill {
   background-color: var(--surface-color, #11221B);
 }
 
@@ -618,7 +628,8 @@
   color: var(--text-secondary, #485E53);
 }
 
-[data-theme='dark'] .country-chevron {
+[data-theme='dark'] .country-chevron,
+.dark .country-chevron {
   color: var(--text-secondary, #A6C2B4);
 }
 
@@ -629,7 +640,8 @@
   flex-shrink: 0;
 }
 
-[data-theme='dark'] .input-vertical-divider {
+[data-theme='dark'] .input-vertical-divider,
+.dark .input-vertical-divider {
   background-color: var(--border-color, #1F3C30);
 }
 
@@ -654,7 +666,8 @@
   line-height: 1.5;
 }
 
-[data-theme='dark'] .input-group-textarea {
+[data-theme='dark'] .input-group-textarea,
+.dark .input-group-textarea {
   color: var(--text-primary, #F2F7F4);
 }
 
@@ -678,7 +691,8 @@
   outline: none;
 }
 
-[data-theme='dark'] .duration-select-box {
+[data-theme='dark'] .duration-select-box,
+.dark .duration-select-box {
   background-color: var(--surface-secondary, #172D24);
   border-color: var(--border-color, #1F3C30);
 }
@@ -688,7 +702,8 @@
   background-color: var(--surface-secondary, #F3F6F1);
 }
 
-[data-theme='dark'] .duration-select-box:hover {
+[data-theme='dark'] .duration-select-box:hover,
+.dark .duration-select-box:hover {
   border-color: var(--primary-green-light, #41BA91);
   background-color: rgba(46, 157, 119, 0.1);
 }
@@ -699,7 +714,8 @@
   box-shadow: 0 0 0 1px var(--primary-green, #1B6B50);
 }
 
-[data-theme='dark'] .duration-select-box.selected {
+[data-theme='dark'] .duration-select-box.selected,
+.dark .duration-select-box.selected {
   border-color: var(--primary-green-light, #41BA91);
   background-color: rgba(46, 157, 119, 0.18);
   box-shadow: 0 0 0 1px var(--primary-green-light, #41BA91);
@@ -717,7 +733,8 @@
   color: var(--text-primary, #14241C);
 }
 
-[data-theme='dark'] .duration-select-title {
+[data-theme='dark'] .duration-select-title,
+.dark .duration-select-title {
   color: var(--text-primary, #F2F7F4);
 }
 
@@ -725,7 +742,8 @@
   color: var(--primary-green, #1B6B50);
 }
 
-[data-theme='dark'] .duration-select-check {
+[data-theme='dark'] .duration-select-check,
+.dark .duration-select-check {
   color: var(--primary-green-light, #41BA91);
 }
 
@@ -737,7 +755,8 @@
   color: var(--primary-green, #1B6B50);
 }
 
-[data-theme='dark'] .duration-select-type {
+[data-theme='dark'] .duration-select-type,
+.dark .duration-select-type {
   color: var(--primary-green-light, #41BA91);
 }
 
@@ -748,7 +767,8 @@
   line-height: 1.4;
 }
 
-[data-theme='dark'] .duration-select-desc {
+[data-theme='dark'] .duration-select-desc,
+.dark .duration-select-desc {
   color: var(--text-secondary, #A6C2B4);
 }
 
@@ -765,7 +785,8 @@
   color: var(--text-secondary, #485E53);
 }
 
-[data-theme='dark'] .info-callout-pill {
+[data-theme='dark'] .info-callout-pill,
+.dark .info-callout-pill {
   background-color: var(--surface-secondary, #172D24);
   border-color: var(--border-color, #1F3C30);
   color: var(--text-secondary, #A6C2B4);
@@ -776,7 +797,8 @@
   flex-shrink: 0;
 }
 
-[data-theme='dark'] .callout-icon {
+[data-theme='dark'] .callout-icon,
+.dark .callout-icon {
   color: var(--primary-green-light, #41BA91);
 }
 
@@ -794,7 +816,8 @@
   line-height: 1.4;
 }
 
-[data-theme='dark'] .switch-hint-label {
+[data-theme='dark'] .switch-hint-label,
+.dark .switch-hint-label {
   color: var(--text-secondary, #A6C2B4);
 }
 
@@ -821,7 +844,8 @@
   transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-[data-theme='dark'] .sloth-switch-track {
+[data-theme='dark'] .sloth-switch-track,
+.dark .sloth-switch-track {
   background-color: var(--border-color, #1F3C30);
 }
 
@@ -842,7 +866,8 @@
   background: var(--primary-green, #1B6B50);
 }
 
-[data-theme='dark'] .sloth-switch input:checked + .sloth-switch-track {
+[data-theme='dark'] .sloth-switch input:checked + .sloth-switch-track,
+.dark .sloth-switch input:checked + .sloth-switch-track {
   background: var(--primary-green-light, #41BA91);
 }
 

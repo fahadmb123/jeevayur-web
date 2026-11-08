@@ -1,7 +1,6 @@
 /* ==========================================================================
    DOCTOR SOCIAL LINKS SETTINGS TAB
-   Clean sanctuary configuration list with platform icons, URL inputs,
-   and interactive Visible/Invisible toggles
+   Unified Kerala Ayurveda Botanical Design matching General tab grid
    ========================================================================== */
 
 .social-links-pane {
@@ -10,109 +9,31 @@
   width: 100%;
 }
 
-/* 1. Table Section */
-.social-table-section {
-  width: 100%;
+.social-field-row {
+  transition: opacity 0.2s ease;
 }
 
-.social-table-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 16px;
+.social-field-row.is-channel-hidden {
+  opacity: 0.62;
 }
 
-.social-table-count {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text-secondary, #485E53);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.social-field-row.is-channel-hidden:hover {
+  opacity: 0.88;
 }
 
-[data-theme='dark'] .social-table-count,
-.dark .social-table-count {
-  color: var(--text-secondary, #9FBEAF);
-}
-
-.social-table-info {
-  font-size: 12px;
-  color: var(--text-light, #7E9387);
-}
-
-.social-table-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-/* 2. Row Card */
-.social-row-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 16px;
-  background-color: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 12px;
-  transition: all 0.22s ease;
-}
-
-[data-theme='dark'] .social-row-card,
-.dark .social-row-card {
-  background-color: var(--surface-secondary, #14281F);
-  border-color: var(--border-color, #1F3C30);
-}
-
-.social-row-card:hover {
-  border-color: var(--primary-green-light, #2A8566);
-  box-shadow: 0 2px 10px rgba(18, 76, 56, 0.04);
-}
-
-/* Dim row slightly when channel is marked hidden */
-.social-row-card.is-channel-hidden {
-  opacity: 0.72;
-  border-style: dashed;
-  background-color: var(--surface-secondary, #F9FAF8);
-}
-
-[data-theme='dark'] .social-row-card.is-channel-hidden,
-.dark .social-row-card.is-channel-hidden {
-  background-color: rgba(13, 28, 21, 0.5);
-  opacity: 0.65;
-}
-
-.social-row-platform {
-  display: flex;
+/* Platform label cell with icon pill and title */
+.social-platform-label {
+  display: inline-flex;
   align-items: center;
   gap: 12px;
-  width: 155px;
-  flex-shrink: 0;
 }
 
-@media (max-width: 680px) {
-  .social-row-card {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .social-row-platform {
-    width: 100%;
-  }
-
-  .social-row-actions {
-    justify-content: flex-end;
-  }
-}
-
-.social-row-icon-pill {
+.social-platform-icon-pill {
   width: 36px;
   height: 36px;
   border-radius: 9px;
   background-color: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
   color: var(--primary-green, #1B6B50);
   display: flex;
   align-items: center;
@@ -121,116 +42,90 @@
   transition: all 0.2s ease;
 }
 
-[data-theme='dark'] .social-row-icon-pill,
-.dark .social-row-icon-pill {
-  background-color: var(--surface-color, #0D1C15);
+[data-theme='dark'] .social-platform-icon-pill,
+.dark .social-platform-icon-pill {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
   color: var(--primary-green-light, #41BA91);
 }
 
-.social-row-name {
+.social-platform-name {
+  font-family: var(--font-brand, 'Trebuchet MS', sans-serif);
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary, #14241C);
+  letter-spacing: -0.01em;
 }
 
-[data-theme='dark'] .social-row-name,
-.dark .social-row-name {
+[data-theme='dark'] .social-platform-name,
+.dark .social-platform-name {
   color: var(--text-primary, #F2F7F4);
 }
 
-.social-row-input-field {
+/* Control cell with modern input and visibility toggle */
+.social-field-control {
+  width: 100%;
+}
+
+.social-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.social-url-input-group {
   flex: 1;
   min-width: 0;
 }
 
-.social-row-text {
-  width: 100%;
-  height: 38px;
-  padding: 0 14px;
-  background-color: var(--surface-secondary, #F8FAF7);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 8px;
-  font-size: 13.5px;
-  color: var(--text-primary, #14241C);
-  outline: none;
-  font-family: inherit;
-  box-sizing: border-box;
-  transition: all 0.18s ease;
-}
-
-[data-theme='dark'] .social-row-text,
-.dark .social-row-text {
-  background-color: var(--surface-color, #102018);
-  border-color: var(--border-color, #1F3C30);
-  color: var(--text-primary, #F2F7F4);
-}
-
-.social-row-text::placeholder {
-  color: var(--text-light, #9EABA3);
-  font-size: 12.5px;
-}
-
-.social-row-text:focus {
-  background-color: var(--surface-color, #FFFFFF);
-  border-color: var(--primary-green, #1B6B50);
-  box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.12);
-}
-
-[data-theme='dark'] .social-row-text:focus {
-  background-color: var(--surface-secondary, #14281F);
-}
-
-/* 3. Actions Row */
-.social-row-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-shrink: 0;
-}
-
-/* Visibility Toggle Button (Eye / EyeOff) */
+/* Visibility Toggle Button */
 .social-visibility-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 8px;
-  font-size: 12px;
+  height: 42px;
+  min-width: 96px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   border: 1px solid transparent;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  font-family: inherit;
+  font-family: var(--font-brand, sans-serif);
   user-select: none;
+  flex-shrink: 0;
 }
 
-/* Visible State: Emerald/Herbal subtle pill */
+/* Visible State: Emerald herbal subtle pill */
 .social-visibility-toggle.is-visible {
-  background-color: rgba(27, 107, 80, 0.08);
-  border-color: rgba(27, 107, 80, 0.2);
+  background-color: var(--primary-green-tint, #EDF6F1);
+  border-color: rgba(27, 107, 80, 0.25);
   color: var(--primary-green, #1B6B50);
 }
 
 [data-theme='dark'] .social-visibility-toggle.is-visible,
 .dark .social-visibility-toggle.is-visible {
-  background-color: rgba(65, 186, 145, 0.12);
-  border-color: rgba(65, 186, 145, 0.25);
+  background-color: rgba(46, 157, 119, 0.16);
+  border-color: rgba(65, 186, 145, 0.3);
   color: var(--primary-green-light, #41BA91);
 }
 
 .social-visibility-toggle.is-visible:hover {
-  background-color: rgba(27, 107, 80, 0.16);
+  background-color: rgba(27, 107, 80, 0.22);
   border-color: var(--primary-green, #1B6B50);
   transform: translateY(-1px);
 }
 
 [data-theme='dark'] .social-visibility-toggle.is-visible:hover,
 .dark .social-visibility-toggle.is-visible:hover {
-  background-color: rgba(65, 186, 145, 0.22);
+  background-color: rgba(65, 186, 145, 0.25);
+  border-color: var(--primary-green-light, #41BA91);
 }
 
-/* Hidden / Invisible State: Neutral/Slate muted pill */
+/* Hidden State: Subtle slate neutral pill */
 .social-visibility-toggle.is-hidden {
   background-color: var(--surface-secondary, #F1F4F0);
   border-color: var(--border-color, #E2E8DE);
@@ -239,24 +134,43 @@
 
 [data-theme='dark'] .social-visibility-toggle.is-hidden,
 .dark .social-visibility-toggle.is-hidden {
-  background-color: var(--surface-color, #0D1C15);
+  background-color: var(--surface-secondary, #172D24);
   border-color: var(--border-color, #1F3C30);
-  color: var(--text-light, #6C8578);
+  color: var(--text-light, #709483);
 }
 
 .social-visibility-toggle.is-hidden:hover {
   background-color: var(--border-color, #E2E8DE);
   color: var(--text-primary, #14241C);
+  border-color: var(--border-color-hover, #CCD6C6);
   transform: translateY(-1px);
 }
 
 [data-theme='dark'] .social-visibility-toggle.is-hidden:hover,
 .dark .social-visibility-toggle.is-hidden:hover {
-  background-color: var(--surface-secondary, #152920);
+  background-color: #1F3C30;
   color: var(--text-primary, #F2F7F4);
+  border-color: var(--border-color-hover, #2D5846);
+}
+
+.visibility-toggle-icon {
+  flex-shrink: 0;
 }
 
 .visibility-toggle-text {
-  font-size: 11.5px;
-  letter-spacing: 0.02em;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 680px) {
+  .social-input-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .social-visibility-toggle {
+    width: 100%;
+    height: 38px;
+  }
 }

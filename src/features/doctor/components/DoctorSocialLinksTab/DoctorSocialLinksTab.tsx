@@ -144,75 +144,70 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
 
         <div className="settings-divider-rule" />
 
-        {/* Channels Configuration Table */}
-        <div className="social-table-section">
-          <div className="social-table-bar">
-            <span className="social-table-count">
-              Sanctuary Channels ({SUPPORTED_PLATFORMS.length})
-            </span>
-            <span className="social-table-info">
-              Use the Visible/Hidden button on each channel to control its appearance on the customer website.
-            </span>
-          </div>
+        {/* Clean row-by-row layout matching Sanctuary Settings standard */}
+        <form onSubmit={handleSave} className="settings-fields-stack">
+          {SUPPORTED_PLATFORMS.map((platform) => {
+            const currentVal = platformValues[platform.id]?.url || '';
+            const isVisible = platformValues[platform.id]?.isVisible ?? true;
 
-          <form onSubmit={handleSave} className="social-table-list">
-            {SUPPORTED_PLATFORMS.map((platform) => {
-              const currentVal = platformValues[platform.id]?.url || '';
-              const isVisible = platformValues[platform.id]?.isVisible ?? true;
-
-              return (
-                <div
-                  key={platform.id}
-                  className={`social-row-card ${!isVisible ? 'is-channel-hidden' : ''}`}
-                >
-                  {/* Platform Indicator */}
-                  <div className="social-row-platform">
-                    <span className="social-row-icon-pill">
-                      <SocialPlatformIcon platform={platform.id} size={16} />
+            return (
+              <div
+                key={platform.id}
+                className={`settings-field-row social-field-row ${!isVisible ? 'is-channel-hidden' : ''}`}
+              >
+                {/* Platform Label with Icon & Name */}
+                <div className="field-label-cell">
+                  <div className="social-platform-label">
+                    <span className="social-platform-icon-pill">
+                      <SocialPlatformIcon platform={platform.id} size={17} />
                     </span>
-                    <span className="social-row-name">{platform.label}</span>
+                    <span className="social-platform-name">{platform.label}</span>
                   </div>
+                </div>
 
-                  {/* Editable URL Input */}
-                  <div className="social-row-input-field">
-                    <input
-                      type="url"
-                      className="social-row-text"
-                      value={currentVal}
-                      onChange={(e) => handleUrlChange(platform.id, e.target.value)}
-                      placeholder={platform.placeholder}
-                      aria-label={`${platform.label} URL`}
-                    />
-                  </div>
+                {/* URL Input & Visibility Toggle */}
+                <div className="field-control-cell social-field-control">
+                  <div className="social-input-row">
+                    <div className="modern-input-group social-url-input-group">
+                      <input
+                        type="url"
+                        className="input-group-text"
+                        value={currentVal}
+                        onChange={(e) => handleUrlChange(platform.id, e.target.value)}
+                        placeholder={platform.placeholder}
+                        aria-label={`${platform.label} URL`}
+                      />
+                    </div>
 
-                  {/* Visibility Toggle Button & Test Link */}
-                  <div className="social-row-actions">
-                    {/* Visibility Toggle Button */}
                     <button
                       type="button"
                       className={`social-visibility-toggle ${isVisible ? 'is-visible' : 'is-hidden'}`}
                       onClick={() => handleToggleVisibility(platform.id)}
-                      title={isVisible ? 'Visible on website (Click to hide)' : 'Hidden from website (Click to show)'}
+                      title={
+                        isVisible
+                          ? 'Visible on customer website (Click to hide)'
+                          : 'Hidden from customer website (Click to show)'
+                      }
                       aria-label={`Toggle visibility for ${platform.label}`}
                     >
                       {isVisible ? (
                         <>
-                          <Eye size={14} />
+                          <Eye size={14} className="visibility-toggle-icon" />
                           <span className="visibility-toggle-text">Visible</span>
                         </>
                       ) : (
                         <>
-                          <EyeOff size={14} />
+                          <EyeOff size={14} className="visibility-toggle-icon" />
                           <span className="visibility-toggle-text">Hidden</span>
                         </>
                       )}
                     </button>
                   </div>
                 </div>
-              );
-            })}
-          </form>
-        </div>
+              </div>
+            );
+          })}
+        </form>
       </div>
     );
   }
