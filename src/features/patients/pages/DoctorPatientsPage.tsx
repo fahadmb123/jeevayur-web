@@ -1,13 +1,15 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import { Users, Activity, Stethoscope, CheckCircle2 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { DoctorSearchFilterStrip, type FilterSelectConfig, type FilterPillConfig } from '@/shared/ui/DoctorSearchFilterStrip';
 import { PatientListItem } from '../components/PatientListItem';
+import { PatientListItemSkeleton, PatientStatsSkeleton } from '../components/PatientListItemSkeleton';
 import { usePatients } from '../hooks/usePatients';
 import type { PatientFilterOption } from '../components/PatientFilterTabs';
 import './DoctorPatientsPage.css';
 
 export const DoctorPatientsPage: React.FC = React.memo(() => {
-  const { patients } = usePatients();
+  const { patients, loading } = usePatients();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
@@ -106,7 +108,52 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content">
-      {/* Yoga-style Search & Filter Strip */}
+      {loading ? (
+        <PatientStatsSkeleton />
+      ) : (
+        <div className="doctor-patient-stats-grid">
+          <div className="doctor-patient-stat-card">
+            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--total">
+              <Users size={22} />
+            </div>
+            <div className="doctor-patient-stat-card__info">
+              <span className="doctor-patient-stat-card__label">Total Patients</span>
+              <strong className="doctor-patient-stat-card__value">{counts.All}</strong>
+            </div>
+          </div>
+
+          <div className="doctor-patient-stat-card">
+            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--treatment">
+              <Activity size={22} />
+            </div>
+            <div className="doctor-patient-stat-card__info">
+              <span className="doctor-patient-stat-card__label">In Treatment</span>
+              <strong className="doctor-patient-stat-card__value text-primary-green">{counts['In treatment']}</strong>
+            </div>
+          </div>
+
+          <div className="doctor-patient-stat-card">
+            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--consult">
+              <Stethoscope size={22} />
+            </div>
+            <div className="doctor-patient-stat-card__info">
+              <span className="doctor-patient-stat-card__label">Consultation</span>
+              <strong className="doctor-patient-stat-card__value text-amber">{counts.Consultation}</strong>
+            </div>
+          </div>
+
+          <div className="doctor-patient-stat-card">
+            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--recovered">
+              <CheckCircle2 size={22} />
+            </div>
+            <div className="doctor-patient-stat-card__info">
+              <span className="doctor-patient-stat-card__label">Recovered</span>
+              <strong className="doctor-patient-stat-card__value text-green">{counts.Recovered}</strong>
+            </div>
+          </div>
+        </div>
+      )}
+
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patients by name, condition, or contact..."
         searchValue={searchQuery}
@@ -119,7 +166,9 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
 
       <Card className="doctor-patients-card">
         <div className="doctor-patients-list">
-          {filteredPatients.length > 0 ? (
+          {loading ? (
+            <PatientListItemSkeleton count={6} />
+          ) : filteredPatients.length > 0 ? (
             filteredPatients.map((patient, index) => (
               <PatientListItem key={patient.id} patient={patient} index={index} />
             ))

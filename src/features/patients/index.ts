@@ -2,6 +2,7 @@ export * from './types';
 export * from './services/patientService';
 export * from './hooks/usePatients';
 export * from './components/PatientListItem';
+export * from './components/PatientListItemSkeleton';
 export * from './components/PatientFilterTabs';
 export * from './components/SearchPatientsInput';
 export * from './components/AddPatientModal';
