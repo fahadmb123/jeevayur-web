@@ -3,6 +3,7 @@ import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { CheckCircle2, User, Bell, Shield, Clock } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { DoctorSessionsCard } from '../components/DoctorSessionsCard';
 import type { DoctorProfile } from '../types';
 import './DoctorSettingsPage.css';
 
@@ -28,8 +29,9 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content">
-      <form onSubmit={handleSave} className="doctor-settings-grid">
-            <Card className="settings-section-card">
+      <div className="doctor-settings-grid">
+        <form onSubmit={handleSave} className="doctor-settings-form">
+          <Card className="settings-section-card">
               <div className="settings-section-header">
                 <User size={20} className="settings-icon" />
                 <div>
@@ -139,7 +141,10 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
               </Button>
             </div>
           </form>
+
+          <DoctorSessionsCard />
         </div>
+      </div>
   );
 });
 
