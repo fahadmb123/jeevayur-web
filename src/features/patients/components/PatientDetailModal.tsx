@@ -1,15 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   X,
   Phone,
   Mail,
-  Calendar,
   User,
-  Activity,
-  Leaf,
-  FileText,
   Stethoscope,
+  ExternalLink,
 } from 'lucide-react';
 import { StatusPill } from '@/shared/ui/status-pill';
 import type { Patient } from '../types';
@@ -23,6 +20,47 @@ export interface PatientDetailModalProps {
   onStartConsultation?: (patient: Patient) => void;
 }
 
+function parsePatientCondition(rawCondition?: string) {
+  if (!rawCondition) {
+    return {
+      serviceType: null,
+      format: null,
+      reason: null,
+    };
+  }
+
+  const match = rawCondition.match(/^([^()]+)\s*\(([^)]+)\)\s*:\s*(.*)$/i);
+  if (match) {
+    const rawType = match[1].trim();
+    const rawFormat = match[2].trim();
+    const rawReason = match[3].trim();
+
+    const formatLabel =
+      rawFormat.toLowerCase() === 'online'
+        ? 'Online (Video Consultation)'
+        : rawFormat.toLowerCase() === 'offline'
+        ? 'Offline (In-Clinic Consultation)'
+        : rawFormat.charAt(0).toUpperCase() + rawFormat.slice(1);
+
+    const typeLabel = rawType
+      .split(' ')
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(' ');
+
+    return {
+      serviceType: typeLabel,
+      format: formatLabel,
+      reason: rawReason,
+    };
+  }
+
+  return {
+    serviceType: null,
+    format: null,
+    reason: rawCondition,
+  };
+}
+
 export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(({
   patient,
   isOpen,
@@ -31,6 +69,10 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
   onStartConsultation,
 }) => {
   const isRecovered = patient?.status === 'Recovered';
+
+  const parsedCondition = useMemo(() => {
+    return parsePatientCondition(patient?.condition);
+  }, [patient?.condition]);
 
   if (!isOpen) return null;
 
@@ -52,13 +94,10 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
             <div className="patient-modal-skeleton-wrapper" role="status" aria-label="Loading patient details">
               <div className="patient-detail-modal__header">
                 <div className="patient-detail-modal__profile">
-                  <div className="patient-skeleton-box patient-modal-skeleton-avatar" />
+                  <div className="patient-skeleton-box patient-detail-modal__avatar" />
                   <div className="patient-detail-modal__name-group">
-                    <div className="patient-detail-modal__name-row">
-                      <div className="patient-skeleton-box patient-modal-skeleton-title" />
-                      <div className="patient-skeleton-box patient-modal-skeleton-pill" />
-                    </div>
-                    <div className="patient-skeleton-box patient-modal-skeleton-sub" />
+                    <div className="patient-skeleton-box patient-skeleton-header-title" />
+                    <div className="patient-skeleton-box patient-skeleton-header-sub" />
                   </div>
                 </div>
                 <button
@@ -71,26 +110,33 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
               </div>
 
               <div className="patient-detail-modal__body">
-                <div className="patient-detail-modal__contact-grid">
-                  <div className="patient-skeleton-box patient-modal-skeleton-contact" />
-                  <div className="patient-skeleton-box patient-modal-skeleton-contact" />
-                  <div className="patient-skeleton-box patient-modal-skeleton-contact" />
+                <div className="patient-detail-group">
+                  <div className="patient-skeleton-box patient-skeleton-group-title" />
+                  <div className="patient-detail-table">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="patient-detail-row">
+                        <div className="patient-skeleton-box patient-skeleton-row-label" />
+                        <div className="patient-skeleton-box patient-skeleton-row-value" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="patient-detail-modal__section">
-                  <div className="patient-skeleton-box patient-modal-skeleton-title-sm" />
-                  <div className="patient-skeleton-box patient-modal-skeleton-card" />
-                </div>
-
-                <div className="patient-detail-modal__section">
-                  <div className="patient-skeleton-box patient-modal-skeleton-title-sm" />
-                  <div className="patient-skeleton-box patient-modal-skeleton-card" />
+                <div className="patient-detail-group">
+                  <div className="patient-skeleton-box patient-skeleton-group-title" />
+                  <div className="patient-detail-table">
+                    {Array.from({ length: 4 }).map((_, i) => (
+                      <div key={i} className="patient-detail-row">
+                        <div className="patient-skeleton-box patient-skeleton-row-label" />
+                        <div className="patient-skeleton-box patient-skeleton-row-value" />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <div className="patient-detail-modal__footer">
-                <div className="patient-skeleton-box patient-modal-skeleton-btn" />
-                <div className="patient-skeleton-box patient-modal-skeleton-btn" />
+                <div className="patient-skeleton-box patient-skeleton-btn" />
               </div>
             </div>
           ) : patient ? (
@@ -108,8 +154,8 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                         variant={isRecovered ? 'success' : 'pending'}
                       />
                     </div>
-                    <span className="patient-detail-modal__id">
-                      Patient Record #{String(patient.id).slice(-8)} • Last Visit: {patient.lastVisit}
+                    <span className="patient-detail-modal__sub">
+                      Patient Record #{String(patient.id).slice(-8)} • {patient.lastVisit}
                     </span>
                   </div>
                 </div>
@@ -123,115 +169,119 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
               </div>
 
               <div className="patient-detail-modal__body">
-                <div className="patient-detail-modal__contact-grid">
-                  {patient.phone ? (
-                    <a
-                      href={`tel:${patient.phone}`}
-                      className="patient-detail-modal__contact-card patient-detail-modal__contact-card--interactive"
-                    >
-                      <div className="patient-detail-modal__contact-icon">
-                        <Phone size={16} />
-                      </div>
-                      <div className="patient-detail-modal__contact-meta">
-                        <span className="patient-detail-modal__contact-label">Phone Number</span>
-                        <span className="patient-detail-modal__contact-val">{patient.phone}</span>
-                      </div>
-                    </a>
-                  ) : (
-                    <div className="patient-detail-modal__contact-card">
-                      <div className="patient-detail-modal__contact-icon">
-                        <Phone size={16} />
-                      </div>
-                      <div className="patient-detail-modal__contact-meta">
-                        <span className="patient-detail-modal__contact-label">Phone Number</span>
-                        <span className="patient-detail-modal__contact-val">Not provided</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {patient.email ? (
-                    <a
-                      href={`mailto:${patient.email}`}
-                      className="patient-detail-modal__contact-card patient-detail-modal__contact-card--interactive"
-                    >
-                      <div className="patient-detail-modal__contact-icon">
-                        <Mail size={16} />
-                      </div>
-                      <div className="patient-detail-modal__contact-meta">
-                        <span className="patient-detail-modal__contact-label">Email Address</span>
-                        <span className="patient-detail-modal__contact-val">{patient.email}</span>
-                      </div>
-                    </a>
-                  ) : (
-                    <div className="patient-detail-modal__contact-card">
-                      <div className="patient-detail-modal__contact-icon">
-                        <Mail size={16} />
-                      </div>
-                      <div className="patient-detail-modal__contact-meta">
-                        <span className="patient-detail-modal__contact-label">Email Address</span>
-                        <span className="patient-detail-modal__contact-val">Not provided</span>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="patient-detail-modal__contact-card">
-                    <div className="patient-detail-modal__contact-icon">
-                      <User size={16} />
-                    </div>
-                    <div className="patient-detail-modal__contact-meta">
-                      <span className="patient-detail-modal__contact-label">Demographics</span>
-                      <span className="patient-detail-modal__contact-val">
-                        {patient.age} yrs • {patient.gender || 'General'}
-                      </span>
-                    </div>
+                <div className="patient-detail-group">
+                  <div className="patient-detail-group__header">
+                    <User size={14} />
+                    <span>Personal & Contact Information</span>
                   </div>
-                </div>
+                  <div className="patient-detail-table">
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">Full Name</div>
+                      <div className="patient-detail-value">{patient.name}</div>
+                    </div>
 
-                <div className="patient-detail-modal__section">
-                  <h4 className="patient-detail-modal__section-title">
-                    <Activity size={16} /> Clinical Diagnosis & Condition
-                  </h4>
-                  <div className="patient-detail-modal__card">
-                    <div className="patient-detail-modal__clinical-grid">
-                      <div className="patient-detail-modal__clinical-item">
-                        <span className="patient-detail-modal__item-label">Primary Diagnosis</span>
-                        <span className="patient-detail-modal__item-value text-primary-green">
-                          {patient.condition || 'General Ayurveda Assessment'}
-                        </span>
+                    {patient.phone ? (
+                      <a
+                        href={`tel:${patient.phone}`}
+                        className="patient-detail-row patient-detail-row--interactive"
+                        title={`Call ${patient.phone}`}
+                      >
+                        <div className="patient-detail-label">
+                          <Phone size={13} />
+                          <span>Phone Number</span>
+                        </div>
+                        <div className="patient-detail-value">
+                          <span>{patient.phone}</span>
+                          <ExternalLink size={13} className="patient-detail-link-icon" />
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="patient-detail-row">
+                        <div className="patient-detail-label">Phone Number</div>
+                        <div className="patient-detail-value">Not provided</div>
                       </div>
-                      <div className="patient-detail-modal__clinical-item">
-                        <span className="patient-detail-modal__item-label">Dosha Profile</span>
-                        <span className="patient-detail-modal__badge">
-                          <Leaf size={12} />
-                          Vata-Pitta Balance
-                        </span>
+                    )}
+
+                    {patient.email ? (
+                      <a
+                        href={`mailto:${patient.email}`}
+                        className="patient-detail-row patient-detail-row--interactive"
+                        title={`Email ${patient.email}`}
+                      >
+                        <div className="patient-detail-label">
+                          <Mail size={13} />
+                          <span>Email Address</span>
+                        </div>
+                        <div className="patient-detail-value">
+                          <span>{patient.email}</span>
+                          <ExternalLink size={13} className="patient-detail-link-icon" />
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="patient-detail-row">
+                        <div className="patient-detail-label">Email Address</div>
+                        <div className="patient-detail-value">Not provided</div>
                       </div>
-                      <div className="patient-detail-modal__clinical-item">
-                        <span className="patient-detail-modal__item-label">Current Phase</span>
-                        <span className="patient-detail-modal__item-value">
-                          {patient.status}
-                        </span>
-                      </div>
-                      <div className="patient-detail-modal__clinical-item">
-                        <span className="patient-detail-modal__item-label">Latest Checkup</span>
-                        <span className="patient-detail-modal__item-value">
-                          <Calendar size={13} style={{ display: 'inline', marginRight: 4 }} />
-                          {patient.lastVisit}
-                        </span>
+                    )}
+
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">Demographics</div>
+                      <div className="patient-detail-value">
+                        {patient.age} Years • {patient.gender || 'General'}
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="patient-detail-modal__section">
-                  <h4 className="patient-detail-modal__section-title">
-                    <FileText size={16} /> Physician Consultation Notes & Regimen
-                  </h4>
-                  <div className="patient-detail-modal__card">
-                    <p className="patient-detail-modal__notes-p">
-                      Patient is undergoing tailored classical Ayurvedic care for {patient.condition || 'health restoration'}.
-                      Recommended regimen includes daily herbal decoctions, therapeutic Abhyanga, and mindful Dinacharya practices.
-                    </p>
+                <div className="patient-detail-group">
+                  <div className="patient-detail-group__header">
+                    <Stethoscope size={14} />
+                    <span>Consultation & Clinical Details</span>
+                  </div>
+                  <div className="patient-detail-table">
+                    {parsedCondition.serviceType && (
+                      <div className="patient-detail-row">
+                        <div className="patient-detail-label">Treatment Type</div>
+                        <div className="patient-detail-value patient-detail-value--highlight">
+                          {parsedCondition.serviceType}
+                        </div>
+                      </div>
+                    )}
+
+                    {parsedCondition.format && (
+                      <div className="patient-detail-row">
+                        <div className="patient-detail-label">Format / Mode</div>
+                        <div className="patient-detail-value">
+                          {parsedCondition.format}
+                        </div>
+                      </div>
+                    )}
+
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">
+                        {parsedCondition.serviceType ? 'Chief Reason' : 'Primary Condition'}
+                      </div>
+                      <div className="patient-detail-value">
+                        {parsedCondition.reason || 'General Consultation'}
+                      </div>
+                    </div>
+
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">Care Status</div>
+                      <div className="patient-detail-value">
+                        <StatusPill
+                          status={patient.status}
+                          variant={isRecovered ? 'success' : 'pending'}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">Latest Activity</div>
+                      <div className="patient-detail-value">
+                        {patient.lastVisit}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
