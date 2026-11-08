@@ -54,18 +54,15 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [sessionCount, setSessionCount] = useState<number>(1);
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // Social Links management state
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [isSavingSocial, setIsSavingSocial] = useState(false);
   const [savedSocial, setSavedSocial] = useState(false);
   const [socialSaveError, setSocialSaveError] = useState<string | null>(null);
 
-  // Profile management state
   const [generalError, setGeneralError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  // Initialize profile with current user info
   const [profile, setProfile] = useState<DoctorProfile>(() => ({
     name: user?.name || '',
     username: '',
@@ -82,7 +79,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     weeklySummary: true,
   }));
 
-  // Detect whether any general profile input box has been modified from saved values
   const isDirty = useMemo(() => {
     const curName = profile.name.trim();
     const curEmail = profile.email.trim();
@@ -98,7 +94,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const isDirtyRef = useRef(false);
   isDirtyRef.current = isDirty;
 
-  // When user data is fetched or updated, sync form state if pristine
   useEffect(() => {
     if (user && !isDirtyRef.current) {
       setProfile((prev) => ({
@@ -110,7 +105,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     }
   }, [user]);
 
-  // Fetch session count for subnavbar badge (matches "Account 12" badge in reference)
   useEffect(() => {
     let isMounted = true;
     authService
@@ -120,15 +114,12 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
           setSessionCount(sessions.length || 1);
         }
       })
-      .catch(() => {
-        // Fallback default
-      });
+      .catch(() => {});
     return () => {
       isMounted = false;
     };
   }, []);
 
-  // Fetch dynamic social links on mount (including inactive ones for settings editing)
   useEffect(() => {
     let isMounted = true;
     socialLinksService
@@ -163,7 +154,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     }
   }, []);
 
-  // Save changes handler for General Profile
   const handleSaveGeneral = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -178,7 +168,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
           phone: profile.phone ? profile.phone.trim() : null,
         });
 
-        // Update react-query cache so user data immediately synchronizes across UI
         queryClient.setQueryData(AUTH_QUERY_KEY, updatedUser);
 
         setSaved(true);
@@ -277,10 +266,8 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
           </div>
         </nav>
 
-        {/* 3. Section Content Pane */}
         {activeTab === 'profile' && (
           <form onSubmit={handleSaveGeneral} className="settings-tab-pane">
-            {/* Section Header: Title + Subtitle on Left, Info Tooltip + Save Button on Right */}
             <div className="settings-pane-header">
               <div className="pane-header-titles">
                 <h2 className="pane-title">Your Profile</h2>
@@ -288,7 +275,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
               </div>
 
               <div className="pane-header-actions">
-                {/* Tooltip trigger & popover matching reference */}
                 <div
                   className="tooltip-container"
                   onMouseEnter={() => setShowTooltip(true)}
@@ -338,12 +324,9 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
               </div>
             </div>
 
-            {/* Subtle Divider Line */}
             <div className="settings-divider-rule" />
 
-            {/* Row-by-Row Form Fields */}
             <div className="settings-fields-stack">
-              {/* Row 1: Name */}
               <div className="settings-field-row">
                 <div className="field-label-cell">
                   <label htmlFor="name">Name</label>
@@ -365,7 +348,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              {/* Row 2: Official Email */}
               <div className="settings-field-row">
                 <div className="field-label-cell">
                   <label htmlFor="email">Official Email</label>
@@ -387,7 +369,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              {/* Row 3: Phone Number */}
               <div className="settings-field-row">
                 <div className="field-label-cell">
                   <label htmlFor="phone">Phone Number</label>
