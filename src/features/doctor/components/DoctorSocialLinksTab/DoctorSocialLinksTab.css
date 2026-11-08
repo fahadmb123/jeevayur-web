@@ -162,6 +162,40 @@
   letter-spacing: 0.01em;
 }
 
+/* Error badge feedback */
+.social-error-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #DC2626;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 7px 16px;
+  border-radius: 8px;
+}
+
+[data-theme='dark'] .social-error-badge,
+.dark .social-error-badge {
+  color: #F87171;
+  background-color: rgba(239, 68, 68, 0.18);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.social-spin-icon {
+  animation: socialSpin 0.9s linear infinite;
+}
+
+@keyframes socialSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 680px) {
   .social-input-row {
     flex-direction: column;

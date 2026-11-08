@@ -1,8 +1,16 @@
+import { apiClient } from '@/shared/lib/api/apiClient';
+
 export interface SocialLink {
   id: string;
   platform: string;
   url: string;
   isVisible?: boolean;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  message?: string;
+  data: T;
 }
 
 export const socialLinksService = {
@@ -12,19 +20,10 @@ export const socialLinksService = {
    */
   async getSocialLinks(all = false): Promise<SocialLink[]> {
     try {
-      const url = `/api/social-links${all ? '?all=true' : ''}`;
-      const res = await fetch(url, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!res.ok) {
-        throw new Error(`Failed to fetch social links: ${res.status}`);
-      }
-
-      const json = await res.json();
-      return json.data || [];
+      const response = await apiClient.get<ApiResponse<SocialLink[]>>(
+        `/api/social-links${all ? '?all=true' : ''}`
+      );
+      return response.data || [];
     } catch (error) {
       console.warn('[socialLinksService] Using fallback links:', error);
       return [
@@ -40,58 +39,28 @@ export const socialLinksService = {
    * Bulk save or update social links (for Doctor Settings management)
    */
   async bulkSaveSocialLinks(links: SocialLink[]): Promise<SocialLink[]> {
-    const res = await fetch('/api/social-links', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ links }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || `Failed to save social links: ${res.status}`);
-    }
-
-    const json = await res.json();
-    return json.data || [];
+    const response = await apiClient.put<ApiResponse<SocialLink[]>, { links: SocialLink[] }>(
+      '/api/social-links',
+      { links }
+    );
+    return response.data || [];
   },
 
   /**
    * Create a single social link
    */
   async createSocialLink(platform: string, url: string, isVisible = true): Promise<SocialLink> {
-    const res = await fetch('/api/social-links', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      body: JSON.stringify({ platform, url, isVisible }),
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Failed to create social link');
-    }
-
-    const json = await res.json();
-    return json.data;
+    const response = await apiClient.post<ApiResponse<SocialLink>, { platform: string; url: string; isVisible: boolean }>(
+      '/api/social-links',
+      { platform, url, isVisible }
+    );
+    return response.data;
   },
 
   /**
    * Delete a single social link by ID
    */
   async deleteSocialLink(id: string): Promise<void> {
-    const res = await fetch(`/api/social-links/${encodeURIComponent(id)}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.message || 'Failed to delete social link');
-    }
+    await apiClient.delete<ApiResponse<void>>(`/api/social-links/${encodeURIComponent(id)}`);
   },
 };

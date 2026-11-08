@@ -4,6 +4,8 @@ import {
   CheckCircle2,
   Eye,
   EyeOff,
+  AlertCircle,
+  Loader2,
 } from 'lucide-react';
 import { SocialPlatformIcon } from '@/shared/ui/SocialPlatformIcon';
 import type { SocialLink } from '@/shared/services/socialLinksService';
@@ -14,6 +16,7 @@ interface Props {
   onSave: (links: SocialLink[]) => Promise<void>;
   isSaving: boolean;
   saved: boolean;
+  errorMessage?: string | null;
 }
 
 interface PlatformDefinition {
@@ -39,7 +42,7 @@ interface PlatformState {
 }
 
 export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
-  ({ links, onSave, isSaving, saved }) => {
+  ({ links, onSave, isSaving, saved, errorMessage }) => {
     // Map existing links by platform for fast lookup
     const buildPlatformMap = useCallback((items: SocialLink[]) => {
       const map: Record<string, PlatformState> = {};
@@ -124,6 +127,11 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
           </div>
 
           <div className="pane-header-actions">
+            {errorMessage && (
+              <span className="social-error-badge">
+                <AlertCircle size={14} /> {errorMessage}
+              </span>
+            )}
             {saved ? (
               <span className="saved-status-badge">
                 <CheckCircle2 size={14} /> Saved to Sanctuary
@@ -135,7 +143,7 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
                 onClick={handleSave}
                 className="btn-primary-action"
               >
-                <Check size={14} />
+                {isSaving ? <Loader2 size={14} className="social-spin-icon" /> : <Check size={14} />}
                 <span>{isSaving ? 'Saving Changes...' : 'Save Social Links'}</span>
               </button>
             )}

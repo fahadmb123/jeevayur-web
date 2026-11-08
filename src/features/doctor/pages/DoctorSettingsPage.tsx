@@ -56,6 +56,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
   const [isSavingSocial, setIsSavingSocial] = useState(false);
   const [savedSocial, setSavedSocial] = useState(false);
+  const [socialSaveError, setSocialSaveError] = useState<string | null>(null);
 
   // Fetch session count for subnavbar badge (matches "Account 12" badge in reference)
   useEffect(() => {
@@ -95,13 +96,16 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
 
   const handleSaveSocialLinks = useCallback(async (updatedLinks: SocialLink[]) => {
     setIsSavingSocial(true);
+    setSocialSaveError(null);
     try {
       const saved = await socialLinksService.bulkSaveSocialLinks(updatedLinks);
       setSocialLinks(saved);
       setSavedSocial(true);
       setTimeout(() => setSavedSocial(false), 2500);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to save social links:', err);
+      const message = err instanceof Error ? err.message : 'Failed to save social links';
+      setSocialSaveError(message);
     } finally {
       setIsSavingSocial(false);
     }
@@ -624,6 +628,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
             onSave={handleSaveSocialLinks}
             isSaving={isSavingSocial}
             saved={savedSocial}
+            errorMessage={socialSaveError}
           />
         )}
 
