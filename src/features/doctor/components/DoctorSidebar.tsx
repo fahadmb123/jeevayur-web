@@ -8,11 +8,13 @@ import {
   Image as ImageIcon,
   PanelLeftClose,
   PanelLeftOpen,
+  LogOut,
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { useRequests } from '@/features/requests';
 import type { DoctorNavItem } from '../types';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import feviconImg from '@/assets/fevicon_rendered.png';
 import './DoctorSidebar.css';
@@ -47,7 +49,17 @@ export const useDoctorSidebar = () => {
 
 export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen, onToggle }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const { pendingCount } = useRequests();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+    } finally {
+      navigate(ROUTES.LOGIN);
+    }
+  }, [logout, navigate]);
 
   const clinicalItems = useMemo<DoctorNavItem[]>(
     () => [
@@ -194,7 +206,23 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
 
         <div className="doctor-sidebar__group doctor-sidebar__group--bottom">
           {isOpen && <span className="doctor-sidebar__group-title">Preferences</span>}
-          <div className="doctor-sidebar__group-list">{systemItems.map(renderNavItem)}</div>
+          <div className="doctor-sidebar__group-list">
+            {systemItems.map(renderNavItem)}
+            <button
+              type="button"
+              className={`doctor-sidebar__item doctor-sidebar__item--logout ${
+                !isOpen ? 'doctor-sidebar__item--collapsed' : ''
+              }`}
+              onClick={handleLogout}
+              title={!isOpen ? 'Sign Out' : undefined}
+              aria-label="Sign Out"
+            >
+              <div className="doctor-sidebar__item-icon">
+                <LogOut size={19} strokeWidth={1.85} />
+              </div>
+              {isOpen && <span className="doctor-sidebar__item-text">Sign Out</span>}
+            </button>
+          </div>
         </div>
       </nav>
     </aside>
