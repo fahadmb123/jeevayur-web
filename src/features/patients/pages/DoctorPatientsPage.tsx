@@ -4,7 +4,9 @@ import { Card } from '@/shared/ui/card';
 import { DoctorSearchFilterStrip, type FilterSelectConfig, type FilterPillConfig } from '@/shared/ui/DoctorSearchFilterStrip';
 import { PatientListItem } from '../components/PatientListItem';
 import { PatientListItemSkeleton, PatientStatsSkeleton } from '../components/PatientListItemSkeleton';
+import { PatientDetailModal } from '../components/PatientDetailModal';
 import { usePatients } from '../hooks/usePatients';
+import type { Patient } from '../types';
 import type { PatientFilterOption } from '../components/PatientFilterTabs';
 import './DoctorPatientsPage.css';
 
@@ -14,11 +16,22 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
   const [selectedGender, setSelectedGender] = useState('All');
+  const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
+  const [isDetailLoading, setIsDetailLoading] = useState(false);
 
   const handleReset = useCallback(() => {
     setSearchQuery('');
     setActiveStatus('All');
     setSelectedGender('All');
+  }, []);
+
+  const handleViewDetails = useCallback((patient: Patient) => {
+    setDetailPatient(patient);
+    setIsDetailLoading(true);
+    const timer = setTimeout(() => {
+      setIsDetailLoading(false);
+    }, 300);
+    return () => clearTimeout(timer);
   }, []);
 
   const filteredPatients = useMemo(() => {
@@ -170,7 +183,12 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
             <PatientListItemSkeleton count={6} />
           ) : filteredPatients.length > 0 ? (
             filteredPatients.map((patient, index) => (
-              <PatientListItem key={patient.id} patient={patient} index={index} />
+              <PatientListItem
+                key={patient.id}
+                patient={patient}
+                index={index}
+                onViewDetails={handleViewDetails}
+              />
             ))
           ) : (
             <div className="doctor-patients-empty">
@@ -179,6 +197,13 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
           )}
         </div>
       </Card>
+
+      <PatientDetailModal
+        patient={detailPatient}
+        isOpen={Boolean(detailPatient)}
+        isLoading={isDetailLoading}
+        onClose={() => setDetailPatient(null)}
+      />
     </div>
   );
 });

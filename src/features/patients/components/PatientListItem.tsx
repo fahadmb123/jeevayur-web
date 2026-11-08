@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { MoreVertical } from 'lucide-react';
+import { MoreVertical, Eye } from 'lucide-react';
 import type { Patient } from '../types';
 import { Avatar } from '@/shared/ui/avatar';
 import { StatusPill } from '@/shared/ui/status-pill';
@@ -10,21 +10,32 @@ export interface PatientListItemProps {
   patient: Patient;
   index: number;
   onSelect?: (patient: Patient) => void;
+  onViewDetails?: (patient: Patient) => void;
 }
 
 export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
   patient,
   index,
   onSelect,
+  onViewDetails,
 }) => {
   const isRecovered = patient.status === 'Recovered';
+
+  const handleOpenDetails = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onViewDetails) {
+      onViewDetails(patient);
+    } else {
+      onSelect?.(patient);
+    }
+  };
 
   return (
     <motion.div
       className="patient-list-item"
       whileHover={{ scale: 1.01 }}
       transition={{ type: 'spring', stiffness: 400, damping: 10 }}
-      onClick={() => onSelect?.(patient)}
+      onClick={() => (onViewDetails ? onViewDetails(patient) : onSelect?.(patient))}
     >
       <div className="patient-list-item__info">
         <Avatar
@@ -38,6 +49,12 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
             <span>{patient.age} yrs</span>
             <span className="patient-list-item__dot">•</span>
             <span>{patient.lastVisit}</span>
+            {patient.condition && (
+              <>
+                <span className="patient-list-item__dot">•</span>
+                <span className="patient-list-item__condition-tag">{patient.condition}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
@@ -46,6 +63,14 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
           status={patient.status}
           variant={isRecovered ? 'success' : 'pending'}
         />
+        <button
+          className="patient-list-item__view-btn"
+          aria-label={`View full details for ${patient.name}`}
+          onClick={handleOpenDetails}
+        >
+          <Eye size={15} />
+          <span>View Details</span>
+        </button>
         <button
           className="patient-list-item__action-btn"
           aria-label={`Options for ${patient.name}`}

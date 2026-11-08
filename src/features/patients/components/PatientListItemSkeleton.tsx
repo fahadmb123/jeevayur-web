@@ -20,6 +20,7 @@ export const PatientListItemSkeleton: React.FC<PatientListItemSkeletonProps> = R
             </div>
             <div className="skeleton-patient-status-wrap">
               <div className="patient-skeleton-box skeleton-patient-pill" />
+              <div className="patient-skeleton-box skeleton-patient-view-btn" />
               <div className="patient-skeleton-box skeleton-patient-action" />
             </div>
           </div>
