@@ -16,6 +16,7 @@ import {
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import { useRequests } from '../hooks/useRequests';
 import { RequestCard } from '../components/RequestCard';
+import { RequestCardSkeleton, RequestStatsSkeleton } from '../components/RequestCardSkeleton';
 import { RequestDetailModal } from '../components/RequestDetailModal';
 import { RejectReasonModal } from '../components/RejectReasonModal';
 import type { PatientRequest, RequestFilterOption } from '../types';
@@ -215,7 +216,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content doctor-consult-page">
-      {/* Toast Notification */}
       {toastMessage && (
         <div className="doctor-consult-toast" role="alert">
           <Check size={18} className="doctor-consult-toast__icon" />
@@ -226,7 +226,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* Action Bar */}
       <div className="doctor-consult-actions-bar">
         <Link to={ROUTES.DOCTOR_PATIENTS} className="doctor-consult-patients-btn">
           <Users size={16} />
@@ -234,50 +233,52 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </Link>
       </div>
 
-      {/* Stats Summary Banner */}
-      <div className="doctor-consult-stats-grid">
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--total">
-            <Inbox size={22} />
+      {loading ? (
+        <RequestStatsSkeleton />
+      ) : (
+        <div className="doctor-consult-stats-grid">
+          <div className="doctor-consult-stat-card">
+            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--total">
+              <Inbox size={22} />
+            </div>
+            <div className="doctor-consult-stat-card__info">
+              <span className="doctor-consult-stat-card__label">Total Requests</span>
+              <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
+            </div>
           </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Total Requests</span>
-            <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
+
+          <div className="doctor-consult-stat-card doctor-consult-stat-card--highlight">
+            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--pending">
+              <Clock size={22} />
+            </div>
+            <div className="doctor-consult-stat-card__info">
+              <span className="doctor-consult-stat-card__label">Pending Review</span>
+              <strong className="doctor-consult-stat-card__value text-amber">{pendingCount}</strong>
+            </div>
+          </div>
+
+          <div className="doctor-consult-stat-card">
+            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--accepted">
+              <CheckCircle2 size={22} />
+            </div>
+            <div className="doctor-consult-stat-card__info">
+              <span className="doctor-consult-stat-card__label">Accepted & Enrolled</span>
+              <strong className="doctor-consult-stat-card__value text-green">{acceptedCount}</strong>
+            </div>
+          </div>
+
+          <div className="doctor-consult-stat-card">
+            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--rejected">
+              <XCircle size={22} />
+            </div>
+            <div className="doctor-consult-stat-card__info">
+              <span className="doctor-consult-stat-card__label">Declined</span>
+              <strong className="doctor-consult-stat-card__value">{rejectedCount}</strong>
+            </div>
           </div>
         </div>
+      )}
 
-        <div className="doctor-consult-stat-card doctor-consult-stat-card--highlight">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--pending">
-            <Clock size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Pending Review</span>
-            <strong className="doctor-consult-stat-card__value text-amber">{pendingCount}</strong>
-          </div>
-        </div>
-
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--accepted">
-            <CheckCircle2 size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Accepted & Enrolled</span>
-            <strong className="doctor-consult-stat-card__value text-green">{acceptedCount}</strong>
-          </div>
-        </div>
-
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--rejected">
-            <XCircle size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Declined</span>
-            <strong className="doctor-consult-stat-card__value">{rejectedCount}</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Yoga-style Search & Filter Strip */}
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patient by name, phone, symptoms, or service..."
         searchValue={localSearch}
@@ -288,12 +289,10 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         pills={pills}
       />
 
-      {/* Main Container Card */}
       <Card className="doctor-consult-card">
-        {/* Requests List */}
         <div className="doctor-consult-list">
           {loading ? (
-            <div className="doctor-consult-loading">Loading requests...</div>
+            <RequestCardSkeleton count={3} />
           ) : filteredRequests.length > 0 ? (
             filteredRequests.map((request, index) => (
               <RequestCard
@@ -320,7 +319,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </div>
       </Card>
 
-      {/* View Details Modal */}
       <RequestDetailModal
         request={detailRequest}
         isOpen={Boolean(detailRequest)}
@@ -330,7 +328,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         isProcessing={isProcessing}
       />
 
-      {/* Reject Reason Confirmation Modal */}
       <RejectReasonModal
         request={rejectingRequest}
         isOpen={Boolean(rejectingRequest)}
