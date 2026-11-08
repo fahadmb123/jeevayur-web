@@ -264,6 +264,23 @@
   flex: 1;
 }
 
+/* Sidebar Separation Line */
+.doctor-sidebar__divider {
+  height: 1px;
+  background-color: var(--border-color, #E2E8DE);
+  margin: 8px 6px;
+}
+
+[data-theme='dark'] .doctor-sidebar__divider,
+.dark .doctor-sidebar__divider {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.doctor-sidebar--collapsed .doctor-sidebar__divider {
+  margin: 8px auto;
+  width: 36px;
+}
+
 /* Sidebar Logout Item */
 .doctor-sidebar__item--logout {
   width: 100%;

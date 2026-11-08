@@ -155,7 +155,7 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
                 <div className="doctor-header__dropdown-user">
                   <strong className="doctor-header__dropdown-name">{doctorName}</strong>
                   <span className="doctor-header__dropdown-email">{doctorEmail}</span>
-                  <span className="doctor-header__dropdown-badge">Chief Physician</span>
+
                 </div>
               </div>
 
@@ -165,9 +165,8 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
               <div className="doctor-header__dropdown-section">
                 <Link
                   to={ROUTES.DOCTOR_SETTINGS}
-                  className={`doctor-header__dropdown-item ${
-                    location.pathname.startsWith(ROUTES.DOCTOR_SETTINGS) ? 'active' : ''
-                  }`}
+                  className={`doctor-header__dropdown-item ${location.pathname.startsWith(ROUTES.DOCTOR_SETTINGS) ? 'active' : ''
+                    }`}
                   role="menuitem"
                   onClick={() => setIsDropdownOpen(false)}
                 >

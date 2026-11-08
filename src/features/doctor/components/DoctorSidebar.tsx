@@ -208,6 +208,7 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
           {isOpen && <span className="doctor-sidebar__group-title">Preferences</span>}
           <div className="doctor-sidebar__group-list">
             {systemItems.map(renderNavItem)}
+            <div className="doctor-sidebar__divider" aria-hidden="true" />
             <button
               type="button"
               className={`doctor-sidebar__item doctor-sidebar__item--logout ${
