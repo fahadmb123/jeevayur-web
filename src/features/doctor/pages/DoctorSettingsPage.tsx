@@ -11,10 +11,12 @@ import {
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { authService } from '@/features/auth/services/authService';
 import { DoctorSessionsCard } from '../components/DoctorSessionsCard/index';
+import { DoctorSocialLinksTab } from '../components/DoctorSocialLinksTab/index';
+import { socialLinksService, type SocialLink } from '@/shared/services/socialLinksService';
 import type { DoctorProfile } from '../types';
 import './DoctorSettingsPage.css';
 
-type SettingsTab = 'profile' | 'consultation' | 'notifications' | 'devices';
+type SettingsTab = 'profile' | 'consultation' | 'social' | 'notifications' | 'devices';
 
 interface TabItem {
   id: SettingsTab;
@@ -50,6 +52,11 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
   const [sessionCount, setSessionCount] = useState<number>(1);
   const [showTooltip, setShowTooltip] = useState(false);
 
+  // Social Links management state
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+  const [isSavingSocial, setIsSavingSocial] = useState(false);
+  const [savedSocial, setSavedSocial] = useState(false);
+
   // Fetch session count for subnavbar badge (matches "Account 12" badge in reference)
   useEffect(() => {
     let isMounted = true;
@@ -66,6 +73,38 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     return () => {
       isMounted = false;
     };
+  }, []);
+
+  // Fetch dynamic social links on mount
+  useEffect(() => {
+    let isMounted = true;
+    socialLinksService
+      .getSocialLinks()
+      .then((links) => {
+        if (isMounted && Array.isArray(links)) {
+          setSocialLinks(links);
+        }
+      })
+      .catch((err) => {
+        console.warn('Failed to load social links in settings:', err);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleSaveSocialLinks = useCallback(async (updatedLinks: SocialLink[]) => {
+    setIsSavingSocial(true);
+    try {
+      const saved = await socialLinksService.bulkSaveSocialLinks(updatedLinks);
+      setSocialLinks(saved);
+      setSavedSocial(true);
+      setTimeout(() => setSavedSocial(false), 2500);
+    } catch (err) {
+      console.error('Failed to save social links:', err);
+    } finally {
+      setIsSavingSocial(false);
+    }
   }, []);
 
   const initialProfile = useMemo<DoctorProfile>(
@@ -109,10 +148,11 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     () => [
       { id: 'profile', label: 'General' },
       { id: 'consultation', label: 'Consultation' },
+      { id: 'social', label: 'Social Links', badge: socialLinks.length > 0 ? socialLinks.length : undefined },
       { id: 'notifications', label: 'Notifications' },
       { id: 'devices', label: 'Account & Devices', badge: sessionCount },
     ],
-    [sessionCount]
+    [sessionCount, socialLinks.length]
   );
 
   // Keyword-aware search bar auto navigation
@@ -122,6 +162,8 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     const lower = q.toLowerCase();
     if (lower.includes('device') || lower.includes('session') || lower.includes('logout') || lower.includes('security') || lower.includes('account')) {
       setActiveTab('devices');
+    } else if (lower.includes('social') || lower.includes('instagram') || lower.includes('linkedin') || lower.includes('twitter') || lower.includes('facebook') || lower.includes('youtube') || lower.includes('link')) {
+      setActiveTab('social');
     } else if (lower.includes('notif') || lower.includes('sms') || lower.includes('alert') || lower.includes('digest')) {
       setActiveTab('notifications');
     } else if (lower.includes('consult') || lower.includes('duration') || lower.includes('timing') || lower.includes('hour') || lower.includes('buffer')) {
@@ -573,6 +615,16 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
               </div>
             </div>
           </form>
+        )}
+
+        {/* Social Links Tab */}
+        {activeTab === 'social' && (
+          <DoctorSocialLinksTab
+            links={socialLinks}
+            onSave={handleSaveSocialLinks}
+            isSaving={isSavingSocial}
+            saved={savedSocial}
+          />
         )}
 
         {/* Devices Tab */}

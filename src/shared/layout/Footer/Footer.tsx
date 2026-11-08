@@ -1,13 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { SocialPlatformIcon } from '@/shared/ui/SocialPlatformIcon';
+import { socialLinksService, type SocialLink } from '@/shared/services/socialLinksService';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './Footer.css';
 
 export const Footer: React.FC = React.memo(() => {
+  const [socialLinks, setSocialLinks] = useState<SocialLink[]>([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    socialLinksService
+      .getSocialLinks()
+      .then((links) => {
+        if (isMounted && Array.isArray(links)) {
+          setSocialLinks(links);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <footer className="footer" id="contact">
       <motion.div
@@ -25,6 +44,25 @@ export const Footer: React.FC = React.memo(() => {
           <div className="footer-sanctuary-badge">
             <span>Kottakkal, Kerala • Classical Ayurveda &amp; Psychotherapy</span>
           </div>
+
+          {/* Dynamic Social Links from Sanctuary Database */}
+          {socialLinks.length > 0 && (
+            <div className="footer-social-strip" aria-label="Social media channels">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-social-btn"
+                  title={`Follow us on ${link.platform}`}
+                  aria-label={link.platform}
+                >
+                  <SocialPlatformIcon platform={link.platform} size={18} />
+                </a>
+              ))}
+            </div>
+          )}
         </motion.div>
         
         <motion.div className="footer-col" variants={fadeUpVariants}>
