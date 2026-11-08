@@ -1,150 +1,220 @@
-import React, { useState } from 'react';
-import { Card } from '@/shared/ui/card';
-import { Button } from '@/shared/ui/button';
-import { CheckCircle2, User, Bell, Shield, Clock } from 'lucide-react';
+import React, { useState, useCallback, useMemo } from 'react';
+import {
+  Shield,
+  CheckCircle2,
+  User,
+  Clock,
+  Bell,
+  Laptop,
+  Check,
+  Sparkles,
+  Layers,
+} from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { DoctorSessionsCard } from '../components/DoctorSessionsCard';
+import {
+  DoctorProfileCard,
+  DoctorProtocolsCard,
+  DoctorNotificationsCard,
+  DoctorSessionsCard,
+} from '../components';
 import type { DoctorProfile } from '../types';
 import './DoctorSettingsPage.css';
 
+type SettingsTab = 'all' | 'profile' | 'protocols' | 'notifications' | 'devices';
+
 export const DoctorSettingsPage: React.FC = React.memo(() => {
   const { user } = useAuth();
-  const [profile, setProfile] = useState<DoctorProfile>({
-    name: user?.name || 'Dr. Ahalya T.S.',
-    specialty: 'Ayurveda & Wellness Consultant',
-    email: user?.email || 'dr.ahalya@jeevayurniketan.com',
-    phone: '+91 73567 02775',
-    consultDuration: '45 mins',
-    emailAlerts: true,
-    smsAlerts: false,
-  });
 
+  const initialProfile = useMemo<DoctorProfile>(
+    () => ({
+      name: user?.name || 'Dr. Ahalya T.S.',
+      specialty: 'Ayurveda & Wellness Consultant',
+      email: user?.email || 'dr.ahalya@jeevayurniketan.com',
+      phone: '+91 73567 02775',
+      licenseNo: 'AYU-KL-2024-9102',
+      location: 'Jeevayurniketan Sanctuary, Kozhikode, Kerala',
+      bio: 'Holistic Ayurvedic consultations specializing in Dosha diagnostics, Nadi Pariksha, and personalized Smriti meditation therapies.',
+      consultDuration: '45 mins',
+      emailAlerts: true,
+      smsAlerts: false,
+      urgentAlerts: true,
+      weeklySummary: true,
+    }),
+    [user?.name, user?.email]
+  );
+
+  const [profile, setProfile] = useState<DoctorProfile>(initialProfile);
+  const [activeTab, setActiveTab] = useState<SettingsTab>('all');
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = React.useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+  const handleUpdateProfile = useCallback((updates: Partial<DoctorProfile>) => {
+    setProfile((prev) => ({ ...prev, ...updates }));
   }, []);
+
+  const handleToggleNotification = useCallback(
+    (key: 'emailAlerts' | 'smsAlerts' | 'urgentAlerts' | 'weeklySummary', value: boolean) => {
+      setProfile((prev) => ({ ...prev, [key]: value }));
+    },
+    []
+  );
+
+  const handleDurationChange = useCallback((duration: string) => {
+    setProfile((prev) => ({ ...prev, consultDuration: duration }));
+  }, []);
+
+  const handleSave = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      setSaving(true);
+      setTimeout(() => {
+        setSaving(false);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 3000);
+      }, 400);
+    },
+    []
+  );
+
+  const handleDiscard = useCallback(() => {
+    setProfile(initialProfile);
+  }, [initialProfile]);
 
   return (
     <div className="doctor-page-content">
-      <div className="doctor-settings-grid">
-        <form onSubmit={handleSave} className="doctor-settings-form">
-          <Card className="settings-section-card">
-              <div className="settings-section-header">
-                <User size={20} className="settings-icon" />
-                <div>
-                  <h3>Practitioner Profile</h3>
-                  <p>Public identification and specialty details</p>
-                </div>
-              </div>
+      <div className="doctor-settings-wrapper">
+        {/* Modern Settings Header */}
+        <div className="settings-header-section">
+          <div>
+            <span className="settings-header-breadcrumb">
+              <Sparkles size={13} />
+              Ayurvedic Medical Sanctuary • Doctor Settings
+            </span>
+            <h1 className="settings-header-title">Practitioner Workspace Settings</h1>
+            <p className="settings-header-subtitle">
+              Manage your clinical credentials, patient consultation protocols, alert channels, and authorized device sessions.
+            </p>
+          </div>
 
-              <div className="settings-fields">
-                <div className="settings-field">
-                  <label htmlFor="name">Display Name</label>
-                  <input
-                    id="name"
-                    type="text"
-                    value={profile.name}
-                    onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                  />
-                </div>
-
-                <div className="settings-field">
-                  <label htmlFor="specialty">Clinical Specialty</label>
-                  <input
-                    id="specialty"
-                    type="text"
-                    value={profile.specialty}
-                    onChange={(e) => setProfile({ ...profile, specialty: e.target.value })}
-                  />
-                </div>
-
-                <div className="settings-field">
-                  <label htmlFor="email">Official Email</label>
-                  <input
-                    id="email"
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                  />
-                </div>
-              </div>
-            </Card>
-
-            <Card className="settings-section-card">
-              <div className="settings-section-header">
-                <Clock size={20} className="settings-icon" />
-                <div>
-                  <h3>Consultation Protocols</h3>
-                  <p>Session timing and scheduling preferences</p>
-                </div>
-              </div>
-
-              <div className="settings-fields">
-                <div className="settings-field">
-                  <label htmlFor="duration">Standard Session Duration</label>
-                  <select
-                    id="duration"
-                    value={profile.consultDuration}
-                    onChange={(e) => setProfile({ ...profile, consultDuration: e.target.value })}
-                  >
-                    <option value="30 mins">30 minutes</option>
-                    <option value="45 mins">45 minutes (Standard Smriti)</option>
-                    <option value="60 mins">60 minutes (Comprehensive)</option>
-                  </select>
-                </div>
-              </div>
-            </Card>
-
-            <Card className="settings-section-card">
-              <div className="settings-section-header">
-                <Bell size={20} className="settings-icon" />
-                <div>
-                  <h3>Notifications</h3>
-                  <p>Reminders for appointments and emergency consults</p>
-                </div>
-              </div>
-
-              <div className="settings-fields">
-                <label className="settings-toggle">
-                  <input
-                    type="checkbox"
-                    checked={profile.emailAlerts}
-                    onChange={(e) => setProfile({ ...profile, emailAlerts: e.target.checked })}
-                  />
-                  <span>Email notifications for appointment requests</span>
-                </label>
-
-                <label className="settings-toggle">
-                  <input
-                    type="checkbox"
-                    checked={profile.smsAlerts}
-                    onChange={(e) => setProfile({ ...profile, smsAlerts: e.target.checked })}
-                  />
-                  <span>SMS alert for patient check-in</span>
-                </label>
-              </div>
-            </Card>
-
-            <div className="settings-save-bar">
-              {saved && (
-                <div className="settings-saved-message">
-                  <CheckCircle2 size={18} />
-                  <span>Settings updated successfully</span>
-                </div>
-              )}
-              <Button type="submit" variant="primary">
-                <Shield size={16} />
-                <span>Save Configuration</span>
-              </Button>
-            </div>
-          </form>
-
-          <DoctorSessionsCard />
+          <div className="settings-header-badge">
+            <span className="pulse-indicator" />
+            <span>Cloud Synchronized</span>
+          </div>
         </div>
+
+        {/* Segmented Filter Navigation */}
+        <div className="settings-nav-tabs">
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'all' ? 'active' : ''}`}
+            onClick={() => setActiveTab('all')}
+          >
+            <Layers size={15} />
+            <span>All Settings</span>
+          </button>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'profile' ? 'active' : ''}`}
+            onClick={() => setActiveTab('profile')}
+          >
+            <User size={15} />
+            <span>Practitioner Profile</span>
+          </button>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'protocols' ? 'active' : ''}`}
+            onClick={() => setActiveTab('protocols')}
+          >
+            <Clock size={15} />
+            <span>Consultation Protocols</span>
+          </button>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'notifications' ? 'active' : ''}`}
+            onClick={() => setActiveTab('notifications')}
+          >
+            <Bell size={15} />
+            <span>Notification Alerts</span>
+          </button>
+          <button
+            type="button"
+            className={`settings-tab-btn ${activeTab === 'devices' ? 'active' : ''}`}
+            onClick={() => setActiveTab('devices')}
+          >
+            <Laptop size={15} />
+            <span>Connected Devices</span>
+          </button>
+        </div>
+
+        {/* Main Settings Content */}
+        <form onSubmit={handleSave} className="doctor-settings-form">
+          <div className="doctor-settings-grid">
+            {(activeTab === 'all' || activeTab === 'profile') && (
+              <DoctorProfileCard
+                profile={profile}
+                onChange={handleUpdateProfile}
+              />
+            )}
+
+            {(activeTab === 'all' || activeTab === 'protocols') && (
+              <DoctorProtocolsCard
+                consultDuration={profile.consultDuration}
+                onChangeDuration={handleDurationChange}
+              />
+            )}
+
+            {(activeTab === 'all' || activeTab === 'notifications') && (
+              <DoctorNotificationsCard
+                emailAlerts={profile.emailAlerts}
+                smsAlerts={profile.smsAlerts}
+                urgentAlerts={profile.urgentAlerts}
+                weeklySummary={profile.weeklySummary}
+                onToggle={handleToggleNotification}
+              />
+            )}
+
+            {(activeTab === 'all' || activeTab === 'devices') && (
+              <DoctorSessionsCard />
+            )}
+          </div>
+
+          {/* Sticky SaaS Save Bar */}
+          <div className="settings-floating-action-bar">
+            <div className={`action-bar-status ${saved ? 'saved' : ''}`}>
+              {saved ? (
+                <>
+                  <CheckCircle2 size={18} />
+                  <span>All settings successfully updated & synchronized</span>
+                </>
+              ) : (
+                <>
+                  <Shield size={16} />
+                  <span>Changes apply to your verified practitioner profile across all clinics</span>
+                </>
+              )}
+            </div>
+
+            <div className="action-bar-buttons">
+              <button
+                type="button"
+                onClick={handleDiscard}
+                className="btn-discard-settings"
+              >
+                Reset
+              </button>
+              <button
+                type="submit"
+                disabled={saving}
+                className="btn-save-settings"
+              >
+                <Check size={16} />
+                <span>{saving ? 'Saving...' : 'Save Configuration'}</span>
+              </button>
+            </div>
+          </div>
+        </form>
       </div>
+    </div>
   );
 });
 

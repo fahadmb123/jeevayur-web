@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Clock, Video, CheckCircle2 } from 'lucide-react';
-import type { Appointment } from '../types';
+import type { Appointment } from '@/features/appointments/types';
 import './AppointmentListItem.css';
 
 export interface AppointmentListItemProps {

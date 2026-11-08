@@ -28,4 +28,10 @@ export interface DoctorProfile {
   consultDuration: string;
   emailAlerts: boolean;
   smsAlerts: boolean;
+  urgentAlerts?: boolean;
+  weeklySummary?: boolean;
+  licenseNo?: string;
+  location?: string;
+  bio?: string;
+  bufferTime?: string;
 }

@@ -1,0 +1,210 @@
+.doctor-profile-card {
+  padding: 32px;
+  border-radius: 16px;
+  background-color: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8F0);
+  transition: all 0.25s ease;
+}
+
+.doctor-profile-card:hover {
+  border-color: rgba(5, 150, 105, 0.25);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.settings-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.settings-card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background-color: rgba(5, 150, 105, 0.08);
+  border: 1px solid rgba(5, 150, 105, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--primary-green, #059669);
+  flex-shrink: 0;
+}
+
+.settings-card-header-text h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary, #0F172A);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.settings-card-header-text p {
+  font-size: 0.88rem;
+  color: var(--text-secondary, #64748B);
+  margin: 4px 0 0;
+  line-height: 1.45;
+}
+
+.profile-identity-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.04) 0%, rgba(248, 250, 252, 0.6) 100%);
+  border: 1px solid var(--border-color, #E2E8F0);
+  margin-bottom: 28px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.profile-avatar-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  box-shadow: 0 4px 14px rgba(5, 150, 105, 0.25);
+  border: 2px solid #FFFFFF;
+}
+
+.profile-verified-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background-color: #10B981;
+  color: #FFFFFF;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--surface-color, #FFFFFF);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-identity-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.profile-identity-title-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.profile-doctor-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  margin: 0;
+}
+
+.profile-role-badge {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  background-color: rgba(5, 150, 105, 0.1);
+  color: var(--primary-green, #059669);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+}
+
+.profile-identity-subtext {
+  font-size: 0.84rem;
+  color: var(--text-secondary, #64748B);
+  margin: 0;
+}
+
+.profile-fields-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.profile-field-full {
+  grid-column: span 2;
+}
+
+.modern-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.modern-field-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #0F172A);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modern-field-input,
+.modern-field-textarea {
+  border: 1px solid var(--border-color, #CBD5E1);
+  border-radius: 10px;
+  padding: 11px 15px;
+  background-color: var(--surface-color, #FFFFFF);
+  font-size: 0.9rem;
+  color: var(--text-primary, #0F172A);
+  outline: none;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modern-field-input:focus,
+.modern-field-textarea:focus {
+  border-color: var(--primary-green, #059669);
+  background-color: var(--surface-color, #FFFFFF);
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.12);
+}
+
+.modern-field-textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.5;
+  font-family: inherit;
+}
+
+.modern-field-helper {
+  font-size: 0.76rem;
+  color: var(--text-secondary, #94A3B8);
+  margin: 0;
+}
+
+@media (max-width: 680px) {
+  .doctor-profile-card {
+    padding: 22px 18px;
+  }
+
+  .profile-fields-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-field-full {
+    grid-column: span 1;
+  }
+
+  .profile-identity-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
