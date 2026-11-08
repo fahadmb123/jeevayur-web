@@ -177,8 +177,7 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
       ) : (
         <div className="sessions-list">
           {sessions.map((session, index) => {
-            // The first session in the list (or one marked isCurrent) is treated as the current session
-            const isCurrent = session.isCurrent ?? index === 0;
+            const isCurrent = typeof session.isCurrent === 'boolean' ? session.isCurrent : index === 0;
 
             return (
               <div
