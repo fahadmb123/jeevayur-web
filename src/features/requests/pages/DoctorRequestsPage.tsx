@@ -38,12 +38,10 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
   const [selectedService, setSelectedService] = useState('All');
   const [selectedMode, setSelectedMode] = useState<string>('All');
 
-  // Modals state
   const [detailRequest, setDetailRequest] = useState<PatientRequest | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<PatientRequest | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Success toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = useCallback((message: string) => {
@@ -61,7 +59,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request accepted! ${req.patientName} has been enrolled into your patient directory.`);
       } catch {
-        // Handled
       } finally {
         setIsProcessing(false);
       }
@@ -82,7 +79,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request for ${req.patientName} was declined.`);
       } catch {
-        // Handled
       } finally {
         setIsProcessing(false);
       }
@@ -117,27 +113,34 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   const filteredRequests = useMemo(() => {
     return requests.filter((r) => {
-      // Status filter
       if (activeFilter === 'Pending' && r.status !== 'pending') return false;
       if (activeFilter === 'Accepted' && r.status !== 'accepted') return false;
       if (activeFilter === 'Rejected' && r.status !== 'rejected') return false;
 
-      // Service filter
       if (selectedService !== 'All' && r.service !== selectedService) return false;
 
-      // Mode filter
       if (selectedMode !== 'All' && r.mode !== selectedMode) return false;
 
-      // Search filter
       if (localSearch.trim()) {
         const query = localSearch.toLowerCase().trim();
         const matchesName = r.patientName.toLowerCase().includes(query);
         const matchesPhone = r.phone.toLowerCase().includes(query);
+        const matchesEmail = r.email.toLowerCase().includes(query);
         const matchesConcern = r.primaryConcern.toLowerCase().includes(query);
         const matchesService = r.service.toLowerCase().includes(query);
+        const matchesLanguage = r.language ? r.language.toLowerCase().includes(query) : false;
         const matchesCity = r.city ? r.city.toLowerCase().includes(query) : false;
-        const matchesSymptoms = r.symptoms.some((s) => s.toLowerCase().includes(query));
-        return matchesName || matchesPhone || matchesConcern || matchesService || matchesCity || matchesSymptoms;
+        const matchesSymptoms = r.symptoms ? r.symptoms.some((s) => s.toLowerCase().includes(query)) : false;
+        return (
+          matchesName ||
+          matchesPhone ||
+          matchesEmail ||
+          matchesConcern ||
+          matchesService ||
+          matchesLanguage ||
+          matchesCity ||
+          matchesSymptoms
+        );
       }
 
       return true;
