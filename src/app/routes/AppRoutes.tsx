@@ -3,7 +3,8 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { LoadingScreen } from '@/shared/ui';
 import { DoctorLayout } from '@/shared/layout';
-import { PublicRoute, PrivateRoute } from './guards';
+import { PublicRoute } from './guards/PublicRoute';
+import { PrivateRoute } from './guards/PrivateRoute';
 import {
   HomePage,
   AboutPage,

@@ -19,7 +19,7 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   const location = useLocation();
 
   if (loading) {
-    return <LoadingScreen fullScreen />;
+    return <LoadingScreen fullScreen message="Verifying access..." />;
   }
 
   if (!isAuthenticated) {

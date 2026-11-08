@@ -200,6 +200,79 @@
   color: var(--primary-green, #1B6B50);
 }
 
+/* Subtle, Polished Logout Pill */
+.navbar-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 13px;
+  border-radius: 999px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(220, 38, 38, 0.22);
+  color: var(--text-secondary, #475569);
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.navbar-logout-btn svg {
+  color: #DC2626;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.navbar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.45);
+  color: #DC2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.12);
+}
+
+.navbar-logout-btn:hover svg {
+  transform: translateX(1px);
+}
+
+.navbar-logout-btn:active {
+  transform: translateY(0);
+}
+
+[data-theme='dark'] .navbar-logout-btn,
+.dark .navbar-logout-btn {
+  background: rgba(18, 34, 27, 0.7);
+  border-color: rgba(248, 113, 113, 0.25);
+  color: var(--text-secondary, #94A3B8);
+}
+
+[data-theme='dark'] .navbar-logout-btn:hover,
+.dark .navbar-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.16);
+  border-color: rgba(248, 113, 113, 0.5);
+  color: #F87171;
+}
+
+[data-theme='dark'] .navbar-logout-btn svg,
+.dark .navbar-logout-btn svg {
+  color: #F87171;
+}
+
+@media (max-width: 1240px) {
+  .navbar-logout-text {
+    display: none;
+  }
+  .navbar-logout-btn {
+    padding: 0 10px;
+    width: 38px;
+  }
+}
+
 /* High-End Pill CTA Button */
 .navbar-cta-wrap {
   display: block;
@@ -352,6 +425,47 @@
 .mobile-menu-portal-link:hover,
 .mobile-menu-portal-link.is-active {
   background: var(--primary-green-tint, #EDF6F1);
+}
+
+.mobile-menu-logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: #DC2626;
+  padding: 10px 18px;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.05);
+  border: 1px solid rgba(239, 68, 68, 0.16);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  margin-top: 4px;
+}
+
+.mobile-menu-logout-btn svg {
+  color: #DC2626;
+  flex-shrink: 0;
+}
+
+.mobile-menu-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+[data-theme='dark'] .mobile-menu-logout-btn,
+.dark .mobile-menu-logout-btn {
+  color: #F87171;
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(248, 113, 113, 0.22);
+}
+
+[data-theme='dark'] .mobile-menu-logout-btn svg,
+.dark .mobile-menu-logout-btn svg {
+  color: #F87171;
 }
 
 /* Mobile Drawer Theme Switcher Row */

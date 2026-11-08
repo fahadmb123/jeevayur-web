@@ -4,7 +4,12 @@ import { AUTH_QUERY_KEY } from './useAuthMutation';
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
-  const { data: user, isPending, error } = useQuery({ queryKey: AUTH_QUERY_KEY, queryFn: authService.getCurrentUser, retry: false });
+  const { data: user, isPending, error } = useQuery({
+    queryKey: AUTH_QUERY_KEY,
+    queryFn: authService.getCurrentUser,
+    retry: false,
+    staleTime: 5 * 60 * 1000,
+  });
 
   return {
     user,

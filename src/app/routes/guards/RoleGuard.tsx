@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/shared/config/routes';
 import { LoadingScreen } from '@/shared/ui';
@@ -16,13 +16,14 @@ export const RoleGuard: React.FC<RoleGuardProps> = ({
   fallbackPath = ROUTES.HOME,
 }) => {
   const { user, loading, isAuthenticated } = useAuth();
+  const location = useLocation();
 
   if (loading) {
-    return <LoadingScreen fullScreen />;
+    return <LoadingScreen fullScreen message="Authorizing..." />;
   }
 
   if (!isAuthenticated) {
-    return <Navigate to={ROUTES.LOGIN} replace />;
+    return <Navigate to={ROUTES.LOGIN} state={{ from: location }} replace />;
   }
 
   if (!user || !allowedRoles.includes(user.role)) {

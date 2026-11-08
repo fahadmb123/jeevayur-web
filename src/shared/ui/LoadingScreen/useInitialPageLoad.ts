@@ -3,14 +3,14 @@ import { useState, useEffect } from 'react';
 export interface UseInitialPageLoadOptions {
   /**
    * Minimum duration in milliseconds to present the loading screen.
-   * @default 5000
+   * @default 3000
    */
   minDuration?: number;
 
   /**
    * Maximum safety timeout in milliseconds to prevent indefinite blocking
    * in degraded network conditions or delayed third-party assets.
-   * @default 6500
+   * @default 4200
    */
   maxTimeout?: number;
 }
@@ -22,10 +22,10 @@ export interface UseInitialPageLoadOptions {
  * 2. Document readiness (`document.readyState === 'complete'`)
  * 3. Typography & font face resolution (`document.fonts.ready`)
  * 4. DOM layout settling via double requestAnimationFrame
- * 5. 5-second presentation threshold for smooth dissolution
+ * 5. ~3-second presentation threshold for smooth dissolution
  */
 export const useInitialPageLoad = (options: UseInitialPageLoadOptions = {}) => {
-  const { minDuration = 5000, maxTimeout = 6500 } = options;
+  const { minDuration = 3000, maxTimeout = 4200 } = options;
   const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
 
   useEffect(() => {

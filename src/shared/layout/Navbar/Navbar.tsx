@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import { User, Menu, X, LogIn, SunMoon } from 'lucide-react';
+import { User, Menu, X, LogIn, LogOut, SunMoon } from 'lucide-react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import './Navbar.css';
 
@@ -21,7 +21,15 @@ export const Navbar: React.FC = React.memo(() => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+  }, [logout]);
 
   useEffect(() => {
     let ticking = false;
@@ -106,6 +114,19 @@ export const Navbar: React.FC = React.memo(() => {
               )}
             </Link>
 
+            {isAuthenticated && (
+              <button
+                type="button"
+                className="navbar-logout-btn"
+                onClick={handleLogout}
+                aria-label="Log Out"
+                title="Log Out of Jeevayurniketan"
+              >
+                <LogOut size={14} />
+                <span className="navbar-logout-text">Logout</span>
+              </button>
+            )}
+
             <div className="navbar-cta-wrap">
               <BookAppointmentButton size="sm" />
             </div>
@@ -160,14 +181,28 @@ export const Navbar: React.FC = React.memo(() => {
               <div className="mobile-menu-divider" />
 
               {isAuthenticated ? (
-                <Link
-                  to={ROUTES.DOCTOR}
-                  className={`mobile-menu-portal-link ${location.pathname.startsWith(ROUTES.DOCTOR) ? 'is-active' : ''}`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <User size={16} />
-                  <span>Doctor Portal</span>
-                </Link>
+                <>
+                  <Link
+                    to={ROUTES.DOCTOR}
+                    className={`mobile-menu-portal-link ${location.pathname.startsWith(ROUTES.DOCTOR) ? 'is-active' : ''}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    <User size={16} />
+                    <span>Doctor Portal</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    className="mobile-menu-logout-btn"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      handleLogout();
+                    }}
+                  >
+                    <LogOut size={16} />
+                    <span>Logout</span>
+                  </button>
+                </>
               ) : (
                 <Link
                   to={ROUTES.LOGIN}
