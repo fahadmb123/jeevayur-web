@@ -114,7 +114,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                 <div className="patient-detail-group">
                   <div className="patient-skeleton-box patient-skeleton-group-title" />
                   <div className="patient-detail-table">
-                    {Array.from({ length: 4 }).map((_, i) => (
+                    {Array.from({ length: 3 }).map((_, i) => (
                       <div key={i} className="patient-detail-row">
                         <div className="patient-skeleton-box patient-skeleton-row-label" />
                         <div className="patient-skeleton-box patient-skeleton-row-value" />
@@ -229,13 +229,6 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                         <div className="patient-detail-value">Not provided</div>
                       </div>
                     )}
-
-                    <div className="patient-detail-row">
-                      <div className="patient-detail-label">Demographics</div>
-                      <div className="patient-detail-value">
-                        {patient.age} Years • {patient.gender || 'General'}
-                      </div>
-                    </div>
                   </div>
                 </div>
 
