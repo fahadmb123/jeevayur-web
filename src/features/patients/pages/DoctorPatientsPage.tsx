@@ -1,23 +1,25 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Users, Activity, Stethoscope, CheckCircle2 } from 'lucide-react';
+import { Users, Activity, Stethoscope, CheckCircle2, UserPlus } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { DoctorSearchFilterStrip, type FilterSelectConfig, type FilterPillConfig } from '@/shared/ui/DoctorSearchFilterStrip';
 import { PatientListItem } from '../components/PatientListItem';
 import { PatientListItemSkeleton, PatientStatsSkeleton } from '../components/PatientListItemSkeleton';
 import { PatientDetailModal } from '../components/PatientDetailModal';
+import { AddPatientModal } from '../components/AddPatientModal';
 import { usePatients } from '../hooks/usePatients';
 import type { Patient } from '../types';
 import type { PatientFilterOption } from '../components/PatientFilterTabs';
 import './DoctorPatientsPage.css';
 
 export const DoctorPatientsPage: React.FC = React.memo(() => {
-  const { patients, loading } = usePatients();
+  const { patients, loading, addPatient } = usePatients();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
   const [selectedGender, setSelectedGender] = useState('All');
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleReset = useCallback(() => {
     setSearchQuery('');
@@ -121,6 +123,23 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content">
+      <div className="doctor-patient-header-row">
+        <div>
+          <h2 className="doctor-patient-page-title">Patient Records</h2>
+          <span className="doctor-patient-page-sub">
+            Manage classical Ayurveda clinical records and active patients
+          </span>
+        </div>
+        <button
+          type="button"
+          onClick={() => setIsAddModalOpen(true)}
+          className="doctor-patient-add-btn"
+        >
+          <UserPlus size={16} />
+          <span>Add Patient</span>
+        </button>
+      </div>
+
       {loading ? (
         <PatientStatsSkeleton />
       ) : (
@@ -203,6 +222,12 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
         isOpen={Boolean(detailPatient)}
         isLoading={isDetailLoading}
         onClose={() => setDetailPatient(null)}
+      />
+
+      <AddPatientModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onAddPatient={addPatient}
       />
     </div>
   );

@@ -62,6 +62,16 @@ export const patientService = {
   },
 
   async addPatient(patient: Omit<Patient, 'id'>): Promise<Patient> {
+    try {
+      const res = await apiClient.post<{
+        success: boolean;
+        data: { patient: ApiPatient };
+      }>('/api/patients', patient);
+      if (res.data?.patient) {
+        return mapApiPatient(res.data.patient);
+      }
+    } catch {
+    }
     const newPatient: Patient = {
       ...patient,
       id: 'pat_' + Date.now(),

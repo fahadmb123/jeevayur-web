@@ -186,7 +186,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
   const pills: FilterPillConfig[] = useMemo(() => [
     {
       id: 'all',
-      label: 'All Requests',
+      label: 'All Consultations',
       count: counts.All,
       isActive: activeFilter === 'All',
       onClick: () => setActiveFilter('All'),
@@ -242,7 +242,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
               <Inbox size={22} />
             </div>
             <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Total Requests</span>
+              <span className="doctor-consult-stat-card__label">Total Consultations</span>
               <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
             </div>
           </div>
@@ -308,11 +308,11 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
           ) : (
             <div className="doctor-consult-empty">
               <Inbox size={42} className="doctor-consult-empty__icon" />
-              <h3 className="doctor-consult-empty__title">No requests found</h3>
+              <h3 className="doctor-consult-empty__title">No consultations found</h3>
               <p className="doctor-consult-empty__desc">
                 {localSearch || selectedService !== 'All' || selectedMode !== 'All'
                   ? 'Try clearing your search or filter options.'
-                  : `There are currently no requests in the "${activeFilter}" tab.`}
+                  : `There are currently no consultations in the "${activeFilter}" tab.`}
               </p>
             </div>
           )}

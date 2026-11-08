@@ -24,7 +24,6 @@ export interface DoctorSidebarProps {
   onToggle: () => void;
 }
 
-// Shared persistent state so sidebar state is preserved across route changes without re-animation
 let globalSidebarOpen = true;
 const sidebarListeners = new Set<(open: boolean) => void>();
 
@@ -71,7 +70,7 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
       },
       {
         id: 'requests',
-        label: 'Requests',
+        label: 'Consultations',
         path: ROUTES.DOCTOR_REQUESTS,
         icon: <Inbox size={19} strokeWidth={1.85} />,
         badge: pendingCount > 0 ? pendingCount : undefined,
@@ -155,7 +154,6 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
       className={`doctor-sidebar ${!isOpen ? 'doctor-sidebar--collapsed' : ''}`}
       aria-label="Doctor Portal Navigation"
     >
-      {/* Top Header / Brand Logo */}
       <div className={`doctor-sidebar__header ${!isOpen ? 'doctor-sidebar__header--collapsed' : ''}`}>
         {isOpen ? (
           <>
@@ -192,7 +190,6 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
         )}
       </div>
 
-      {/* Main Nav Items */}
       <nav className="doctor-sidebar__nav">
         <div className="doctor-sidebar__group">
           {isOpen && <span className="doctor-sidebar__group-title">Clinical</span>}

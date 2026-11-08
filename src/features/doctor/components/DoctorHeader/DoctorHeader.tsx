@@ -20,7 +20,7 @@ const getPageTitle = (pathname: string): string => {
     return 'Dashboard';
   }
   if (pathname.startsWith(ROUTES.DOCTOR_REQUESTS)) {
-    return 'Requests';
+    return 'Consultations';
   }
   if (pathname.startsWith(ROUTES.DOCTOR_PATIENTS)) {
     return 'Patients';
@@ -63,7 +63,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
     }
   }, [logout, navigate]);
 
-  // Click outside and ESC key listener for dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -88,7 +87,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
     };
   }, [isDropdownOpen]);
 
-  // Close dropdown on route change
   useEffect(() => {
     setIsDropdownOpen(false);
   }, [location.pathname]);
@@ -106,7 +104,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
       </div>
 
       <div className="doctor-header__actions">
-        {/* Quick link to public sanctuary website */}
         <Link
           to={ROUTES.HOME}
           className="doctor-header__home-btn"
@@ -117,7 +114,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
           <span>Website</span>
         </Link>
 
-        {/* Doctor Profile Dropdown Container */}
         <div className="doctor-header__profile-container" ref={dropdownRef}>
           <button
             type="button"
@@ -142,10 +138,8 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
             />
           </button>
 
-          {/* Premium Human-Crafted Dropdown Menu */}
           {isDropdownOpen && (
             <div className="doctor-header__dropdown" role="menu">
-              {/* Profile Card Header */}
               <div className="doctor-header__dropdown-header">
                 <div className="doctor-header__avatar-wrap">
                   <div className="doctor-header__dropdown-avatar">{doctorInitial}</div>
@@ -154,13 +148,11 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
                 <div className="doctor-header__dropdown-user">
                   <strong className="doctor-header__dropdown-name">{doctorName}</strong>
                   <span className="doctor-header__dropdown-email">{doctorEmail}</span>
-
                 </div>
               </div>
 
               <div className="doctor-header__dropdown-divider" />
 
-              {/* Navigation Items */}
               <div className="doctor-header__dropdown-section">
                 <Link
                   to={ROUTES.DOCTOR_SETTINGS}
@@ -176,7 +168,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
 
               <div className="doctor-header__dropdown-divider" />
 
-              {/* Theme Toggle Switcher Row */}
               <div className="doctor-header__dropdown-theme-row">
                 <div className="doctor-header__dropdown-theme-label">
                   <SunMoon size={16} />
@@ -187,7 +178,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
 
               <div className="doctor-header__dropdown-divider" />
 
-              {/* Logout Action */}
               <div className="doctor-header__dropdown-section">
                 <button
                   type="button"

@@ -8,8 +8,8 @@ import {
   Stethoscope,
   FileText,
   ExternalLink,
+  MessageSquare,
 } from 'lucide-react';
-import { StatusPill } from '@/shared/ui/status-pill';
 import type { Patient } from '../types';
 import './PatientDetailModal.css';
 
@@ -69,8 +69,6 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
   onClose,
   onStartConsultation,
 }) => {
-  const isRecovered = patient?.status === 'Recovered';
-
   const parsedCondition = useMemo(() => {
     return parsePatientCondition(patient?.condition);
   }, [patient?.condition]);
@@ -153,15 +151,9 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     {patient.name.charAt(0).toUpperCase()}
                   </div>
                   <div className="patient-detail-modal__name-group">
-                    <div className="patient-detail-modal__name-row">
-                      <h2 className="patient-detail-modal__name">{patient.name}</h2>
-                      <StatusPill
-                        status={patient.status}
-                        variant={isRecovered ? 'success' : 'pending'}
-                      />
-                    </div>
+                    <h2 className="patient-detail-modal__name">{patient.name}</h2>
                     <span className="patient-detail-modal__sub">
-                      Patient Record #{String(patient.id).slice(-8)} • {patient.lastVisit}
+                      Patient ID #{String(patient.id).slice(-8)}
                     </span>
                   </div>
                 </div>
@@ -177,7 +169,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
               <div className="patient-detail-modal__body">
                 <div className="patient-detail-group">
                   <div className="patient-detail-group__header">
-                    <User size={14} />
+                    <User size={15} />
                     <span>Personal & Contact Information</span>
                   </div>
                   <div className="patient-detail-table">
@@ -204,7 +196,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     ) : (
                       <div className="patient-detail-row">
                         <div className="patient-detail-label">Phone Number</div>
-                        <div className="patient-detail-value">Not provided</div>
+                        <div className="patient-detail-value patient-detail-value--empty">Not provided</div>
                       </div>
                     )}
 
@@ -226,7 +218,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     ) : (
                       <div className="patient-detail-row">
                         <div className="patient-detail-label">Email Address</div>
-                        <div className="patient-detail-value">Not provided</div>
+                        <div className="patient-detail-value patient-detail-value--empty">Not provided</div>
                       </div>
                     )}
                   </div>
@@ -234,7 +226,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
 
                 <div className="patient-detail-group">
                   <div className="patient-detail-group__header">
-                    <Stethoscope size={14} />
+                    <Stethoscope size={15} />
                     <span>Consultation & Treatment Specification</span>
                   </div>
                   <div className="patient-detail-table">
@@ -246,7 +238,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     </div>
 
                     <div className="patient-detail-row">
-                      <div className="patient-detail-label">Format / Mode</div>
+                      <div className="patient-detail-label">Consultation Format</div>
                       <div className="patient-detail-value">
                         {parsedCondition.format || 'Offline (In-Clinic Consultation)'}
                       </div>
@@ -256,13 +248,19 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
 
                 <div className="patient-detail-group">
                   <div className="patient-detail-group__header">
-                    <FileText size={14} />
-                    <span>Chief Health Concern & Reason for Consultation</span>
+                    <FileText size={15} />
+                    <span>Chief Health Concern & Detailed Reason</span>
                   </div>
                   <div className="patient-detail-reason-card">
-                    <p className="patient-detail-reason-text">
-                      {parsedCondition.reason || 'General Consultation'}
-                    </p>
+                    <div className="patient-detail-reason-badge">
+                      <MessageSquare size={13} />
+                      <span>Reported Health Concern</span>
+                    </div>
+                    <div className="patient-detail-reason-content">
+                      <p className="patient-detail-reason-text">
+                        {parsedCondition.reason || 'General Consultation'}
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
