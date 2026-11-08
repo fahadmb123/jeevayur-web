@@ -1,4 +1,4 @@
-import type { ClinicInfo, ContactMessage } from '../types';
+import type { ClinicInfo, BookingAppointmentForm } from '../types';
 
 export const CLINIC_INFO: ClinicInfo = {
   address: 'Near Ayurveda College, Kottakkal, Malappuram, Pin: 676501, Kerala, India',
@@ -8,9 +8,9 @@ export const CLINIC_INFO: ClinicInfo = {
 };
 
 export const contactService = {
-  async sendMessage(msg: ContactMessage): Promise<{ success: boolean }> {
+  async sendMessage(msg: BookingAppointmentForm): Promise<{ success: boolean }> {
     await new Promise((resolve) => setTimeout(resolve, 800));
-    console.log('Contact message received:', msg);
+    console.log('Appointment booking inquiry received:', msg);
     return { success: true };
   },
 

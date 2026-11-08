@@ -17,7 +17,7 @@ export const ContactPage: React.FC = React.memo(() => {
             animate={{ opacity: 1, y: 0 }}
             className="page-hero__badge"
           >
-            Get In Touch
+            Sanctuary Inquiries & Appointments
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -25,7 +25,7 @@ export const ContactPage: React.FC = React.memo(() => {
             transition={{ delay: 0.1 }}
             className="page-hero__title"
           >
-            Contact & Location
+            Book Appointment & Contact
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -33,7 +33,7 @@ export const ContactPage: React.FC = React.memo(() => {
             transition={{ delay: 0.2 }}
             className="page-hero__desc"
           >
-            Visit our physical clinic in Kottakkal or connect directly with our patient care support team.
+            Schedule your consultation with our classical Ayurveda physicians or connect directly with our patient care team in Kottakkal.
           </motion.p>
         </div>
       </header>
@@ -53,4 +53,3 @@ export const ContactPage: React.FC = React.memo(() => {
 });
 
 ContactPage.displayName = 'ContactPage';
-
