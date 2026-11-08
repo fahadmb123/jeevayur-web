@@ -29,6 +29,16 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   private handleReset = () => {
+    const isChunkError =
+      this.state.error?.message?.includes('dynamically imported module') ||
+      this.state.error?.message?.includes('Loading chunk') ||
+      this.state.error?.message?.includes('Failed to fetch');
+
+    if (isChunkError && typeof window !== 'undefined') {
+      window.location.reload();
+      return;
+    }
+
     this.setState({ hasError: false, error: null });
     if (this.props.onReset) {
       this.props.onReset();
@@ -41,6 +51,16 @@ export class ErrorBoundary extends Component<Props, State> {
         return this.props.fallback;
       }
 
+      const isChunkError =
+        this.state.error?.message?.includes('dynamically imported module') ||
+        this.state.error?.message?.includes('Loading chunk') ||
+        this.state.error?.message?.includes('Failed to fetch');
+
+      const userFriendlyMessage = isChunkError
+        ? 'A new version or component update was applied. Please refresh to load the updated view.'
+        : this.state.error?.message ||
+          'An unexpected error occurred while loading this view. Please try refreshing.';
+
       return (
         <div className="error-boundary-fallback" role="alert">
           <div className="error-boundary-card">
@@ -48,17 +68,14 @@ export class ErrorBoundary extends Component<Props, State> {
               <AlertCircle size={32} className="error-boundary-icon" />
             </div>
             <h3 className="error-boundary-title">Something went wrong</h3>
-            <p className="error-boundary-message">
-              {this.state.error?.message ||
-                'An unexpected error occurred while loading this view. Please try refreshing.'}
-            </p>
+            <p className="error-boundary-message">{userFriendlyMessage}</p>
             <button
               type="button"
               className="error-boundary-btn"
               onClick={this.handleReset}
             >
               <RefreshCw size={15} />
-              <span>Try Again</span>
+              <span>{isChunkError ? 'Refresh Page' : 'Try Again'}</span>
             </button>
           </div>
         </div>
