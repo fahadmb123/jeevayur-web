@@ -31,8 +31,6 @@ const SUPPORTED_PLATFORMS: PlatformDefinition[] = [
   { id: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/your-sanctuary' },
   { id: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@your-sanctuary' },
   { id: 'twitter', label: 'X (Twitter)', placeholder: 'https://x.com/your-sanctuary' },
-  { id: 'github', label: 'GitHub', placeholder: 'https://github.com/your-org' },
-  { id: 'whatsapp', label: 'WhatsApp', placeholder: 'https://wa.me/917356702775' },
 ];
 
 interface PlatformState {
@@ -100,15 +98,16 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
         e.preventDefault();
 
         // Convert platformValues into an array of SocialLink items
-        // Include platforms with non-empty URLs
-        const payload: SocialLink[] = Object.entries(platformValues)
-          .filter(([_, val]) => val.url && val.url.trim().length > 0)
-          .map(([platform, val]) => ({
-            id: val.id || '',
-            platform,
-            url: val.url.trim(),
-            isVisible: val.isVisible,
-          }));
+        // Include ALL supported platforms so their visibility and URL state are strictly preserved
+        const payload: SocialLink[] = SUPPORTED_PLATFORMS.map((platform) => {
+          const val = platformValues[platform.id];
+          return {
+            id: val?.id || '',
+            platform: platform.id,
+            url: (val?.url || '').trim(),
+            isVisible: val?.isVisible ?? true,
+          };
+        });
 
         onSave(payload);
       },
