@@ -153,7 +153,6 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
           <>
             <div className="doctor-sidebar__brand-area">
               <BrandLogo linkTo={ROUTES.DOCTOR} size="sm" showDivider={false} />
-              <span className="doctor-sidebar__badge-portal">Portal</span>
             </div>
             <button
               type="button"

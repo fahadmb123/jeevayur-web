@@ -3,9 +3,9 @@
    ========================================================================== */
 
 .doctor-sidebar {
-  width: 248px;
-  min-width: 248px;
-  max-width: 248px;
+  width: 256px;
+  min-width: 256px;
+  max-width: 256px;
   flex-shrink: 0;
   background-color: var(--surface-color, #FFFFFF);
   border-right: 1px solid var(--border-color, #E2E8DE);
@@ -53,28 +53,8 @@
 .doctor-sidebar__brand-area {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
   min-width: 0;
-}
-
-.doctor-sidebar__badge-portal {
-  font-size: 0.64rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(27, 107, 80, 0.08);
-  color: var(--primary-green, #1B6B50);
-  border: 1px solid rgba(27, 107, 80, 0.16);
-  white-space: nowrap;
-}
-
-[data-theme='dark'] .doctor-sidebar__badge-portal,
-.dark .doctor-sidebar__badge-portal {
-  background: rgba(46, 171, 129, 0.14);
-  color: var(--primary-green-light, #2EAB81);
-  border-color: rgba(46, 171, 129, 0.24);
+  flex: 1;
 }
 
 .doctor-sidebar__toggle-btn {
@@ -90,6 +70,7 @@
   border-radius: 8px;
   transition: all 0.18s ease;
   flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .doctor-sidebar__toggle-btn:hover {
