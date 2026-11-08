@@ -74,7 +74,41 @@
 .doctor-header__actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
+}
+
+.doctor-header__home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background-color: var(--surface-color, #ffffff);
+  border: 1px solid var(--border-color, #e2e8f0);
+  border-radius: 8px;
+  color: var(--text-secondary, #475569);
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.doctor-header__home-btn:hover {
+  background-color: rgba(27, 107, 80, 0.08);
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+  transform: translateY(-1px);
+}
+
+.doctor-header__home-btn:active {
+  transform: translateY(0);
+}
+
+[data-theme='dark'] .doctor-header__home-btn:hover {
+  background-color: rgba(46, 171, 129, 0.15);
+  border-color: var(--primary-green-light, #2EAB81);
+  color: var(--primary-green-light, #2EAB81);
 }
 
 .doctor-header__logout-btn {
@@ -165,9 +199,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+  .doctor-header__home-btn span,
   .doctor-header__logout-btn span {
     display: none;
   }
+  .doctor-header__home-btn,
   .doctor-header__logout-btn {
     padding: 8px 10px;
   }

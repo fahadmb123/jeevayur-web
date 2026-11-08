@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
-import { LogOut } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { LogOut, Home } from 'lucide-react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/shared/config/routes';
@@ -68,6 +68,15 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
         <h2 className="doctor-header__page-title">{pageTitle}</h2>
       </div>
       <div className="doctor-header__actions">
+        <Link
+          to={ROUTES.HOME}
+          className="doctor-header__home-btn"
+          title="Return to Public Website"
+          aria-label="Return to Public Website"
+        >
+          <Home size={16} />
+          <span>Website</span>
+        </Link>
         <ThemeToggle />
         <button
           type="button"
