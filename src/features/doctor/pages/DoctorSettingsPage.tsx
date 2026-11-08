@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   Calendar,
   Search,
-  HelpCircle,
   ChevronDown,
   Info,
 } from 'lucide-react';
@@ -274,31 +273,47 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
             {/* Subtle Divider Line */}
             <div className="settings-divider-rule" />
 
-            {/* Row-by-Row Form Fields matching reference UI */}
+            {/* Row-by-Row Form Fields */}
             <div className="settings-fields-stack">
-              {/* Row 1: Username / URL (slothui style with prefix and helper) */}
+              {/* Row 1: Name */}
               <div className="settings-field-row">
                 <div className="field-label-cell">
-                  <label htmlFor="username">Username</label>
+                  <label htmlFor="name">Name</label>
                 </div>
                 <div className="field-control-cell">
-                  <div className="modern-input-group">
-                    <span className="input-prefix-label">jeevayur.com/</span>
+                  <div className="modern-input-group single">
                     <input
-                      id="username"
+                      id="name"
                       type="text"
                       className="input-group-text"
-                      value={profile.username || 'ahalya-ayur'}
-                      onChange={(e) => setProfile({ ...profile, username: e.target.value })}
+                      value={profile.name}
+                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+                      placeholder="Doctor Name"
                     />
-                    <span className="input-suffix-icon" title="Public booking identifier">
-                      <HelpCircle size={15} />
-                    </span>
                   </div>
                 </div>
               </div>
 
-              {/* Row 2: Phone Number (with country flag, chevron, and separator) */}
+              {/* Row 2: Official Email */}
+              <div className="settings-field-row">
+                <div className="field-label-cell">
+                  <label htmlFor="email">Official Email</label>
+                </div>
+                <div className="field-control-cell">
+                  <div className="modern-input-group single">
+                    <input
+                      id="email"
+                      type="email"
+                      className="input-group-text"
+                      value={profile.email}
+                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+                      placeholder="doctor@jeevayurniketan.com"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Row 3: Phone Number */}
               <div className="settings-field-row">
                 <div className="field-label-cell">
                   <label htmlFor="phone">Phone Number</label>
@@ -317,114 +332,6 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
                       value={profile.phone}
                       onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                       placeholder="+91 73567 02775"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 3: Practitioner Name */}
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="name">Practitioner Name</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="name"
-                      type="text"
-                      className="input-group-text"
-                      value={profile.name}
-                      onChange={(e) => setProfile({ ...profile, name: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 4: Official Email */}
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="email">Official Email</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="email"
-                      type="email"
-                      className="input-group-text"
-                      value={profile.email}
-                      onChange={(e) => setProfile({ ...profile, email: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 5: Medical Registration No */}
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="license">Medical Registration No.</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="license"
-                      type="text"
-                      className="input-group-text"
-                      value={profile.licenseNo || ''}
-                      onChange={(e) => setProfile({ ...profile, licenseNo: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 6: Clinical Specialty */}
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="specialty">Clinical Specialty</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="specialty"
-                      type="text"
-                      className="input-group-text"
-                      value={profile.specialty}
-                      onChange={(e) => setProfile({ ...profile, specialty: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 7: Sanctuary Location */}
-              <div className="settings-field-row">
-                <div className="field-label-cell">
-                  <label htmlFor="location">Sanctuary Location</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group single">
-                    <input
-                      id="location"
-                      type="text"
-                      className="input-group-text"
-                      value={profile.location || ''}
-                      onChange={(e) => setProfile({ ...profile, location: e.target.value })}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* Row 8: Professional Bio */}
-              <div className="settings-field-row align-top">
-                <div className="field-label-cell">
-                  <label htmlFor="bio">Professional Bio</label>
-                </div>
-                <div className="field-control-cell">
-                  <div className="modern-input-group textarea-wrap">
-                    <textarea
-                      id="bio"
-                      rows={3}
-                      className="input-group-textarea"
-                      value={profile.bio || ''}
-                      onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
                     />
                   </div>
                 </div>
