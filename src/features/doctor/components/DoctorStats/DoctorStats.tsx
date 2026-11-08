@@ -1,8 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, type Variants } from 'framer-motion';
-import { useDoctorStats } from '../hooks/useDoctorStats';
-import type { DoctorStatItem } from '../types';
+import { useDoctorStats } from '@/features/doctor/hooks/useDoctorStats';
+import type { DoctorStatItem } from '@/features/doctor/types';
 import './DoctorStats.css';
 
 export interface DoctorStatsProps {

@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Sparkles, ShieldCheck, Heart } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
-import { LoginForm } from '../components/LoginForm';
+import { LoginForm } from '../components/LoginForm/LoginForm';
 import { useAuthMutation } from '../hooks/useAuthMutation';
 import type { LoginCredentials } from '../types';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
