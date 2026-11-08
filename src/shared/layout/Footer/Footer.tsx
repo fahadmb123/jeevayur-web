@@ -6,6 +6,7 @@ import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { SocialPlatformIcon } from '@/shared/ui/SocialPlatformIcon';
 import { socialLinksService, type SocialLink } from '@/shared/services/socialLinksService';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './Footer.css';
 
@@ -91,11 +92,11 @@ export const Footer: React.FC = React.memo(() => {
             </li>
             <li>
               <span className="contact-icon"><Phone size={18} /></span>
-              <a href="tel:+917356702775">+91 73567 02775</a>
+              <a href={CLINIC_CONTACT.telUrl}>{CLINIC_CONTACT.phone}</a>
             </li>
             <li>
               <span className="contact-icon"><Mail size={18} /></span>
-              <a href="mailto:info@jeevayurniketan.com">info@jeevayurniketan.com</a>
+              <a href={CLINIC_CONTACT.mailtoUrl}>{CLINIC_CONTACT.email}</a>
             </li>
           </ul>
         </motion.div>
@@ -105,9 +106,8 @@ export const Footer: React.FC = React.memo(() => {
         <p>&copy; {new Date().getFullYear()} Jeevayurniketan Ayurveda. All Rights Reserved.</p>
       </div>
 
-      {/* Floating WhatsApp Button */}
       <a
-        href="https://wa.me/917356702775?text=Hello,%20I%20am%20interested%20in%20an%20Ayurveda%20consultation%20with%20Dr.%20Ahalya%20T.S.%20Could%20you%20please%20share%20more%20details"
+        href={CLINIC_CONTACT.getWhatsappUrl('Hello, I am interested in an Ayurveda consultation with Dr. Ahalya T.S. Could you please share more details')}
         className="floating-whatsapp"
         target="_blank"
         rel="noopener noreferrer"

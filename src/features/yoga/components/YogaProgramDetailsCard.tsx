@@ -1,6 +1,7 @@
 import React from 'react';
 import { Clock, MessageCircle, MapPin, Video, ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import type { YogaProgram } from '../data/yogaathmaData';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 
 export interface YogaProgramDetailsCardProps {
   program: YogaProgram;
@@ -17,9 +18,9 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
   const prevProgram = currentIndex > 0 ? programs[currentIndex - 1] : null;
   const nextProgram = currentIndex >= 0 && currentIndex < programs.length - 1 ? programs[currentIndex + 1] : null;
 
-  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
+  const whatsappUrl = CLINIC_CONTACT.getWhatsappUrl(
     `Hello Jeevayurniketan | Yogaathma, I would like to book or enquire about the "${program.title}" program.`
-  )}`;
+  );
 
   const isOnline = program.format.toLowerCase().includes('online');
 

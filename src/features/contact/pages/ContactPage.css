@@ -577,7 +577,7 @@
 
 @media (max-width: 768px) {
   .contact-page .page-hero {
-    padding-top: 110px;
+    padding-top: calc(96px + env(safe-area-inset-top, 0px));
     padding-bottom: 20px;
   }
 
@@ -639,7 +639,7 @@
 
 @media (max-width: 480px) {
   .contact-page .page-hero {
-    padding-top: 112px;
+    padding-top: calc(92px + env(safe-area-inset-top, 0px));
     padding-bottom: 16px;
   }
 

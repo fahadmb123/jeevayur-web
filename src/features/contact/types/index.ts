@@ -5,6 +5,7 @@ export interface BookingAppointmentForm {
   type: AppointmentType;
   name: string;
   email: string;
+  phone: string;
   reason: string;
   format: AppointmentFormat;
   language: string;

@@ -1,10 +1,11 @@
 import type { ClinicInfo, BookingAppointmentForm } from '../types';
 import { apiClient } from '@/shared/lib/api/apiClient';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 
 export const CLINIC_INFO: ClinicInfo = {
   address: 'Near Ayurveda College, Kottakkal, Malappuram, Pin: 676501, Kerala, India',
-  phone: '+91 73567 02775',
-  email: 'info@jeevayurniketan.com',
+  phone: CLINIC_CONTACT.phone,
+  email: CLINIC_CONTACT.email,
   hours: ['Mon - Sat: 9:00 AM - 6:00 PM', 'Sunday: Closed'],
 };
 
@@ -23,6 +24,10 @@ export const contactService = {
   },
 
   getClinicInfo(): ClinicInfo {
-    return CLINIC_INFO;
+    return {
+      ...CLINIC_INFO,
+      phone: CLINIC_CONTACT.phone,
+      email: CLINIC_CONTACT.email,
+    };
   },
 };

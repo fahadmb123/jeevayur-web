@@ -12,6 +12,7 @@ import {
   Video,
   Leaf,
   Loader2,
+  Phone,
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -25,6 +26,7 @@ const bookingSchema = z.object({
   }),
   name: z.string().trim().min(2, 'Name must be at least 2 characters'),
   email: z.string().trim().email('Please enter a valid email address'),
+  phone: z.string().trim().min(6, 'Please enter a valid contact phone number'),
   reason: z.string().trim().min(5, 'Please describe the reason for your visit (min 5 characters)'),
   format: z.enum(['online', 'offline'], {
     required_error: 'Please select online or offline format',
@@ -55,6 +57,7 @@ export const ContactForm: React.FC = React.memo(() => {
       type: initialType,
       name: '',
       email: '',
+      phone: '',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -79,6 +82,7 @@ export const ContactForm: React.FC = React.memo(() => {
       type: values.type,
       name: values.name,
       email: values.email,
+      phone: values.phone,
       reason: values.reason,
       format: values.format,
       language: values.language,
@@ -92,6 +96,7 @@ export const ContactForm: React.FC = React.memo(() => {
       type: 'ayurveda treatment',
       name: '',
       email: '',
+      phone: '',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -107,7 +112,7 @@ export const ContactForm: React.FC = React.memo(() => {
             <h4>Appointment Request Confirmed</h4>
             <p>
               Thank you for choosing Jeevayurniketan Sanctuary. Our clinical patient care team will
-              review your details and contact you via email shortly.
+              review your details and contact you via phone and email shortly.
             </p>
             <div className="contact-form__summary">
               <div className="contact-form__summary-row">
@@ -121,6 +126,10 @@ export const ContactForm: React.FC = React.memo(() => {
                 <span className="summary-value">
                   {selectedFormat === 'online' ? 'Online (Virtual)' : 'Offline (In-Person Clinic)'}
                 </span>
+              </div>
+              <div className="contact-form__summary-row">
+                <span className="summary-label">Contact Phone:</span>
+                <span className="summary-value">{watch('phone')}</span>
               </div>
               <div className="contact-form__summary-row">
                 <span className="summary-label">Preferred Language:</span>
@@ -144,7 +153,6 @@ export const ContactForm: React.FC = React.memo(() => {
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)} className="contact-form" noValidate>
-              {/* Field 1: Service Type (Ayurveda Treatment or Yoga Class) */}
               <div className="contact-form__field">
                 <label className="field-title">Appointment / Service Type</label>
                 <div className="appointment-type-selector">
@@ -175,7 +183,6 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.type && <span className="field-error">{errors.type.message}</span>}
               </div>
 
-              {/* Field 2: Consultation Format (Online or Offline) */}
               <div className="contact-form__field">
                 <label className="field-title">Consultation Format</label>
                 <div className="appointment-format-selector">
@@ -206,7 +213,6 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.format && <span className="field-error">{errors.format.message}</span>}
               </div>
 
-              {/* Field 3: Full Name */}
               <div className="contact-form__field">
                 <label htmlFor="bookingName" className="field-title">
                   Full Name <span className="required-star">*</span>
@@ -221,7 +227,6 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.name && <span className="field-error">{errors.name.message}</span>}
               </div>
 
-              {/* Field 4: Email Address */}
               <div className="contact-form__field">
                 <label htmlFor="bookingEmail" className="field-title">
                   Email Address <span className="required-star">*</span>
@@ -236,7 +241,21 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.email && <span className="field-error">{errors.email.message}</span>}
               </div>
 
-              {/* Field 5: Reason for Appointment */}
+              <div className="contact-form__field">
+                <label htmlFor="bookingPhone" className="field-title">
+                  <Phone size={14} className="inline mr-1 text-primary-green" />
+                  Phone Number <span className="required-star">*</span>
+                </label>
+                <input
+                  id="bookingPhone"
+                  type="tel"
+                  placeholder="e.g. +91 98765 43210"
+                  {...register('phone')}
+                  className={errors.phone ? 'input-error' : ''}
+                />
+                {errors.phone && <span className="field-error">{errors.phone.message}</span>}
+              </div>
+
               <div className="contact-form__field">
                 <label htmlFor="bookingReason" className="field-title">
                   Reason for Appointment / Symptoms <span className="required-star">*</span>
@@ -251,7 +270,6 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.reason && <span className="field-error">{errors.reason.message}</span>}
               </div>
 
-              {/* Field 6: Language of the World */}
               <div className="contact-form__field">
                 <label htmlFor="bookingLanguage" className="field-title">
                   <Globe size={15} className="inline mr-1 text-primary-green" />
@@ -282,7 +300,6 @@ export const ContactForm: React.FC = React.memo(() => {
                 {errors.language && <span className="field-error">{errors.language.message}</span>}
               </div>
 
-              {/* Field 7: Confirm Button */}
               <Button
                 type="submit"
                 variant="primary"
