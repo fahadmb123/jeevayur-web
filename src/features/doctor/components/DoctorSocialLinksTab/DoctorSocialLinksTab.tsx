@@ -1,12 +1,8 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Check,
   CheckCircle2,
-  Plus,
-  Trash2,
   ExternalLink,
-  Share2,
-  AlertCircle,
 } from 'lucide-react';
 import { SocialPlatformIcon } from '@/shared/ui/SocialPlatformIcon';
 import type { SocialLink } from '@/shared/services/socialLinksService';
@@ -19,79 +15,76 @@ interface Props {
   saved: boolean;
 }
 
-const AVAILABLE_PLATFORMS = [
-  { id: 'instagram', label: 'Instagram', defaultPlaceholder: 'https://instagram.com/your-sanctuary' },
-  { id: 'linkedin', label: 'LinkedIn', defaultPlaceholder: 'https://linkedin.com/company/your-sanctuary' },
-  { id: 'facebook', label: 'Facebook', defaultPlaceholder: 'https://facebook.com/your-sanctuary' },
-  { id: 'youtube', label: 'YouTube', defaultPlaceholder: 'https://youtube.com/@your-sanctuary' },
-  { id: 'twitter', label: 'X (Twitter)', defaultPlaceholder: 'https://x.com/your-sanctuary' },
-  { id: 'github', label: 'GitHub', defaultPlaceholder: 'https://github.com/your-org' },
-  { id: 'whatsapp', label: 'WhatsApp', defaultPlaceholder: 'https://wa.me/917356702775' },
-  { id: 'website', label: 'Custom Website', defaultPlaceholder: 'https://yourwebsite.com' },
+interface PlatformDefinition {
+  id: string;
+  label: string;
+  placeholder: string;
+}
+
+const SUPPORTED_PLATFORMS: PlatformDefinition[] = [
+  { id: 'instagram', label: 'Instagram', placeholder: 'https://instagram.com/your-sanctuary' },
+  { id: 'linkedin', label: 'LinkedIn', placeholder: 'https://linkedin.com/company/your-sanctuary' },
+  { id: 'facebook', label: 'Facebook', placeholder: 'https://facebook.com/your-sanctuary' },
+  { id: 'youtube', label: 'YouTube', placeholder: 'https://youtube.com/@your-sanctuary' },
+  { id: 'twitter', label: 'X (Twitter)', placeholder: 'https://x.com/your-sanctuary' },
+  { id: 'github', label: 'GitHub', placeholder: 'https://github.com/your-org' },
+  { id: 'whatsapp', label: 'WhatsApp', placeholder: 'https://wa.me/917356702775' },
 ];
 
 export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
   ({ links, onSave, isSaving, saved }) => {
-    const [localLinks, setLocalLinks] = useState<SocialLink[]>(links);
-    const [newPlatform, setNewPlatform] = useState('instagram');
-    const [newUrl, setNewUrl] = useState('');
-    const [validationError, setValidationError] = useState<string | null>(null);
-
-    // Keep localLinks in sync when external links change (e.g., initial load)
-    React.useEffect(() => {
-      setLocalLinks(links);
-    }, [links]);
-
-    const handleAddLink = useCallback(
-      (e: React.FormEvent) => {
-        e.preventDefault();
-        const trimmed = newUrl.trim();
-        if (!trimmed) {
-          setValidationError('Please enter a valid URL.');
-          return;
+    // Map existing links by platform for fast lookup
+    const buildPlatformMap = useCallback((items: SocialLink[]) => {
+      const map: Record<string, { id?: string; url: string }> = {};
+      items.forEach((item) => {
+        if (item.platform) {
+          map[item.platform.toLowerCase().trim()] = {
+            id: item.id,
+            url: item.url || '',
+          };
         }
-
-        // Basic URL validation
-        if (!/^https?:\/\//i.test(trimmed)) {
-          setValidationError('URL must start with http:// or https://');
-          return;
-        }
-
-        const newLink: SocialLink = {
-          id: `temp-${Date.now()}`,
-          platform: newPlatform,
-          url: trimmed,
-        };
-
-        setLocalLinks((prev) => [...prev, newLink]);
-        setNewUrl('');
-        setValidationError(null);
-      },
-      [newPlatform, newUrl]
-    );
-
-    const handleUpdateUrl = useCallback((index: number, updatedUrl: string) => {
-      setLocalLinks((prev) => {
-        const next = [...prev];
-        next[index] = { ...next[index], url: updatedUrl };
-        return next;
       });
+      return map;
     }, []);
 
-    const handleRemoveLink = useCallback((index: number) => {
-      setLocalLinks((prev) => prev.filter((_, i) => i !== index));
-    }, []);
-
-    const handleSubmitAll = useCallback(
-      (e: React.FormEvent) => {
-        e.preventDefault();
-        onSave(localLinks);
-      },
-      [localLinks, onSave]
+    // State holds URLs for each platform
+    const [platformValues, setPlatformValues] = useState<Record<string, { id?: string; url: string }>>(() =>
+      buildPlatformMap(links)
     );
 
-    const currentPlatformConfig =
-      AVAILABLE_PLATFORMS.find((p) => p.id === newPlatform) || AVAILABLE_PLATFORMS[0];
+    // Sync when external links change (e.g. on initial fetch from API)
+    useEffect(() => {
+      setPlatformValues(buildPlatformMap(links));
+    }, [links, buildPlatformMap]);
+
+    const handleUrlChange = (platformId: string, url: string) => {
+      setPlatformValues((prev) => ({
+        ...prev,
+        [platformId]: {
+          id: prev[platformId]?.id,
+          url,
+        },
+      }));
+    };
+
+    const handleSave = useCallback(
+      (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Convert platformValues into an array of SocialLink items
+        // Include all platforms that have a non-empty trimmed URL
+        const payload: SocialLink[] = Object.entries(platformValues)
+          .filter(([_, val]) => val.url && val.url.trim().length > 0)
+          .map(([platform, val]) => ({
+            id: val.id || '',
+            platform,
+            url: val.url.trim(),
+          }));
+
+        onSave(payload);
+      },
+      [platformValues, onSave]
+    );
 
     return (
       <div className="settings-tab-pane social-links-pane">
@@ -100,7 +93,7 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
           <div className="pane-header-titles">
             <h2 className="pane-title">Social Links &amp; Channels</h2>
             <p className="pane-subtitle">
-              Manage dynamic social channels displayed across customer sanctuary footers and contact pages.
+              Configure the social media links displayed across the customer sanctuary website and footer.
             </p>
           </div>
 
@@ -113,7 +106,7 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
               <button
                 type="button"
                 disabled={isSaving}
-                onClick={handleSubmitAll}
+                onClick={handleSave}
                 className="btn-primary-action"
               >
                 <Check size={14} />
@@ -125,142 +118,65 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
 
         <div className="settings-divider-rule" />
 
-        {/* Add New Link Card */}
-        <div className="social-add-card">
-          <div className="social-add-card-header">
-            <div className="social-add-title-wrap">
-              <Share2 size={16} className="social-accent-icon" />
-              <span className="social-add-title">Add New Social Channel</span>
-            </div>
-            <span className="social-add-hint">
-              Channels update immediately on the patient website upon saving.
-            </span>
-          </div>
-
-          <form onSubmit={handleAddLink} className="social-add-form">
-            <div className="social-platform-select-wrap">
-              <label htmlFor="platform-select" className="visually-hidden">
-                Select Platform
-              </label>
-              <select
-                id="platform-select"
-                className="social-platform-select"
-                value={newPlatform}
-                onChange={(e) => {
-                  setNewPlatform(e.target.value);
-                  setValidationError(null);
-                }}
-              >
-                {AVAILABLE_PLATFORMS.map((platform) => (
-                  <option key={platform.id} value={platform.id}>
-                    {platform.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="social-url-input-wrap">
-              <label htmlFor="url-input" className="visually-hidden">
-                Platform URL
-              </label>
-              <input
-                id="url-input"
-                type="url"
-                className={`social-url-input ${validationError ? 'has-error' : ''}`}
-                placeholder={currentPlatformConfig.defaultPlaceholder}
-                value={newUrl}
-                onChange={(e) => {
-                  setNewUrl(e.target.value);
-                  if (validationError) setValidationError(null);
-                }}
-              />
-            </div>
-
-            <button type="submit" className="social-add-btn">
-              <Plus size={15} />
-              <span>Add Link</span>
-            </button>
-          </form>
-
-          {validationError && (
-            <div className="social-validation-msg">
-              <AlertCircle size={14} />
-              <span>{validationError}</span>
-            </div>
-          )}
-        </div>
-
-        {/* Dynamic Social Links Table / List */}
+        {/* Channels Configuration Table */}
         <div className="social-table-section">
           <div className="social-table-bar">
             <span className="social-table-count">
-              Configured Channels ({localLinks.length})
+              Sanctuary Channels ({SUPPORTED_PLATFORMS.length})
             </span>
             <span className="social-table-info">
-              Click URL to edit directly, or test live via the preview button.
+              Enter your official URLs below and click &quot;Save Social Links&quot;. Active channels appear in the website footer.
             </span>
           </div>
 
-          {localLinks.length === 0 ? (
-            <div className="social-empty-view">
-              <Share2 size={32} className="social-empty-icon" />
-              <p className="social-empty-title">No Social Channels Added Yet</p>
-              <p className="social-empty-desc">
-                Add platforms like Instagram, LinkedIn, YouTube, or GitHub using the form above.
-              </p>
-            </div>
-          ) : (
-            <div className="social-table-list">
-              {localLinks.map((link, idx) => (
-                <div key={link.id || idx} className="social-row-card">
+          <form onSubmit={handleSave} className="social-table-list">
+            {SUPPORTED_PLATFORMS.map((platform) => {
+              const currentVal = platformValues[platform.id]?.url || '';
+              const hasUrl = currentVal.trim().length > 0;
+
+              return (
+                <div key={platform.id} className="social-row-card">
                   {/* Platform Indicator */}
                   <div className="social-row-platform">
                     <span className="social-row-icon-pill">
-                      <SocialPlatformIcon platform={link.platform} size={16} />
+                      <SocialPlatformIcon platform={platform.id} size={16} />
                     </span>
-                    <span className="social-row-name">
-                      {link.platform.charAt(0).toUpperCase() + link.platform.slice(1)}
-                    </span>
+                    <span className="social-row-name">{platform.label}</span>
                   </div>
 
-                  {/* Editable URL Input Field */}
+                  {/* Editable URL Input */}
                   <div className="social-row-input-field">
                     <input
                       type="url"
                       className="social-row-text"
-                      value={link.url}
-                      onChange={(e) => handleUpdateUrl(idx, e.target.value)}
-                      placeholder="https://..."
+                      value={currentVal}
+                      onChange={(e) => handleUrlChange(platform.id, e.target.value)}
+                      placeholder={platform.placeholder}
+                      aria-label={`${platform.label} URL`}
                     />
                   </div>
 
-                  {/* Actions: Open link in new tab + Delete button */}
+                  {/* Action: Open link in new tab to test (if URL entered) */}
                   <div className="social-row-actions">
-                    <a
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="social-action-btn"
-                      title="Open link in new tab to test"
-                      aria-label={`Open ${link.platform} link`}
-                    >
-                      <ExternalLink size={15} />
-                    </a>
-
-                    <button
-                      type="button"
-                      className="social-action-btn social-delete-btn"
-                      onClick={() => handleRemoveLink(idx)}
-                      title="Remove channel"
-                      aria-label={`Remove ${link.platform} channel`}
-                    >
-                      <Trash2 size={15} />
-                    </button>
+                    {hasUrl ? (
+                      <a
+                        href={currentVal}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="social-action-btn"
+                        title={`Test ${platform.label} link in new tab`}
+                        aria-label={`Open ${platform.label} in new tab`}
+                      >
+                        <ExternalLink size={15} />
+                      </a>
+                    ) : (
+                      <span className="social-action-placeholder" title="Enter a URL to test" />
+                    )}
                   </div>
                 </div>
-              ))}
-            </div>
-          )}
+              );
+            })}
+          </form>
         </div>
       </div>
     );
