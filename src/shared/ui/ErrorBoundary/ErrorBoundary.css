@@ -1,89 +1,405 @@
-.error-boundary-fallback {
+/* ==========================================================================
+   MODERN RESILIENT ERROR BOUNDARY - AUTHENTIC BOTANICAL MINIMALISM
+   Human-crafted recovery screen honoring Kerala Ayurveda tranquility
+   ========================================================================== */
+
+.modern-error-boundary {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 380px;
-  padding: 32px 20px;
+  min-height: 480px;
   width: 100%;
+  padding: 40px 20px;
   box-sizing: border-box;
 }
 
-.error-boundary-card {
-  max-width: 440px;
+.modern-error-card {
+  position: relative;
+  max-width: 520px;
   width: 100%;
   background-color: var(--surface-color, #FFFFFF);
   border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 16px;
-  padding: 32px 28px;
+  border-radius: 20px;
+  padding: 40px 36px 32px;
   text-align: center;
-  box-shadow: var(--card-shadow, 0 4px 16px rgba(0, 0, 0, 0.05));
+  box-shadow: 
+    0 16px 40px -8px rgba(18, 76, 56, 0.08),
+    0 4px 12px -2px rgba(18, 76, 56, 0.03),
+    0 0 0 1px var(--border-color, #E2E8DE);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  overflow: hidden;
+  transition: all 0.25s ease;
 }
 
-[data-theme='dark'] .error-boundary-card,
-.dark .error-boundary-card {
+[data-theme='dark'] .modern-error-card,
+.dark .modern-error-card {
   background-color: var(--surface-color, #11221B);
   border-color: var(--border-color, #1F3C30);
+  box-shadow: 
+    0 20px 48px -8px rgba(0, 0, 0, 0.6),
+    0 4px 16px -2px rgba(0, 0, 0, 0.4),
+    0 0 0 1px var(--border-color, #1F3C30);
 }
 
-.error-boundary-icon-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background-color: rgba(239, 68, 68, 0.1);
-  color: #EF4444;
-  display: flex;
+/* Ambient Botanical Glow Behind Card */
+.modern-error-glow {
+  position: absolute;
+  top: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 120px;
+  background: radial-gradient(circle, rgba(27, 107, 80, 0.12) 0%, transparent 70%);
+  filter: blur(28px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme='dark'] .modern-error-glow,
+.dark .modern-error-glow {
+  background: radial-gradient(circle, rgba(65, 186, 145, 0.18) 0%, transparent 70%);
+}
+
+/* 1. Status Pill */
+.modern-error-pill {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-
-.error-boundary-title {
-  font-family: var(--font-brand, sans-serif);
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--text-primary, #14241C);
-  margin: 0 0 8px;
-}
-
-[data-theme='dark'] .error-boundary-title,
-.dark .error-boundary-title {
-  color: var(--text-primary, #F2F7F4);
-}
-
-.error-boundary-message {
-  font-size: 0.9rem;
+  gap: 7px;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  background-color: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--text-secondary, #485E53);
-  margin: 0 0 24px;
-  line-height: 1.5;
+  margin-bottom: 22px;
 }
 
-[data-theme='dark'] .error-boundary-message,
-.dark .error-boundary-message {
+[data-theme='dark'] .modern-error-pill,
+.dark .modern-error-pill {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
   color: var(--text-secondary, #A6C2B4);
 }
 
-.error-boundary-btn {
+.modern-error-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--accent-gold, #C98D3B);
+  box-shadow: 0 0 8px rgba(201, 141, 59, 0.55);
+}
+
+[data-theme='dark'] .modern-error-dot,
+.dark .modern-error-dot {
+  background-color: var(--accent-gold, #DDA34E);
+  box-shadow: 0 0 8px rgba(221, 163, 78, 0.7);
+}
+
+/* 2. Concentric Emblem */
+.modern-error-emblem-wrap {
+  position: relative;
+  z-index: 1;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(27, 107, 80, 0.12), rgba(201, 141, 59, 0.08));
+  border: 1px solid rgba(27, 107, 80, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+[data-theme='dark'] .modern-error-emblem-wrap,
+.dark .modern-error-emblem-wrap {
+  background: linear-gradient(135deg, rgba(65, 186, 145, 0.16), rgba(221, 163, 78, 0.12));
+  border-color: rgba(65, 186, 145, 0.28);
+}
+
+.modern-error-emblem-inner {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--surface-color, #FFFFFF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(18, 76, 56, 0.08);
+}
+
+[data-theme='dark'] .modern-error-emblem-inner,
+.dark .modern-error-emblem-inner {
+  background-color: var(--surface-secondary, #172D24);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.modern-error-emblem-icon {
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .modern-error-emblem-icon,
+.dark .modern-error-emblem-icon {
+  color: var(--primary-green-light, #41BA91);
+}
+
+/* 3. Titles & Content */
+.modern-error-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-brand, 'Trebuchet MS', sans-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--primary-green-deep, #0B3326);
+  margin: 0 0 10px;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+[data-theme='dark'] .modern-error-title,
+.dark .modern-error-title {
+  color: var(--text-primary, #F2F7F4);
+}
+
+.modern-error-description {
+  position: relative;
+  z-index: 1;
+  font-size: 0.92rem;
+  color: var(--text-secondary, #485E53);
+  margin: 0 0 26px;
+  line-height: 1.55;
+  max-width: 440px;
+}
+
+[data-theme='dark'] .modern-error-description,
+.dark .modern-error-description {
+  color: var(--text-secondary, #A6C2B4);
+}
+
+/* 4. Action Buttons */
+.modern-error-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.btn-modern-error-primary {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 40px;
-  padding: 0 20px;
-  background: var(--primary-green, #1B6B50);
+  height: 42px;
+  padding: 0 22px;
+  background: linear-gradient(135deg, var(--primary-green, #1B6B50), var(--primary-green-deep, #0B3326));
   color: #FFFFFF;
   border: none;
-  border-radius: 9999px;
-  font-size: 0.88rem;
+  border-radius: 10px;
+  font-size: 13.5px;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-brand, sans-serif);
+  box-shadow: 0 2px 8px rgba(18, 76, 56, 0.22);
+}
+
+[data-theme='dark'] .btn-modern-error-primary,
+.dark .btn-modern-error-primary {
+  background: linear-gradient(135deg, var(--primary-green, #2E9D77), var(--primary-green-dark, #227A5C));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+.btn-modern-error-primary:hover {
+  background: linear-gradient(135deg, var(--primary-green-light, #2A8566), var(--primary-green, #1B6B50));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(18, 76, 56, 0.3);
+}
+
+[data-theme='dark'] .btn-modern-error-primary:hover,
+.dark .btn-modern-error-primary:hover {
+  background: linear-gradient(135deg, var(--primary-green-light, #41BA91), var(--primary-green, #2E9D77));
+}
+
+.btn-icon-spin-hover {
+  transition: transform 0.4s ease;
+}
+
+.btn-modern-error-primary:hover .btn-icon-spin-hover {
+  transform: rotate(180deg);
+}
+
+.btn-modern-error-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 18px;
+  background-color: var(--surface-secondary, #F3F6F1);
+  color: var(--text-secondary, #485E53);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: var(--font-brand, sans-serif);
 }
 
-.error-boundary-btn:hover {
-  background: var(--primary-green-light, #2A8566);
-  transform: translateY(-1px);
+[data-theme='dark'] .btn-modern-error-secondary,
+.dark .btn-modern-error-secondary {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-secondary, #A6C2B4);
 }
 
+.btn-modern-error-secondary:hover {
+  background-color: var(--primary-green-tint, #EDF6F1);
+  color: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green-light, #2A8566);
+}
+
+[data-theme='dark'] .btn-modern-error-secondary:hover,
+.dark .btn-modern-error-secondary:hover {
+  background-color: rgba(46, 157, 119, 0.16);
+  color: var(--primary-green-light, #41BA91);
+  border-color: var(--primary-green, #2E9D77);
+}
+
+/* 5. Diagnostic Details Accordion */
+.modern-error-diagnostics {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-color, #E2E8DE);
+}
+
+[data-theme='dark'] .modern-error-diagnostics,
+.dark .modern-error-diagnostics {
+  border-top-color: var(--border-color, #1F3C30);
+}
+
+.diagnostics-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-light, #7E9387);
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+  font-family: var(--font-brand, sans-serif);
+}
+
+[data-theme='dark'] .diagnostics-toggle-btn,
+.dark .diagnostics-toggle-btn {
+  color: var(--text-light, #709483);
+}
+
+.diagnostics-toggle-btn:hover {
+  color: var(--primary-green, #1B6B50);
+  background-color: var(--primary-green-tint, #EDF6F1);
+}
+
+[data-theme='dark'] .diagnostics-toggle-btn:hover,
+.dark .diagnostics-toggle-btn:hover {
+  color: var(--primary-green-light, #41BA91);
+  background-color: rgba(46, 157, 119, 0.14);
+}
+
+.diagnostics-chevron {
+  transition: transform 0.2s ease;
+}
+
+.diagnostics-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.diagnostics-panel {
+  margin-top: 12px;
+  background-color: #0A140F;
+  border: 1px solid var(--border-color, #1F3C30);
+  border-radius: 10px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+.diagnostics-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.diagnostics-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #DDA34E;
+}
+
+.diagnostics-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: #E2E8DE;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.diagnostics-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+}
+
+.diagnostics-code-block {
+  margin: 0;
+  font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #A6C2B4;
+  max-height: 160px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+@media (max-width: 640px) {
+  .modern-error-card {
+    padding: 30px 20px 24px;
+  }
+
+  .modern-error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-modern-error-primary,
+  .btn-modern-error-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
