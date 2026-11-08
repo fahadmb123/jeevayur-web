@@ -3,6 +3,8 @@ import {
   Check,
   CheckCircle2,
   ExternalLink,
+  Eye,
+  EyeOff,
 } from 'lucide-react';
 import { SocialPlatformIcon } from '@/shared/ui/SocialPlatformIcon';
 import type { SocialLink } from '@/shared/services/socialLinksService';
@@ -31,24 +33,32 @@ const SUPPORTED_PLATFORMS: PlatformDefinition[] = [
   { id: 'whatsapp', label: 'WhatsApp', placeholder: 'https://wa.me/917356702775' },
 ];
 
+interface PlatformState {
+  id?: string;
+  url: string;
+  isVisible: boolean;
+}
+
 export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
   ({ links, onSave, isSaving, saved }) => {
     // Map existing links by platform for fast lookup
     const buildPlatformMap = useCallback((items: SocialLink[]) => {
-      const map: Record<string, { id?: string; url: string }> = {};
+      const map: Record<string, PlatformState> = {};
       items.forEach((item) => {
         if (item.platform) {
-          map[item.platform.toLowerCase().trim()] = {
+          const key = item.platform.toLowerCase().trim();
+          map[key] = {
             id: item.id,
             url: item.url || '',
+            isVisible: item.isVisible !== false,
           };
         }
       });
       return map;
     }, []);
 
-    // State holds URLs for each platform
-    const [platformValues, setPlatformValues] = useState<Record<string, { id?: string; url: string }>>(() =>
+    // State holds URLs and visibility for each platform
+    const [platformValues, setPlatformValues] = useState<Record<string, PlatformState>>(() =>
       buildPlatformMap(links)
     );
 
@@ -63,8 +73,24 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
         [platformId]: {
           id: prev[platformId]?.id,
           url,
+          isVisible: prev[platformId]?.isVisible ?? true,
         },
       }));
+    };
+
+    const handleToggleVisibility = (platformId: string) => {
+      setPlatformValues((prev) => {
+        const current = prev[platformId];
+        const nextVisible = current ? !current.isVisible : false;
+        return {
+          ...prev,
+          [platformId]: {
+            id: current?.id,
+            url: current?.url || '',
+            isVisible: nextVisible,
+          },
+        };
+      });
     };
 
     const handleSave = useCallback(
@@ -72,13 +98,14 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
         e.preventDefault();
 
         // Convert platformValues into an array of SocialLink items
-        // Include all platforms that have a non-empty trimmed URL
+        // Include platforms with non-empty URLs
         const payload: SocialLink[] = Object.entries(platformValues)
           .filter(([_, val]) => val.url && val.url.trim().length > 0)
           .map(([platform, val]) => ({
             id: val.id || '',
             platform,
             url: val.url.trim(),
+            isVisible: val.isVisible,
           }));
 
         onSave(payload);
@@ -93,7 +120,7 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
           <div className="pane-header-titles">
             <h2 className="pane-title">Social Links &amp; Channels</h2>
             <p className="pane-subtitle">
-              Configure the social media links displayed across the customer sanctuary website and footer.
+              Configure URLs and toggle visibility for channels displayed on the customer website and footer.
             </p>
           </div>
 
@@ -125,17 +152,21 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
               Sanctuary Channels ({SUPPORTED_PLATFORMS.length})
             </span>
             <span className="social-table-info">
-              Enter your official URLs below and click &quot;Save Social Links&quot;. Active channels appear in the website footer.
+              Use the Visible/Hidden button on each channel to control its appearance on the customer website.
             </span>
           </div>
 
           <form onSubmit={handleSave} className="social-table-list">
             {SUPPORTED_PLATFORMS.map((platform) => {
               const currentVal = platformValues[platform.id]?.url || '';
+              const isVisible = platformValues[platform.id]?.isVisible ?? true;
               const hasUrl = currentVal.trim().length > 0;
 
               return (
-                <div key={platform.id} className="social-row-card">
+                <div
+                  key={platform.id}
+                  className={`social-row-card ${!isVisible ? 'is-channel-hidden' : ''}`}
+                >
                   {/* Platform Indicator */}
                   <div className="social-row-platform">
                     <span className="social-row-icon-pill">
@@ -156,8 +187,30 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
                     />
                   </div>
 
-                  {/* Action: Open link in new tab to test (if URL entered) */}
+                  {/* Visibility Toggle Button & Test Link */}
                   <div className="social-row-actions">
+                    {/* Visibility Toggle Button */}
+                    <button
+                      type="button"
+                      className={`social-visibility-toggle ${isVisible ? 'is-visible' : 'is-hidden'}`}
+                      onClick={() => handleToggleVisibility(platform.id)}
+                      title={isVisible ? 'Visible on website (Click to hide)' : 'Hidden from website (Click to show)'}
+                      aria-label={`Toggle visibility for ${platform.label}`}
+                    >
+                      {isVisible ? (
+                        <>
+                          <Eye size={14} />
+                          <span className="visibility-toggle-text">Visible</span>
+                        </>
+                      ) : (
+                        <>
+                          <EyeOff size={14} />
+                          <span className="visibility-toggle-text">Hidden</span>
+                        </>
+                      )}
+                    </button>
+
+                    {/* Action: Open link in new tab to test (if URL entered) */}
                     {hasUrl ? (
                       <a
                         href={currentVal}

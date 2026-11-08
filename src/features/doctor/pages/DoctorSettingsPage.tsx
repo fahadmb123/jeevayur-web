@@ -75,11 +75,11 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
     };
   }, []);
 
-  // Fetch dynamic social links on mount
+  // Fetch dynamic social links on mount (including inactive ones for settings editing)
   useEffect(() => {
     let isMounted = true;
     socialLinksService
-      .getSocialLinks()
+      .getSocialLinks(true)
       .then((links) => {
         if (isMounted && Array.isArray(links)) {
           setSocialLinks(links);

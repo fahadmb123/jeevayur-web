@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { MapPin, Phone, Mail } from 'lucide-react';
@@ -15,7 +15,7 @@ export const Footer: React.FC = React.memo(() => {
   useEffect(() => {
     let isMounted = true;
     socialLinksService
-      .getSocialLinks()
+      .getSocialLinks(false) // Public view: only fetch visible links
       .then((links) => {
         if (isMounted && Array.isArray(links)) {
           setSocialLinks(links);
@@ -26,6 +26,11 @@ export const Footer: React.FC = React.memo(() => {
       isMounted = false;
     };
   }, []);
+
+  const visibleSocialLinks = useMemo(
+    () => socialLinks.filter((link) => link.isVisible !== false && link.url && link.url.trim().length > 0),
+    [socialLinks]
+  );
 
   return (
     <footer className="footer" id="contact">
@@ -46,9 +51,9 @@ export const Footer: React.FC = React.memo(() => {
           </div>
 
           {/* Dynamic Social Links from Sanctuary Database */}
-          {socialLinks.length > 0 && (
+          {visibleSocialLinks.length > 0 && (
             <div className="footer-social-strip" aria-label="Social media channels">
-              {socialLinks.map((link) => (
+              {visibleSocialLinks.map((link) => (
                 <a
                   key={link.id}
                   href={link.url}

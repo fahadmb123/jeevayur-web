@@ -2,15 +2,18 @@ export interface SocialLink {
   id: string;
   platform: string;
   url: string;
+  isVisible?: boolean;
 }
 
 export const socialLinksService = {
   /**
-   * Fetch all active social links (public endpoint for customer website)
+   * Fetch social links
+   * @param all If true, fetches all links including inactive/hidden ones (for doctor settings)
    */
-  async getSocialLinks(): Promise<SocialLink[]> {
+  async getSocialLinks(all = false): Promise<SocialLink[]> {
     try {
-      const res = await fetch('/api/social-links', {
+      const url = `/api/social-links${all ? '?all=true' : ''}`;
+      const res = await fetch(url, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -25,10 +28,10 @@ export const socialLinksService = {
     } catch (error) {
       console.warn('[socialLinksService] Using fallback links:', error);
       return [
-        { id: '1', platform: 'instagram', url: 'https://instagram.com/jeevayurniketan' },
-        { id: '2', platform: 'linkedin', url: 'https://linkedin.com/company/jeevayurniketan' },
-        { id: '3', platform: 'facebook', url: 'https://facebook.com/jeevayurniketan' },
-        { id: '4', platform: 'youtube', url: 'https://youtube.com/@jeevayurniketan' },
+        { id: '1', platform: 'instagram', url: 'https://instagram.com/jeevayurniketan', isVisible: true },
+        { id: '2', platform: 'linkedin', url: 'https://linkedin.com/company/jeevayurniketan', isVisible: true },
+        { id: '3', platform: 'facebook', url: 'https://facebook.com/jeevayurniketan', isVisible: true },
+        { id: '4', platform: 'youtube', url: 'https://youtube.com/@jeevayurniketan', isVisible: true },
       ];
     }
   },
@@ -58,14 +61,14 @@ export const socialLinksService = {
   /**
    * Create a single social link
    */
-  async createSocialLink(platform: string, url: string): Promise<SocialLink> {
+  async createSocialLink(platform: string, url: string, isVisible = true): Promise<SocialLink> {
     const res = await fetch('/api/social-links', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify({ platform, url }),
+      body: JSON.stringify({ platform, url, isVisible }),
     });
 
     if (!res.ok) {
@@ -92,4 +95,3 @@ export const socialLinksService = {
     }
   },
 };
-
