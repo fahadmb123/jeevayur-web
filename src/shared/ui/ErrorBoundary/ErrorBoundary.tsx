@@ -15,6 +15,7 @@ import {
   Activity,
 } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { Navbar } from '@/shared/layout/Navbar';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import './ErrorBoundary.css';
@@ -227,7 +228,7 @@ const FullPageErrorView: React.FC<FullPageErrorViewProps> = React.memo(
                     </div>
                     <div className="helpful-card__text">
                       <strong className="helpful-card__title">Sanctuary Support</strong>
-                      <span className="helpful-card__desc">Direct desk: +91 73567 02775</span>
+                      <span className="helpful-card__desc">Direct desk: {CLINIC_CONTACT.phone}</span>
                     </div>
                   </div>
                 </>

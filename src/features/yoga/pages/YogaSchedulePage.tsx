@@ -15,6 +15,7 @@ import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
 import { YogaProgramDetailsCard } from '../components/YogaProgramDetailsCard';
 import { YogaBookingCard } from '../components/YogaBookingCard';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import type { YogaProgram } from '../data/yogaathmaData';
 import { Navbar, Footer } from '@/shared/layout';
 import type { DayOfWeek, YogaFormat } from '../types/yoga.types';
@@ -48,9 +49,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
   const { hero, programs } = YOGAATHMA_DATA;
 
-  const whatsappHeroUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
-    hero.whatsappMessage
-  )}`;
+  const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
   const activeProgram = useMemo(() => {
     return programs.find((p) => p.id === selectedProgramId) || programs[0];
@@ -243,9 +242,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                   No classes scheduled for {activeDay} in this format. Try selecting another day or contact our desk for private sessions.
                 </p>
                 <a
-                  href={`https://wa.me/917356702775?text=${encodeURIComponent(
-                    `Hello, I would like to enquire about yoga sessions available on ${activeDay}.`
-                  )}`}
+                  href={CLINIC_CONTACT.getWhatsappUrl(`Hello, I would like to enquire about yoga sessions available on ${activeDay}.`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="yoga-empty-whatsapp-btn"
@@ -257,9 +254,9 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             ) : (
               <div className="yoga-classes-grid">
                 {filteredSessions.map((session) => {
-                  const sessionWhatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
+                  const sessionWhatsappUrl = CLINIC_CONTACT.getWhatsappUrl(
                     `Hello Jeevayurniketan | Yogaathma, I would like to book a spot for "${session.title}" on ${activeDay} (${session.time}).`
-                  )}`;
+                  );
 
                   return (
                     <article key={session.id} className="yoga-timetable-card">

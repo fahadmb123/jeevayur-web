@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Video, MapPin, Check, X, Eye, UserCheck, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, Video, MapPin, Check, X, Eye, UserCheck, AlertCircle, Phone, Globe } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { StatusPill } from '@/shared/ui/status-pill';
 import type { PatientRequest } from '../types';
@@ -48,7 +48,6 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.24, delay: index * 0.05 }}
     >
-      {/* Top Header Row */}
       <div className="consult-card__top">
         <div className="consult-card__patient-info">
           <div className="consult-card__avatar">
@@ -57,13 +56,16 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
           <div>
             <div className="consult-card__name-row">
               <h3 className="consult-card__name">{request.patientName}</h3>
-              <span className="consult-card__demographics">
-                {request.age} yrs • {request.gender}
-              </span>
+              {request.phone && (
+                <span className="consult-card__demographics">
+                  <Phone size={12} className="inline mr-1" />
+                  {request.phone}
+                </span>
+              )}
             </div>
-            {request.city && (
+            {request.language && (
               <span className="consult-card__location">
-                <MapPin size={13} /> {request.city}
+                <Globe size={13} /> {request.language}
               </span>
             )}
           </div>
@@ -80,7 +82,6 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
         </div>
       </div>
 
-      {/* Service & Preferred Schedule */}
       <div className="consult-card__service-schedule">
         <div className="consult-card__badge-group">
           <span className="consult-card__service-badge">
@@ -92,18 +93,19 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
           </span>
         </div>
 
-        <div className="consult-card__schedule-item">
-          <Calendar size={14} className="consult-card__schedule-icon" />
-          <span>Prefers: <strong>{request.preferredDate}</strong> at <strong>{request.preferredTimeSlot}</strong></span>
-        </div>
+        {request.preferredDate && (
+          <div className="consult-card__schedule-item">
+            <Calendar size={14} className="consult-card__schedule-icon" />
+            <span>Prefers: <strong>{request.preferredDate}</strong> {request.preferredTimeSlot ? `at ${request.preferredTimeSlot}` : ''}</span>
+          </div>
+        )}
       </div>
 
-      {/* Primary Concern & Symptoms */}
       <div className="consult-card__concern-box">
         <p className="consult-card__concern-text">
-          <strong className="consult-card__concern-label">Concern:</strong> {request.primaryConcern}
+          <strong className="consult-card__concern-label">Reason / Inquiry:</strong> {request.primaryConcern}
         </p>
-        {request.symptoms.length > 0 && (
+        {request.symptoms && request.symptoms.length > 0 && (
           <div className="consult-card__symptom-tags">
             {request.symptoms.map((symptom, idx) => (
               <span key={idx} className="consult-card__symptom-tag">
@@ -114,7 +116,6 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
         )}
       </div>
 
-      {/* Rejection / Acceptance note if present */}
       {request.status === 'rejected' && request.rejectionReason && (
         <div className="consult-card__feedback-note consult-card__feedback-note--rejected">
           <AlertCircle size={14} />
@@ -129,7 +130,6 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
         </div>
       )}
 
-      {/* Action Footer */}
       <div className="consult-card__actions">
         <Button
           variant="outline"

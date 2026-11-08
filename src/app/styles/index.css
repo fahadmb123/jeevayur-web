@@ -290,7 +290,7 @@ button, a, input, select, textarea {
 
 @media (max-width: 768px) {
   .page-hero {
-    padding-top: 110px;
+    padding-top: calc(96px + env(safe-area-inset-top, 0px));
     padding-bottom: 20px;
   }
 
@@ -319,7 +319,7 @@ button, a, input, select, textarea {
 
 @media (max-width: 480px) {
   .page-hero {
-    padding-top: 112px;
+    padding-top: calc(92px + env(safe-area-inset-top, 0px));
     padding-bottom: 16px;
   }
 

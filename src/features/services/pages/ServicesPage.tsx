@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { MessageCircle, Search, Leaf } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { useTreatments } from '../hooks/useTreatments';
 import type { AyurvedaService } from '../types';
 import { TreatmentImageCard } from '../components/TreatmentImageCard';
@@ -121,7 +122,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                 variant="primary"
               />
               <a
-                href="https://wa.me/917356702775?text=Hello%20Dr.%20Ahalya%20/%20Jeevayurniketan,%20I%20would%20like%20to%20enquire%20about%20Ayurvedic%20treatments."
+                href={CLINIC_CONTACT.getWhatsappUrl('Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatments.')}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="treatments-hero__whatsapp-btn"

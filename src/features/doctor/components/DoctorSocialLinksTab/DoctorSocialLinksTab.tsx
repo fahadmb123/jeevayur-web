@@ -41,7 +41,6 @@ interface PlatformState {
 
 export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
   ({ links, onSave, isSaving, saved, errorMessage }) => {
-    // Map existing links by platform for fast lookup
     const buildPlatformMap = useCallback((items: SocialLink[]) => {
       const map: Record<string, PlatformState> = {};
       items.forEach((item) => {
@@ -57,12 +56,10 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
       return map;
     }, []);
 
-    // State holds URLs and visibility for each platform
     const [platformValues, setPlatformValues] = useState<Record<string, PlatformState>>(() =>
       buildPlatformMap(links)
     );
 
-    // Sync when external links change (e.g. on initial fetch from API)
     useEffect(() => {
       setPlatformValues(buildPlatformMap(links));
     }, [links, buildPlatformMap]);
@@ -97,8 +94,6 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
       (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Convert platformValues into an array of SocialLink items
-        // Include ALL supported platforms so their visibility and URL state are strictly preserved
         const payload: SocialLink[] = SUPPORTED_PLATFORMS.map((platform) => {
           const val = platformValues[platform.id];
           return {
@@ -116,7 +111,6 @@ export const DoctorSocialLinksTab: React.FC<Props> = React.memo(
 
     return (
       <div className="settings-tab-pane social-links-pane">
-        {/* Section Header */}
         <div className="settings-pane-header">
           <div className="pane-header-titles">
             <h2 className="pane-title">Social Links &amp; Channels</h2>

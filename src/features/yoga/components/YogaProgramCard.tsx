@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Check, MessageCircle, Clock, Video } from 'lucide-react';
 import type { YogaProgram } from '../data/yogaathmaData';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { fadeUpVariants } from '@/shared/lib/animations';
 import './YogaProgramCard.css';
 
@@ -17,9 +18,9 @@ export const YogaProgramCard: React.FC<YogaProgramCardProps> = React.memo(({
 }) => {
   const [isToggled, setIsToggled] = useState(false);
 
-  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
+  const whatsappUrl = CLINIC_CONTACT.getWhatsappUrl(
     `Hello Jeevayurniketan | Yogaathma, I would like to enquire about the "${program.title}" program.`
-  )}`;
+  );
 
   return (
     <div className={`yoga-program-card-slot ${isCenteredSingle ? 'is-centered-single' : ''}`}>
