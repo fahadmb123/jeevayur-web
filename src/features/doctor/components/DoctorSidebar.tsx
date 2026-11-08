@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { ChevronLeft, Menu, Activity, Users, Sparkles, Settings, Inbox, Image as ImageIcon } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Users,
+  Sparkles,
+  Settings,
+  Inbox,
+  Image as ImageIcon,
+  PanelLeftClose,
+  PanelLeftOpen,
+} from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { useRequests } from '@/features/requests';
 import type { DoctorNavItem } from '../types';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
-import feviconSvg from '@/assets/fevicon.svg';
+import feviconImg from '@/assets/fevicon_rendered.png';
 import './DoctorSidebar.css';
 
 export interface DoctorSidebarProps {
@@ -44,38 +53,116 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
   const doctorInitial = doctorName.replace(/^Dr\.\s*/i, '').charAt(0) || 'A';
   const { pendingCount } = useRequests();
 
-  const navItems = useMemo<DoctorNavItem[]>(
+  const clinicalItems = useMemo<DoctorNavItem[]>(
     () => [
-      { id: 'dashboard', label: 'Dashboard', path: ROUTES.DOCTOR, icon: <Activity size={20} /> },
+      {
+        id: 'dashboard',
+        label: 'Dashboard',
+        path: ROUTES.DOCTOR,
+        icon: <LayoutDashboard size={19} strokeWidth={1.85} />,
+      },
       {
         id: 'requests',
         label: 'Requests',
         path: ROUTES.DOCTOR_REQUESTS,
-        icon: <Inbox size={20} />,
+        icon: <Inbox size={19} strokeWidth={1.85} />,
         badge: pendingCount > 0 ? pendingCount : undefined,
       },
-      { id: 'patients', label: 'Patients', path: ROUTES.DOCTOR_PATIENTS, icon: <Users size={20} /> },
-      { id: 'yoga', label: 'Yoga Schedule', path: ROUTES.DOCTOR_YOGA, icon: <Sparkles size={20} /> },
-      { id: 'gallery', label: 'Gallery', path: ROUTES.DOCTOR_GALLERY, icon: <ImageIcon size={20} /> },
-      { id: 'settings', label: 'Settings', path: ROUTES.DOCTOR_SETTINGS, icon: <Settings size={20} /> },
+      {
+        id: 'patients',
+        label: 'Patients',
+        path: ROUTES.DOCTOR_PATIENTS,
+        icon: <Users size={19} strokeWidth={1.85} />,
+      },
     ],
     [pendingCount]
   );
 
+  const sanctuaryItems = useMemo<DoctorNavItem[]>(
+    () => [
+      {
+        id: 'yoga',
+        label: 'Yoga Schedule',
+        path: ROUTES.DOCTOR_YOGA,
+        icon: <Sparkles size={19} strokeWidth={1.85} />,
+      },
+      {
+        id: 'gallery',
+        label: 'Gallery',
+        path: ROUTES.DOCTOR_GALLERY,
+        icon: <ImageIcon size={19} strokeWidth={1.85} />,
+      },
+    ],
+    []
+  );
+
+  const systemItems = useMemo<DoctorNavItem[]>(
+    () => [
+      {
+        id: 'settings',
+        label: 'Settings',
+        path: ROUTES.DOCTOR_SETTINGS,
+        icon: <Settings size={19} strokeWidth={1.85} />,
+      },
+    ],
+    []
+  );
+
+  const renderNavItem = useCallback(
+    (item: DoctorNavItem) => {
+      const isActive =
+        item.path === ROUTES.DOCTOR
+          ? location.pathname === ROUTES.DOCTOR || location.pathname === `${ROUTES.DOCTOR}/`
+          : location.pathname.startsWith(item.path);
+
+      return (
+        <Link
+          key={item.id}
+          to={item.path}
+          className={`doctor-sidebar__item ${
+            isActive ? 'doctor-sidebar__item--active' : ''
+          } ${!isOpen ? 'doctor-sidebar__item--collapsed' : ''}`}
+          title={!isOpen ? item.label : undefined}
+          aria-current={isActive ? 'page' : undefined}
+        >
+          <div className="doctor-sidebar__item-icon">{item.icon}</div>
+          {isOpen && <span className="doctor-sidebar__item-text">{item.label}</span>}
+          {item.badge !== undefined && (
+            <span
+              className={`doctor-sidebar__badge ${
+                isActive ? 'doctor-sidebar__badge--active' : ''
+              }`}
+            >
+              {item.badge}
+            </span>
+          )}
+        </Link>
+      );
+    },
+    [isOpen, location.pathname]
+  );
+
   return (
-    <aside className={`doctor-sidebar ${!isOpen ? 'doctor-sidebar--collapsed' : ''}`}>
-      <div className={`doctor-sidebar__logo-container ${!isOpen ? 'doctor-sidebar__logo-container--collapsed' : ''}`}>
+    <aside
+      className={`doctor-sidebar ${!isOpen ? 'doctor-sidebar--collapsed' : ''}`}
+      aria-label="Doctor Portal Navigation"
+    >
+      {/* Top Header / Brand Logo */}
+      <div className={`doctor-sidebar__header ${!isOpen ? 'doctor-sidebar__header--collapsed' : ''}`}>
         {isOpen ? (
           <>
-            <BrandLogo linkTo={ROUTES.DOCTOR} size="md" />
+            <div className="doctor-sidebar__brand-area">
+              <BrandLogo linkTo={ROUTES.DOCTOR} size="sm" showDivider={false} />
+              <span className="doctor-sidebar__badge-portal">Portal</span>
+            </div>
             <button
               type="button"
-              className="doctor-sidebar__collapse-btn"
+              className="doctor-sidebar__toggle-btn"
               onClick={onToggle}
               aria-label="Collapse sidebar"
               title="Collapse sidebar"
             >
-              <ChevronLeft size={20} />
+              <PanelLeftClose size={18} strokeWidth={1.8} />
             </button>
           </>
         ) : (
@@ -86,48 +173,53 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
             aria-label="Expand sidebar"
             title="Expand sidebar"
           >
-            <div className="doctor-sidebar__collapsed-logo-stack">
-              <img
-                src={feviconSvg}
-                alt="Jeevayurniketan Emblem"
-                className="doctor-sidebar__collapsed-emblem"
-              />
-              <div className="doctor-sidebar__collapsed-hover-icon" aria-hidden="true">
-                <Menu size={22} strokeWidth={2.4} />
-              </div>
+            <img
+              src={feviconImg}
+              alt="Jeevayurniketan Emblem"
+              className="doctor-sidebar__collapsed-emblem"
+            />
+            <div className="doctor-sidebar__expand-hint" aria-hidden="true">
+              <PanelLeftOpen size={16} strokeWidth={2} />
             </div>
           </button>
         )}
       </div>
 
+      {/* Main Nav Items */}
       <nav className="doctor-sidebar__nav">
-        {navItems.map((item: DoctorNavItem) => {
-          const isActive = location.pathname === item.path;
+        <div className="doctor-sidebar__group">
+          {isOpen && <span className="doctor-sidebar__group-title">Clinical</span>}
+          <div className="doctor-sidebar__group-list">{clinicalItems.map(renderNavItem)}</div>
+        </div>
 
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              className={`doctor-sidebar__nav-item ${isActive ? 'doctor-sidebar__nav-item--active' : ''} ${!isOpen ? 'doctor-sidebar__nav-item--collapsed' : ''}`}
-              title={!isOpen ? item.label : undefined}
-            >
-              <div className="doctor-sidebar__nav-icon">{item.icon}</div>
-              <span className="doctor-sidebar__nav-text">{item.label}</span>
-              {item.badge !== undefined && (
-                <span className="doctor-sidebar__nav-badge">{item.badge}</span>
-              )}
-            </Link>
-          );
-        })}
+        <div className="doctor-sidebar__group">
+          {isOpen && <span className="doctor-sidebar__group-title">Sanctuary</span>}
+          <div className="doctor-sidebar__group-list">{sanctuaryItems.map(renderNavItem)}</div>
+        </div>
+
+        <div className="doctor-sidebar__group doctor-sidebar__group--bottom">
+          {isOpen && <span className="doctor-sidebar__group-title">Preferences</span>}
+          <div className="doctor-sidebar__group-list">{systemItems.map(renderNavItem)}</div>
+        </div>
       </nav>
 
+      {/* Doctor Profile Footer */}
       <div className="doctor-sidebar__footer">
-        <div className="doctor-sidebar__profile">
-          <div className="doctor-sidebar__profile-avatar">{doctorInitial}</div>
-          <div className="doctor-sidebar__profile-info">
-            <span className="doctor-sidebar__profile-name">{doctorName}</span>
-            <span className="doctor-sidebar__profile-role">Ayurveda &amp; Wellness Consultant</span>
+        <div
+          className={`doctor-sidebar__profile ${!isOpen ? 'doctor-sidebar__profile--collapsed' : ''}`}
+          title={!isOpen ? `${doctorName} • Online` : undefined}
+        >
+          <div className="doctor-sidebar__avatar-wrap">
+            <div className="doctor-sidebar__avatar">{doctorInitial}</div>
+            <span className="doctor-sidebar__status-dot" title="Active on Duty" />
           </div>
+
+          {isOpen && (
+            <div className="doctor-sidebar__profile-info">
+              <span className="doctor-sidebar__profile-name">{doctorName}</span>
+              <span className="doctor-sidebar__profile-role">Chief Physician</span>
+            </div>
+          )}
         </div>
       </div>
     </aside>
