@@ -236,6 +236,34 @@
   color: #2E9D77;
 }
 
+.patient-detail-reason-card {
+  padding: 16px 18px;
+  border-radius: 14px;
+  background: var(--surface-secondary, #F8FAF7);
+  border: 1px solid var(--border-color, #E2E8DE);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='dark'] .patient-detail-reason-card,
+.dark .patient-detail-reason-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border-color, #1D362B);
+}
+
+.patient-detail-reason-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-primary, #14241C);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+[data-theme='dark'] .patient-detail-reason-text,
+.dark .patient-detail-reason-text {
+  color: #E8EDE9;
+}
+
 .patient-detail-modal__footer {
   display: flex;
   align-items: center;
@@ -318,6 +346,11 @@
   width: 120px;
   height: 14px;
   border-radius: 4px;
+}
+
+.patient-skeleton-reason-box {
+  height: 72px;
+  border-radius: 14px;
 }
 
 .patient-skeleton-btn {

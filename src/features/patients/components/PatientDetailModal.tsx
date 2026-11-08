@@ -6,6 +6,7 @@ import {
   Mail,
   User,
   Stethoscope,
+  FileText,
   ExternalLink,
 } from 'lucide-react';
 import { StatusPill } from '@/shared/ui/status-pill';
@@ -125,13 +126,18 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                 <div className="patient-detail-group">
                   <div className="patient-skeleton-box patient-skeleton-group-title" />
                   <div className="patient-detail-table">
-                    {Array.from({ length: 4 }).map((_, i) => (
+                    {Array.from({ length: 2 }).map((_, i) => (
                       <div key={i} className="patient-detail-row">
                         <div className="patient-skeleton-box patient-skeleton-row-label" />
                         <div className="patient-skeleton-box patient-skeleton-row-value" />
                       </div>
                     ))}
                   </div>
+                </div>
+
+                <div className="patient-detail-group">
+                  <div className="patient-skeleton-box patient-skeleton-group-title" />
+                  <div className="patient-skeleton-box patient-skeleton-reason-box" />
                 </div>
               </div>
 
@@ -236,52 +242,34 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                 <div className="patient-detail-group">
                   <div className="patient-detail-group__header">
                     <Stethoscope size={14} />
-                    <span>Consultation & Clinical Details</span>
+                    <span>Consultation & Treatment Specification</span>
                   </div>
                   <div className="patient-detail-table">
-                    {parsedCondition.serviceType && (
-                      <div className="patient-detail-row">
-                        <div className="patient-detail-label">Treatment Type</div>
-                        <div className="patient-detail-value patient-detail-value--highlight">
-                          {parsedCondition.serviceType}
-                        </div>
-                      </div>
-                    )}
-
-                    {parsedCondition.format && (
-                      <div className="patient-detail-row">
-                        <div className="patient-detail-label">Format / Mode</div>
-                        <div className="patient-detail-value">
-                          {parsedCondition.format}
-                        </div>
-                      </div>
-                    )}
-
                     <div className="patient-detail-row">
-                      <div className="patient-detail-label">
-                        {parsedCondition.serviceType ? 'Chief Reason' : 'Primary Condition'}
-                      </div>
-                      <div className="patient-detail-value">
-                        {parsedCondition.reason || 'General Consultation'}
+                      <div className="patient-detail-label">Treatment Type</div>
+                      <div className="patient-detail-value patient-detail-value--highlight">
+                        {parsedCondition.serviceType || 'Ayurveda Treatment'}
                       </div>
                     </div>
 
                     <div className="patient-detail-row">
-                      <div className="patient-detail-label">Care Status</div>
+                      <div className="patient-detail-label">Format / Mode</div>
                       <div className="patient-detail-value">
-                        <StatusPill
-                          status={patient.status}
-                          variant={isRecovered ? 'success' : 'pending'}
-                        />
+                        {parsedCondition.format || 'Offline (In-Clinic Consultation)'}
                       </div>
                     </div>
+                  </div>
+                </div>
 
-                    <div className="patient-detail-row">
-                      <div className="patient-detail-label">Latest Activity</div>
-                      <div className="patient-detail-value">
-                        {patient.lastVisit}
-                      </div>
-                    </div>
+                <div className="patient-detail-group">
+                  <div className="patient-detail-group__header">
+                    <FileText size={14} />
+                    <span>Chief Health Concern & Reason for Consultation</span>
+                  </div>
+                  <div className="patient-detail-reason-card">
+                    <p className="patient-detail-reason-text">
+                      {parsedCondition.reason || 'General Consultation'}
+                    </p>
                   </div>
                 </div>
               </div>
