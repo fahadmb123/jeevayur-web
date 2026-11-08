@@ -128,6 +128,7 @@ export const requestService = {
       data: ApiAppointment;
     }>(`/api/appointments/${encodeURIComponent(id)}/status`, {
       status: 'CANCELLED',
+      reason,
     });
 
     const updated = mapApiToPatientRequest(res.data);

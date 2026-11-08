@@ -1,4 +1,18 @@
-import type { Patient } from '../types';
+import type { Patient, PatientStatus } from '../types';
+import { apiClient } from '@/shared/lib/api/apiClient';
+
+interface ApiPatient {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  gender: string | null;
+  age: number | null;
+  condition: string | null;
+  status: string;
+  lastVisit: string | null;
+  createdAt: string;
+}
 
 export const INITIAL_PATIENTS: Patient[] = [
   { id: 1, name: 'Ananya Patel', age: 34, lastVisit: 'Today', status: 'In treatment', phone: '+91 98765 11001', condition: 'Chronic Anxiety' },
@@ -7,17 +21,52 @@ export const INITIAL_PATIENTS: Patient[] = [
   { id: 4, name: 'Vikram Singh', age: 52, lastVisit: '15 Sep', status: 'Consultation', phone: '+91 98765 44004', condition: 'Workplace Burnout' },
 ];
 
+function normalizeStatus(status: string): PatientStatus {
+  const lower = status.toLowerCase();
+  if (lower.includes('treatment')) return 'In treatment';
+  if (lower.includes('recovered')) return 'Recovered';
+  return 'Consultation';
+}
+
+function mapApiPatient(p: ApiPatient): Patient {
+  return {
+    id: p.id,
+    name: p.name,
+    age: p.age || 35,
+    lastVisit: p.lastVisit || 'Today (New Request)',
+    status: normalizeStatus(p.status),
+    phone: p.phone || undefined,
+    email: p.email || undefined,
+    gender: p.gender || undefined,
+    condition: p.condition || undefined,
+  };
+}
+
+let inMemoryPatients: Patient[] = [...INITIAL_PATIENTS];
+
 export const patientService = {
   async getPatients(): Promise<Patient[]> {
-    return [...INITIAL_PATIENTS];
+    try {
+      const res = await apiClient.get<{
+        success: boolean;
+        data: { patients: ApiPatient[]; total: number };
+      }>('/api/patients');
+      const apiPatients = res.data?.patients || [];
+      if (apiPatients.length > 0) {
+        return [...apiPatients.map(mapApiPatient), ...inMemoryPatients];
+      }
+      return inMemoryPatients;
+    } catch {
+      return inMemoryPatients;
+    }
   },
 
   async addPatient(patient: Omit<Patient, 'id'>): Promise<Patient> {
     const newPatient: Patient = {
       ...patient,
-      id: Date.now(),
+      id: 'pat_' + Date.now(),
     };
-    INITIAL_PATIENTS.unshift(newPatient);
+    inMemoryPatients.unshift(newPatient);
     return newPatient;
   },
 };
