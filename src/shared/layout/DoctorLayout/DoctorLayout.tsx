@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useMemo, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import { DoctorSidebar, useDoctorSidebar, DoctorHeader, DoctorBottomNav } from '@/features/doctor/components';
+import { DoctorSidebar, useDoctorSidebar } from '@/features/doctor/components/DoctorSidebar';
+import { DoctorHeader } from '@/features/doctor/components/DoctorHeader';
+import { DoctorBottomNav } from '@/features/doctor/components/DoctorBottomNav';
 import { usePatients, type Patient } from '@/features/patients';
-import { LoadingScreen } from '@/shared/ui';
+import { ErrorBoundary } from '@/shared/ui';
 import './DoctorLayout.css';
 
 export interface DoctorOutletContext {
@@ -41,23 +43,30 @@ export const DoctorLayout: React.FC = React.memo(() => {
       {/* Persistent Sidebar (Mounted Once) */}
       <DoctorSidebar isOpen={isSidebarOpen} onToggle={toggleSidebar} />
 
-      {/* Main Content Area with Persistent Header Navbar */}
+      {/* Main Content Area with Fixed Persistent Header Navbar */}
       <main className="doctor-layout__main doctor-dashboard-main doctor-page-main">
         <DoctorHeader
           isSidebarOpen={isSidebarOpen}
           onToggleSidebar={toggleSidebar}
         />
 
-        {/* Dynamic Nested Route Content with Contained Suspense */}
-        <Suspense
-          fallback={
-            <div className="doctor-layout__loading-container">
-              <LoadingScreen fullScreen={false} message="Loading view..." />
-            </div>
-          }
-        >
-          <Outlet context={outletContext} />
-        </Suspense>
+        {/* Dynamic Nested Route Content with Contained Smooth Scrolling */}
+        <div className="doctor-layout__content-scroll" data-lenis-prevent>
+          <ErrorBoundary>
+            <Suspense
+              fallback={
+                <div className="doctor-layout__loading-container">
+                  <div className="doctor-loading-pulse">
+                    <div className="doctor-loading-spinner" />
+                    <span className="doctor-loading-text">Loading view...</span>
+                  </div>
+                </div>
+              }
+            >
+              <Outlet context={outletContext} />
+            </Suspense>
+          </ErrorBoundary>
+        </div>
       </main>
 
       {/* Mobile Bottom Navigation Bar */}

@@ -1,14 +1,16 @@
 /* ==========================================================================
    DOCTOR PORTAL SHARED LAYOUT & FOUNDATION STYLES
    Ensures consistent typography, spacing, and layout across all portal routes
-   regardless of navigation order or direct page reloads.
+   Header navbar stays fixed in place, while content scrolls smoothly.
    ========================================================================== */
 
 .doctor-layout,
 .doctor-dashboard-layout,
 .doctor-page-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   background-color: var(--bg-color, #FBFBF9);
   font-family: var(--font-brand, 'Trebuchet MS', sans-serif);
   color: var(--text-primary, #14241C);
@@ -22,13 +24,28 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Independent Content Scroll Container
+   Pinned header sits above this; data-lenis-prevent ensures wheel events
+   are not hijacked by root smooth-scroll.
+   -------------------------------------------------------------------------- */
+.doctor-layout__content-scroll {
+  flex: 1;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: contain;
 }
 
 @media (max-width: 768px) {
-  .doctor-layout__main,
-  .doctor-dashboard-main,
-  .doctor-page-main {
+  .doctor-layout__content-scroll {
     padding-bottom: calc(68px + env(safe-area-inset-bottom, 0px));
   }
 }
@@ -39,6 +56,46 @@
   align-items: center;
   justify-content: center;
   min-height: 400px;
+}
+
+.doctor-loading-pulse {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.doctor-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(27, 107, 80, 0.15);
+  border-top-color: var(--primary-green, #1B6B50);
+  border-radius: 50%;
+  animation: doctorSpinnerSpin 0.8s linear infinite;
+}
+
+[data-theme='dark'] .doctor-loading-spinner,
+.dark .doctor-loading-spinner {
+  border-color: rgba(65, 186, 145, 0.2);
+  border-top-color: var(--primary-green-light, #41BA91);
+}
+
+@keyframes doctorSpinnerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.doctor-loading-text {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-secondary, #485E53);
+  letter-spacing: -0.01em;
+}
+
+[data-theme='dark'] .doctor-loading-text,
+.dark .doctor-loading-text {
+  color: var(--text-secondary, #A6C2B4);
 }
 
 /* --------------------------------------------------------------------------
@@ -84,6 +141,11 @@
 .doctor-greeting-highlight {
   color: var(--primary-green, #1B6B50);
   font-weight: 700;
+}
+
+[data-theme="dark"] .doctor-greeting-highlight,
+.dark .doctor-greeting-highlight {
+  color: var(--primary-green-light, #41BA91);
 }
 
 .doctor-greeting-sub,

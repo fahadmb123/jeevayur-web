@@ -1,0 +1,210 @@
+/* ==========================================================================
+   DOCTOR SOCIAL LINKS SETTINGS TAB
+   Unified Kerala Ayurveda Botanical Design matching General tab grid
+   ========================================================================== */
+
+.social-links-pane {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.social-field-row {
+  transition: opacity 0.2s ease;
+}
+
+.social-field-row.is-channel-hidden {
+  opacity: 0.62;
+}
+
+.social-field-row.is-channel-hidden:hover {
+  opacity: 0.88;
+}
+
+/* Platform label cell with icon pill and title */
+.social-platform-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.social-platform-icon-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background-color: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  color: var(--primary-green, #1B6B50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .social-platform-icon-pill,
+.dark .social-platform-icon-pill {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--primary-green-light, #41BA91);
+}
+
+.social-platform-name {
+  font-family: var(--font-brand, 'Trebuchet MS', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #14241C);
+  letter-spacing: -0.01em;
+}
+
+[data-theme='dark'] .social-platform-name,
+.dark .social-platform-name {
+  color: var(--text-primary, #F2F7F4);
+}
+
+/* Control cell with modern input and visibility toggle */
+.social-field-control {
+  width: 100%;
+}
+
+.social-input-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.social-url-input-group {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Visibility Toggle Button */
+.social-visibility-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 42px;
+  min-width: 96px;
+  padding: 0 16px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-brand, sans-serif);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+/* Visible State: Emerald herbal subtle pill */
+.social-visibility-toggle.is-visible {
+  background-color: var(--primary-green-tint, #EDF6F1);
+  border-color: rgba(27, 107, 80, 0.25);
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .social-visibility-toggle.is-visible,
+.dark .social-visibility-toggle.is-visible {
+  background-color: rgba(46, 157, 119, 0.16);
+  border-color: rgba(65, 186, 145, 0.3);
+  color: var(--primary-green-light, #41BA91);
+}
+
+.social-visibility-toggle.is-visible:hover {
+  background-color: rgba(27, 107, 80, 0.22);
+  border-color: var(--primary-green, #1B6B50);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .social-visibility-toggle.is-visible:hover,
+.dark .social-visibility-toggle.is-visible:hover {
+  background-color: rgba(65, 186, 145, 0.25);
+  border-color: var(--primary-green-light, #41BA91);
+}
+
+/* Hidden State: Subtle slate neutral pill */
+.social-visibility-toggle.is-hidden {
+  background-color: var(--surface-secondary, #F1F4F0);
+  border-color: var(--border-color, #E2E8DE);
+  color: var(--text-light, #7E9387);
+}
+
+[data-theme='dark'] .social-visibility-toggle.is-hidden,
+.dark .social-visibility-toggle.is-hidden {
+  background-color: var(--surface-secondary, #172D24);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-light, #709483);
+}
+
+.social-visibility-toggle.is-hidden:hover {
+  background-color: var(--border-color, #E2E8DE);
+  color: var(--text-primary, #14241C);
+  border-color: var(--border-color-hover, #CCD6C6);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .social-visibility-toggle.is-hidden:hover,
+.dark .social-visibility-toggle.is-hidden:hover {
+  background-color: #1F3C30;
+  color: var(--text-primary, #F2F7F4);
+  border-color: var(--border-color-hover, #2D5846);
+}
+
+.visibility-toggle-icon {
+  flex-shrink: 0;
+}
+
+.visibility-toggle-text {
+  font-size: 12px;
+  letter-spacing: 0.01em;
+}
+
+/* Error badge feedback */
+.social-error-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #DC2626;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  padding: 7px 16px;
+  border-radius: 8px;
+}
+
+[data-theme='dark'] .social-error-badge,
+.dark .social-error-badge {
+  color: #F87171;
+  background-color: rgba(239, 68, 68, 0.18);
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+.social-spin-icon {
+  animation: socialSpin 0.9s linear infinite;
+}
+
+@keyframes socialSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 680px) {
+  .social-input-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .social-visibility-toggle {
+    width: 100%;
+    height: 38px;
+  }
+}

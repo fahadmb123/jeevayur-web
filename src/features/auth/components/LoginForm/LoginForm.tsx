@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { Mail, Lock, LogIn, Eye, EyeOff, Sparkles } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { ROUTES } from '@/shared/config/routes';
-import { loginSchema, type LoginFormValues } from '../validation/loginSchema';
+import { loginSchema, type LoginFormValues } from '@/features/auth/validation/loginSchema';
 
 interface LoginFormProps {
   onSubmit: (credentials: LoginFormValues) => Promise<void>;

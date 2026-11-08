@@ -134,7 +134,6 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
 
             <div className="doctor-header__profile-info">
               <span className="doctor-header__profile-name">{doctorName}</span>
-              <span className="doctor-header__profile-role">Chief Physician</span>
             </div>
 
             <ChevronDown

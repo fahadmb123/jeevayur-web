@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, type Variants } from 'framer-motion';
-import { DoctorStats } from '../components/DoctorStats';
+import { DoctorStats } from '../components/DoctorStats/index';
 import { RecentPatientsWidget, usePatients } from '@/features/patients';
 import { TodayScheduleWidget, useAppointments } from '@/features/appointments';
 import { ROUTES } from '@/shared/config/routes';

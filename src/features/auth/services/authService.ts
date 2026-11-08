@@ -3,6 +3,17 @@ import { apiClient } from '@/shared/lib/api/apiClient';
 import { ApiError } from '@/shared/lib/api/ApiError';
 import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
 
+export interface ActiveSession {
+  id: string;
+  ipAddress: string;
+  device: string;
+  city: string | null;
+  country: string | null;
+  lastActiveAt: string;
+  createdAt: string;
+  isCurrent?: boolean;
+}
+
 export const authService = {
   async login(credentials: LoginCredentials): Promise<User> {
     const response = await apiClient.post<LoginResponse, LoginCredentials>('/api/auth/login', credentials);
@@ -10,6 +21,26 @@ export const authService = {
       tokenStorage.setAccessToken(response.accessToken);
     }
     return response.user;
+  },
+
+  async getSessions(): Promise<ActiveSession[]> {
+    const response = await apiClient.get<{
+      sessions?: ActiveSession[];
+      data?: { sessions?: ActiveSession[] };
+    }>('/api/auth/sessions');
+    return response.sessions ?? response.data?.sessions ?? [];
+  },
+
+  async revokeSession(sessionId: string): Promise<void> {
+    await apiClient.delete(`/api/auth/sessions/${encodeURIComponent(sessionId)}`);
+  },
+
+  async updateProfile(data: { name: string; email?: string; phone?: string | null }): Promise<User> {
+    const response = await apiClient.put<{ user: User; data?: { user: User } }, { name: string; email?: string; phone?: string | null }>(
+      '/api/auth/profile',
+      data
+    );
+    return response.user ?? response.data?.user ?? (response as unknown as User);
   },
 
   async requestPasswordReset(email: string): Promise<string> {

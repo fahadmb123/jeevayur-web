@@ -215,6 +215,119 @@ button, a, input, select, textarea {
   flex-direction: column;
 }
 
+/* ==========================================================================
+   Shared Page Hero Component (Subpage Header below fixed navbar)
+   Used by: ContactPage, TeamPage, AboutPage, BlogPage
+   ========================================================================== */
+.page-hero {
+  padding-top: clamp(120px, 15vh, 145px);
+  padding-bottom: 28px;
+  text-align: center;
+  background-color: var(--bg-color, #FBFBF9);
+  position: relative;
+  width: 100%;
+}
+
+[data-theme='dark'] .page-hero,
+.dark .page-hero {
+  background-color: var(--bg-color, #0A140F);
+}
+
+.page-hero__container {
+  max-width: 840px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-hero__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  background-color: rgba(27, 107, 80, 0.08);
+  color: var(--primary-green, #1B6B50);
+  border: 1px solid rgba(27, 107, 80, 0.18);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+[data-theme='dark'] .page-hero__badge,
+.dark .page-hero__badge {
+  background-color: rgba(46, 138, 106, 0.15);
+  color: #5AD8A6;
+  border-color: rgba(46, 138, 106, 0.3);
+}
+
+.page-hero__title {
+  font-size: clamp(2rem, 4vw, 2.85rem);
+  font-weight: 700;
+  color: var(--text-primary, #0A140F);
+  letter-spacing: -0.02em;
+  line-height: 1.18;
+  margin-bottom: 16px;
+}
+
+[data-theme='dark'] .page-hero__title,
+.dark .page-hero__title {
+  color: #F1F5F9;
+}
+
+.page-hero__desc {
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  color: var(--text-secondary, #485E53);
+  line-height: 1.65;
+  margin: 0 auto;
+}
+
+[data-theme='dark'] .page-hero__desc,
+.dark .page-hero__desc {
+  color: #A6C2B4;
+}
+
+@media (max-width: 768px) {
+  .page-hero {
+    padding-top: 110px;
+    padding-bottom: 20px;
+  }
+
+  .page-hero__container {
+    padding: 0 16px;
+  }
+
+  .page-hero__badge {
+    font-size: 0.75rem;
+    padding: 5px 14px;
+    margin-bottom: 12px;
+  }
+
+  .page-hero__title {
+    font-size: 1.95rem;
+    line-height: 1.22;
+    margin-bottom: 12px;
+  }
+
+  .page-hero__desc {
+    font-size: 0.92rem;
+    line-height: 1.55;
+    padding: 0 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-hero {
+    padding-top: 112px;
+    padding-bottom: 16px;
+  }
+
+  .page-hero__title {
+    font-size: 1.75rem;
+  }
+}
+
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(20px); }

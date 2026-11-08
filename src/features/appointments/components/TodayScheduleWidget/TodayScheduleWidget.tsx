@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Card } from '@/shared/ui/card';
-import { AppointmentListItem } from './AppointmentListItem';
+import { AppointmentListItem } from '../AppointmentListItem';
 import { StartConsultationModal } from '@/features/patients';
-import { useAppointments } from '../hooks/useAppointments';
-import type { Appointment } from '../types';
+import { useAppointments } from '@/features/appointments/hooks/useAppointments';
+import type { Appointment } from '@/features/appointments/types';
 import './TodayScheduleWidget.css';
 
 export interface TodayScheduleWidgetProps {

@@ -13,7 +13,7 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '@/shared/config/routes';
 import { useRequests } from '@/features/requests';
-import type { DoctorNavItem } from '../types';
+import type { DoctorNavItem } from '@/features/doctor/types';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import feviconImg from '@/assets/fevicon_rendered.png';
