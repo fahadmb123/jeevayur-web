@@ -26,7 +26,7 @@ const cardItemVariants: Variants = {
   show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
 };
 
-type DashboardTabFilter = 'all' | 'schedule' | 'patients' | 'in-treatment' | 'consultation';
+type DashboardTabFilter = 'all' | 'schedule' | 'patients' | 'uncompleted' | 'completed';
 
 export const DoctorDashboardPage: React.FC = React.memo(() => {
   const navigate = useNavigate();
@@ -48,27 +48,23 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     setSelectedStatus('All');
   }, []);
 
-  const inTreatmentCount = useMemo(
-    () => patients.filter((p) => p.status === 'In treatment').length,
+  const uncompletedCount = useMemo(
+    () => patients.filter((p) => p.status !== 'Completed').length,
     [patients]
   );
 
-  const consultationCount = useMemo(
-    () => patients.filter((p) => p.status === 'Consultation').length,
+  const completedCount = useMemo(
+    () => patients.filter((p) => p.status === 'Completed').length,
     [patients]
   );
 
-  // Filtered patients based on search, status dropdown, and tab filter
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
-      // Tab filter
-      if (activeTab === 'in-treatment' && patient.status !== 'In treatment') return false;
-      if (activeTab === 'consultation' && patient.status !== 'Consultation') return false;
+      if (activeTab === 'uncompleted' && patient.status !== 'Uncompleted') return false;
+      if (activeTab === 'completed' && patient.status !== 'Completed') return false;
 
-      // Status dropdown filter
       if (selectedStatus !== 'All' && patient.status !== selectedStatus) return false;
 
-      // Search query filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesName = patient.name.toLowerCase().includes(q);
@@ -81,7 +77,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     });
   }, [patients, activeTab, selectedStatus, searchQuery]);
 
-  // Filtered appointments based on search query
   const filteredAppointments = useMemo(() => {
     return appointments.filter((apt) => {
       if (!searchQuery.trim()) return true;
@@ -111,9 +106,8 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
       onChange: setSelectedStatus,
       options: [
         { value: 'All', label: 'All Statuses' },
-        { value: 'In treatment', label: 'In Treatment' },
-        { value: 'Consultation', label: 'Consultation' },
-        { value: 'Recovered', label: 'Recovered' },
+        { value: 'Uncompleted', label: 'Uncompleted' },
+        { value: 'Completed', label: 'Completed' },
       ],
     },
   ], [selectedSection, selectedStatus]);
@@ -150,29 +144,29 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
       },
     },
     {
-      id: 'in-treatment',
-      label: 'In Treatment',
-      count: inTreatmentCount,
-      isActive: activeTab === 'in-treatment',
+      id: 'uncompleted',
+      label: 'Uncompleted',
+      count: uncompletedCount,
+      isActive: activeTab === 'uncompleted',
       onClick: () => {
-        setActiveTab('in-treatment');
+        setActiveTab('uncompleted');
         setSelectedSection('Patients');
       },
     },
     {
-      id: 'consultation',
-      label: 'Consultation',
-      count: consultationCount,
-      isActive: activeTab === 'consultation',
+      id: 'completed',
+      label: 'Completed',
+      count: completedCount,
+      isActive: activeTab === 'completed',
       onClick: () => {
-        setActiveTab('consultation');
+        setActiveTab('completed');
         setSelectedSection('Patients');
       },
     },
-  ], [activeTab, selectedSection, patients.length, appointments.length, inTreatmentCount, consultationCount]);
+  ], [activeTab, selectedSection, patients.length, appointments.length, uncompletedCount, completedCount]);
 
-  const showPatients = selectedSection === 'All' || selectedSection === 'Patients' || activeTab === 'patients' || activeTab === 'in-treatment' || activeTab === 'consultation';
-  const showSchedule = (selectedSection === 'All' || selectedSection === 'Appointments' || activeTab === 'schedule') && activeTab !== 'in-treatment' && activeTab !== 'consultation';
+  const showPatients = selectedSection === 'All' || selectedSection === 'Patients' || activeTab === 'patients' || activeTab === 'uncompleted' || activeTab === 'completed';
+  const showSchedule = (selectedSection === 'All' || selectedSection === 'Appointments' || activeTab === 'schedule') && activeTab !== 'uncompleted' && activeTab !== 'completed';
 
   return (
     <div className="doctor-dashboard-content">

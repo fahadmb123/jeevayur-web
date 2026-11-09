@@ -2,9 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Inbox,
-  Clock,
-  CheckCircle2,
-  XCircle,
   Users,
   Check,
 } from 'lucide-react';
@@ -16,9 +13,10 @@ import {
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import { useRequests } from '../hooks/useRequests';
 import { RequestCard } from '../components/RequestCard';
-import { RequestCardSkeleton, RequestStatsSkeleton } from '../components/RequestCardSkeleton';
+import { RequestCardSkeleton } from '../components/RequestCardSkeleton';
 import { RequestDetailModal } from '../components/RequestDetailModal';
 import { RejectReasonModal } from '../components/RejectReasonModal';
+import { AcceptConfirmModal } from '../components/AcceptConfirmModal';
 import type { PatientRequest, RequestFilterOption } from '../types';
 import { ROUTES } from '@/shared/config/routes';
 import './DoctorRequestsPage.css';
@@ -41,6 +39,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   const [detailRequest, setDetailRequest] = useState<PatientRequest | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<PatientRequest | null>(null);
+  const [acceptingRequest, setAcceptingRequest] = useState<PatientRequest | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -52,11 +51,20 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
     }, 4500);
   }, []);
 
-  const handleAccept = useCallback(
+  const handleOpenAccept = useCallback((req: PatientRequest) => {
+    setAcceptingRequest(req);
+  }, []);
+
+  const handleCloseAccept = useCallback(() => {
+    setAcceptingRequest(null);
+  }, []);
+
+  const handleConfirmAccept = useCallback(
     async (req: PatientRequest) => {
       try {
         setIsProcessing(true);
         await acceptRequest(req.id);
+        setAcceptingRequest(null);
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request accepted! ${req.patientName} has been enrolled into your patient directory.`);
       } catch {
@@ -186,7 +194,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
   const pills: FilterPillConfig[] = useMemo(() => [
     {
       id: 'all',
-      label: 'All Requests',
+      label: 'All Consultations',
       count: counts.All,
       isActive: activeFilter === 'All',
       onClick: () => setActiveFilter('All'),
@@ -233,52 +241,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </Link>
       </div>
 
-      {loading ? (
-        <RequestStatsSkeleton />
-      ) : (
-        <div className="doctor-consult-stats-grid">
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--total">
-              <Inbox size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Total Requests</span>
-              <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card doctor-consult-stat-card--highlight">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--pending">
-              <Clock size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Pending Review</span>
-              <strong className="doctor-consult-stat-card__value text-amber">{pendingCount}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--accepted">
-              <CheckCircle2 size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Accepted & Enrolled</span>
-              <strong className="doctor-consult-stat-card__value text-green">{acceptedCount}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--rejected">
-              <XCircle size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Declined</span>
-              <strong className="doctor-consult-stat-card__value">{rejectedCount}</strong>
-            </div>
-          </div>
-        </div>
-      )}
-
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patient by name, phone, symptoms, or service..."
         searchValue={localSearch}
@@ -299,7 +261,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
                 key={request.id}
                 request={request}
                 index={index}
-                onAccept={handleAccept}
+                onAccept={handleOpenAccept}
                 onReject={handleOpenReject}
                 onViewDetails={handleViewDetails}
                 isProcessing={isProcessing}
@@ -308,11 +270,11 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
           ) : (
             <div className="doctor-consult-empty">
               <Inbox size={42} className="doctor-consult-empty__icon" />
-              <h3 className="doctor-consult-empty__title">No requests found</h3>
+              <h3 className="doctor-consult-empty__title">No consultations found</h3>
               <p className="doctor-consult-empty__desc">
                 {localSearch || selectedService !== 'All' || selectedMode !== 'All'
                   ? 'Try clearing your search or filter options.'
-                  : `There are currently no requests in the "${activeFilter}" tab.`}
+                  : `There are currently no consultations in the "${activeFilter}" tab.`}
               </p>
             </div>
           )}
@@ -323,8 +285,16 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         request={detailRequest}
         isOpen={Boolean(detailRequest)}
         onClose={handleCloseDetail}
-        onAccept={handleAccept}
+        onAccept={handleOpenAccept}
         onReject={handleOpenReject}
+        isProcessing={isProcessing}
+      />
+
+      <AcceptConfirmModal
+        request={acceptingRequest}
+        isOpen={Boolean(acceptingRequest)}
+        onClose={handleCloseAccept}
+        onConfirmAccept={handleConfirmAccept}
         isProcessing={isProcessing}
       />
 

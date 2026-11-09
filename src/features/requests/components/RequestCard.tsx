@@ -1,8 +1,25 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, Video, MapPin, Check, X, Eye, UserCheck, AlertCircle, Phone, Globe } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  Video,
+  MapPin,
+  Check,
+  X,
+  Eye,
+  UserCheck,
+  AlertCircle,
+  Phone,
+  Globe,
+  Mail,
+  Leaf,
+  Sparkles,
+  FileText,
+} from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { StatusPill } from '@/shared/ui/status-pill';
+import { PatientAvatar } from '@/features/patients';
 import type { PatientRequest } from '../types';
 import './RequestCard.css';
 
@@ -23,7 +40,7 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
   onViewDetails,
   isProcessing = false,
 }) => {
-  const statusVariant = React.useMemo(() => {
+  const statusVariant = useMemo(() => {
     switch (request.status) {
       case 'accepted':
         return 'success';
@@ -36,135 +53,144 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
     }
   }, [request.status]);
 
-  const initial = React.useMemo(
-    () => request.patientName.charAt(0).toUpperCase(),
-    [request.patientName]
-  );
+  const isYoga = request.service.toLowerCase().includes('yoga');
+  const isOnline = request.mode === 'Video Call';
 
   return (
     <motion.div
       className={`consult-card consult-card--${request.status}`}
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.24, delay: index * 0.05 }}
+      transition={{ duration: 0.22, delay: index * 0.04 }}
     >
-      <div className="consult-card__top">
-        <div className="consult-card__patient-info">
-          <div className="consult-card__avatar">
-            <span>{initial}</span>
-          </div>
-          <div>
-            <div className="consult-card__name-row">
-              <h3 className="consult-card__name">{request.patientName}</h3>
+      <div className="consult-card__header">
+        <div className="consult-card__patient">
+          <PatientAvatar name={request.patientName} id={request.id} size={42} />
+          <div className="consult-card__patient-meta">
+            <div className="consult-card__patient-name-row">
+              <h3 className="consult-card__patient-name">{request.patientName}</h3>
+              <span className="consult-card__ref-id">#{request.id.slice(-6)}</span>
+            </div>
+            <div className="consult-card__contact-chips">
               {request.phone && (
-                <span className="consult-card__demographics">
-                  <Phone size={12} className="inline mr-1" />
-                  {request.phone}
+                <span className="consult-card__chip">
+                  <Phone size={12} />
+                  <span>{request.phone}</span>
+                </span>
+              )}
+              {request.email && (
+                <span className="consult-card__chip consult-card__chip--email">
+                  <Mail size={12} />
+                  <span>{request.email}</span>
+                </span>
+              )}
+              {request.language && (
+                <span className="consult-card__chip">
+                  <Globe size={12} />
+                  <span>{request.language}</span>
                 </span>
               )}
             </div>
-            {request.language && (
-              <span className="consult-card__location">
-                <Globe size={13} /> {request.language}
-              </span>
-            )}
           </div>
         </div>
 
-        <div className="consult-card__status-wrap">
+        <div className="consult-card__header-right">
           <StatusPill
             status={request.status.charAt(0).toUpperCase() + request.status.slice(1)}
             variant={statusVariant}
           />
-          <span className="consult-card__time">
-            <Clock size={12} /> {request.requestedAt}
+          <span className="consult-card__timestamp">
+            <Clock size={12} />
+            <span>{request.requestedAt}</span>
           </span>
         </div>
       </div>
 
-      <div className="consult-card__service-schedule">
-        <div className="consult-card__badge-group">
-          <span className="consult-card__service-badge">
-            {request.service}
-          </span>
-          <span className="consult-card__mode-badge">
-            {request.mode === 'Video Call' ? <Video size={13} /> : <MapPin size={13} />}
-            {request.mode}
-          </span>
+      <div className="consult-card__spec-strip">
+        <div className="consult-card__spec-pill consult-card__spec-pill--service">
+          {isYoga ? <Sparkles size={13} /> : <Leaf size={13} />}
+          <span>{request.service}</span>
+        </div>
+
+        <div className="consult-card__spec-pill consult-card__spec-pill--mode">
+          {isOnline ? <Video size={13} /> : <MapPin size={13} />}
+          <span>{isOnline ? 'Online Virtual Consultation' : 'In-Clinic (Kottakkal)'}</span>
         </div>
 
         {request.preferredDate && (
-          <div className="consult-card__schedule-item">
-            <Calendar size={14} className="consult-card__schedule-icon" />
-            <span>Prefers: <strong>{request.preferredDate}</strong> {request.preferredTimeSlot ? `at ${request.preferredTimeSlot}` : ''}</span>
+          <div className="consult-card__spec-pill consult-card__spec-pill--schedule">
+            <Calendar size={13} />
+            <span>
+              Prefers: <strong>{request.preferredDate}</strong>{' '}
+              {request.preferredTimeSlot ? `(${request.preferredTimeSlot})` : ''}
+            </span>
           </div>
         )}
       </div>
 
-      <div className="consult-card__concern-box">
-        <p className="consult-card__concern-text">
-          <strong className="consult-card__concern-label">Reason / Inquiry:</strong> {request.primaryConcern}
-        </p>
-        {request.symptoms && request.symptoms.length > 0 && (
-          <div className="consult-card__symptom-tags">
-            {request.symptoms.map((symptom, idx) => (
-              <span key={idx} className="consult-card__symptom-tag">
-                {symptom}
-              </span>
-            ))}
-          </div>
-        )}
+      <div className="consult-card__inquiry-card">
+        <div className="consult-card__inquiry-header">
+          <FileText size={13} />
+          <span>Patient Inquiry &amp; Health Concern</span>
+        </div>
+        <p className="consult-card__inquiry-body">{request.primaryConcern}</p>
       </div>
 
       {request.status === 'rejected' && request.rejectionReason && (
         <div className="consult-card__feedback-note consult-card__feedback-note--rejected">
-          <AlertCircle size={14} />
-          <span>Reason: {request.rejectionReason}</span>
+          <AlertCircle size={15} />
+          <span>Declined: {request.rejectionReason}</span>
         </div>
       )}
 
       {request.status === 'accepted' && (
         <div className="consult-card__feedback-note consult-card__feedback-note--accepted">
-          <UserCheck size={14} />
+          <UserCheck size={15} />
           <span>Enrolled as an active patient in your clinical directory.</span>
         </div>
       )}
 
-      <div className="consult-card__actions">
+      <div className="consult-card__footer">
         <Button
           variant="outline"
           size="sm"
-          className="consult-card__btn-details"
+          className="consult-card__btn-view"
           onClick={() => onViewDetails(request)}
         >
-          <Eye size={15} />
-          View Details
+          <Eye size={14} />
+          <span>View Details</span>
         </Button>
 
-        {request.status === 'pending' && (
-          <div className="consult-card__action-group">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="consult-card__btn-reject"
-              onClick={() => onReject(request)}
-              disabled={isProcessing}
-            >
-              <X size={15} />
-              Decline
-            </Button>
-            <Button
-              variant="primary"
-              size="sm"
-              className="consult-card__btn-accept"
-              onClick={() => onAccept(request)}
-              disabled={isProcessing}
-            >
-              <Check size={15} />
-              Accept Request
-            </Button>
-          </div>
-        )}
+        <div className="consult-card__actions-group">
+          {request.status === 'pending' && (
+            <>
+              <button
+                type="button"
+                className="consult-card__btn-decline"
+                onClick={() => onReject(request)}
+                disabled={isProcessing}
+              >
+                <X size={14} />
+                <span>Decline</span>
+              </button>
+              <button
+                type="button"
+                className="consult-card__btn-accept"
+                onClick={() => onAccept(request)}
+                disabled={isProcessing}
+              >
+                <Check size={14} />
+                <span>Accept Request</span>
+              </button>
+            </>
+          )}
+
+          {request.status === 'accepted' && (
+            <span className="consult-card__status-confirmed">
+              <Check size={14} /> Confirmed &amp; Active
+            </span>
+          )}
+        </div>
       </div>
     </motion.div>
   );

@@ -27,7 +27,7 @@ export const DoctorBottomNav: React.FC = React.memo(() => {
       },
       {
         id: 'requests',
-        label: 'Requests',
+        label: 'Consultations',
         path: ROUTES.DOCTOR_REQUESTS,
         icon: <Inbox size={20} />,
         badge: pendingCount > 0 ? pendingCount : undefined,

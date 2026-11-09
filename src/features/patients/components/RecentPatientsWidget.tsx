@@ -42,9 +42,8 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
   const counts = useMemo(() => {
     return {
       All: patients.length,
-      'In treatment': patients.filter((p) => p.status === 'In treatment').length,
-      Recovered: patients.filter((p) => p.status === 'Recovered').length,
-      Consultation: patients.filter((p) => p.status === 'Consultation').length,
+      Uncompleted: patients.filter((p) => p.status !== 'Completed').length,
+      Completed: patients.filter((p) => p.status === 'Completed').length,
     };
   }, [patients]);
 

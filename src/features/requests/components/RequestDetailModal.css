@@ -193,12 +193,47 @@
   background: var(--surface-secondary, #F3F6F1);
   border: 1px solid var(--border-color, #E2E8DE);
   font-size: 0.9rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--text-primary, #14241C);
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .consult-detail-modal__concern-desc {
   margin: 0 0 10px 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  max-height: 160px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.consult-detail-modal__concern-desc::-webkit-scrollbar {
+  width: 4px;
+}
+
+.consult-detail-modal__concern-desc::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+}
+
+.consult-detail-modal__concern-desc::-webkit-scrollbar-thumb {
+  background: rgba(27, 107, 80, 0.28);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .consult-detail-modal__concern-desc::-webkit-scrollbar-thumb,
+.dark .consult-detail-modal__concern-desc::-webkit-scrollbar-thumb {
+  background: rgba(46, 157, 119, 0.35);
 }
 
 .consult-detail-modal__symptoms {

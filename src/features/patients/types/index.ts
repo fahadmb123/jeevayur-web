@@ -1,4 +1,4 @@
-export type PatientStatus = 'In treatment' | 'Recovered' | 'Consultation';
+export type PatientStatus = 'Completed' | 'Uncompleted';
 
 export interface Patient {
   id: number | string;
@@ -10,4 +10,6 @@ export interface Patient {
   email?: string;
   gender?: string;
   condition?: string;
+  avatarUrl?: string;
+  source?: 'website' | 'doctor';
 }

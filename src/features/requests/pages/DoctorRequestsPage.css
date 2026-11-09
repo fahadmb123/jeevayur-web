@@ -265,11 +265,17 @@
   width: 280px;
 }
 
-/* List */
+.doctor-consult-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
 .doctor-consult-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .doctor-consult-loading {
@@ -286,6 +292,15 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px dashed var(--border-color, #E2E8DE);
+  border-radius: 16px;
+}
+
+[data-theme='dark'] .doctor-consult-empty,
+.dark .doctor-consult-empty {
+  background: #12241C;
+  border-color: #1E3A2E;
 }
 
 .doctor-consult-empty__icon {

@@ -6,4 +6,6 @@ export * from './DoctorSearchFilterStrip';
 export * from './BrandLogo';
 export * from './LoadingScreen';
 export * from './ScrollToTop';
+export * from './ConfirmSignOutModal';
+export * from './InternationalPhoneInput';
 export * from './ErrorBoundary/ErrorBoundary';

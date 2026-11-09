@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: 'Treatments', path: ROUTES.SERVICES },
   { label: 'Yoga', path: ROUTES.YOGA },
   { label: 'Team', path: ROUTES.TEAM },
-  { label: 'Contact', path: ROUTES.CONTACT },
+  { label: 'Book', path: ROUTES.CONTACT },
 ];
 
 export const Navbar: React.FC = React.memo(() => {

@@ -41,15 +41,20 @@ function mapApiToPatientRequest(apt: ApiAppointment): PatientRequest {
       })
     : 'Recently';
 
+  const genderMatch = apt.reason?.match(/\[Gender:\s*([^\]]+)\]/i);
+  const extractedGender = genderMatch ? genderMatch[1].trim() : undefined;
+  const cleanReason = apt.reason ? apt.reason.replace(/\[Gender:\s*[^\]]+\]\s*/i, '').trim() : '';
+
   return {
     id: apt.id,
     patientName: apt.name,
+    gender: extractedGender || (apt as any).gender || 'Male',
     phone: apt.phone || '',
     email: apt.email || '',
     service,
     mode,
     language: apt.language || 'English',
-    primaryConcern: apt.reason || 'General Consultation & Booking',
+    primaryConcern: cleanReason || 'General Consultation & Booking',
     symptoms: [service, mode, `Language: ${apt.language || 'English'}`],
     notes: `Online booking for ${service} (${mode}). Preferred language: ${apt.language || 'English'}.`,
     requestedAt: formattedDate,
@@ -113,7 +118,7 @@ export const requestService = {
         email: updated.email,
         condition: updated.primaryConcern,
         lastVisit: 'Today (New Request)',
-        status: 'Consultation',
+        status: 'Uncompleted',
       });
     } catch {
     }

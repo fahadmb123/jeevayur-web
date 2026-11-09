@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,13 +11,16 @@ import {
   MapPin,
   Video,
   Leaf,
-  Loader2,
   Phone,
+  User,
+  ArrowRight,
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import { InternationalPhoneInput, findCountryByDialCode } from '@/shared/ui/InternationalPhoneInput';
 import { useContact } from '../hooks/useContact';
 import { POPULAR_LANGUAGES, ALL_WORLD_LANGUAGES } from '../data/languages';
+import { BookingConfirmModal } from './BookingConfirmModal';
 import type { BookingAppointmentForm } from '../types';
 
 const bookingSchema = z.object({
@@ -26,12 +29,36 @@ const bookingSchema = z.object({
   }),
   name: z.string().trim().min(2, 'Name must be at least 2 characters'),
   email: z.string().trim().email('Please enter a valid email address'),
-  phone: z.string().trim().min(6, 'Please enter a valid contact phone number'),
+  phone: z
+    .string()
+    .trim()
+    .superRefine((val, ctx) => {
+      if (!val || val.length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please enter a valid contact phone number',
+        });
+        return;
+      }
+      const country = findCountryByDialCode(val);
+      const clean = val.replace(/\s+/g, '');
+      const digits = clean.startsWith(country.dialCode)
+        ? clean.slice(country.dialCode.length).replace(/\D/g, '')
+        : clean.replace(/\D/g, '');
+      const err = country.validateDigits(digits);
+      if (err) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: err,
+        });
+      }
+    }),
   reason: z.string().trim().min(5, 'Please describe the reason for your visit (min 5 characters)'),
   format: z.enum(['online', 'offline'], {
     required_error: 'Please select online or offline format',
   }),
   language: z.string().min(1, 'Please select your preferred language'),
+  gender: z.string().min(1, 'Please select your gender'),
 });
 
 type BookingFormValues = z.infer<typeof bookingSchema>;
@@ -39,6 +66,8 @@ type BookingFormValues = z.infer<typeof bookingSchema>;
 export const ContactForm: React.FC = React.memo(() => {
   const [searchParams] = useSearchParams();
   const { sendMessage, loading, success, reset } = useContact();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [pendingValues, setPendingValues] = useState<BookingAppointmentForm | null>(null);
 
   const typeParam = searchParams.get('type')?.toLowerCase();
   const initialType: 'ayurveda treatment' | 'yoga class' =
@@ -58,6 +87,7 @@ export const ContactForm: React.FC = React.memo(() => {
       name: '',
       email: '',
       phone: '',
+      gender: 'Male',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -77,26 +107,52 @@ export const ContactForm: React.FC = React.memo(() => {
     }
   }, [typeParam, setValue]);
 
-  const onSubmit = async (values: BookingFormValues) => {
+  const handleReviewBooking = useCallback((values: BookingFormValues) => {
     const payload: BookingAppointmentForm = {
       type: values.type,
       name: values.name,
       email: values.email,
       phone: values.phone,
+      gender: values.gender,
       reason: values.reason,
       format: values.format,
       language: values.language,
     };
-    await sendMessage(payload);
-  };
+    setPendingValues(payload);
+    setIsConfirmOpen(true);
+  }, []);
+
+  const handleConfirmFinal = useCallback(async () => {
+    if (!pendingValues) return;
+    try {
+      const reasonPayload = pendingValues.gender
+        ? `[Gender: ${pendingValues.gender}] ${pendingValues.reason}`
+        : pendingValues.reason;
+
+      await sendMessage({
+        ...pendingValues,
+        reason: reasonPayload,
+      });
+      setIsConfirmOpen(false);
+      setPendingValues(null);
+    } catch {
+    }
+  }, [pendingValues, sendMessage]);
+
+  const handleCloseConfirm = useCallback(() => {
+    setIsConfirmOpen(false);
+  }, []);
 
   const handleBookAnother = () => {
     reset();
+    setIsConfirmOpen(false);
+    setPendingValues(null);
     resetForm({
       type: 'ayurveda treatment',
       name: '',
       email: '',
       phone: '',
+      gender: 'Male',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -152,7 +208,7 @@ export const ContactForm: React.FC = React.memo(() => {
               <p>Schedule your personalized Ayurveda treatment or yoga session with our clinical specialists.</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="contact-form" noValidate>
+            <form onSubmit={handleSubmit(handleReviewBooking)} className="contact-form" noValidate>
               <div className="contact-form__field">
                 <label className="field-title">Appointment / Service Type</label>
                 <div className="appointment-type-selector">
@@ -246,14 +302,13 @@ export const ContactForm: React.FC = React.memo(() => {
                   <Phone size={14} className="inline mr-1 text-primary-green" />
                   Phone Number <span className="required-star">*</span>
                 </label>
-                <input
+                <InternationalPhoneInput
                   id="bookingPhone"
-                  type="tel"
-                  placeholder="e.g. +91 98765 43210"
-                  {...register('phone')}
-                  className={errors.phone ? 'input-error' : ''}
+                  value={watch('phone')}
+                  onChange={(val) => setValue('phone', val, { shouldValidate: true })}
+                  error={errors.phone?.message}
+                  defaultCountryCode="IN"
                 />
-                {errors.phone && <span className="field-error">{errors.phone.message}</span>}
               </div>
 
               <div className="contact-form__field">
@@ -268,6 +323,25 @@ export const ContactForm: React.FC = React.memo(() => {
                   className={errors.reason ? 'input-error' : ''}
                 />
                 {errors.reason && <span className="field-error">{errors.reason.message}</span>}
+              </div>
+
+              <div className="contact-form__field">
+                <label htmlFor="bookingGender" className="field-title">
+                  <User size={14} className="inline mr-1 text-primary-green" />
+                  Gender <span className="required-star">*</span>
+                </label>
+                <div className="language-select-wrapper">
+                  <select
+                    id="bookingGender"
+                    {...register('gender')}
+                    className="language-select"
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {errors.gender && <span className="field-error">{errors.gender.message}</span>}
               </div>
 
               <div className="contact-form__field">
@@ -307,22 +381,22 @@ export const ContactForm: React.FC = React.memo(() => {
                 disabled={loading}
                 className="confirm-booking-btn"
               >
-                {loading ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>Processing Confirmation...</span>
-                  </>
-                ) : (
-                  <>
-                    <CalendarCheck size={18} />
-                    <span>Confirm Appointment</span>
-                  </>
-                )}
+                <CalendarCheck size={18} />
+                <span>Review &amp; Confirm Consultation</span>
+                <ArrowRight size={16} />
               </Button>
             </form>
           </>
         )}
       </Card>
+
+      <BookingConfirmModal
+        isOpen={isConfirmOpen}
+        bookingData={pendingValues}
+        onClose={handleCloseConfirm}
+        onConfirm={handleConfirmFinal}
+        isLoading={loading}
+      />
     </div>
   );
 });
