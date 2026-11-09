@@ -158,7 +158,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
           <table className="doctor-patients-table">
             <thead>
               <tr>
-                <th className="col-patient">Patient</th>
+                <th className="col-number">#</th>
+                <th className="col-patient">Name</th>
                 <th className="col-contact">Contact Info</th>
                 <th className="col-service">Service &amp; Mode</th>
                 <th className="col-concern">Chief Concern</th>
@@ -180,7 +181,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="doctor-patients-empty">
+                  <td colSpan={7} className="doctor-patients-empty">
                     No patient records match the current filter criteria.
                   </td>
                 </tr>

@@ -11,6 +11,10 @@ export const PatientListItemSkeleton: React.FC<PatientListItemSkeletonProps> = R
       <>
         {Array.from({ length: count }).map((_, idx) => (
           <tr key={idx} className="doctor-patient-row--skeleton">
+            <td className="patient-cell patient-cell--number">
+              <div className="patient-skeleton-box skeleton-table-number" />
+            </td>
+
             <td className="patient-cell patient-cell--profile">
               <div className="patient-profile-wrapper">
                 <div className="patient-skeleton-box skeleton-table-avatar" />

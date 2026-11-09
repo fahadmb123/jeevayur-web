@@ -55,6 +55,7 @@ function parsePatientCondition(rawCondition?: string) {
 
 export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
   patient,
+  index,
   onSelect,
   onViewDetails,
 }) => {
@@ -80,6 +81,10 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
       className="doctor-patient-row"
       onClick={() => (onViewDetails ? onViewDetails(patient) : onSelect?.(patient))}
     >
+      <td className="patient-cell patient-cell--number">
+        <span className="patient-row-number">{index + 1}</span>
+      </td>
+
       <td className="patient-cell patient-cell--profile">
         <div className="patient-profile-wrapper">
           <PatientAvatar

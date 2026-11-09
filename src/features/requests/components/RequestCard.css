@@ -157,13 +157,42 @@
   display: flex;
   flex-direction: column;
   gap: 8px;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .consult-card__concern-text {
   font-size: 0.88rem;
-  line-height: 1.45;
+  line-height: 1.5;
   color: var(--text-secondary, #485E53);
   margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.consult-card__concern-text::-webkit-scrollbar {
+  width: 4px;
+}
+
+.consult-card__concern-text::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+}
+
+.consult-card__concern-text::-webkit-scrollbar-thumb {
+  background: rgba(27, 107, 80, 0.28);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .consult-card__concern-text::-webkit-scrollbar-thumb,
+.dark .consult-card__concern-text::-webkit-scrollbar-thumb {
+  background: rgba(46, 157, 119, 0.35);
 }
 
 .consult-card__concern-label {

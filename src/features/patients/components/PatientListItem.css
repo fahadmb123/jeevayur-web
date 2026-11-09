@@ -25,6 +25,34 @@
   color: var(--text-primary, #14241C);
 }
 
+.patient-cell--number {
+  text-align: center;
+  width: 48px;
+  padding-left: 12px;
+  padding-right: 6px;
+}
+
+.patient-row-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background-color: var(--surface-secondary, #F3F6F1);
+  color: var(--text-secondary, #485E53);
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid var(--border-color, #E2E8DE);
+}
+
+[data-theme='dark'] .patient-row-number,
+.dark .patient-row-number {
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #92AA9E;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
 .patient-profile-wrapper {
   display: flex;
   align-items: center;

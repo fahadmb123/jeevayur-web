@@ -35,6 +35,13 @@
   border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
+.skeleton-table-number {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  margin: 0 auto;
+}
+
 [data-theme='dark'] .doctor-patient-row--skeleton,
 .dark .doctor-patient-row--skeleton {
   border-bottom-color: var(--border-color, #1D362B);
