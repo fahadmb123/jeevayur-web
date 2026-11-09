@@ -2,9 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Inbox,
-  Clock,
-  CheckCircle2,
-  XCircle,
   Users,
   Check,
 } from 'lucide-react';
@@ -16,7 +13,7 @@ import {
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import { useRequests } from '../hooks/useRequests';
 import { RequestCard } from '../components/RequestCard';
-import { RequestCardSkeleton, RequestStatsSkeleton } from '../components/RequestCardSkeleton';
+import { RequestCardSkeleton } from '../components/RequestCardSkeleton';
 import { RequestDetailModal } from '../components/RequestDetailModal';
 import { RejectReasonModal } from '../components/RejectReasonModal';
 import { AcceptConfirmModal } from '../components/AcceptConfirmModal';
@@ -243,52 +240,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
           <span>View Registered Patients</span>
         </Link>
       </div>
-
-      {loading ? (
-        <RequestStatsSkeleton />
-      ) : (
-        <div className="doctor-consult-stats-grid">
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--total">
-              <Inbox size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Total Consultations</span>
-              <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card doctor-consult-stat-card--highlight">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--pending">
-              <Clock size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Pending Review</span>
-              <strong className="doctor-consult-stat-card__value text-amber">{pendingCount}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--accepted">
-              <CheckCircle2 size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Accepted & Enrolled</span>
-              <strong className="doctor-consult-stat-card__value text-green">{acceptedCount}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-consult-stat-card">
-            <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--rejected">
-              <XCircle size={22} />
-            </div>
-            <div className="doctor-consult-stat-card__info">
-              <span className="doctor-consult-stat-card__label">Declined</span>
-              <strong className="doctor-consult-stat-card__value">{rejectedCount}</strong>
-            </div>
-          </div>
-        </div>
-      )}
 
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patient by name, phone, symptoms, or service..."
