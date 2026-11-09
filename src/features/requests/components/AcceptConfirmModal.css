@@ -119,6 +119,7 @@
   gap: 16px;
   max-height: 72vh;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .accept-confirm-patient-card {
@@ -129,6 +130,9 @@
   background: var(--surface-secondary, #F8FAF7);
   border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 14px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 [data-theme='dark'] .accept-confirm-patient-card,
@@ -264,6 +268,11 @@
   background: rgba(27, 107, 80, 0.03);
   border-left: 3px solid var(--primary-green, #1B6B50);
   border-radius: 0 10px 10px 0;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 [data-theme='dark'] .accept-confirm-concern-box,
@@ -291,6 +300,35 @@
   line-height: 1.55;
   color: var(--text-primary, #14241C);
   white-space: pre-wrap;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  max-height: 140px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.accept-confirm-concern-text::-webkit-scrollbar {
+  width: 5px;
+}
+
+.accept-confirm-concern-text::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+}
+
+.accept-confirm-concern-text::-webkit-scrollbar-thumb {
+  background: rgba(27, 107, 80, 0.28);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .accept-confirm-concern-text::-webkit-scrollbar-thumb,
+.dark .accept-confirm-concern-text::-webkit-scrollbar-thumb {
+  background: rgba(46, 157, 119, 0.35);
 }
 
 .accept-confirm-notice {
