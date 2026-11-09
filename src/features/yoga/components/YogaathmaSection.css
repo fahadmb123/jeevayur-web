@@ -313,22 +313,42 @@
 }
 
 .yogaathma-programs-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
   position: relative;
 }
 
+.yogaathma-programs-grid > .yoga-program-card-slot {
+  flex: 0 1 calc((100% - 40px) / 3);
+  width: calc((100% - 40px) / 3);
+  max-width: calc((100% - 40px) / 3);
+  min-width: 280px;
+  box-sizing: border-box;
+}
+
 @media (max-width: 1040px) {
   .yogaathma-programs-grid {
-    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .yogaathma-programs-grid > .yoga-program-card-slot {
+    flex: 0 1 calc((100% - 18px) / 2);
+    width: calc((100% - 18px) / 2);
+    max-width: calc((100% - 18px) / 2);
+    min-width: 260px;
   }
 }
 
 @media (max-width: 680px) {
   .yogaathma-programs-grid {
-    grid-template-columns: 1fr;
     gap: 16px;
+  }
+  .yogaathma-programs-grid > .yoga-program-card-slot {
+    flex: 0 1 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 }
 

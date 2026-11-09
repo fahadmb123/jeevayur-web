@@ -142,23 +142,46 @@
 
 /* Images Grid */
 .yoga-images-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 24px;
   margin-bottom: 56px;
 }
 
+.yoga-images-grid > div {
+  flex: 0 1 calc((100% - 48px) / 3);
+  width: calc((100% - 48px) / 3);
+  max-width: calc((100% - 48px) / 3);
+  min-width: 280px;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.yoga-images-grid > div > .yoga-image-card {
+  width: 100%;
+}
+
 @media (max-width: 1024px) {
   .yoga-images-grid {
-    grid-template-columns: repeat(2, 1fr);
     gap: 18px;
+  }
+  .yoga-images-grid > div {
+    flex: 0 1 calc((100% - 18px) / 2);
+    width: calc((100% - 18px) / 2);
+    max-width: calc((100% - 18px) / 2);
   }
 }
 
 @media (max-width: 640px) {
   .yoga-images-grid {
-    grid-template-columns: 1fr;
     gap: 16px;
+  }
+  .yoga-images-grid > div {
+    flex: 0 1 100%;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
 }
 

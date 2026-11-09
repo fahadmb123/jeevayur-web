@@ -311,6 +311,7 @@
   box-sizing: border-box;
   max-height: 140px;
   overflow-y: auto;
+  overflow-x: hidden;
   padding-right: 6px;
 }
 
