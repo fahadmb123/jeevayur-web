@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Eye, Phone, Mail, MapPin, Video } from 'lucide-react';
 import type { Patient } from '../types';
 import { StatusPill } from '@/shared/ui/status-pill';
+import { PatientAvatar } from './PatientAvatar';
 import './PatientListItem.css';
 
 export interface PatientListItemProps {
@@ -63,8 +64,6 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
     return parsePatientCondition(patient.condition);
   }, [patient.condition]);
 
-  const initial = patient.name.charAt(0).toUpperCase();
-
   const handleOpenDetails = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onViewDetails) {
@@ -83,7 +82,13 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
     >
       <td className="patient-cell patient-cell--profile">
         <div className="patient-profile-wrapper">
-          <div className="patient-table-avatar">{initial}</div>
+          <PatientAvatar
+            name={patient.name}
+            gender={patient.gender}
+            avatarUrl={patient.avatarUrl}
+            id={patient.id}
+            size={38}
+          />
           <div className="patient-profile-meta">
             <strong className="patient-table-name">{patient.name}</strong>
             <span className="patient-table-id">#{String(patient.id).slice(-6)}</span>

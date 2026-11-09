@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Calendar, Clock, Video, MapPin, Check, X, Eye, UserCheck, AlertCircle, Phone, Globe } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { StatusPill } from '@/shared/ui/status-pill';
+import { PatientAvatar } from '@/features/patients';
 import type { PatientRequest } from '../types';
 import './RequestCard.css';
 
@@ -36,10 +37,7 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
     }
   }, [request.status]);
 
-  const initial = React.useMemo(
-    () => request.patientName.charAt(0).toUpperCase(),
-    [request.patientName]
-  );
+
 
   return (
     <motion.div
@@ -50,9 +48,7 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
     >
       <div className="consult-card__top">
         <div className="consult-card__patient-info">
-          <div className="consult-card__avatar">
-            <span>{initial}</span>
-          </div>
+          <PatientAvatar name={request.patientName} id={request.id} size={38} />
           <div>
             <div className="consult-card__name-row">
               <h3 className="consult-card__name">{request.patientName}</h3>

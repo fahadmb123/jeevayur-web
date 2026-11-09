@@ -11,6 +11,7 @@ import {
   MessageSquare,
 } from 'lucide-react';
 import type { Patient } from '../types';
+import { PatientAvatar } from './PatientAvatar';
 import './PatientDetailModal.css';
 
 export interface PatientDetailModalProps {
@@ -147,9 +148,13 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
             <>
               <div className="patient-detail-modal__header">
                 <div className="patient-detail-modal__profile">
-                  <div className="patient-detail-modal__avatar">
-                    {patient.name.charAt(0).toUpperCase()}
-                  </div>
+                  <PatientAvatar
+                    name={patient.name}
+                    gender={patient.gender}
+                    avatarUrl={patient.avatarUrl}
+                    id={patient.id}
+                    size={48}
+                  />
                   <div className="patient-detail-modal__name-group">
                     <h2 className="patient-detail-modal__name">{patient.name}</h2>
                     <span className="patient-detail-modal__sub">

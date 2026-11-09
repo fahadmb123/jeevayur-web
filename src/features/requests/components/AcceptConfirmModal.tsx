@@ -14,6 +14,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
+import { PatientAvatar } from '@/features/patients';
 import type { PatientRequest } from '../types';
 import './AcceptConfirmModal.css';
 
@@ -34,7 +35,7 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
 }) => {
   if (!request) return null;
 
-  const initial = request.patientName.charAt(0).toUpperCase();
+
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
@@ -83,7 +84,7 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
             <form onSubmit={handleConfirm} className="accept-confirm-modal__form">
               <div className="accept-confirm-modal__body">
                 <div className="accept-confirm-patient-card">
-                  <div className="accept-confirm-patient-avatar">{initial}</div>
+                  <PatientAvatar name={request.patientName} id={request.id} size={42} />
                   <div className="accept-confirm-patient-meta">
                     <div className="accept-confirm-patient-name-row">
                       <h4 className="accept-confirm-patient-name">{request.patientName}</h4>

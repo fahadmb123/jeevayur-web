@@ -1,0 +1,44 @@
+.patient-human-avatar {
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  background-color: var(--surface-secondary, #F3F6F1);
+  border: 1.5px solid var(--border-color, #E2E8DE);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  user-select: none;
+}
+
+[data-theme='dark'] .patient-human-avatar,
+.dark .patient-human-avatar {
+  background-color: #172D24;
+  border-color: rgba(46, 157, 119, 0.3);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+.patient-human-avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 50%;
+}
+
+.patient-human-avatar__fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--primary-green-tint, #EDF6F1);
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .patient-human-avatar__fallback,
+.dark .patient-human-avatar__fallback {
+  background: rgba(46, 157, 119, 0.16);
+  color: #34D399;
+}

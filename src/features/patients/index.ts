@@ -10,3 +10,4 @@ export * from './components/AddPatientModal';
 export * from './components/AddPatientButton';
 export * from './components/StartConsultationModal';
 export * from './components/RecentPatientsWidget';
+export * from './components/PatientAvatar';

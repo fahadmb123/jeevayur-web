@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { StatusPill } from '@/shared/ui/status-pill';
+import { PatientAvatar } from '@/features/patients';
 import type { PatientRequest } from '../types';
 import './RequestDetailModal.css';
 
@@ -66,9 +67,7 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = React.memo(
           >
             <div className="consult-detail-modal__header">
               <div className="consult-detail-modal__title-wrap">
-                <div className="consult-detail-modal__avatar">
-                  {request.patientName.charAt(0).toUpperCase()}
-                </div>
+                <PatientAvatar name={request.patientName} id={request.id} size={48} />
                 <div>
                   <div className="consult-detail-modal__name-row">
                     <h2 className="consult-detail-modal__name">{request.patientName}</h2>

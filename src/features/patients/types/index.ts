@@ -10,4 +10,5 @@ export interface Patient {
   email?: string;
   gender?: string;
   condition?: string;
+  avatarUrl?: string;
 }
