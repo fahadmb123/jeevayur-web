@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, User, Phone, CheckCircle2 } from 'lucide-react';
+import { X, Calendar, User, Phone, CheckCircle2, ShieldCheck, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { useBookAppointment } from '@/features/appointments/hooks/useBookAppointment';
 import type { BookingFormData } from '@/features/appointments/types';
@@ -25,19 +25,28 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
     notes: '',
   });
 
+  const [step, setStep] = useState<'form' | 'confirm'>('form');
   const { book, loading } = useBookAppointment();
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
+  const handleProceedToReview = useCallback(
+    (e: React.FormEvent) => {
       e.preventDefault();
       if (!formData.fullName || !formData.phone) return;
+      setStep('confirm');
+    },
+    [formData.fullName, formData.phone]
+  );
+
+  const handleFinalConfirm = useCallback(
+    async () => {
       try {
         await book(formData);
         setSubmitted(true);
         setTimeout(() => {
           onSuccess?.(formData);
           setSubmitted(false);
+          setStep('form');
           onClose();
         }, 1400);
       } catch {
@@ -46,10 +55,15 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
     [formData, book, onSuccess, onClose]
   );
 
+  const handleClose = useCallback(() => {
+    setStep('form');
+    onClose();
+  }, [onClose]);
+
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="book-modal-backdrop" onClick={onClose}>
+        <div className="book-modal-backdrop" onClick={handleClose}>
           <motion.div
             className="book-modal"
             onClick={(e) => e.stopPropagation()}
@@ -60,12 +74,18 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
           >
             <div className="book-modal__header">
               <div>
-                <h3 className="book-modal__title">Book Consultation</h3>
-                <p className="book-modal__subtitle">Holistic healing tailored for you</p>
+                <h3 className="book-modal__title">
+                  {step === 'confirm' ? 'Confirm Consultation' : 'Book Consultation'}
+                </h3>
+                <p className="book-modal__subtitle">
+                  {step === 'confirm'
+                    ? 'Review your consultation request'
+                    : 'Holistic healing tailored for you'}
+                </p>
               </div>
               <button
                 className="book-modal__close-btn"
-                onClick={onClose}
+                onClick={handleClose}
                 aria-label="Close modal"
               >
                 <X size={20} />
@@ -78,8 +98,62 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
                 <h4>Appointment Requested!</h4>
                 <p>Our clinic will contact you shortly to confirm your slot.</p>
               </div>
+            ) : step === 'confirm' ? (
+              <div className="book-modal__confirm-view">
+                <div className="book-modal__confirm-table">
+                  <div className="book-modal__confirm-row">
+                    <span className="book-modal__confirm-label">Patient Name</span>
+                    <strong className="book-modal__confirm-val">{formData.fullName}</strong>
+                  </div>
+                  <div className="book-modal__confirm-row">
+                    <span className="book-modal__confirm-label">Phone Number</span>
+                    <strong className="book-modal__confirm-val">{formData.phone}</strong>
+                  </div>
+                  <div className="book-modal__confirm-row">
+                    <span className="book-modal__confirm-label">Selected Therapy</span>
+                    <strong className="book-modal__confirm-val">{formData.service}</strong>
+                  </div>
+                  {formData.preferredDate && (
+                    <div className="book-modal__confirm-row">
+                      <span className="book-modal__confirm-label">Preferred Date</span>
+                      <strong className="book-modal__confirm-val">{formData.preferredDate}</strong>
+                    </div>
+                  )}
+                </div>
+
+                <div className="book-modal__confirm-notice">
+                  <ShieldCheck size={16} />
+                  <span>Our medical team will review your booking and confirm your appointment.</span>
+                </div>
+
+                <div className="book-modal__actions">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => setStep('form')}
+                    disabled={loading}
+                  >
+                    Back to Edit
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={handleFinalConfirm}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      'Confirming...'
+                    ) : (
+                      <>
+                        <Check size={16} />
+                        <span>Confirm &amp; Book</span>
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
             ) : (
-              <form onSubmit={handleSubmit} className="book-modal__form">
+              <form onSubmit={handleProceedToReview} className="book-modal__form">
                 <div className="book-modal__field">
                   <label htmlFor="fullName">Full Name</label>
                   <div className="book-modal__input-wrapper">
@@ -140,11 +214,12 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
                 </div>
 
                 <div className="book-modal__actions">
-                  <Button type="button" variant="ghost" onClick={onClose}>
+                  <Button type="button" variant="ghost" onClick={handleClose}>
                     Cancel
                   </Button>
-                  <Button type="submit" variant="primary" disabled={loading}>
-                    {loading ? 'Submitting...' : 'Confirm Booking'}
+                  <Button type="submit" variant="primary">
+                    <span>Review &amp; Confirm</span>
+                    <ArrowRight size={15} />
                   </Button>
                 </div>
               </form>
@@ -157,4 +232,3 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
 });
 
 BookAppointmentModal.displayName = 'BookAppointmentModal';
-

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -11,13 +11,14 @@ import {
   MapPin,
   Video,
   Leaf,
-  Loader2,
   Phone,
+  ArrowRight,
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { useContact } from '../hooks/useContact';
 import { POPULAR_LANGUAGES, ALL_WORLD_LANGUAGES } from '../data/languages';
+import { BookingConfirmModal } from './BookingConfirmModal';
 import type { BookingAppointmentForm } from '../types';
 
 const bookingSchema = z.object({
@@ -39,6 +40,8 @@ type BookingFormValues = z.infer<typeof bookingSchema>;
 export const ContactForm: React.FC = React.memo(() => {
   const [searchParams] = useSearchParams();
   const { sendMessage, loading, success, reset } = useContact();
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [pendingValues, setPendingValues] = useState<BookingAppointmentForm | null>(null);
 
   const typeParam = searchParams.get('type')?.toLowerCase();
   const initialType: 'ayurveda treatment' | 'yoga class' =
@@ -77,7 +80,7 @@ export const ContactForm: React.FC = React.memo(() => {
     }
   }, [typeParam, setValue]);
 
-  const onSubmit = async (values: BookingFormValues) => {
+  const handleReviewBooking = useCallback((values: BookingFormValues) => {
     const payload: BookingAppointmentForm = {
       type: values.type,
       name: values.name,
@@ -87,11 +90,28 @@ export const ContactForm: React.FC = React.memo(() => {
       format: values.format,
       language: values.language,
     };
-    await sendMessage(payload);
-  };
+    setPendingValues(payload);
+    setIsConfirmOpen(true);
+  }, []);
+
+  const handleConfirmFinal = useCallback(async () => {
+    if (!pendingValues) return;
+    try {
+      await sendMessage(pendingValues);
+      setIsConfirmOpen(false);
+      setPendingValues(null);
+    } catch {
+    }
+  }, [pendingValues, sendMessage]);
+
+  const handleCloseConfirm = useCallback(() => {
+    setIsConfirmOpen(false);
+  }, []);
 
   const handleBookAnother = () => {
     reset();
+    setIsConfirmOpen(false);
+    setPendingValues(null);
     resetForm({
       type: 'ayurveda treatment',
       name: '',
@@ -152,7 +172,7 @@ export const ContactForm: React.FC = React.memo(() => {
               <p>Schedule your personalized Ayurveda treatment or yoga session with our clinical specialists.</p>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="contact-form" noValidate>
+            <form onSubmit={handleSubmit(handleReviewBooking)} className="contact-form" noValidate>
               <div className="contact-form__field">
                 <label className="field-title">Appointment / Service Type</label>
                 <div className="appointment-type-selector">
@@ -307,22 +327,22 @@ export const ContactForm: React.FC = React.memo(() => {
                 disabled={loading}
                 className="confirm-booking-btn"
               >
-                {loading ? (
-                  <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>Processing Confirmation...</span>
-                  </>
-                ) : (
-                  <>
-                    <CalendarCheck size={18} />
-                    <span>Confirm Appointment</span>
-                  </>
-                )}
+                <CalendarCheck size={18} />
+                <span>Review &amp; Confirm Consultation</span>
+                <ArrowRight size={16} />
               </Button>
             </form>
           </>
         )}
       </Card>
+
+      <BookingConfirmModal
+        isOpen={isConfirmOpen}
+        bookingData={pendingValues}
+        onClose={handleCloseConfirm}
+        onConfirm={handleConfirmFinal}
+        isLoading={loading}
+      />
     </div>
   );
 });

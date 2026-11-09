@@ -19,6 +19,7 @@ import { RequestCard } from '../components/RequestCard';
 import { RequestCardSkeleton, RequestStatsSkeleton } from '../components/RequestCardSkeleton';
 import { RequestDetailModal } from '../components/RequestDetailModal';
 import { RejectReasonModal } from '../components/RejectReasonModal';
+import { AcceptConfirmModal } from '../components/AcceptConfirmModal';
 import type { PatientRequest, RequestFilterOption } from '../types';
 import { ROUTES } from '@/shared/config/routes';
 import './DoctorRequestsPage.css';
@@ -41,6 +42,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   const [detailRequest, setDetailRequest] = useState<PatientRequest | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<PatientRequest | null>(null);
+  const [acceptingRequest, setAcceptingRequest] = useState<PatientRequest | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
@@ -52,11 +54,20 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
     }, 4500);
   }, []);
 
-  const handleAccept = useCallback(
+  const handleOpenAccept = useCallback((req: PatientRequest) => {
+    setAcceptingRequest(req);
+  }, []);
+
+  const handleCloseAccept = useCallback(() => {
+    setAcceptingRequest(null);
+  }, []);
+
+  const handleConfirmAccept = useCallback(
     async (req: PatientRequest) => {
       try {
         setIsProcessing(true);
         await acceptRequest(req.id);
+        setAcceptingRequest(null);
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request accepted! ${req.patientName} has been enrolled into your patient directory.`);
       } catch {
@@ -299,7 +310,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
                 key={request.id}
                 request={request}
                 index={index}
-                onAccept={handleAccept}
+                onAccept={handleOpenAccept}
                 onReject={handleOpenReject}
                 onViewDetails={handleViewDetails}
                 isProcessing={isProcessing}
@@ -323,8 +334,16 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         request={detailRequest}
         isOpen={Boolean(detailRequest)}
         onClose={handleCloseDetail}
-        onAccept={handleAccept}
+        onAccept={handleOpenAccept}
         onReject={handleOpenReject}
+        isProcessing={isProcessing}
+      />
+
+      <AcceptConfirmModal
+        request={acceptingRequest}
+        isOpen={Boolean(acceptingRequest)}
+        onClose={handleCloseAccept}
+        onConfirmAccept={handleConfirmAccept}
         isProcessing={isProcessing}
       />
 

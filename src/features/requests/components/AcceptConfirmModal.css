@@ -1,0 +1,392 @@
+.accept-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 20, 15, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1300;
+  padding: 16px;
+}
+
+.accept-confirm-modal {
+  width: 100%;
+  max-width: 580px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 20px;
+  box-shadow: 0 28px 56px -12px rgba(11, 51, 38, 0.28);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-theme='dark'] .accept-confirm-modal,
+.dark .accept-confirm-modal {
+  background: var(--surface-color, #11221B);
+  border-color: var(--border-color, #1D362B);
+  box-shadow: 0 28px 56px -12px rgba(0, 0, 0, 0.65);
+}
+
+.accept-confirm-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
+  background: linear-gradient(to right, var(--surface-color, #FFFFFF), var(--surface-secondary, #F8FAF7));
+}
+
+[data-theme='dark'] .accept-confirm-modal__header,
+.dark .accept-confirm-modal__header {
+  border-bottom-color: var(--border-color, #1D362B);
+  background: linear-gradient(to right, #11221B, #0E1B15);
+}
+
+.accept-confirm-modal__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.accept-confirm-modal__icon-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1B6B50 0%, #0B3326 100%);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(27, 107, 80, 0.3);
+}
+
+[data-theme='dark'] .accept-confirm-modal__icon-badge,
+.dark .accept-confirm-modal__icon-badge {
+  background: linear-gradient(135deg, #2E9D77 0%, #16533E 100%);
+}
+
+.accept-confirm-modal__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+  letter-spacing: -0.01em;
+}
+
+.accept-confirm-modal__subtitle {
+  margin: 2px 0 0 0;
+  font-size: 0.8rem;
+  color: var(--text-secondary, #485E53);
+}
+
+.accept-confirm-modal__close-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #485E53);
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.accept-confirm-modal__close-btn:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary, #14241C);
+}
+
+[data-theme='dark'] .accept-confirm-modal__close-btn:hover,
+.dark .accept-confirm-modal__close-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.accept-confirm-modal__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.accept-confirm-modal__body {
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 72vh;
+  overflow-y: auto;
+}
+
+.accept-confirm-patient-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--surface-secondary, #F8FAF7);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 14px;
+}
+
+[data-theme='dark'] .accept-confirm-patient-card,
+.dark .accept-confirm-patient-card {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border-color, #1D362B);
+}
+
+.accept-confirm-patient-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--primary-green-tint, #EDF6F1);
+  color: var(--primary-green, #1B6B50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+[data-theme='dark'] .accept-confirm-patient-avatar,
+.dark .accept-confirm-patient-avatar {
+  background: rgba(46, 157, 119, 0.16);
+  color: #2E9D77;
+}
+
+.accept-confirm-patient-meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.accept-confirm-patient-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.accept-confirm-patient-name {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-primary, #14241C);
+}
+
+.accept-confirm-patient-service {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .accept-confirm-patient-service,
+.dark .accept-confirm-patient-service {
+  color: #2E9D77;
+}
+
+.accept-confirm-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.accept-confirm-badge--mode {
+  background: rgba(27, 107, 80, 0.1);
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .accept-confirm-badge--mode,
+.dark .accept-confirm-badge--mode {
+  background: rgba(46, 157, 119, 0.18);
+  color: #2E9D77;
+}
+
+.accept-confirm-details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 520px) {
+  .accept-confirm-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.accept-confirm-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 12px;
+  background: var(--surface-secondary, #F8FAF7);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 10px;
+}
+
+[data-theme='dark'] .accept-confirm-detail-item,
+.dark .accept-confirm-detail-item {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: var(--border-color, #1D362B);
+}
+
+.accept-confirm-detail-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--text-secondary, #485E53);
+}
+
+.accept-confirm-detail-val {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary, #14241C);
+  word-break: break-all;
+}
+
+.accept-confirm-concern-box {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  background: rgba(27, 107, 80, 0.03);
+  border-left: 3px solid var(--primary-green, #1B6B50);
+  border-radius: 0 10px 10px 0;
+}
+
+[data-theme='dark'] .accept-confirm-concern-box,
+.dark .accept-confirm-concern-box {
+  background: rgba(46, 157, 119, 0.05);
+  border-left-color: #2E9D77;
+}
+
+.accept-confirm-concern-heading {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .accept-confirm-concern-heading,
+.dark .accept-confirm-concern-heading {
+  color: #2E9D77;
+}
+
+.accept-confirm-concern-text {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.55;
+  color: var(--text-primary, #14241C);
+  white-space: pre-wrap;
+}
+
+.accept-confirm-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 14px;
+  background: rgba(27, 107, 80, 0.06);
+  border: 1px dashed rgba(27, 107, 80, 0.28);
+  border-radius: 12px;
+}
+
+[data-theme='dark'] .accept-confirm-notice,
+.dark .accept-confirm-notice {
+  background: rgba(46, 157, 119, 0.08);
+  border-color: rgba(46, 157, 119, 0.3);
+}
+
+.accept-confirm-notice-icon {
+  color: var(--primary-green, #1B6B50);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+[data-theme='dark'] .accept-confirm-notice-icon,
+.dark .accept-confirm-notice-icon {
+  color: #2E9D77;
+}
+
+.accept-confirm-notice-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.accept-confirm-notice-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--primary-green, #1B6B50);
+}
+
+[data-theme='dark'] .accept-confirm-notice-title,
+.dark .accept-confirm-notice-title {
+  color: #2E9D77;
+}
+
+.accept-confirm-notice-desc {
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #485E53);
+}
+
+.accept-confirm-notice-desc strong {
+  color: var(--text-primary, #14241C);
+}
+
+.accept-confirm-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border-color, #E2E8DE);
+  background: var(--surface-secondary, #F8FAF7);
+}
+
+[data-theme='dark'] .accept-confirm-modal__footer,
+.dark .accept-confirm-modal__footer {
+  border-top-color: var(--border-color, #1D362B);
+  background: #0E1B15;
+}
+
+.accept-confirm-submit-btn {
+  background: var(--primary-green, #1B6B50);
+  border: 1px solid var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.accept-confirm-submit-btn:hover {
+  background: #14553F;
+}
+
+.accept-confirm-spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
