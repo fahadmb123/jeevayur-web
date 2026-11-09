@@ -49,22 +49,95 @@ function mapApiPatient(p: ApiPatient): Patient {
   };
 }
 
+export interface PatientFilterQuery {
+  search?: string;
+  status?: string;
+  gender?: string;
+  source?: string;
+  limit?: number;
+  page?: number;
+}
+
+export interface GetPatientsResult {
+  patients: Patient[];
+  total: number;
+  counts: {
+    all: number;
+    completed: number;
+    uncompleted: number;
+  };
+}
+
 let inMemoryPatients: Patient[] = [...INITIAL_PATIENTS];
 
 export const patientService = {
-  async getPatients(): Promise<Patient[]> {
+  async getPatients(query?: PatientFilterQuery): Promise<GetPatientsResult> {
+    const params = new URLSearchParams();
+    if (query?.search && query.search.trim()) params.set('search', query.search.trim());
+    if (query?.status && query.status !== 'All') params.set('status', query.status);
+    if (query?.gender && query.gender !== 'All') params.set('gender', query.gender);
+    if (query?.source && query.source !== 'All') params.set('source', query.source);
+    if (query?.limit) params.set('limit', String(query.limit));
+    if (query?.page) params.set('page', String(query.page));
+
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+
     try {
       const res = await apiClient.get<{
         success: boolean;
-        data: { patients: ApiPatient[]; total: number };
-      }>('/api/patients');
+        data: {
+          patients: ApiPatient[];
+          total: number;
+          counts?: { all: number; completed: number; uncompleted: number };
+        };
+      }>(`/api/patients${queryString}`);
+
       const apiPatients = res.data?.patients || [];
-      if (apiPatients.length > 0) {
-        return [...apiPatients.map(mapApiPatient), ...inMemoryPatients];
-      }
-      return inMemoryPatients;
+      const mapped = apiPatients.map(mapApiPatient);
+      const total = res.data?.total ?? mapped.length;
+      const counts = res.data?.counts || {
+        all: total,
+        completed: mapped.filter((p) => p.status === 'Completed').length,
+        uncompleted: mapped.filter((p) => p.status === 'Uncompleted').length,
+      };
+
+      return {
+        patients: mapped,
+        total,
+        counts,
+      };
     } catch {
-      return inMemoryPatients;
+      let filtered = [...inMemoryPatients];
+      if (query?.search && query.search.trim()) {
+        const q = query.search.toLowerCase().trim();
+        filtered = filtered.filter(
+          (p) =>
+            p.name.toLowerCase().includes(q) ||
+            (p.condition && p.condition.toLowerCase().includes(q)) ||
+            (p.phone && p.phone.toLowerCase().includes(q)) ||
+            (p.email && p.email.toLowerCase().includes(q))
+        );
+      }
+      if (query?.status && query.status !== 'All') {
+        filtered = filtered.filter((p) => p.status === query.status);
+      }
+      if (query?.gender && query.gender !== 'All') {
+        filtered = filtered.filter((p) => p.gender === query.gender);
+      }
+      if (query?.source && query.source !== 'All') {
+        filtered = filtered.filter((p) => p.source === query.source);
+      }
+
+      const limit = query?.limit || 50;
+      return {
+        patients: filtered.slice(0, limit),
+        total: filtered.length,
+        counts: {
+          all: inMemoryPatients.length,
+          completed: inMemoryPatients.filter((p) => p.status === 'Completed').length,
+          uncompleted: inMemoryPatients.filter((p) => p.status === 'Uncompleted').length,
+        },
+      };
     }
   },
 

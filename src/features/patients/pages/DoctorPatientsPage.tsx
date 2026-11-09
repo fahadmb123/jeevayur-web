@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { UserPlus } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { DoctorSearchFilterStrip, type FilterSelectConfig, type FilterPillConfig } from '@/shared/ui/DoctorSearchFilterStrip';
@@ -12,18 +12,36 @@ import type { PatientFilterOption } from '../components/PatientFilterTabs';
 import './DoctorPatientsPage.css';
 
 export const DoctorPatientsPage: React.FC = React.memo(() => {
-  const { patients, loading, addPatient, updatePatientStatus } = usePatients();
-
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
   const [selectedGender, setSelectedGender] = useState('All');
   const [selectedSource, setSelectedSource] = useState('All');
+  const [limit] = useState(50);
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const queryParams = useMemo(() => ({
+    search: debouncedSearch || undefined,
+    status: activeStatus,
+    gender: selectedGender,
+    source: selectedSource,
+    limit,
+  }), [debouncedSearch, activeStatus, selectedGender, selectedSource, limit]);
+
+  const { patients, counts, loading, addPatient, updatePatientStatus } = usePatients(queryParams);
+
   const handleReset = useCallback(() => {
     setSearchQuery('');
+    setDebouncedSearch('');
     setActiveStatus('All');
     setSelectedGender('All');
     setSelectedSource('All');
@@ -46,34 +64,6 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
     },
     [updatePatientStatus]
   );
-
-  const filteredPatients = useMemo(() => {
-    return patients.filter((patient) => {
-      const matchesStatus = activeStatus === 'All' || patient.status === activeStatus;
-      const matchesGender = selectedGender === 'All' || patient.gender === selectedGender;
-      const matchesSource = selectedSource === 'All' || (patient.source || 'doctor') === selectedSource;
-      
-      if (!matchesStatus || !matchesGender || !matchesSource) return false;
-
-      if (!searchQuery.trim()) return true;
-
-      const q = searchQuery.toLowerCase().trim();
-      const matchesName = patient.name.toLowerCase().includes(q);
-      const matchesCondition = patient.condition ? patient.condition.toLowerCase().includes(q) : false;
-      const matchesPhone = patient.phone ? patient.phone.toLowerCase().includes(q) : false;
-      const matchesEmail = patient.email ? patient.email.toLowerCase().includes(q) : false;
-
-      return matchesName || matchesCondition || matchesPhone || matchesEmail;
-    });
-  }, [patients, activeStatus, selectedGender, selectedSource, searchQuery]);
-
-  const counts = useMemo(() => {
-    return {
-      All: patients.length,
-      Uncompleted: patients.filter((p) => p.status !== 'Completed').length,
-      Completed: patients.filter((p) => p.status === 'Completed').length,
-    };
-  }, [patients]);
 
   const selectFilters: FilterSelectConfig[] = useMemo(() => [
     {
@@ -184,8 +174,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
             <tbody>
               {loading ? (
                 <PatientListItemSkeleton count={6} />
-              ) : filteredPatients.length > 0 ? (
-                filteredPatients.map((patient, index) => (
+              ) : patients.length > 0 ? (
+                patients.map((patient, index) => (
                   <PatientListItem
                     key={patient.id}
                     patient={patient}

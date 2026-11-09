@@ -52,7 +52,8 @@ export const doctorService = {
   },
 
   async getPatients(): Promise<Patient[]> {
-    return patientService.getPatients();
+    const res = await patientService.getPatients();
+    return res.patients;
   },
 
   async addPatient(patient: Omit<Patient, 'id'>): Promise<Patient> {
