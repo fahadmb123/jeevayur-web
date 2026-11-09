@@ -197,23 +197,39 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
       />
 
       <Card className="doctor-patients-card">
-        <div className="doctor-patients-list">
-          {loading ? (
-            <PatientListItemSkeleton count={6} />
-          ) : filteredPatients.length > 0 ? (
-            filteredPatients.map((patient, index) => (
-              <PatientListItem
-                key={patient.id}
-                patient={patient}
-                index={index}
-                onViewDetails={handleViewDetails}
-              />
-            ))
-          ) : (
-            <div className="doctor-patients-empty">
-              No patient records match the current filter criteria.
-            </div>
-          )}
+        <div className="doctor-patients-table-container">
+          <table className="doctor-patients-table">
+            <thead>
+              <tr>
+                <th className="col-patient">Patient</th>
+                <th className="col-contact">Contact Info</th>
+                <th className="col-service">Service &amp; Mode</th>
+                <th className="col-concern">Chief Concern</th>
+                <th className="col-status">Status</th>
+                <th className="col-actions">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                <PatientListItemSkeleton count={6} />
+              ) : filteredPatients.length > 0 ? (
+                filteredPatients.map((patient, index) => (
+                  <PatientListItem
+                    key={patient.id}
+                    patient={patient}
+                    index={index}
+                    onViewDetails={handleViewDetails}
+                  />
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={6} className="doctor-patients-empty">
+                    No patient records match the current filter criteria.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       </Card>
 

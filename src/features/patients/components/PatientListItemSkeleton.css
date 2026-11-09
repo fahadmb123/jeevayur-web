@@ -30,84 +30,86 @@
   background-size: 200% 100%;
 }
 
-.patient-skeletons-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
-
-.patient-list-item--skeleton {
+.doctor-patient-row--skeleton {
   pointer-events: none;
-  user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  background-color: var(--surface-color, #FFFFFF);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 12px;
-  box-shadow: 0 2px 8px -2px rgba(18, 76, 56, 0.04);
+  border-bottom: 1px solid var(--border-color, #E2E8DE);
 }
 
-.skeleton-patient-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+[data-theme='dark'] .doctor-patient-row--skeleton,
+.dark .doctor-patient-row--skeleton {
+  border-bottom-color: var(--border-color, #1D362B);
 }
 
-.skeleton-patient-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.skeleton-table-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   flex-shrink: 0;
 }
 
-.skeleton-patient-details {
+.skeleton-profile-meta {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
-.skeleton-patient-name {
-  width: 145px;
-  height: 16px;
+.skeleton-table-name {
+  width: 120px;
+  height: 15px;
   border-radius: 4px;
 }
 
-.skeleton-patient-meta {
-  width: 110px;
+.skeleton-table-id {
+  width: 55px;
+  height: 11px;
+  border-radius: 4px;
+}
+
+.skeleton-table-phone {
+  width: 105px;
+  height: 13px;
+  border-radius: 4px;
+}
+
+.skeleton-table-email {
+  width: 130px;
   height: 12px;
   border-radius: 4px;
 }
 
-.skeleton-patient-status-wrap {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.skeleton-table-service {
+  width: 120px;
+  height: 14px;
+  border-radius: 4px;
 }
 
-.skeleton-patient-pill {
+.skeleton-table-format {
+  width: 70px;
+  height: 16px;
+  border-radius: 9999px;
+}
+
+.skeleton-table-concern {
+  width: 180px;
+  height: 14px;
+  border-radius: 4px;
+}
+
+.skeleton-table-pill {
   width: 82px;
   height: 24px;
   border-radius: 9999px;
 }
 
-.skeleton-patient-view-btn {
-  width: 106px;
-  height: 30px;
+.skeleton-table-view-btn {
+  width: 72px;
+  height: 28px;
   border-radius: 8px;
-}
-
-.skeleton-patient-action {
-  width: 24px;
-  height: 24px;
-  border-radius: 6px;
+  margin-left: auto;
 }
 
 .doctor-patient-stat-card--skeleton {
   pointer-events: none;
-  user-select: none;
 }
 
 .skeleton-patient-stat-icon {
@@ -120,24 +122,18 @@
 .skeleton-patient-stat-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  width: 100%;
+  gap: 6px;
+  flex: 1;
 }
 
 .skeleton-patient-stat-label {
-  width: 65%;
+  width: 80px;
   height: 12px;
   border-radius: 4px;
 }
 
 .skeleton-patient-stat-value {
-  width: 38%;
+  width: 50px;
   height: 24px;
   border-radius: 6px;
-}
-
-@media (max-width: 640px) {
-  .skeleton-patient-view-btn {
-    width: 32px;
-  }
 }

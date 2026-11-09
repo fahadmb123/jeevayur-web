@@ -8,24 +8,47 @@ export interface PatientListItemSkeletonProps {
 export const PatientListItemSkeleton: React.FC<PatientListItemSkeletonProps> = React.memo(
   ({ count = 6 }) => {
     return (
-      <div className="patient-skeletons-wrapper" role="status" aria-label="Loading patients">
+      <>
         {Array.from({ length: count }).map((_, idx) => (
-          <div key={idx} className="patient-list-item--skeleton">
-            <div className="skeleton-patient-info">
-              <div className="patient-skeleton-box skeleton-patient-avatar" />
-              <div className="skeleton-patient-details">
-                <div className="patient-skeleton-box skeleton-patient-name" />
-                <div className="patient-skeleton-box skeleton-patient-meta" />
+          <tr key={idx} className="doctor-patient-row--skeleton">
+            <td className="patient-cell patient-cell--profile">
+              <div className="patient-profile-wrapper">
+                <div className="patient-skeleton-box skeleton-table-avatar" />
+                <div className="skeleton-profile-meta">
+                  <div className="patient-skeleton-box skeleton-table-name" />
+                  <div className="patient-skeleton-box skeleton-table-id" />
+                </div>
               </div>
-            </div>
-            <div className="skeleton-patient-status-wrap">
-              <div className="patient-skeleton-box skeleton-patient-pill" />
-              <div className="patient-skeleton-box skeleton-patient-view-btn" />
-              <div className="patient-skeleton-box skeleton-patient-action" />
-            </div>
-          </div>
+            </td>
+
+            <td className="patient-cell patient-cell--contact">
+              <div className="patient-contact-wrapper">
+                <div className="patient-skeleton-box skeleton-table-phone" />
+                <div className="patient-skeleton-box skeleton-table-email" />
+              </div>
+            </td>
+
+            <td className="patient-cell patient-cell--service">
+              <div className="patient-service-wrapper">
+                <div className="patient-skeleton-box skeleton-table-service" />
+                <div className="patient-skeleton-box skeleton-table-format" />
+              </div>
+            </td>
+
+            <td className="patient-cell patient-cell--concern">
+              <div className="patient-skeleton-box skeleton-table-concern" />
+            </td>
+
+            <td className="patient-cell patient-cell--status">
+              <div className="patient-skeleton-box skeleton-table-pill" />
+            </td>
+
+            <td className="patient-cell patient-cell--action">
+              <div className="patient-skeleton-box skeleton-table-view-btn" />
+            </td>
+          </tr>
         ))}
-      </div>
+      </>
     );
   }
 );

@@ -193,3 +193,4 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
 });
 
 AcceptConfirmModal.displayName = 'AcceptConfirmModal';
+

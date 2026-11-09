@@ -181,3 +181,4 @@ export const BookingConfirmModal: React.FC<BookingConfirmModalProps> = React.mem
 });
 
 BookingConfirmModal.displayName = 'BookingConfirmModal';
+
