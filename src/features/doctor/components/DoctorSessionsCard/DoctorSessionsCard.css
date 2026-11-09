@@ -283,6 +283,23 @@
   cursor: not-allowed;
 }
 
+.session-current-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.session-revoke-btn--current {
+  color: #DC2626;
+  border-color: rgba(220, 38, 38, 0.3);
+  background-color: rgba(220, 38, 38, 0.04);
+}
+
+.session-revoke-btn--current:hover:not(:disabled) {
+  background-color: rgba(220, 38, 38, 0.12);
+  border-color: #DC2626;
+}
+
 .session-current-pill {
   font-size: 0.8rem;
   font-weight: 500;

@@ -207,21 +207,26 @@
   color: var(--text-primary, #14241C);
   text-align: right;
   word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 65%;
 }
 
 .booking-confirm-concern-card {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 12px 14px;
-  background: rgba(27, 107, 80, 0.03);
+  padding: 13px 16px;
+  background: rgba(27, 107, 80, 0.04);
   border-left: 3px solid var(--primary-green, #1B6B50);
-  border-radius: 0 10px 10px 0;
+  border-radius: 0 12px 12px 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 [data-theme='dark'] .booking-confirm-concern-card,
 .dark .booking-confirm-concern-card {
-  background: rgba(46, 157, 119, 0.05);
+  background: rgba(46, 157, 119, 0.08);
   border-left-color: #2E9D77;
 }
 
@@ -244,9 +249,34 @@
 .booking-confirm-concern-text {
   margin: 0;
   font-size: 0.88rem;
-  line-height: 1.55;
+  line-height: 1.58;
   color: var(--text-primary, #14241C);
   white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  word-wrap: break-word;
+  max-height: 140px;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+.booking-confirm-concern-text::-webkit-scrollbar {
+  width: 5px;
+}
+
+.booking-confirm-concern-text::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.04);
+  border-radius: 4px;
+}
+
+.booking-confirm-concern-text::-webkit-scrollbar-thumb {
+  background: rgba(27, 107, 80, 0.28);
+  border-radius: 4px;
+}
+
+[data-theme='dark'] .booking-confirm-concern-text::-webkit-scrollbar-thumb,
+.dark .booking-confirm-concern-text::-webkit-scrollbar-thumb {
+  background: rgba(46, 157, 119, 0.35);
 }
 
 .booking-confirm-assurance-box {

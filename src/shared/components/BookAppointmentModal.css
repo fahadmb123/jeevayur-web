@@ -169,6 +169,9 @@
   font-size: 0.85rem;
   color: var(--text-primary, #0F172A);
   text-align: right;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 65%;
 }
 
 .book-modal__confirm-notice {

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Laptop,
   Smartphone,
@@ -13,6 +14,9 @@ import {
   Shield,
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
+import { ConfirmSignOutModal } from '@/shared/ui/ConfirmSignOutModal';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { ROUTES } from '@/shared/config/routes';
 import { authService, type ActiveSession } from '@/features/auth/services/authService';
 import './DoctorSessionsCard.css';
 
@@ -65,11 +69,18 @@ function formatLocation(session: ActiveSession): string {
 }
 
 export const DoctorSessionsCard: React.FC = React.memo(() => {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
   const [sessions, setSessions] = useState<ActiveSession[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [revokingId, setRevokingId] = useState<string | null>(null);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [pendingRevoke, setPendingRevoke] = useState<{
+    sessionId: string;
+    deviceName: string;
+    isCurrent: boolean;
+  } | null>(null);
 
   const loadSessions = useCallback(async (isRefresh = false) => {
     if (isRefresh) {
@@ -101,13 +112,23 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
     return () => window.removeEventListener('focus', handleFocus);
   }, [loadSessions]);
 
-  const handleRevoke = async (sessionId: string, deviceName: string) => {
-    if (!window.confirm(`Are you sure you want to sign out "${deviceName}"?`)) {
-      return;
-    }
+  const requestRevoke = (sessionId: string, deviceName: string, isCurrent: boolean) => {
+    setPendingRevoke({ sessionId, deviceName, isCurrent });
+  };
+
+  const handleConfirmRevoke = async () => {
+    if (!pendingRevoke) return;
+    const { sessionId, deviceName, isCurrent } = pendingRevoke;
 
     setRevokingId(sessionId);
     try {
+      if (isCurrent) {
+        setPendingRevoke(null);
+        await logout();
+        navigate(ROUTES.LOGIN);
+        return;
+      }
+
       await authService.revokeSession(sessionId);
       setSessions((prev) => prev.filter((s) => s.id !== sessionId));
       setStatusMessage({
@@ -121,6 +142,7 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
       setTimeout(() => setStatusMessage(null), 5000);
     } finally {
       setRevokingId(null);
+      setPendingRevoke(null);
     }
   };
 
@@ -240,11 +262,23 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
 
                 <div className="session-right-action">
                   {isCurrent ? (
-                    <span className="session-current-pill">Active Session</span>
+                    <div className="session-current-actions">
+                      <span className="session-current-pill">Active Session</span>
+                      <button
+                        type="button"
+                        onClick={() => requestRevoke(session.id || 'current', session.device || 'This Device', true)}
+                        disabled={revokingId === (session.id || 'current')}
+                        className="session-revoke-btn session-revoke-btn--current"
+                        title="Sign out of this device"
+                      >
+                        <LogOut size={14} />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
                   ) : (
                     <button
                       type="button"
-                      onClick={() => handleRevoke(session.id, session.device)}
+                      onClick={() => requestRevoke(session.id, session.device || 'Remote Device', false)}
                       disabled={revokingId === session.id}
                       className="session-revoke-btn"
                       title="Revoke and sign out this device"
@@ -267,6 +301,20 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
           If you ever suspect an unrecognized device, IP location, or browser, immediately revoke that device's session and update your account password.
         </div>
       </div>
+
+      <ConfirmSignOutModal
+        isOpen={Boolean(pendingRevoke)}
+        onClose={() => setPendingRevoke(null)}
+        onConfirm={handleConfirmRevoke}
+        title={pendingRevoke?.isCurrent ? 'Sign Out of Practitioner Portal' : 'Sign Out Device'}
+        description={
+          pendingRevoke?.isCurrent
+            ? 'Are you sure you want to sign out of this practitioner portal session? You will be redirected to the login screen.'
+            : `Are you sure you want to sign out "${pendingRevoke?.deviceName}"? Its active session will be invalidated immediately.`
+        }
+        confirmText={pendingRevoke?.isCurrent ? 'Sign Out' : 'Sign Out Device'}
+        isLoading={Boolean(revokingId)}
+      />
     </Card>
   );
 });

@@ -5,6 +5,7 @@ import { ThemeToggle } from '@/shared/ui/ThemeToggle';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { ConfirmSignOutModal } from '@/shared/ui/ConfirmSignOutModal';
 import './DoctorHeader.css';
 
 export interface DoctorHeaderProps {
@@ -48,18 +49,23 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
   const doctorInitial = doctorName.replace(/^Dr\.\s*/i, '').charAt(0) || 'A';
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const pageTitle = useMemo(() => {
     return title || getPageTitle(location.pathname);
   }, [location.pathname, title]);
 
-  const handleLogout = useCallback(async () => {
+  const handleConfirmLogout = useCallback(async () => {
+    setIsLoggingOut(true);
     try {
       setIsDropdownOpen(false);
       await logout();
-    } finally {
       navigate(ROUTES.LOGIN);
+    } finally {
+      setIsLoggingOut(false);
+      setIsSignOutModalOpen(false);
     }
   }, [logout, navigate]);
 
@@ -183,7 +189,10 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
                   type="button"
                   className="doctor-header__dropdown-item doctor-header__dropdown-item--logout"
                   role="menuitem"
-                  onClick={handleLogout}
+                  onClick={() => {
+                    setIsDropdownOpen(false);
+                    setIsSignOutModalOpen(true);
+                  }}
                 >
                   <LogOut size={16} />
                   <span>Sign Out</span>
@@ -193,6 +202,16 @@ export const DoctorHeader: React.FC<DoctorHeaderProps> = React.memo(({
           )}
         </div>
       </div>
+
+      <ConfirmSignOutModal
+        isOpen={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        isLoading={isLoggingOut}
+        title="Sign Out of Practitioner Portal"
+        description="Are you sure you want to sign out of your practitioner session? You will need to log back in to access your consultations and patients."
+        confirmText="Sign Out"
+      />
     </header>
   );
 });

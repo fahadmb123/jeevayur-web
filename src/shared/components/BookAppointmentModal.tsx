@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, User, Phone, CheckCircle2, ShieldCheck, ArrowRight, Check } from 'lucide-react';
+import { X, Calendar, User, CheckCircle2, ShieldCheck, ArrowRight, Check } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
+import { InternationalPhoneInput, findCountryByDialCode } from '@/shared/ui/InternationalPhoneInput';
 import { useBookAppointment } from '@/features/appointments/hooks/useBookAppointment';
 import type { BookingFormData } from '@/features/appointments/types';
 import './BookAppointmentModal.css';
@@ -26,13 +27,29 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
   });
 
   const [step, setStep] = useState<'form' | 'confirm'>('form');
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const { book, loading } = useBookAppointment();
   const [submitted, setSubmitted] = useState(false);
 
   const handleProceedToReview = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      if (!formData.fullName || !formData.phone) return;
+      setPhoneError(null);
+      if (!formData.fullName) return;
+      if (!formData.phone) {
+        setPhoneError('Please enter your phone number');
+        return;
+      }
+      const country = findCountryByDialCode(formData.phone);
+      const clean = formData.phone.replace(/\s+/g, '');
+      const digits = clean.startsWith(country.dialCode)
+        ? clean.slice(country.dialCode.length).replace(/\D/g, '')
+        : clean.replace(/\D/g, '');
+      const validation = country.validateDigits(digits);
+      if (validation) {
+        setPhoneError(validation);
+        return;
+      }
       setStep('confirm');
     },
     [formData.fullName, formData.phone]
@@ -171,17 +188,16 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
 
                 <div className="book-modal__field">
                   <label htmlFor="phone">Phone Number</label>
-                  <div className="book-modal__input-wrapper">
-                    <Phone size={18} className="book-modal__input-icon" />
-                    <input
-                      id="phone"
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    />
-                  </div>
+                  <InternationalPhoneInput
+                    id="phone"
+                    value={formData.phone}
+                    onChange={(val) => {
+                      setFormData((prev) => ({ ...prev, phone: val }));
+                      setPhoneError(null);
+                    }}
+                    error={phoneError || undefined}
+                    defaultCountryCode="AE"
+                  />
                 </div>
 
                 <div className="book-modal__field">

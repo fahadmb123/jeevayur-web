@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
+import { InternationalPhoneInput, findCountryByDialCode } from '@/shared/ui/InternationalPhoneInput';
 import { useContact } from '../hooks/useContact';
 import { POPULAR_LANGUAGES, ALL_WORLD_LANGUAGES } from '../data/languages';
 import { BookingConfirmModal } from './BookingConfirmModal';
@@ -27,7 +28,30 @@ const bookingSchema = z.object({
   }),
   name: z.string().trim().min(2, 'Name must be at least 2 characters'),
   email: z.string().trim().email('Please enter a valid email address'),
-  phone: z.string().trim().min(6, 'Please enter a valid contact phone number'),
+  phone: z
+    .string()
+    .trim()
+    .superRefine((val, ctx) => {
+      if (!val || val.length < 5) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: 'Please enter a valid contact phone number',
+        });
+        return;
+      }
+      const country = findCountryByDialCode(val);
+      const clean = val.replace(/\s+/g, '');
+      const digits = clean.startsWith(country.dialCode)
+        ? clean.slice(country.dialCode.length).replace(/\D/g, '')
+        : clean.replace(/\D/g, '');
+      const err = country.validateDigits(digits);
+      if (err) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: err,
+        });
+      }
+    }),
   reason: z.string().trim().min(5, 'Please describe the reason for your visit (min 5 characters)'),
   format: z.enum(['online', 'offline'], {
     required_error: 'Please select online or offline format',
@@ -266,14 +290,13 @@ export const ContactForm: React.FC = React.memo(() => {
                   <Phone size={14} className="inline mr-1 text-primary-green" />
                   Phone Number <span className="required-star">*</span>
                 </label>
-                <input
+                <InternationalPhoneInput
                   id="bookingPhone"
-                  type="tel"
-                  placeholder="e.g. +91 98765 43210"
-                  {...register('phone')}
-                  className={errors.phone ? 'input-error' : ''}
+                  value={watch('phone')}
+                  onChange={(val) => setValue('phone', val, { shouldValidate: true })}
+                  error={errors.phone?.message}
+                  defaultCountryCode="AE"
                 />
-                {errors.phone && <span className="field-error">{errors.phone.message}</span>}
               </div>
 
               <div className="contact-form__field">

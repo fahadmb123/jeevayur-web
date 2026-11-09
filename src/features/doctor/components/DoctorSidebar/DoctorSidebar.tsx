@@ -16,6 +16,7 @@ import { useRequests } from '@/features/requests';
 import type { DoctorNavItem } from '@/features/doctor/types';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { ConfirmSignOutModal } from '@/shared/ui/ConfirmSignOutModal';
 import feviconImg from '@/assets/fevicon_rendered.png';
 import './DoctorSidebar.css';
 
@@ -51,12 +52,17 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
   const navigate = useNavigate();
   const { logout } = useAuth();
   const { pendingCount } = useRequests();
+  const [isSignOutModalOpen, setIsSignOutModalOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = useCallback(async () => {
+  const handleConfirmLogout = useCallback(async () => {
+    setIsLoggingOut(true);
     try {
       await logout();
-    } finally {
       navigate(ROUTES.LOGIN);
+    } finally {
+      setIsLoggingOut(false);
+      setIsSignOutModalOpen(false);
     }
   }, [logout, navigate]);
 
@@ -211,7 +217,7 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
               className={`doctor-sidebar__item doctor-sidebar__item--logout ${
                 !isOpen ? 'doctor-sidebar__item--collapsed' : ''
               }`}
-              onClick={handleLogout}
+              onClick={() => setIsSignOutModalOpen(true)}
               title={!isOpen ? 'Sign Out' : undefined}
               aria-label="Sign Out"
             >
@@ -223,6 +229,16 @@ export const DoctorSidebar: React.FC<DoctorSidebarProps> = React.memo(({ isOpen,
           </div>
         </div>
       </nav>
+
+      <ConfirmSignOutModal
+        isOpen={isSignOutModalOpen}
+        onClose={() => setIsSignOutModalOpen(false)}
+        onConfirm={handleConfirmLogout}
+        isLoading={isLoggingOut}
+        title="Sign Out of Practitioner Portal"
+        description="Are you sure you want to sign out of your practitioner session? You will be returned to the login screen."
+        confirmText="Sign Out"
+      />
     </aside>
   );
 });
