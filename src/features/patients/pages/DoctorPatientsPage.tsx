@@ -1,9 +1,9 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { Users, Activity, Stethoscope, CheckCircle2, UserPlus } from 'lucide-react';
+import { UserPlus } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { DoctorSearchFilterStrip, type FilterSelectConfig, type FilterPillConfig } from '@/shared/ui/DoctorSearchFilterStrip';
 import { PatientListItem } from '../components/PatientListItem';
-import { PatientListItemSkeleton, PatientStatsSkeleton } from '../components/PatientListItemSkeleton';
+import { PatientListItemSkeleton } from '../components/PatientListItemSkeleton';
 import { PatientDetailModal } from '../components/PatientDetailModal';
 import { AddPatientModal } from '../components/AddPatientModal';
 import { usePatients } from '../hooks/usePatients';
@@ -124,8 +124,11 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   return (
     <div className="doctor-page-content">
       <div className="doctor-patient-header-row">
-        <div>
-          <h2 className="doctor-patient-page-title">Patient Records</h2>
+        <div className="doctor-patient-title-wrap">
+          <div className="doctor-patient-title-badge-row">
+            <h2 className="doctor-patient-page-title">Patient Records</h2>
+            <span className="doctor-patient-total-badge">{counts.All} Total</span>
+          </div>
           <span className="doctor-patient-page-sub">
             Manage classical Ayurveda clinical records and active patients
           </span>
@@ -139,52 +142,6 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
           <span>Add Patient</span>
         </button>
       </div>
-
-      {loading ? (
-        <PatientStatsSkeleton />
-      ) : (
-        <div className="doctor-patient-stats-grid">
-          <div className="doctor-patient-stat-card">
-            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--total">
-              <Users size={22} />
-            </div>
-            <div className="doctor-patient-stat-card__info">
-              <span className="doctor-patient-stat-card__label">Total Patients</span>
-              <strong className="doctor-patient-stat-card__value">{counts.All}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-patient-stat-card">
-            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--treatment">
-              <Activity size={22} />
-            </div>
-            <div className="doctor-patient-stat-card__info">
-              <span className="doctor-patient-stat-card__label">In Treatment</span>
-              <strong className="doctor-patient-stat-card__value text-primary-green">{counts['In treatment']}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-patient-stat-card">
-            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--consult">
-              <Stethoscope size={22} />
-            </div>
-            <div className="doctor-patient-stat-card__info">
-              <span className="doctor-patient-stat-card__label">Consultation</span>
-              <strong className="doctor-patient-stat-card__value text-amber">{counts.Consultation}</strong>
-            </div>
-          </div>
-
-          <div className="doctor-patient-stat-card">
-            <div className="doctor-patient-stat-card__icon doctor-patient-stat-card__icon--recovered">
-              <CheckCircle2 size={22} />
-            </div>
-            <div className="doctor-patient-stat-card__info">
-              <span className="doctor-patient-stat-card__label">Recovered</span>
-              <strong className="doctor-patient-stat-card__value text-green">{counts.Recovered}</strong>
-            </div>
-          </div>
-        </div>
-      )}
 
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patients by name, condition, or contact..."
