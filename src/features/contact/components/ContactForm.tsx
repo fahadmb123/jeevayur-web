@@ -295,7 +295,7 @@ export const ContactForm: React.FC = React.memo(() => {
                   value={watch('phone')}
                   onChange={(val) => setValue('phone', val, { shouldValidate: true })}
                   error={errors.phone?.message}
-                  defaultCountryCode="AE"
+                  defaultCountryCode="IN"
                 />
               </div>
 

@@ -196,7 +196,7 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
                       setPhoneError(null);
                     }}
                     error={phoneError || undefined}
-                    defaultCountryCode="AE"
+                    defaultCountryCode="IN"
                   />
                 </div>
 

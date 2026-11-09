@@ -19,7 +19,7 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
   value = '',
   onChange,
   error,
-  defaultCountryCode = 'AE',
+  defaultCountryCode = 'IN',
   disabled = false,
 }) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryConfig>(() => {
@@ -43,6 +43,17 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
   const [countrySearch, setCountrySearch] = useState('');
   const [isTouched, setIsTouched] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const listEl = listRef.current;
+    if (!listEl) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.stopPropagation();
+    };
+    listEl.addEventListener('wheel', handleWheel, { passive: true });
+    return () => listEl.removeEventListener('wheel', handleWheel);
+  }, [isOpenDropdown]);
 
   useEffect(() => {
     if (value) {
@@ -158,7 +169,14 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
           </button>
 
           {isOpenDropdown && (
-            <div className="intl-dropdown-menu">
+            <div
+              className="intl-dropdown-menu"
+              data-lenis-prevent="true"
+              data-lenis-prevent-wheel="true"
+              data-lenis-prevent-touch="true"
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
               <div className="intl-dropdown-search">
                 <input
                   type="text"
@@ -168,7 +186,15 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
                   autoFocus
                 />
               </div>
-              <div className="intl-dropdown-list">
+              <div
+                ref={listRef}
+                className="intl-dropdown-list"
+                data-lenis-prevent="true"
+                data-lenis-prevent-wheel="true"
+                data-lenis-prevent-touch="true"
+                onWheel={(e) => e.stopPropagation()}
+                onTouchMove={(e) => e.stopPropagation()}
+              >
                 {filteredCountries.map((c) => {
                   const isCurrent = c.code === selectedCountry.code;
                   return (
@@ -229,7 +255,9 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
             </div>
           ) : (
             <span className="feedback-hint">
-              {selectedCountry.code === 'AE'
+              {selectedCountry.code === 'IN'
+                ? 'India: Enter 10-digit mobile number starting with 6, 7, 8, or 9'
+                : selectedCountry.code === 'AE'
                 ? 'Dubai/UAE: Enter 9-digit mobile (starts with 5) or 8-digit landline'
                 : selectedCountry.patternMessage}
             </span>

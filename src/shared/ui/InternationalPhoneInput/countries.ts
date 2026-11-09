@@ -12,6 +12,29 @@ export interface CountryConfig {
 
 export const COUNTRIES: CountryConfig[] = [
   {
+    code: 'IN',
+    name: 'India (+91)',
+    dialCode: '+91',
+    flag: '🇮🇳',
+    placeholder: '98765 43210',
+    expectedDigits: 10,
+    patternMessage: '10 digits starting with 6, 7, 8, or 9',
+    validateDigits: (digits: string) => {
+      if (!digits) return 'Phone number is required';
+      if (!/^\d+$/.test(digits)) return 'Digits only';
+      if (digits.length < 10) {
+        return `Indian phone number requires 10 digits (entered ${digits.length}/10 digits)`;
+      }
+      if (digits.length > 10) {
+        return 'Indian phone number cannot exceed 10 digits';
+      }
+      if (!/^[6-9]/.test(digits)) {
+        return 'Indian mobile numbers must start with 6, 7, 8, or 9';
+      }
+      return null;
+    },
+  },
+  {
     code: 'AE',
     name: 'UAE / Dubai (+971)',
     dialCode: '+971',
@@ -39,29 +62,6 @@ export const COUNTRIES: CountryConfig[] = [
         return `UAE number requires 9 digits for mobile (entered ${digits.length}/9 digits)`;
       }
       return 'UAE number cannot exceed 9 digits';
-    },
-  },
-  {
-    code: 'IN',
-    name: 'India (+91)',
-    dialCode: '+91',
-    flag: '🇮🇳',
-    placeholder: '98765 43210',
-    expectedDigits: 10,
-    patternMessage: '10 digits starting with 6, 7, 8, or 9',
-    validateDigits: (digits: string) => {
-      if (!digits) return 'Phone number is required';
-      if (!/^\d+$/.test(digits)) return 'Digits only';
-      if (digits.length < 10) {
-        return `Indian phone number requires 10 digits (entered ${digits.length}/10 digits)`;
-      }
-      if (digits.length > 10) {
-        return 'Indian phone number cannot exceed 10 digits';
-      }
-      if (!/^[6-9]/.test(digits)) {
-        return 'Indian mobile numbers must start with 6, 7, 8, or 9';
-      }
-      return null;
     },
   },
   {
