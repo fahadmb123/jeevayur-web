@@ -51,6 +51,20 @@
   color: #34D399;
 }
 
+.doctor-search-spinner {
+  animation: searchSpin 0.8s linear infinite;
+  color: var(--primary-green, #1B6B50) !important;
+}
+
+@keyframes searchSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .doctor-search-filter-strip__search-input {
   width: 100%;
   height: 42px;

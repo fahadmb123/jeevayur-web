@@ -226,6 +226,18 @@
   color: #E8EDE9;
 }
 
+.add-patient-modal__field input.has-error {
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.add-patient-field-error {
+  font-size: 0.78rem;
+  color: #EF4444;
+  font-weight: 500;
+  margin-top: 3px;
+}
+
 .add-patient-modal__field input:focus,
 .add-patient-modal__field select:focus,
 .add-patient-modal__field textarea:focus {

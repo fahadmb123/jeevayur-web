@@ -278,6 +278,26 @@
   color: #34D399;
 }
 
+.patient-table-view-btn.is-loading,
+.patient-table-status-btn.is-loading {
+  opacity: 0.72;
+  cursor: wait;
+  pointer-events: none;
+}
+
+.patient-btn-spinner {
+  animation: patientBtnSpin 0.85s linear infinite;
+}
+
+@keyframes patientBtnSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .patient-actions-group {
   display: inline-flex;
   align-items: center;

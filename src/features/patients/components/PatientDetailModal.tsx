@@ -13,6 +13,7 @@ import {
   UserCheck,
   RotateCcw,
   CheckCircle2,
+  Loader2,
 } from 'lucide-react';
 import type { Patient } from '../types';
 import { PatientAvatar } from './PatientAvatar';
@@ -22,6 +23,7 @@ export interface PatientDetailModalProps {
   patient: Patient | null;
   isOpen: boolean;
   isLoading?: boolean;
+  isStatusUpdating?: boolean;
   onClose: () => void;
   onStartConsultation?: (patient: Patient) => void;
   onToggleStatus?: (patient: Patient) => void;
@@ -72,6 +74,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
   patient,
   isOpen,
   isLoading = false,
+  isStatusUpdating = false,
   onClose,
   onStartConsultation,
   onToggleStatus,
@@ -326,10 +329,16 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                       patient.status === 'Completed'
                         ? 'patient-detail-modal__btn--uncomplete'
                         : 'patient-detail-modal__btn--complete'
-                    }`}
+                    } ${isStatusUpdating ? 'is-loading' : ''}`}
                     onClick={() => onToggleStatus(patient)}
+                    disabled={isStatusUpdating}
                   >
-                    {patient.status === 'Completed' ? (
+                    {isStatusUpdating ? (
+                      <>
+                        <Loader2 size={15} className="patient-btn-spinner" />
+                        <span>Updating Status...</span>
+                      </>
+                    ) : patient.status === 'Completed' ? (
                       <>
                         <RotateCcw size={15} />
                         <span>Mark Uncompleted</span>

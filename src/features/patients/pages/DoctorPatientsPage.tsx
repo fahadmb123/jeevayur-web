@@ -20,6 +20,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   const [limit] = useState(50);
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState(false);
+  const [viewingPatientId, setViewingPatientId] = useState<string | number | null>(null);
+  const [updatingPatientId, setUpdatingPatientId] = useState<string | number | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   useEffect(() => {
@@ -48,21 +50,29 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   }, []);
 
   const handleViewDetails = useCallback((patient: Patient) => {
+    setViewingPatientId(patient.id);
     setDetailPatient(patient);
     setIsDetailLoading(true);
     const timer = setTimeout(() => {
       setIsDetailLoading(false);
-    }, 300);
+      setViewingPatientId(null);
+    }, 280);
     return () => clearTimeout(timer);
   }, []);
 
   const handleToggleStatus = useCallback(
     async (patient: Patient) => {
-      const nextStatus = patient.status === 'Completed' ? 'Uncompleted' : 'Completed';
-      await updatePatientStatus(patient.id, nextStatus);
-      setDetailPatient((prev) => (prev?.id === patient.id ? { ...prev, status: nextStatus } : prev));
+      if (updatingPatientId !== null) return;
+      setUpdatingPatientId(patient.id);
+      try {
+        const nextStatus = patient.status === 'Completed' ? 'Uncompleted' : 'Completed';
+        await updatePatientStatus(patient.id, nextStatus);
+        setDetailPatient((prev) => (prev?.id === patient.id ? { ...prev, status: nextStatus } : prev));
+      } finally {
+        setUpdatingPatientId(null);
+      }
     },
-    [updatePatientStatus]
+    [updatePatientStatus, updatingPatientId]
   );
 
   const selectFilters: FilterSelectConfig[] = useMemo(() => [
@@ -155,6 +165,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
         onReset={handleReset}
         resetTitle="Reset patient filters"
         pills={pills}
+        isLoading={loading}
       />
 
       <Card className="doctor-patients-card">
@@ -182,6 +193,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
                     index={index}
                     onViewDetails={handleViewDetails}
                     onToggleStatus={handleToggleStatus}
+                    isStatusUpdating={updatingPatientId === patient.id}
+                    isDetailLoading={viewingPatientId === patient.id && isDetailLoading}
                   />
                 ))
               ) : (
@@ -200,6 +213,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
         patient={detailPatient}
         isOpen={Boolean(detailPatient)}
         isLoading={isDetailLoading}
+        isStatusUpdating={Boolean(detailPatient && updatingPatientId === detailPatient.id)}
         onClose={() => setDetailPatient(null)}
         onToggleStatus={handleToggleStatus}
       />

@@ -40,6 +40,7 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   const [type, setType] = useState<'ayurveda treatment' | 'yoga class'>('ayurveda treatment');
   const [format, setFormat] = useState<'offline' | 'online'>('offline');
   const [name, setName] = useState('');
+  const [nameError, setNameError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [phoneError, setPhoneError] = useState<string | null>(null);
@@ -55,6 +56,7 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
     setType('ayurveda treatment');
     setFormat('offline');
     setName('');
+    setNameError(null);
     setEmail('');
     setPhone('');
     setPhoneError(null);
@@ -74,9 +76,13 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   const handleProceedToReview = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
+      setNameError(null);
       setPhoneError(null);
 
-      if (!name.trim()) return;
+      if (!name.trim()) {
+        setNameError('Please enter the patient full name (at least 2 characters)');
+        return;
+      }
 
       if (!phone.trim()) {
         setPhoneError('Please enter a contact phone number');
@@ -338,8 +344,15 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                       required
                       placeholder="e.g. Ananya Patel"
                       value={name}
-                      onChange={(e) => setName(e.target.value)}
+                      onChange={(e) => {
+                        setName(e.target.value);
+                        setNameError(null);
+                      }}
+                      className={nameError ? 'has-error' : ''}
                     />
+                    {nameError && (
+                      <span className="add-patient-field-error">{nameError}</span>
+                    )}
                   </div>
 
                   <div className="add-patient-modal__field">

@@ -472,6 +472,12 @@
   gap: 8px;
 }
 
+.patient-detail-modal__btn.is-loading {
+  opacity: 0.75;
+  cursor: wait;
+  pointer-events: none;
+}
+
 .patient-detail-modal__btn--secondary {
   background: transparent;
   border: 1px solid var(--border-color, #E2E8DE);

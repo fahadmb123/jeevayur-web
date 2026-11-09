@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus, CheckCircle2, RotateCcw } from 'lucide-react';
+import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus, CheckCircle2, RotateCcw, Loader2 } from 'lucide-react';
 import type { Patient } from '../types';
 import { StatusPill } from '@/shared/ui/status-pill';
 import { PatientAvatar } from './PatientAvatar';
@@ -11,6 +11,8 @@ export interface PatientListItemProps {
   onSelect?: (patient: Patient) => void;
   onViewDetails?: (patient: Patient) => void;
   onToggleStatus?: (patient: Patient) => void;
+  isStatusUpdating?: boolean;
+  isDetailLoading?: boolean;
 }
 
 function parsePatientCondition(rawCondition?: string) {
@@ -60,6 +62,8 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
   onSelect,
   onViewDetails,
   onToggleStatus,
+  isStatusUpdating = false,
+  isDetailLoading = false,
 }) => {
   const isCompleted = patient.status === 'Completed';
 
@@ -178,12 +182,22 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
         <div className="patient-actions-group">
           <button
             type="button"
-            className="patient-table-view-btn"
+            className={`patient-table-view-btn ${isDetailLoading ? 'is-loading' : ''}`}
             aria-label={`View details for ${patient.name}`}
             onClick={handleOpenDetails}
+            disabled={isDetailLoading}
           >
-            <Eye size={14} />
-            <span>View</span>
+            {isDetailLoading ? (
+              <>
+                <Loader2 size={13} className="patient-btn-spinner" />
+                <span>Opening...</span>
+              </>
+            ) : (
+              <>
+                <Eye size={14} />
+                <span>View</span>
+              </>
+            )}
           </button>
 
           {onToggleStatus && (
@@ -193,12 +207,18 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
                 isCompleted
                   ? 'patient-table-status-btn--uncomplete'
                   : 'patient-table-status-btn--complete'
-              }`}
+              } ${isStatusUpdating ? 'is-loading' : ''}`}
               aria-label={isCompleted ? 'Mark as Uncompleted' : 'Mark as Completed'}
               title={isCompleted ? 'Mark as Uncompleted' : 'Mark as Completed'}
               onClick={handleToggleStatus}
+              disabled={isStatusUpdating}
             >
-              {isCompleted ? (
+              {isStatusUpdating ? (
+                <>
+                  <Loader2 size={12} className="patient-btn-spinner" />
+                  <span>Updating...</span>
+                </>
+              ) : isCompleted ? (
                 <>
                   <RotateCcw size={12} />
                   <span>Uncomplete</span>

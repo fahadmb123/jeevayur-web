@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, RotateCcw, X, ChevronDown } from 'lucide-react';
+import { Search, RotateCcw, X, ChevronDown, Loader2 } from 'lucide-react';
 import './DoctorSearchFilterStrip.css';
 
 export interface FilterSelectOption {
@@ -33,6 +33,7 @@ export interface DoctorSearchFilterStripProps {
   pills?: FilterPillConfig[];
   className?: string;
   rightAction?: React.ReactNode;
+  isLoading?: boolean;
 }
 
 export const DoctorSearchFilterStrip: React.FC<DoctorSearchFilterStripProps> = React.memo(({
@@ -45,12 +46,17 @@ export const DoctorSearchFilterStrip: React.FC<DoctorSearchFilterStripProps> = R
   pills = [],
   className = '',
   rightAction,
+  isLoading = false,
 }) => {
   return (
     <div className={`doctor-search-filter-strip ${className}`.trim()}>
       <div className="doctor-search-filter-strip__top">
         <div className="doctor-search-filter-strip__search-wrap">
-          <Search size={16} className="doctor-search-filter-strip__search-icon" />
+          {isLoading ? (
+            <Loader2 size={16} className="doctor-search-filter-strip__search-icon doctor-search-spinner" />
+          ) : (
+            <Search size={16} className="doctor-search-filter-strip__search-icon" />
+          )}
           <input
             type="text"
             className="doctor-search-filter-strip__search-input"
