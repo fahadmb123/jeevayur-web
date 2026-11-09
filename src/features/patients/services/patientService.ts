@@ -11,14 +11,15 @@ interface ApiPatient {
   condition: string | null;
   status: string;
   lastVisit: string | null;
+  source?: 'website' | 'doctor';
   createdAt: string;
 }
 
 export const INITIAL_PATIENTS: Patient[] = [
-  { id: 1, name: 'Ananya Patel', age: 34, lastVisit: 'Today', status: 'In treatment', phone: '+91 98765 11001', condition: 'Chronic Anxiety' },
-  { id: 2, name: 'Rahul Verma', age: 45, lastVisit: 'Yesterday', status: 'Recovered', phone: '+91 98765 22002', condition: 'Tension Cephalea' },
-  { id: 3, name: 'Sunita Rao', age: 29, lastVisit: '18 Sep', status: 'In treatment', phone: '+91 98765 33003', condition: 'Somatoform Disorder' },
-  { id: 4, name: 'Vikram Singh', age: 52, lastVisit: '15 Sep', status: 'Consultation', phone: '+91 98765 44004', condition: 'Workplace Burnout' },
+  { id: 1, name: 'Ananya Patel', age: 34, lastVisit: 'Today', status: 'In treatment', phone: '+91 98765 11001', condition: 'Chronic Anxiety', source: 'doctor' },
+  { id: 2, name: 'Rahul Verma', age: 45, lastVisit: 'Yesterday', status: 'Recovered', phone: '+91 98765 22002', condition: 'Tension Cephalea', source: 'doctor' },
+  { id: 3, name: 'Sunita Rao', age: 29, lastVisit: '18 Sep', status: 'In treatment', phone: '+91 98765 33003', condition: 'Somatoform Disorder', source: 'doctor' },
+  { id: 4, name: 'Vikram Singh', age: 52, lastVisit: '15 Sep', status: 'Consultation', phone: '+91 98765 44004', condition: 'Workplace Burnout', source: 'doctor' },
 ];
 
 function normalizeStatus(status: string): PatientStatus {
@@ -29,6 +30,12 @@ function normalizeStatus(status: string): PatientStatus {
 }
 
 function mapApiPatient(p: ApiPatient): Patient {
+  const isWebsite =
+    p.source === 'website' ||
+    Boolean(p.lastVisit && /website|request/i.test(p.lastVisit)) ||
+    Boolean(p.condition && /\((offline|online|in-person|in-clinic|virtual)\)/i.test(p.condition)) ||
+    (String(p.id).length > 10 && !p.lastVisit?.toLowerCase().includes('doctor'));
+
   return {
     id: p.id,
     name: p.name,
@@ -39,6 +46,7 @@ function mapApiPatient(p: ApiPatient): Patient {
     email: p.email || undefined,
     gender: p.gender || undefined,
     condition: p.condition || undefined,
+    source: isWebsite ? 'website' : 'doctor',
   };
 }
 
@@ -74,6 +82,7 @@ export const patientService = {
     }
     const newPatient: Patient = {
       ...patient,
+      source: 'doctor',
       id: 'pat_' + Date.now(),
     };
     inMemoryPatients.unshift(newPatient);

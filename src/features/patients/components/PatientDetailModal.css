@@ -90,6 +90,87 @@
 .patient-detail-modal__sub {
   font-size: 0.78rem;
   color: var(--text-secondary, #485E53);
+  font-variant-numeric: tabular-nums;
+}
+
+.patient-detail-modal__meta-strip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.patient-detail-source-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  line-height: 1.2;
+}
+
+.patient-detail-source-badge--website {
+  background: rgba(27, 107, 80, 0.1);
+  color: #155740;
+  border: 1px solid rgba(27, 107, 80, 0.24);
+}
+
+[data-theme='dark'] .patient-detail-source-badge--website,
+.dark .patient-detail-source-badge--website {
+  background: rgba(46, 157, 119, 0.16);
+  color: #5eead4;
+  border-color: rgba(46, 157, 119, 0.32);
+}
+
+.patient-detail-source-badge--doctor {
+  background: rgba(59, 130, 246, 0.09);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.22);
+}
+
+[data-theme='dark'] .patient-detail-source-badge--doctor,
+.dark .patient-detail-source-badge--doctor {
+  background: rgba(96, 165, 250, 0.15);
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.3);
+}
+
+.patient-detail-source-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 7px;
+}
+
+.patient-detail-source-indicator--website {
+  background: rgba(27, 107, 80, 0.08);
+  color: #1b6b50;
+  border: 1px solid rgba(27, 107, 80, 0.2);
+}
+
+[data-theme='dark'] .patient-detail-source-indicator--website,
+.dark .patient-detail-source-indicator--website {
+  background: rgba(46, 157, 119, 0.14);
+  color: #5eead4;
+  border-color: rgba(46, 157, 119, 0.28);
+}
+
+.patient-detail-source-indicator--doctor {
+  background: rgba(59, 130, 246, 0.08);
+  color: #2563eb;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+[data-theme='dark'] .patient-detail-source-indicator--doctor,
+.dark .patient-detail-source-indicator--doctor {
+  background: rgba(96, 165, 250, 0.14);
+  color: #93c5fd;
+  border-color: rgba(96, 165, 250, 0.28);
 }
 
 .patient-detail-modal__close-btn {

@@ -11,4 +11,5 @@ export interface Patient {
   gender?: string;
   condition?: string;
   avatarUrl?: string;
+  source?: 'website' | 'doctor';
 }

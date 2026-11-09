@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Eye, Phone, Mail, MapPin, Video } from 'lucide-react';
+import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus } from 'lucide-react';
 import type { Patient } from '../types';
 import { StatusPill } from '@/shared/ui/status-pill';
 import { PatientAvatar } from './PatientAvatar';
@@ -96,7 +96,25 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
           />
           <div className="patient-profile-meta">
             <strong className="patient-table-name">{patient.name}</strong>
-            <span className="patient-table-id">#{String(patient.id).slice(-6)}</span>
+            <div className="patient-table-subline">
+              <span className="patient-table-id">#{String(patient.id).slice(-6)}</span>
+              <span
+                className={`patient-source-tag patient-source-tag--${patient.source || 'doctor'}`}
+                title={patient.source === 'website' ? 'Applied via Website Appointment' : 'Added Manually by Doctor'}
+              >
+                {patient.source === 'website' ? (
+                  <>
+                    <Globe size={10} />
+                    <span>Website</span>
+                  </>
+                ) : (
+                  <>
+                    <UserPlus size={10} />
+                    <span>Doctor</span>
+                  </>
+                )}
+              </span>
+            </div>
           </div>
         </div>
       </td>

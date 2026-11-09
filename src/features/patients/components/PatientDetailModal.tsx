@@ -9,6 +9,8 @@ import {
   FileText,
   ExternalLink,
   MessageSquare,
+  Globe,
+  UserCheck,
 } from 'lucide-react';
 import type { Patient } from '../types';
 import { PatientAvatar } from './PatientAvatar';
@@ -157,9 +159,24 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                   />
                   <div className="patient-detail-modal__name-group">
                     <h2 className="patient-detail-modal__name">{patient.name}</h2>
-                    <span className="patient-detail-modal__sub">
-                      Patient ID #{String(patient.id).slice(-8)}
-                    </span>
+                    <div className="patient-detail-modal__meta-strip">
+                      <span className="patient-detail-modal__sub">
+                        Patient ID #{String(patient.id).slice(-8)}
+                      </span>
+                      <span className={`patient-detail-source-badge patient-detail-source-badge--${patient.source || 'doctor'}`}>
+                        {patient.source === 'website' ? (
+                          <>
+                            <Globe size={11} />
+                            <span>Website Booking</span>
+                          </>
+                        ) : (
+                          <>
+                            <UserCheck size={11} />
+                            <span>Added by Doctor</span>
+                          </>
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <button
@@ -226,6 +243,23 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                         <div className="patient-detail-value patient-detail-value--empty">Not provided</div>
                       </div>
                     )}
+
+                    <div className="patient-detail-row">
+                      <div className="patient-detail-label">Registration Source</div>
+                      <div className="patient-detail-value">
+                        {patient.source === 'website' ? (
+                          <span className="patient-detail-source-indicator patient-detail-source-indicator--website">
+                            <Globe size={13} />
+                            <span>Applied via Website Appointment</span>
+                          </span>
+                        ) : (
+                          <span className="patient-detail-source-indicator patient-detail-source-indicator--doctor">
+                            <UserCheck size={13} />
+                            <span>Added Manually by Doctor</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 

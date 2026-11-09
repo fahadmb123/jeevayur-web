@@ -17,6 +17,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
   const [selectedGender, setSelectedGender] = useState('All');
+  const [selectedSource, setSelectedSource] = useState('All');
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
   const [isDetailLoading, setIsDetailLoading] = useState(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -25,6 +26,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
     setSearchQuery('');
     setActiveStatus('All');
     setSelectedGender('All');
+    setSelectedSource('All');
   }, []);
 
   const handleViewDetails = useCallback((patient: Patient) => {
@@ -40,8 +42,9 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
     return patients.filter((patient) => {
       const matchesStatus = activeStatus === 'All' || patient.status === activeStatus;
       const matchesGender = selectedGender === 'All' || patient.gender === selectedGender;
+      const matchesSource = selectedSource === 'All' || (patient.source || 'doctor') === selectedSource;
       
-      if (!matchesStatus || !matchesGender) return false;
+      if (!matchesStatus || !matchesGender || !matchesSource) return false;
 
       if (!searchQuery.trim()) return true;
 
@@ -53,7 +56,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
 
       return matchesName || matchesCondition || matchesPhone || matchesEmail;
     });
-  }, [patients, activeStatus, selectedGender, searchQuery]);
+  }, [patients, activeStatus, selectedGender, selectedSource, searchQuery]);
 
   const counts = useMemo(() => {
     return {
@@ -65,6 +68,17 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   }, [patients]);
 
   const selectFilters: FilterSelectConfig[] = useMemo(() => [
+    {
+      id: 'source-filter',
+      value: selectedSource,
+      ariaLabel: 'Filter by patient source',
+      onChange: setSelectedSource,
+      options: [
+        { label: 'All Sources', value: 'All' },
+        { label: 'Website Booking', value: 'website' },
+        { label: 'Added by Doctor', value: 'doctor' },
+      ],
+    },
     {
       id: 'status-filter',
       value: activeStatus,
@@ -88,7 +102,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
         { label: 'Female', value: 'Female' },
       ],
     },
-  ], [activeStatus, selectedGender]);
+  ], [activeStatus, selectedGender, selectedSource]);
 
   const pills: FilterPillConfig[] = useMemo(() => [
     {
