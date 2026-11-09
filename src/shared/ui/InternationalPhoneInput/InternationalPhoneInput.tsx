@@ -59,9 +59,9 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
       }
     };
 
-    menuEl.addEventListener('wheel', handleWheel, { passive: false });
+    menuEl.addEventListener('wheel', handleWheel, { passive: false, capture: true });
     return () => {
-      menuEl.removeEventListener('wheel', handleWheel);
+      menuEl.removeEventListener('wheel', handleWheel, { capture: true });
     };
   }, [isOpenDropdown]);
 
@@ -181,7 +181,7 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
           {isOpenDropdown && (
             <div
               ref={menuRef}
-              className="intl-dropdown-menu"
+              className="intl-dropdown-menu lenis-prevent"
               data-lenis-prevent="true"
               data-lenis-prevent-wheel="true"
               data-lenis-prevent-touch="true"
@@ -199,7 +199,7 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
               </div>
               <div
                 ref={listRef}
-                className="intl-dropdown-list"
+                className="intl-dropdown-list lenis-prevent"
                 data-lenis-prevent="true"
                 data-lenis-prevent-wheel="true"
                 data-lenis-prevent-touch="true"

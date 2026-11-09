@@ -4,6 +4,7 @@ import {
   X,
   CheckCircle2,
   UserCheck,
+  User,
   Calendar,
   Phone,
   Mail,
@@ -34,8 +35,6 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
   isProcessing = false,
 }) => {
   if (!request) return null;
-
-
 
   const handleConfirm = (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,6 +112,16 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
                     </span>
                     <span className="accept-confirm-detail-val">{request.email}</span>
                   </div>
+
+                  {request.gender && (
+                    <div className="accept-confirm-detail-item">
+                      <span className="accept-confirm-detail-label">
+                        <User size={13} />
+                        <span>Gender</span>
+                      </span>
+                      <span className="accept-confirm-detail-val">{request.gender}</span>
+                    </div>
+                  )}
 
                   {request.language && (
                     <div className="accept-confirm-detail-item">

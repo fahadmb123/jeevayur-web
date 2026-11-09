@@ -236,6 +236,8 @@
   background: var(--surface-secondary, #F8FAF7);
   border: 1px solid var(--border-color, #E2E8DE);
   border-radius: 10px;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 [data-theme='dark'] .accept-confirm-detail-item,

@@ -13,6 +13,14 @@ const lenisOptions = {
   touchMultiplier: 1.0,
   syncTouch: false,
   infinite: false,
+  prevent: (node: HTMLElement) => {
+    return (
+      Boolean(node?.hasAttribute?.('data-lenis-prevent')) ||
+      Boolean(node?.closest?.('[data-lenis-prevent]')) ||
+      Boolean(node?.classList?.contains?.('lenis-prevent')) ||
+      Boolean(node?.closest?.('.lenis-prevent'))
+    );
+  },
 };
 
 export const App: React.FC = React.memo(() => {
@@ -25,7 +33,6 @@ export const App: React.FC = React.memo(() => {
           <Router>
             <ScrollToTop />
             <div className="app">
-              {/* Initial App Load Overlay - Stays until components, DOM & fonts settle */}
               <AnimatePresence mode="wait">
                 {isInitialLoading && (
                   <LoadingScreen

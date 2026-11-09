@@ -103,6 +103,14 @@ export const BookingConfirmModal: React.FC<BookingConfirmModalProps> = React.mem
 
                 <div className="booking-confirm-row">
                   <div className="booking-confirm-label">
+                    <User size={14} />
+                    <span>Gender</span>
+                  </div>
+                  <div className="booking-confirm-value">{bookingData.gender || 'Not specified'}</div>
+                </div>
+
+                <div className="booking-confirm-row">
+                  <div className="booking-confirm-label">
                     <Phone size={14} />
                     <span>Phone Number</span>
                   </div>

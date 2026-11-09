@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { InternationalPhoneInput, findCountryByDialCode } from '@/shared/ui/InternationalPhoneInput';
+import { POPULAR_LANGUAGES, ALL_WORLD_LANGUAGES } from '@/features/contact/data/languages';
 import type { Patient } from '../types';
 import './AddPatientModal.css';
 
@@ -29,19 +30,6 @@ export interface AddPatientModalProps {
   onClose: () => void;
   onAddPatient?: (patient: Omit<Patient, 'id'>) => Promise<unknown> | void;
 }
-
-const COMMON_LANGUAGES = [
-  'English',
-  'Malayalam',
-  'Hindi',
-  'Tamil',
-  'Kannada',
-  'Telugu',
-  'Arabic',
-  'French',
-  'German',
-  'Spanish',
-];
 
 export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   isOpen,
@@ -396,11 +384,20 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                         value={language}
                         onChange={(e) => setLanguage(e.target.value)}
                       >
-                        {COMMON_LANGUAGES.map((lang) => (
-                          <option key={lang} value={lang}>
-                            {lang}
-                          </option>
-                        ))}
+                        <optgroup label="Popular & Regional Languages">
+                          {POPULAR_LANGUAGES.map((lang) => (
+                            <option key={lang.code} value={lang.name}>
+                              {lang.name} {lang.nativeName && lang.nativeName !== lang.name ? `(${lang.nativeName})` : ''}
+                            </option>
+                          ))}
+                        </optgroup>
+                        <optgroup label="All World Languages (A - Z)">
+                          {ALL_WORLD_LANGUAGES.map((lang) => (
+                            <option key={lang.code} value={lang.name}>
+                              {lang.name} {lang.nativeName && lang.nativeName !== lang.name ? `(${lang.nativeName})` : ''}
+                            </option>
+                          ))}
+                        </optgroup>
                       </select>
                     </div>
 

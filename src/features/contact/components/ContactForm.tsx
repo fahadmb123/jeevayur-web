@@ -12,6 +12,7 @@ import {
   Video,
   Leaf,
   Phone,
+  User,
   ArrowRight,
 } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
@@ -57,6 +58,7 @@ const bookingSchema = z.object({
     required_error: 'Please select online or offline format',
   }),
   language: z.string().min(1, 'Please select your preferred language'),
+  gender: z.string().min(1, 'Please select your gender'),
 });
 
 type BookingFormValues = z.infer<typeof bookingSchema>;
@@ -85,6 +87,7 @@ export const ContactForm: React.FC = React.memo(() => {
       name: '',
       email: '',
       phone: '',
+      gender: 'Male',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -110,6 +113,7 @@ export const ContactForm: React.FC = React.memo(() => {
       name: values.name,
       email: values.email,
       phone: values.phone,
+      gender: values.gender,
       reason: values.reason,
       format: values.format,
       language: values.language,
@@ -121,7 +125,14 @@ export const ContactForm: React.FC = React.memo(() => {
   const handleConfirmFinal = useCallback(async () => {
     if (!pendingValues) return;
     try {
-      await sendMessage(pendingValues);
+      const reasonPayload = pendingValues.gender
+        ? `[Gender: ${pendingValues.gender}] ${pendingValues.reason}`
+        : pendingValues.reason;
+
+      await sendMessage({
+        ...pendingValues,
+        reason: reasonPayload,
+      });
       setIsConfirmOpen(false);
       setPendingValues(null);
     } catch {
@@ -141,6 +152,7 @@ export const ContactForm: React.FC = React.memo(() => {
       name: '',
       email: '',
       phone: '',
+      gender: 'Male',
       reason: '',
       format: 'offline',
       language: 'English',
@@ -311,6 +323,25 @@ export const ContactForm: React.FC = React.memo(() => {
                   className={errors.reason ? 'input-error' : ''}
                 />
                 {errors.reason && <span className="field-error">{errors.reason.message}</span>}
+              </div>
+
+              <div className="contact-form__field">
+                <label htmlFor="bookingGender" className="field-title">
+                  <User size={14} className="inline mr-1 text-primary-green" />
+                  Gender <span className="required-star">*</span>
+                </label>
+                <div className="language-select-wrapper">
+                  <select
+                    id="bookingGender"
+                    {...register('gender')}
+                    className="language-select"
+                  >
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                {errors.gender && <span className="field-error">{errors.gender.message}</span>}
               </div>
 
               <div className="contact-form__field">
