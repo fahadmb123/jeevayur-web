@@ -12,7 +12,7 @@ import type { PatientFilterOption } from '../components/PatientFilterTabs';
 import './DoctorPatientsPage.css';
 
 export const DoctorPatientsPage: React.FC = React.memo(() => {
-  const { patients, loading, addPatient } = usePatients();
+  const { patients, loading, addPatient, updatePatientStatus } = usePatients();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeStatus, setActiveStatus] = useState<PatientFilterOption>('All');
@@ -38,6 +38,15 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleToggleStatus = useCallback(
+    async (patient: Patient) => {
+      const nextStatus = patient.status === 'Completed' ? 'Uncompleted' : 'Completed';
+      await updatePatientStatus(patient.id, nextStatus);
+      setDetailPatient((prev) => (prev?.id === patient.id ? { ...prev, status: nextStatus } : prev));
+    },
+    [updatePatientStatus]
+  );
+
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
       const matchesStatus = activeStatus === 'All' || patient.status === activeStatus;
@@ -61,9 +70,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
   const counts = useMemo(() => {
     return {
       All: patients.length,
-      'In treatment': patients.filter((p) => p.status === 'In treatment').length,
-      Recovered: patients.filter((p) => p.status === 'Recovered').length,
-      Consultation: patients.filter((p) => p.status === 'Consultation').length,
+      Uncompleted: patients.filter((p) => p.status !== 'Completed').length,
+      Completed: patients.filter((p) => p.status === 'Completed').length,
     };
   }, [patients]);
 
@@ -86,9 +94,8 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
       onChange: (val) => setActiveStatus(val as PatientFilterOption),
       options: [
         { label: 'All Statuses', value: 'All' },
-        { label: 'In Treatment', value: 'In treatment' },
-        { label: 'Recovered', value: 'Recovered' },
-        { label: 'Consultation', value: 'Consultation' },
+        { label: 'Uncompleted', value: 'Uncompleted' },
+        { label: 'Completed', value: 'Completed' },
       ],
     },
     {
@@ -113,25 +120,18 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
       onClick: () => setActiveStatus('All'),
     },
     {
-      id: 'in-treatment',
-      label: 'In Treatment',
-      count: counts['In treatment'],
-      isActive: activeStatus === 'In treatment',
-      onClick: () => setActiveStatus('In treatment'),
+      id: 'uncompleted',
+      label: 'Uncompleted',
+      count: counts.Uncompleted,
+      isActive: activeStatus === 'Uncompleted',
+      onClick: () => setActiveStatus('Uncompleted'),
     },
     {
-      id: 'consultation',
-      label: 'Consultation',
-      count: counts.Consultation,
-      isActive: activeStatus === 'Consultation',
-      onClick: () => setActiveStatus('Consultation'),
-    },
-    {
-      id: 'recovered',
-      label: 'Recovered',
-      count: counts.Recovered,
-      isActive: activeStatus === 'Recovered',
-      onClick: () => setActiveStatus('Recovered'),
+      id: 'completed',
+      label: 'Completed',
+      count: counts.Completed,
+      isActive: activeStatus === 'Completed',
+      onClick: () => setActiveStatus('Completed'),
     },
   ], [activeStatus, counts]);
 
@@ -191,6 +191,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
                     patient={patient}
                     index={index}
                     onViewDetails={handleViewDetails}
+                    onToggleStatus={handleToggleStatus}
                   />
                 ))
               ) : (
@@ -210,6 +211,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
         isOpen={Boolean(detailPatient)}
         isLoading={isDetailLoading}
         onClose={() => setDetailPatient(null)}
+        onToggleStatus={handleToggleStatus}
       />
 
       <AddPatientModal

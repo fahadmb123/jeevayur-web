@@ -277,3 +277,73 @@
   border-color: #2E9D77;
   color: #34D399;
 }
+
+.patient-actions-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.patient-table-status-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.patient-table-status-btn--complete {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.28);
+  color: #059669;
+}
+
+.patient-table-status-btn--complete:hover {
+  background: #10B981;
+  border-color: #10B981;
+  color: #FFFFFF;
+}
+
+[data-theme='dark'] .patient-table-status-btn--complete,
+.dark .patient-table-status-btn--complete {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.32);
+  color: #34D399;
+}
+
+[data-theme='dark'] .patient-table-status-btn--complete:hover,
+.dark .patient-table-status-btn--complete:hover {
+  background: #059669;
+  color: #FFFFFF;
+}
+
+.patient-table-status-btn--uncomplete {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  color: #D97706;
+}
+
+.patient-table-status-btn--uncomplete:hover {
+  background: #F59E0B;
+  border-color: #F59E0B;
+  color: #FFFFFF;
+}
+
+[data-theme='dark'] .patient-table-status-btn--uncomplete,
+.dark .patient-table-status-btn--uncomplete {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: rgba(245, 158, 11, 0.32);
+  color: #FBBF24;
+}
+
+[data-theme='dark'] .patient-table-status-btn--uncomplete:hover,
+.dark .patient-table-status-btn--uncomplete:hover {
+  background: #D97706;
+  color: #FFFFFF;
+}

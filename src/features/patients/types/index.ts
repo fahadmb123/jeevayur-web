@@ -1,4 +1,4 @@
-export type PatientStatus = 'In treatment' | 'Recovered' | 'Consultation';
+export type PatientStatus = 'Completed' | 'Uncompleted';
 
 export interface Patient {
   id: number | string;

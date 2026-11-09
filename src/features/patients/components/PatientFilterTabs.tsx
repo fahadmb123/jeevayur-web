@@ -10,7 +10,7 @@ export interface PatientFilterTabsProps {
   counts?: Partial<Record<PatientFilterOption, number>>;
 }
 
-const FILTER_OPTIONS: PatientFilterOption[] = ['All', 'In treatment', 'Recovered', 'Consultation'];
+const FILTER_OPTIONS: PatientFilterOption[] = ['All', 'Uncompleted', 'Completed'];
 
 export const PatientFilterTabs: React.FC<PatientFilterTabsProps> = React.memo(({
   activeFilter,

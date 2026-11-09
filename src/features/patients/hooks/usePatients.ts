@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import type { Patient } from '../types';
+import type { Patient, PatientStatus } from '../types';
 import { patientService } from '../services/patientService';
 
 export const usePatients = () => {
@@ -19,9 +19,17 @@ export const usePatients = () => {
     return created;
   }, []);
 
+  const updatePatientStatus = useCallback(async (id: number | string, status: PatientStatus) => {
+    setPatients((prev) =>
+      prev.map((p) => (String(p.id) === String(id) ? { ...p, status } : p))
+    );
+    await patientService.updatePatientStatus(id, status);
+  }, []);
+
   return {
     patients,
     loading,
     addPatient,
+    updatePatientStatus,
   };
 };

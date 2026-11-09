@@ -71,7 +71,7 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
           email: email.trim() || undefined,
           phone: phone.trim() || undefined,
           condition: conditionString,
-          status: 'Consultation',
+          status: 'Uncompleted',
           lastVisit: 'Today (New Entry)',
           age: 30,
         });

@@ -221,6 +221,8 @@
   background: rgba(27, 107, 80, 0.03);
   border: 1px solid var(--border-color, #E2E8DE);
   border-left: 3px solid var(--primary-green, #1B6B50);
+  width: 100%;
+  min-width: 0;
   max-width: 100%;
   box-sizing: border-box;
   overflow: hidden;
@@ -255,9 +257,13 @@
   line-height: 1.55;
   color: var(--text-primary, #14241C);
   white-space: pre-wrap;
-  word-break: break-word;
+  word-break: break-all;
   overflow-wrap: anywhere;
   word-wrap: break-word;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   max-height: 120px;
   overflow-y: auto;
   padding-right: 4px;

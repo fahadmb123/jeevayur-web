@@ -16,17 +16,16 @@ interface ApiPatient {
 }
 
 export const INITIAL_PATIENTS: Patient[] = [
-  { id: 1, name: 'Ananya Patel', age: 34, lastVisit: 'Today', status: 'In treatment', phone: '+91 98765 11001', condition: 'Chronic Anxiety', source: 'doctor' },
-  { id: 2, name: 'Rahul Verma', age: 45, lastVisit: 'Yesterday', status: 'Recovered', phone: '+91 98765 22002', condition: 'Tension Cephalea', source: 'doctor' },
-  { id: 3, name: 'Sunita Rao', age: 29, lastVisit: '18 Sep', status: 'In treatment', phone: '+91 98765 33003', condition: 'Somatoform Disorder', source: 'doctor' },
-  { id: 4, name: 'Vikram Singh', age: 52, lastVisit: '15 Sep', status: 'Consultation', phone: '+91 98765 44004', condition: 'Workplace Burnout', source: 'doctor' },
+  { id: 1, name: 'Ananya Patel', age: 34, lastVisit: 'Today', status: 'Uncompleted', phone: '+91 98765 11001', condition: 'Chronic Anxiety', source: 'doctor' },
+  { id: 2, name: 'Rahul Verma', age: 45, lastVisit: 'Yesterday', status: 'Completed', phone: '+91 98765 22002', condition: 'Tension Cephalea', source: 'doctor' },
+  { id: 3, name: 'Sunita Rao', age: 29, lastVisit: '18 Sep', status: 'Uncompleted', phone: '+91 98765 33003', condition: 'Somatoform Disorder', source: 'doctor' },
+  { id: 4, name: 'Vikram Singh', age: 52, lastVisit: '15 Sep', status: 'Uncompleted', phone: '+91 98765 44004', condition: 'Workplace Burnout', source: 'doctor' },
 ];
 
 function normalizeStatus(status: string): PatientStatus {
-  const lower = status.toLowerCase();
-  if (lower.includes('treatment')) return 'In treatment';
-  if (lower.includes('recovered')) return 'Recovered';
-  return 'Consultation';
+  const lower = status?.toLowerCase() || '';
+  if (lower.includes('complete') || lower.includes('recovered')) return 'Completed';
+  return 'Uncompleted';
 }
 
 function mapApiPatient(p: ApiPatient): Patient {
@@ -87,5 +86,16 @@ export const patientService = {
     };
     inMemoryPatients.unshift(newPatient);
     return newPatient;
+  },
+
+  async updatePatientStatus(id: number | string, status: PatientStatus): Promise<void> {
+    const idx = inMemoryPatients.findIndex((p) => String(p.id) === String(id));
+    if (idx !== -1) {
+      inMemoryPatients[idx] = { ...inMemoryPatients[idx], status };
+    }
+    try {
+      await apiClient.patch(`/api/patients/${id}/status`, { status });
+    } catch {
+    }
   },
 };

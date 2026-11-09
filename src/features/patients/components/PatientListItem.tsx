@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus } from 'lucide-react';
+import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus, CheckCircle2, RotateCcw } from 'lucide-react';
 import type { Patient } from '../types';
 import { StatusPill } from '@/shared/ui/status-pill';
 import { PatientAvatar } from './PatientAvatar';
@@ -10,6 +10,7 @@ export interface PatientListItemProps {
   index: number;
   onSelect?: (patient: Patient) => void;
   onViewDetails?: (patient: Patient) => void;
+  onToggleStatus?: (patient: Patient) => void;
 }
 
 function parsePatientCondition(rawCondition?: string) {
@@ -58,8 +59,9 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
   index,
   onSelect,
   onViewDetails,
+  onToggleStatus,
 }) => {
-  const isRecovered = patient.status === 'Recovered';
+  const isCompleted = patient.status === 'Completed';
 
   const parsedCondition = useMemo(() => {
     return parsePatientCondition(patient.condition);
@@ -72,6 +74,11 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
     } else {
       onSelect?.(patient);
     }
+  };
+
+  const handleToggleStatus = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onToggleStatus?.(patient);
   };
 
   const isOnline = parsedCondition.format === 'Online';
@@ -163,20 +170,48 @@ export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
       <td className="patient-cell patient-cell--status">
         <StatusPill
           status={patient.status}
-          variant={isRecovered ? 'success' : 'pending'}
+          variant={isCompleted ? 'success' : 'pending'}
         />
       </td>
 
       <td className="patient-cell patient-cell--action">
-        <button
-          type="button"
-          className="patient-table-view-btn"
-          aria-label={`View details for ${patient.name}`}
-          onClick={handleOpenDetails}
-        >
-          <Eye size={14} />
-          <span>View</span>
-        </button>
+        <div className="patient-actions-group">
+          <button
+            type="button"
+            className="patient-table-view-btn"
+            aria-label={`View details for ${patient.name}`}
+            onClick={handleOpenDetails}
+          >
+            <Eye size={14} />
+            <span>View</span>
+          </button>
+
+          {onToggleStatus && (
+            <button
+              type="button"
+              className={`patient-table-status-btn ${
+                isCompleted
+                  ? 'patient-table-status-btn--uncomplete'
+                  : 'patient-table-status-btn--complete'
+              }`}
+              aria-label={isCompleted ? 'Mark as Uncompleted' : 'Mark as Completed'}
+              title={isCompleted ? 'Mark as Uncompleted' : 'Mark as Completed'}
+              onClick={handleToggleStatus}
+            >
+              {isCompleted ? (
+                <>
+                  <RotateCcw size={12} />
+                  <span>Uncomplete</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 size={12} />
+                  <span>Complete</span>
+                </>
+              )}
+            </button>
+          )}
+        </div>
       </td>
     </tr>
   );

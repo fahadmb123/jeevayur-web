@@ -43,16 +43,26 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
   const [countrySearch, setCountrySearch] = useState('');
   const [isTouched, setIsTouched] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const listEl = listRef.current;
-    if (!listEl) return;
+    const menuEl = menuRef.current;
+    if (!menuEl || !isOpenDropdown) return;
+
     const handleWheel = (e: WheelEvent) => {
       e.stopPropagation();
+      e.preventDefault();
+      const listEl = listRef.current;
+      if (listEl) {
+        listEl.scrollTop += e.deltaY;
+      }
     };
-    listEl.addEventListener('wheel', handleWheel, { passive: true });
-    return () => listEl.removeEventListener('wheel', handleWheel);
+
+    menuEl.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      menuEl.removeEventListener('wheel', handleWheel);
+    };
   }, [isOpenDropdown]);
 
   useEffect(() => {
@@ -170,6 +180,7 @@ export const InternationalPhoneInput: React.FC<InternationalPhoneInputProps> = R
 
           {isOpenDropdown && (
             <div
+              ref={menuRef}
               className="intl-dropdown-menu"
               data-lenis-prevent="true"
               data-lenis-prevent-wheel="true"

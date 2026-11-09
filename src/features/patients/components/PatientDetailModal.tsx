@@ -11,6 +11,8 @@ import {
   MessageSquare,
   Globe,
   UserCheck,
+  RotateCcw,
+  CheckCircle2,
 } from 'lucide-react';
 import type { Patient } from '../types';
 import { PatientAvatar } from './PatientAvatar';
@@ -22,6 +24,7 @@ export interface PatientDetailModalProps {
   isLoading?: boolean;
   onClose: () => void;
   onStartConsultation?: (patient: Patient) => void;
+  onToggleStatus?: (patient: Patient) => void;
 }
 
 function parsePatientCondition(rawCondition?: string) {
@@ -71,6 +74,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
   isLoading = false,
   onClose,
   onStartConsultation,
+  onToggleStatus,
 }) => {
   const parsedCondition = useMemo(() => {
     return parsePatientCondition(patient?.condition);
@@ -162,6 +166,9 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     <div className="patient-detail-modal__meta-strip">
                       <span className="patient-detail-modal__sub">
                         Patient ID #{String(patient.id).slice(-8)}
+                      </span>
+                      <span className={`patient-detail-status-pill patient-detail-status-pill--${patient.status === 'Completed' ? 'completed' : 'uncompleted'}`}>
+                        {patient.status}
                       </span>
                       <span className={`patient-detail-source-badge patient-detail-source-badge--${patient.source || 'doctor'}`}>
                         {patient.source === 'website' ? (
@@ -312,6 +319,29 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                 >
                   Close
                 </button>
+                {onToggleStatus && (
+                  <button
+                    type="button"
+                    className={`patient-detail-modal__btn ${
+                      patient.status === 'Completed'
+                        ? 'patient-detail-modal__btn--uncomplete'
+                        : 'patient-detail-modal__btn--complete'
+                    }`}
+                    onClick={() => onToggleStatus(patient)}
+                  >
+                    {patient.status === 'Completed' ? (
+                      <>
+                        <RotateCcw size={15} />
+                        <span>Mark Uncompleted</span>
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 size={15} />
+                        <span>Mark Completed</span>
+                      </>
+                    )}
+                  </button>
+                )}
                 {onStartConsultation && (
                   <button
                     type="button"

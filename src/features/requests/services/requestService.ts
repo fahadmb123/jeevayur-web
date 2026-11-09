@@ -113,7 +113,7 @@ export const requestService = {
         email: updated.email,
         condition: updated.primaryConcern,
         lastVisit: 'Today (New Request)',
-        status: 'Consultation',
+        status: 'Uncompleted',
       });
     } catch {
     }
