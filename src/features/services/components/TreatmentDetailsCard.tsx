@@ -2,6 +2,7 @@ import React from 'react';
 import { Clock, MessageCircle, ArrowLeft, ArrowRight, Check } from 'lucide-react';
 import type { AyurvedaService } from '../types';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 
 export interface TreatmentDetailsCardProps {
   service: AyurvedaService;
@@ -18,9 +19,9 @@ export const TreatmentDetailsCard: React.FC<TreatmentDetailsCardProps> = React.m
   const prevService = currentIndex > 0 ? services[currentIndex - 1] : null;
   const nextService = currentIndex >= 0 && currentIndex < services.length - 1 ? services[currentIndex + 1] : null;
 
-  const whatsappUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
+  const whatsappUrl = CLINIC_CONTACT.getWhatsappUrl(
     `Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatment for: ${service.title}.`
-  )}`;
+  );
 
   return (
     <article className="treatment-details-card" id="treatment-details">

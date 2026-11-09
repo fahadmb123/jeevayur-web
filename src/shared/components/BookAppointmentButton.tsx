@@ -1,14 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/shared/ui/button';
-import { BookAppointmentModal } from './BookAppointmentModal';
-import type { BookingFormData } from '@/features/appointments/types';
 
 export interface BookAppointmentButtonProps {
   label?: string;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'outline' | 'ghost' | 'icon';
   className?: string;
-  onBookSuccess?: (data: BookingFormData) => void;
+  type?: 'ayurveda treatment' | 'yoga class';
+  onBookSuccess?: (data?: unknown) => void;
 }
 
 export const BookAppointmentButton: React.FC<BookAppointmentButtonProps> = React.memo(({
@@ -16,37 +16,28 @@ export const BookAppointmentButton: React.FC<BookAppointmentButtonProps> = React
   size = 'md',
   variant = 'primary',
   className = '',
-  onBookSuccess,
+  type,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleOpen = useCallback(() => {
-    setIsOpen(true);
-  }, []);
-
-  const handleClose = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+  const handleClick = useCallback(() => {
+    if (type) {
+      navigate(`/contact?type=${encodeURIComponent(type)}`);
+    } else {
+      navigate('/contact');
+    }
+  }, [navigate, type]);
 
   return (
-    <>
-      <Button
-        variant={variant}
-        size={size}
-        className={className}
-        onClick={handleOpen}
-      >
-        {label}
-      </Button>
-
-      <BookAppointmentModal
-        isOpen={isOpen}
-        onClose={handleClose}
-        onSuccess={onBookSuccess}
-      />
-    </>
+    <Button
+      variant={variant}
+      size={size}
+      className={className}
+      onClick={handleClick}
+    >
+      {label}
+    </Button>
   );
 });
 
 BookAppointmentButton.displayName = 'BookAppointmentButton';
-

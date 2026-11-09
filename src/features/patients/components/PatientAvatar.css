@@ -1,0 +1,19 @@
+.patient-human-avatar {
+  border-radius: 10px;
+  background: var(--primary-green-tint, #EDF6F1);
+  color: var(--primary-green, #1B6B50);
+  border: 1px solid var(--border-color, #E2E8DE);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+[data-theme='dark'] .patient-human-avatar,
+.dark .patient-human-avatar {
+  background: rgba(46, 157, 119, 0.16);
+  border-color: rgba(46, 157, 119, 0.25);
+  color: #34D399;
+}

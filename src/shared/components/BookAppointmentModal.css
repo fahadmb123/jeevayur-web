@@ -127,11 +127,83 @@
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.18);
 }
 
+.book-modal__input-wrapper input.has-error,
+.book-modal__select.has-error {
+  border-color: #EF4444 !important;
+}
+
+.book-modal__input-wrapper:has(input.has-error) {
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.book-modal-field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #EF4444;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
 .book-modal__actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
   margin-top: 12px;
+}
+
+.book-modal__confirm-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.book-modal__confirm-table {
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 12px;
+  background: var(--surface-secondary, #F8FAFC);
+  overflow: hidden;
+}
+
+.book-modal__confirm-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-color, #E2E8F0);
+  gap: 12px;
+}
+
+.book-modal__confirm-row:last-child {
+  border-bottom: none;
+}
+
+.book-modal__confirm-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #475569);
+}
+
+.book-modal__confirm-val {
+  font-size: 0.85rem;
+  color: var(--text-primary, #0F172A);
+  text-align: right;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  max-width: 65%;
+}
+
+.book-modal__confirm-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: rgba(27, 107, 80, 0.08);
+  color: var(--primary-green, #1B6B50);
+  font-size: 0.78rem;
+  line-height: 1.45;
 }
 
 .book-modal__success {

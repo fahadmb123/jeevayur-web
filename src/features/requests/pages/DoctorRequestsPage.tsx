@@ -2,9 +2,6 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Inbox,
-  Clock,
-  CheckCircle2,
-  XCircle,
   Users,
   Check,
 } from 'lucide-react';
@@ -16,8 +13,10 @@ import {
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import { useRequests } from '../hooks/useRequests';
 import { RequestCard } from '../components/RequestCard';
+import { RequestCardSkeleton } from '../components/RequestCardSkeleton';
 import { RequestDetailModal } from '../components/RequestDetailModal';
 import { RejectReasonModal } from '../components/RejectReasonModal';
+import { AcceptConfirmModal } from '../components/AcceptConfirmModal';
 import type { PatientRequest, RequestFilterOption } from '../types';
 import { ROUTES } from '@/shared/config/routes';
 import './DoctorRequestsPage.css';
@@ -38,12 +37,11 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
   const [selectedService, setSelectedService] = useState('All');
   const [selectedMode, setSelectedMode] = useState<string>('All');
 
-  // Modals state
   const [detailRequest, setDetailRequest] = useState<PatientRequest | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<PatientRequest | null>(null);
+  const [acceptingRequest, setAcceptingRequest] = useState<PatientRequest | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Success toast state
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const showToast = useCallback((message: string) => {
@@ -53,15 +51,23 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
     }, 4500);
   }, []);
 
-  const handleAccept = useCallback(
+  const handleOpenAccept = useCallback((req: PatientRequest) => {
+    setAcceptingRequest(req);
+  }, []);
+
+  const handleCloseAccept = useCallback(() => {
+    setAcceptingRequest(null);
+  }, []);
+
+  const handleConfirmAccept = useCallback(
     async (req: PatientRequest) => {
       try {
         setIsProcessing(true);
         await acceptRequest(req.id);
+        setAcceptingRequest(null);
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request accepted! ${req.patientName} has been enrolled into your patient directory.`);
       } catch {
-        // Handled
       } finally {
         setIsProcessing(false);
       }
@@ -82,7 +88,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         setDetailRequest((prev) => (prev?.id === req.id ? null : prev));
         showToast(`Request for ${req.patientName} was declined.`);
       } catch {
-        // Handled
       } finally {
         setIsProcessing(false);
       }
@@ -117,27 +122,34 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   const filteredRequests = useMemo(() => {
     return requests.filter((r) => {
-      // Status filter
       if (activeFilter === 'Pending' && r.status !== 'pending') return false;
       if (activeFilter === 'Accepted' && r.status !== 'accepted') return false;
       if (activeFilter === 'Rejected' && r.status !== 'rejected') return false;
 
-      // Service filter
       if (selectedService !== 'All' && r.service !== selectedService) return false;
 
-      // Mode filter
       if (selectedMode !== 'All' && r.mode !== selectedMode) return false;
 
-      // Search filter
       if (localSearch.trim()) {
         const query = localSearch.toLowerCase().trim();
         const matchesName = r.patientName.toLowerCase().includes(query);
         const matchesPhone = r.phone.toLowerCase().includes(query);
+        const matchesEmail = r.email.toLowerCase().includes(query);
         const matchesConcern = r.primaryConcern.toLowerCase().includes(query);
         const matchesService = r.service.toLowerCase().includes(query);
+        const matchesLanguage = r.language ? r.language.toLowerCase().includes(query) : false;
         const matchesCity = r.city ? r.city.toLowerCase().includes(query) : false;
-        const matchesSymptoms = r.symptoms.some((s) => s.toLowerCase().includes(query));
-        return matchesName || matchesPhone || matchesConcern || matchesService || matchesCity || matchesSymptoms;
+        const matchesSymptoms = r.symptoms ? r.symptoms.some((s) => s.toLowerCase().includes(query)) : false;
+        return (
+          matchesName ||
+          matchesPhone ||
+          matchesEmail ||
+          matchesConcern ||
+          matchesService ||
+          matchesLanguage ||
+          matchesCity ||
+          matchesSymptoms
+        );
       }
 
       return true;
@@ -182,7 +194,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
   const pills: FilterPillConfig[] = useMemo(() => [
     {
       id: 'all',
-      label: 'All Requests',
+      label: 'All Consultations',
       count: counts.All,
       isActive: activeFilter === 'All',
       onClick: () => setActiveFilter('All'),
@@ -212,7 +224,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content doctor-consult-page">
-      {/* Toast Notification */}
       {toastMessage && (
         <div className="doctor-consult-toast" role="alert">
           <Check size={18} className="doctor-consult-toast__icon" />
@@ -223,7 +234,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* Action Bar */}
       <div className="doctor-consult-actions-bar">
         <Link to={ROUTES.DOCTOR_PATIENTS} className="doctor-consult-patients-btn">
           <Users size={16} />
@@ -231,50 +241,6 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         </Link>
       </div>
 
-      {/* Stats Summary Banner */}
-      <div className="doctor-consult-stats-grid">
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--total">
-            <Inbox size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Total Requests</span>
-            <strong className="doctor-consult-stat-card__value">{requests.length}</strong>
-          </div>
-        </div>
-
-        <div className="doctor-consult-stat-card doctor-consult-stat-card--highlight">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--pending">
-            <Clock size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Pending Review</span>
-            <strong className="doctor-consult-stat-card__value text-amber">{pendingCount}</strong>
-          </div>
-        </div>
-
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--accepted">
-            <CheckCircle2 size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Accepted & Enrolled</span>
-            <strong className="doctor-consult-stat-card__value text-green">{acceptedCount}</strong>
-          </div>
-        </div>
-
-        <div className="doctor-consult-stat-card">
-          <div className="doctor-consult-stat-card__icon doctor-consult-stat-card__icon--rejected">
-            <XCircle size={22} />
-          </div>
-          <div className="doctor-consult-stat-card__info">
-            <span className="doctor-consult-stat-card__label">Declined</span>
-            <strong className="doctor-consult-stat-card__value">{rejectedCount}</strong>
-          </div>
-        </div>
-      </div>
-
-      {/* Yoga-style Search & Filter Strip */}
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patient by name, phone, symptoms, or service..."
         searchValue={localSearch}
@@ -285,19 +251,17 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
         pills={pills}
       />
 
-      {/* Main Container Card */}
       <Card className="doctor-consult-card">
-        {/* Requests List */}
         <div className="doctor-consult-list">
           {loading ? (
-            <div className="doctor-consult-loading">Loading requests...</div>
+            <RequestCardSkeleton count={3} />
           ) : filteredRequests.length > 0 ? (
             filteredRequests.map((request, index) => (
               <RequestCard
                 key={request.id}
                 request={request}
                 index={index}
-                onAccept={handleAccept}
+                onAccept={handleOpenAccept}
                 onReject={handleOpenReject}
                 onViewDetails={handleViewDetails}
                 isProcessing={isProcessing}
@@ -306,28 +270,34 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
           ) : (
             <div className="doctor-consult-empty">
               <Inbox size={42} className="doctor-consult-empty__icon" />
-              <h3 className="doctor-consult-empty__title">No requests found</h3>
+              <h3 className="doctor-consult-empty__title">No consultations found</h3>
               <p className="doctor-consult-empty__desc">
                 {localSearch || selectedService !== 'All' || selectedMode !== 'All'
                   ? 'Try clearing your search or filter options.'
-                  : `There are currently no requests in the "${activeFilter}" tab.`}
+                  : `There are currently no consultations in the "${activeFilter}" tab.`}
               </p>
             </div>
           )}
         </div>
       </Card>
 
-      {/* View Details Modal */}
       <RequestDetailModal
         request={detailRequest}
         isOpen={Boolean(detailRequest)}
         onClose={handleCloseDetail}
-        onAccept={handleAccept}
+        onAccept={handleOpenAccept}
         onReject={handleOpenReject}
         isProcessing={isProcessing}
       />
 
-      {/* Reject Reason Confirmation Modal */}
+      <AcceptConfirmModal
+        request={acceptingRequest}
+        isOpen={Boolean(acceptingRequest)}
+        onClose={handleCloseAccept}
+        onConfirmAccept={handleConfirmAccept}
+        isProcessing={isProcessing}
+      />
+
       <RejectReasonModal
         request={rejectingRequest}
         isOpen={Boolean(rejectingRequest)}

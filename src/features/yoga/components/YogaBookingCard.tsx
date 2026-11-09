@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { MessageCircle, PhoneCall, Calendar } from 'lucide-react';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { ROUTES } from '@/shared/config/routes';
 import { fadeUpVariants, standardViewport } from '@/shared/lib/animations';
 import './YogaBookingCard.css';
@@ -38,20 +39,18 @@ export const YogaBookingCard: React.FC = React.memo(() => {
 
           <div className="yogaathma-booking-card__actions">
             <a
-              href={`https://wa.me/917356702775?text=${encodeURIComponent(
-                'Hello Jeevayurniketan | Yogaathma, I would like to book a yoga session.'
-              )}`}
+              href={CLINIC_CONTACT.getWhatsappUrl('Hello Jeevayurniketan | Yogaathma, I would like to book a yoga session.')}
               target="_blank"
               rel="noopener noreferrer"
               className="yogaathma-booking-btn-whatsapp"
             >
               <MessageCircle size={18} />
-              <span>WhatsApp: {booking.phone}</span>
+              <span>WhatsApp: {CLINIC_CONTACT.phone}</span>
             </a>
 
-            <a href={`tel:+917356702775`} className="yogaathma-booking-btn-call">
+            <a href={CLINIC_CONTACT.telUrl} className="yogaathma-booking-btn-call">
               <PhoneCall size={16} />
-              <span>Call: {booking.phone}</span>
+              <span>Call: {CLINIC_CONTACT.phone}</span>
             </a>
 
             <Link to={ROUTES.YOGA} className="yogaathma-booking-btn-schedule">

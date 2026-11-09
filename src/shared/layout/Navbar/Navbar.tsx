@@ -14,7 +14,7 @@ const NAV_LINKS = [
   { label: 'Treatments', path: ROUTES.SERVICES },
   { label: 'Yoga', path: ROUTES.YOGA },
   { label: 'Team', path: ROUTES.TEAM },
-  { label: 'Contact', path: ROUTES.CONTACT },
+  { label: 'Book', path: ROUTES.CONTACT },
 ];
 
 export const Navbar: React.FC = React.memo(() => {
@@ -53,9 +53,12 @@ export const Navbar: React.FC = React.memo(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
+  const isHome = location.pathname === '/' || location.pathname === ROUTES.HOME;
+  const isSolid = scrolled || !isHome;
+
   return (
     <>
-      <header className={`navbar-wrapper ${scrolled ? 'scrolled' : 'transparent-top'}`}>
+      <header className={`navbar-wrapper ${isSolid ? 'scrolled' : 'transparent-top'}`}>
         <nav className="navbar" aria-label="Primary Navigation">
           <div className="navbar-brand-section">
             <BrandLogo linkTo={ROUTES.HOME} showDivider={false} size="md" />

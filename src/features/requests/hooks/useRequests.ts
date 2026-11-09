@@ -6,11 +6,17 @@ export const useRequests = () => {
   const [requests, setRequests] = useState<PatientRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    requestService.getRequests().then((data) => {
+  const fetchRequests = useCallback(async () => {
+    try {
+      const data = await requestService.getRequests();
       setRequests(data);
+    } finally {
       setLoading(false);
-    });
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchRequests();
 
     const unsubscribe = requestService.subscribe((updated) => {
       setRequests(updated);
@@ -19,14 +25,18 @@ export const useRequests = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [fetchRequests]);
 
   const acceptRequest = useCallback(async (id: string) => {
-    return await requestService.acceptRequest(id);
+    const updated = await requestService.acceptRequest(id);
+    setRequests((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    return updated;
   }, []);
 
   const rejectRequest = useCallback(async (id: string, reason?: string) => {
-    return await requestService.rejectRequest(id, reason);
+    const updated = await requestService.rejectRequest(id, reason);
+    setRequests((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    return updated;
   }, []);
 
   const { pendingCount, acceptedCount, rejectedCount } = useMemo(() => {
@@ -53,6 +63,7 @@ export const useRequests = () => {
     rejectedCount,
     acceptRequest,
     rejectRequest,
+    refresh: fetchRequests,
   };
 };
 

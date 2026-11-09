@@ -12,6 +12,7 @@ import {
   Award,
 } from 'lucide-react';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
+import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { YogaProgramCard } from './YogaProgramCard';
 import { ROUTES } from '@/shared/config/routes';
 import {
@@ -50,9 +51,7 @@ const PILLAR_ICONS = [Compass, Award, Heart, Sparkles, ShieldCheck];
 export const YogaathmaSection: React.FC = React.memo(() => {
   const { hero, approach, programs } = YOGAATHMA_DATA;
 
-  const whatsappHeroUrl = `https://wa.me/917356702775?text=${encodeURIComponent(
-    hero.whatsappMessage
-  )}`;
+  const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
   return (
     <section id="yoga" className="yogaathma-section">
