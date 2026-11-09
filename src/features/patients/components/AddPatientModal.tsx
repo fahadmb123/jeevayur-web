@@ -4,6 +4,7 @@ import {
   X,
   UserPlus,
   CheckCircle2,
+  AlertCircle,
   Leaf,
   Sparkles,
   MapPin,
@@ -31,6 +32,16 @@ export interface AddPatientModalProps {
   onAddPatient?: (patient: Omit<Patient, 'id'>) => Promise<unknown> | void;
 }
 
+export interface FormErrors {
+  name?: string;
+  phone?: string;
+  email?: string;
+  age?: string;
+  language?: string;
+  gender?: string;
+  reason?: string;
+}
+
 export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   isOpen,
   onClose,
@@ -40,30 +51,107 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   const [type, setType] = useState<'ayurveda treatment' | 'yoga class'>('ayurveda treatment');
   const [format, setFormat] = useState<'offline' | 'online'>('offline');
   const [name, setName] = useState('');
-  const [nameError, setNameError] = useState<string | null>(null);
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [language, setLanguage] = useState('English');
   const [gender, setGender] = useState('Male');
   const [age, setAge] = useState<string>('32');
   const [reason, setReason] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const validateField = useCallback((field: keyof FormErrors, customVal?: string): string | undefined => {
+    switch (field) {
+      case 'name': {
+        const v = (customVal !== undefined ? customVal : name).trim();
+        if (!v) return 'Patient full name is required';
+        if (v.length < 2) return 'Patient name must be at least 2 characters';
+        if (v.length > 100) return 'Patient name cannot exceed 100 characters';
+        return undefined;
+      }
+      case 'phone': {
+        const v = (customVal !== undefined ? customVal : phone).trim();
+        if (!v) return 'Contact phone number is required';
+        const country = findCountryByDialCode(v);
+        const clean = v.replace(/\s+/g, '');
+        const digits = clean.startsWith(country.dialCode)
+          ? clean.slice(country.dialCode.length).replace(/\D/g, '')
+          : clean.replace(/\D/g, '');
+        return country.validateDigits(digits) || undefined;
+      }
+      case 'email': {
+        const v = (customVal !== undefined ? customVal : email).trim();
+        if (v) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(v)) return 'Please enter a valid email address';
+        }
+        return undefined;
+      }
+      case 'age': {
+        const v = (customVal !== undefined ? customVal : age).trim();
+        if (!v) return 'Patient age is required';
+        const num = Number(v);
+        if (isNaN(num) || !Number.isInteger(num) || num < 1 || num > 120) {
+          return 'Age must be a valid number between 1 and 120';
+        }
+        return undefined;
+      }
+      case 'language': {
+        const v = (customVal !== undefined ? customVal : language).trim();
+        if (!v) return 'Please select preferred consultation language';
+        return undefined;
+      }
+      case 'gender': {
+        const v = (customVal !== undefined ? customVal : gender).trim();
+        if (!v) return 'Please select patient gender';
+        return undefined;
+      }
+      case 'reason': {
+        const v = (customVal !== undefined ? customVal : reason).trim();
+        if (!v) return 'Please describe chief health concern or reason for visit';
+        if (v.length < 5) return 'Health concern must be at least 5 characters';
+        return undefined;
+      }
+      default:
+        return undefined;
+    }
+  }, [name, phone, email, age, language, gender, reason]);
+
+  const handleBlurField = useCallback((field: keyof FormErrors) => {
+    const error = validateField(field);
+    setFieldErrors((prev) => {
+      if (error) {
+        return { ...prev, [field]: error };
+      }
+      if (!prev[field]) return prev;
+      const updated = { ...prev };
+      delete updated[field];
+      return updated;
+    });
+  }, [validateField]);
+
+  const clearFieldError = useCallback((field: keyof FormErrors) => {
+    setFieldErrors((prev) => {
+      if (!prev[field]) return prev;
+      const updated = { ...prev };
+      delete updated[field];
+      return updated;
+    });
+  }, []);
 
   const resetForm = useCallback(() => {
     setStep('form');
     setType('ayurveda treatment');
     setFormat('offline');
     setName('');
-    setNameError(null);
     setEmail('');
     setPhone('');
-    setPhoneError(null);
     setLanguage('English');
     setGender('Male');
     setAge('32');
     setReason('');
+    setFieldErrors({});
     setSubmitted(false);
     setIsSubmitting(false);
   }, []);
@@ -76,33 +164,25 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   const handleProceedToReview = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      setNameError(null);
-      setPhoneError(null);
 
-      if (!name.trim()) {
-        setNameError('Please enter the patient full name (at least 2 characters)');
+      const newErrors: FormErrors = {};
+      const fieldsToCheck: (keyof FormErrors)[] = ['name', 'phone', 'email', 'age', 'language', 'gender', 'reason'];
+      for (const f of fieldsToCheck) {
+        const err = validateField(f);
+        if (err) {
+          newErrors[f] = err;
+        }
+      }
+
+      if (Object.keys(newErrors).length > 0) {
+        setFieldErrors(newErrors);
         return;
       }
 
-      if (!phone.trim()) {
-        setPhoneError('Please enter a contact phone number');
-        return;
-      }
-
-      const country = findCountryByDialCode(phone);
-      const clean = phone.replace(/\s+/g, '');
-      const digits = clean.startsWith(country.dialCode)
-        ? clean.slice(country.dialCode.length).replace(/\D/g, '')
-        : clean.replace(/\D/g, '');
-      const validation = country.validateDigits(digits);
-      if (validation) {
-        setPhoneError(validation);
-        return;
-      }
-
+      setFieldErrors({});
       setStep('confirm');
     },
-    [name, phone]
+    [validateField]
   );
 
   const handleFinalConfirm = useCallback(async () => {
@@ -346,12 +426,16 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                       value={name}
                       onChange={(e) => {
                         setName(e.target.value);
-                        setNameError(null);
+                        clearFieldError('name');
                       }}
-                      className={nameError ? 'has-error' : ''}
+                      onBlur={() => handleBlurField('name')}
+                      className={fieldErrors.name ? 'has-error' : ''}
                     />
-                    {nameError && (
-                      <span className="add-patient-field-error">{nameError}</span>
+                    {fieldErrors.name && (
+                      <span className="add-patient-field-error">
+                        <AlertCircle size={12} />
+                        <span>{fieldErrors.name}</span>
+                      </span>
                     )}
                   </div>
 
@@ -365,9 +449,9 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                       value={phone}
                       onChange={(val) => {
                         setPhone(val);
-                        setPhoneError(null);
+                        clearFieldError('phone');
                       }}
-                      error={phoneError || undefined}
+                      error={fieldErrors.phone}
                       defaultCountryCode="IN"
                     />
                   </div>
@@ -382,20 +466,36 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                       type="email"
                       placeholder="e.g. ananya@example.com"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        clearFieldError('email');
+                      }}
+                      onBlur={() => handleBlurField('email')}
+                      className={fieldErrors.email ? 'has-error' : ''}
                     />
+                    {fieldErrors.email && (
+                      <span className="add-patient-field-error">
+                        <AlertCircle size={12} />
+                        <span>{fieldErrors.email}</span>
+                      </span>
+                    )}
                   </div>
 
                   <div className="add-patient-modal__grid-3">
                     <div className="add-patient-modal__field">
                       <label htmlFor="patientLanguage">
                         <Globe size={13} />
-                        <span>Language</span>
+                        <span>Language *</span>
                       </label>
                       <select
                         id="patientLanguage"
                         value={language}
-                        onChange={(e) => setLanguage(e.target.value)}
+                        onChange={(e) => {
+                          setLanguage(e.target.value);
+                          clearFieldError('language');
+                        }}
+                        onBlur={() => handleBlurField('language')}
+                        className={fieldErrors.language ? 'has-error' : ''}
                       >
                         <optgroup label="Popular & Regional Languages">
                           {POPULAR_LANGUAGES.map((lang) => (
@@ -412,27 +512,44 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                           ))}
                         </optgroup>
                       </select>
+                      {fieldErrors.language && (
+                        <span className="add-patient-field-error">
+                          <AlertCircle size={12} />
+                          <span>{fieldErrors.language}</span>
+                        </span>
+                      )}
                     </div>
 
                     <div className="add-patient-modal__field">
                       <label htmlFor="patientGender">
                         <User size={13} />
-                        <span>Gender</span>
+                        <span>Gender *</span>
                       </label>
                       <select
                         id="patientGender"
                         value={gender}
-                        onChange={(e) => setGender(e.target.value)}
+                        onChange={(e) => {
+                          setGender(e.target.value);
+                          clearFieldError('gender');
+                        }}
+                        onBlur={() => handleBlurField('gender')}
+                        className={fieldErrors.gender ? 'has-error' : ''}
                       >
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Other">Other</option>
                       </select>
+                      {fieldErrors.gender && (
+                        <span className="add-patient-field-error">
+                          <AlertCircle size={12} />
+                          <span>{fieldErrors.gender}</span>
+                        </span>
+                      )}
                     </div>
 
                     <div className="add-patient-modal__field">
                       <label htmlFor="patientAge">
-                        <span>Age</span>
+                        <span>Age *</span>
                       </label>
                       <input
                         id="patientAge"
@@ -441,23 +558,45 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
                         max="120"
                         placeholder="32"
                         value={age}
-                        onChange={(e) => setAge(e.target.value)}
+                        onChange={(e) => {
+                          setAge(e.target.value);
+                          clearFieldError('age');
+                        }}
+                        onBlur={() => handleBlurField('age')}
+                        className={fieldErrors.age ? 'has-error' : ''}
                       />
+                      {fieldErrors.age && (
+                        <span className="add-patient-field-error">
+                          <AlertCircle size={12} />
+                          <span>{fieldErrors.age}</span>
+                        </span>
+                      )}
                     </div>
                   </div>
 
                   <div className="add-patient-modal__field">
                     <label htmlFor="patientReason">
                       <FileText size={13} />
-                      <span>Chief Health Concern &amp; Reason</span>
+                      <span>Chief Health Concern &amp; Reason *</span>
                     </label>
                     <textarea
                       id="patientReason"
                       rows={3}
-                      placeholder="Describe primary health concern, symptoms, treatment history, or therapy inquiry..."
+                      placeholder="Describe primary health concern, symptoms, treatment history, or therapy inquiry (min 5 characters)..."
                       value={reason}
-                      onChange={(e) => setReason(e.target.value)}
+                      onChange={(e) => {
+                        setReason(e.target.value);
+                        clearFieldError('reason');
+                      }}
+                      onBlur={() => handleBlurField('reason')}
+                      className={fieldErrors.reason ? 'has-error' : ''}
                     />
+                    {fieldErrors.reason && (
+                      <span className="add-patient-field-error">
+                        <AlertCircle size={12} />
+                        <span>{fieldErrors.reason}</span>
+                      </span>
+                    )}
                   </div>
 
                   <div className="add-patient-modal__actions">

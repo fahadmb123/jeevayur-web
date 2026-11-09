@@ -127,6 +127,26 @@
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.18);
 }
 
+.book-modal__input-wrapper input.has-error,
+.book-modal__select.has-error {
+  border-color: #EF4444 !important;
+}
+
+.book-modal__input-wrapper:has(input.has-error) {
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.book-modal-field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: #EF4444;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
 .book-modal__actions {
   display: flex;
   justify-content: flex-end;

@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Calendar, User, CheckCircle2, ShieldCheck, ArrowRight, Check } from 'lucide-react';
+import { X, Calendar, User, CheckCircle2, ShieldCheck, ArrowRight, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
 import { InternationalPhoneInput, findCountryByDialCode } from '@/shared/ui/InternationalPhoneInput';
 import { useBookAppointment } from '@/features/appointments/hooks/useBookAppointment';
@@ -27,32 +27,94 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
   });
 
   const [step, setStep] = useState<'form' | 'confirm'>('form');
-  const [phoneError, setPhoneError] = useState<string | null>(null);
+  const [errors, setErrors] = useState<{
+    fullName?: string;
+    phone?: string;
+    preferredDate?: string;
+    service?: string;
+  }>({});
   const { book, loading } = useBookAppointment();
   const [submitted, setSubmitted] = useState(false);
+
+  const validateSingleField = useCallback((field: keyof typeof errors, customVal?: string): string | undefined => {
+    switch (field) {
+      case 'fullName': {
+        const v = (customVal !== undefined ? customVal : formData.fullName).trim();
+        if (!v) return 'Please enter your full name';
+        if (v.length < 2) return 'Full name must be at least 2 characters';
+        return undefined;
+      }
+      case 'phone': {
+        const v = (customVal !== undefined ? customVal : formData.phone).trim();
+        if (!v) return 'Please enter your phone number';
+        const country = findCountryByDialCode(v);
+        const clean = v.replace(/\s+/g, '');
+        const digits = clean.startsWith(country.dialCode)
+          ? clean.slice(country.dialCode.length).replace(/\D/g, '')
+          : clean.replace(/\D/g, '');
+        return country.validateDigits(digits) || undefined;
+      }
+      case 'preferredDate': {
+        const v = (customVal !== undefined ? customVal : formData.preferredDate).trim();
+        if (!v) return 'Please select your preferred date';
+        return undefined;
+      }
+      case 'service': {
+        const v = (customVal !== undefined ? customVal : formData.service).trim();
+        if (!v) return 'Please select a therapy or service';
+        return undefined;
+      }
+      default:
+        return undefined;
+    }
+  }, [formData]);
+
+  const handleBlur = useCallback((field: keyof typeof errors) => {
+    const err = validateSingleField(field);
+    setErrors((prev) => {
+      if (err) return { ...prev, [field]: err };
+      if (!prev[field]) return prev;
+      const updated = { ...prev };
+      delete updated[field];
+      return updated;
+    });
+  }, [validateSingleField]);
+
+  const clearError = useCallback((field: keyof typeof errors) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const updated = { ...prev };
+      delete updated[field];
+      return updated;
+    });
+  }, []);
 
   const handleProceedToReview = useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      setPhoneError(null);
-      if (!formData.fullName) return;
-      if (!formData.phone) {
-        setPhoneError('Please enter your phone number');
+
+      const newErrors: { fullName?: string; phone?: string; preferredDate?: string; service?: string } = {};
+      const nameErr = validateSingleField('fullName');
+      if (nameErr) newErrors.fullName = nameErr;
+
+      const phoneErr = validateSingleField('phone');
+      if (phoneErr) newErrors.phone = phoneErr;
+
+      const dateErr = validateSingleField('preferredDate');
+      if (dateErr) newErrors.preferredDate = dateErr;
+
+      const serviceErr = validateSingleField('service');
+      if (serviceErr) newErrors.service = serviceErr;
+
+      if (Object.keys(newErrors).length > 0) {
+        setErrors(newErrors);
         return;
       }
-      const country = findCountryByDialCode(formData.phone);
-      const clean = formData.phone.replace(/\s+/g, '');
-      const digits = clean.startsWith(country.dialCode)
-        ? clean.slice(country.dialCode.length).replace(/\D/g, '')
-        : clean.replace(/\D/g, '');
-      const validation = country.validateDigits(digits);
-      if (validation) {
-        setPhoneError(validation);
-        return;
-      }
+
+      setErrors({});
       setStep('confirm');
     },
-    [formData.fullName, formData.phone]
+    [validateSingleField]
   );
 
   const handleFinalConfirm = useCallback(
@@ -172,7 +234,7 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
             ) : (
               <form onSubmit={handleProceedToReview} className="book-modal__form">
                 <div className="book-modal__field">
-                  <label htmlFor="fullName">Full Name</label>
+                  <label htmlFor="fullName">Full Name *</label>
                   <div className="book-modal__input-wrapper">
                     <User size={18} className="book-modal__input-icon" />
                     <input
@@ -181,42 +243,63 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
                       placeholder="e.g. Ramesh Menon"
                       required
                       value={formData.fullName}
-                      onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, fullName: e.target.value });
+                        clearError('fullName');
+                      }}
+                      onBlur={() => handleBlur('fullName')}
+                      className={errors.fullName ? 'has-error' : ''}
                     />
                   </div>
+                  {errors.fullName && (
+                    <span className="book-modal-field-error">
+                      <AlertCircle size={12} />
+                      <span>{errors.fullName}</span>
+                    </span>
+                  )}
                 </div>
 
                 <div className="book-modal__field">
-                  <label htmlFor="phone">Phone Number</label>
+                  <label htmlFor="phone">Phone Number *</label>
                   <InternationalPhoneInput
                     id="phone"
                     value={formData.phone}
                     onChange={(val) => {
                       setFormData((prev) => ({ ...prev, phone: val }));
-                      setPhoneError(null);
+                      clearError('phone');
                     }}
-                    error={phoneError || undefined}
+                    error={errors.phone}
                     defaultCountryCode="IN"
                   />
                 </div>
 
                 <div className="book-modal__field">
-                  <label htmlFor="service">Therapy / Service</label>
+                  <label htmlFor="service">Therapy / Service *</label>
                   <select
                     id="service"
-                    className="book-modal__select"
+                    className={`book-modal__select ${errors.service ? 'has-error' : ''}`}
                     value={formData.service}
-                    onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, service: e.target.value });
+                      clearError('service');
+                    }}
+                    onBlur={() => handleBlur('service')}
                   >
                     <option value="Smriti Meditation">Smriti Meditation</option>
                     <option value="Psychotherapy">Ayurvedic Psychotherapy</option>
                     <option value="Stress Management">Stress Management Program</option>
                     <option value="General Consultation">General Ayurveda Consultation</option>
                   </select>
+                  {errors.service && (
+                    <span className="book-modal-field-error">
+                      <AlertCircle size={12} />
+                      <span>{errors.service}</span>
+                    </span>
+                  )}
                 </div>
 
                 <div className="book-modal__field">
-                  <label htmlFor="preferredDate">Preferred Date</label>
+                  <label htmlFor="preferredDate">Preferred Date *</label>
                   <div className="book-modal__input-wrapper">
                     <Calendar size={18} className="book-modal__input-icon" />
                     <input
@@ -224,9 +307,20 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
                       type="date"
                       required
                       value={formData.preferredDate}
-                      onChange={(e) => setFormData({ ...formData, preferredDate: e.target.value })}
+                      onChange={(e) => {
+                        setFormData({ ...formData, preferredDate: e.target.value });
+                        clearError('preferredDate');
+                      }}
+                      onBlur={() => handleBlur('preferredDate')}
+                      className={errors.preferredDate ? 'has-error' : ''}
                     />
                   </div>
+                  {errors.preferredDate && (
+                    <span className="book-modal-field-error">
+                      <AlertCircle size={12} />
+                      <span>{errors.preferredDate}</span>
+                    </span>
+                  )}
                 </div>
 
                 <div className="book-modal__actions">

@@ -226,16 +226,21 @@
   color: #E8EDE9;
 }
 
-.add-patient-modal__field input.has-error {
+.add-patient-modal__field input.has-error,
+.add-patient-modal__field select.has-error,
+.add-patient-modal__field textarea.has-error {
   border-color: #EF4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
 }
 
 .add-patient-field-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.78rem;
   color: #EF4444;
   font-weight: 500;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .add-patient-modal__field input:focus,
