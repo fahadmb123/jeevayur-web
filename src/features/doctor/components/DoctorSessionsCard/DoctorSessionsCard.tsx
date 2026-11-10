@@ -17,6 +17,7 @@ import { Card } from '@/shared/ui/card';
 import { ConfirmSignOutModal } from '@/shared/ui/ConfirmSignOutModal';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/shared/config/routes';
+import { getErrorMessage } from '@/shared/lib/api';
 import { authService, type ActiveSession } from '@/features/auth/services/authService';
 import './DoctorSessionsCard.css';
 
@@ -93,7 +94,7 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
       const data = await authService.getSessions();
       setSessions(data);
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Failed to retrieve active sessions.';
+      const errorMsg = getErrorMessage(err, 'Failed to retrieve active sessions.');
       setStatusMessage({ type: 'error', text: errorMsg });
     } finally {
       setLoading(false);
@@ -137,7 +138,7 @@ export const DoctorSessionsCard: React.FC = React.memo(() => {
       });
       setTimeout(() => setStatusMessage(null), 4000);
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : 'Could not revoke session.';
+      const errorMsg = getErrorMessage(err, 'Could not revoke session.');
       setStatusMessage({ type: 'error', text: errorMsg });
       setTimeout(() => setStatusMessage(null), 5000);
     } finally {

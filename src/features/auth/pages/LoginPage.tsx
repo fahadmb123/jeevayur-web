@@ -7,6 +7,7 @@ import { LoginForm } from '../components/LoginForm/LoginForm';
 import { useAuthMutation } from '../hooks/useAuthMutation';
 import type { LoginCredentials } from '../types';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
+import { getErrorMessage } from '@/shared/lib/api';
 import loginSanctuaryImg from '@/assets/login_sanctuary.jpg';
 import './AuthPages.css';
 
@@ -38,7 +39,7 @@ export const LoginPage: React.FC = React.memo(() => {
         navigate(ROUTES.HOME, { replace: true });
       }
     } catch (err: unknown) {
-      setLocalError(err instanceof Error ? err.message : 'Invalid credentials. Please try again.');
+      setLocalError(getErrorMessage(err, 'Invalid credentials. Please try again.'));
     }
   }, [login, navigate, location.state]);
 

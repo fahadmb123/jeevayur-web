@@ -4,6 +4,7 @@ import { ArrowLeft, Mail, Send, ShieldCheck, Sparkles, Heart } from 'lucide-reac
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/button';
+import { getErrorMessage } from '@/shared/lib/api';
 import { authService } from '../services/authService';
 import loginSanctuaryImg from '@/assets/login_sanctuary.jpg';
 import './AuthPages.css';
@@ -25,7 +26,7 @@ export const ForgotPasswordPage: React.FC = React.memo(() => {
       await authService.requestPasswordReset(email.trim());
       setSubmitted(true);
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to send reset link. Please try again.');
+      setError(getErrorMessage(err, 'Failed to send reset link. Please try again.'));
     } finally {
       setLoading(false);
     }

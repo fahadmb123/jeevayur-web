@@ -61,7 +61,9 @@ async function request<TResponse>(path: string, options: RequestInit = {}, isRet
       headers: buildHeaders(options.headers),
     });
   } catch {
-    throw new ApiError(0, 'Unable to connect to the API service');
+    throw new ApiError(0, 'Unable to connect to the server. Please check your internet connection.', {
+      code: 'NETWORK_ERROR',
+    });
   }
 
   const isAuthRoute =
@@ -91,11 +93,19 @@ async function request<TResponse>(path: string, options: RequestInit = {}, isRet
   const payload = await response.json().catch(() => null);
 
   if (!response.ok) {
-    throw new ApiError(
-      response.status,
-      payload?.error?.message || payload?.message || 'Request failed',
-      payload?.error
-    );
+    const message =
+      payload?.message ||
+      payload?.error?.message ||
+      (typeof payload?.error === 'string' ? payload.error : null) ||
+      'Request failed';
+    const code = payload?.code || payload?.error?.code;
+    const errors = payload?.errors ?? payload?.error?.details ?? payload?.details;
+
+    throw new ApiError(response.status, message, {
+      code,
+      errors,
+      raw: payload,
+    });
   }
 
   return payload as TResponse;
