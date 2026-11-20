@@ -2,6 +2,8 @@ export * from './YogaClassCard';
 export * from './YogaClassModal';
 export * from './YogaFilterBar';
 export * from './YogaProgramCard';
+export * from './YogaProgramDetailsCard';
+export * from './YogaProgramImageCard';
 export * from './YogaProgramShowcaseCard';
 export * from './YogaathmaSection';
 export * from './YogaLearningSection';
