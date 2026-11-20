@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, Sparkles, Compass } from 'lucide-react';
 import type { TeamMember } from '../types';
-import { DrAhalyaModal } from './DrAhalyaModal';
-import { DoctorBioModal } from './DoctorBioModal';
 import { fadeUpVariants } from '@/shared/lib/animations';
 import './TeamMemberCard.css';
+
+const DrAhalyaModal = React.lazy(() =>
+  import('./DrAhalyaModal').then((m) => ({ default: m.DrAhalyaModal }))
+);
+
+const DoctorBioModal = React.lazy(() =>
+  import('./DoctorBioModal').then((m) => ({ default: m.DoctorBioModal }))
+);
 
 export interface TeamMemberCardProps {
   member: TeamMember;
@@ -20,12 +26,12 @@ interface DoctorStyleConfig {
 
 const DOCTOR_STYLES: Record<string, DoctorStyleConfig> = {
   'dr-ahalya': {
-    bgColor: '#124C38', // Deep Ayurvedic forest emerald
+    bgColor: '#124C38',
     category: 'AYURVEDA & WELLNESS CONSULTANT',
     icon: <Sparkles size={24} color="#FFFFFF" strokeWidth={2.2} />,
   },
   'devadarsan': {
-    bgColor: '#1D3B53', // Deep indigo / oceanic slate
+    bgColor: '#1D3B53',
     category: 'YOGA & MEDITATION TEACHER',
     icon: <Compass size={24} color="#FFFFFF" strokeWidth={2.2} />,
   },
@@ -54,7 +60,6 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(({ membe
         tabIndex={0}
         aria-label={`Explore profile of ${member.name}`}
       >
-        {/* Top Hero Image Frame */}
         <div className="team-card__image-box">
           <img
             src={member.image}
@@ -64,8 +69,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(({ membe
             decoding="async"
           />
           <div className="team-card__image-overlay" />
-          
-          {/* Subtle qualifications floating tag */}
+
           <div className="team-card__floating-chip">
             <span>
               {member.qualifications}
@@ -74,9 +78,7 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(({ membe
           </div>
         </div>
 
-        {/* Bottom Editorial Meta Bar (Matches User's Reference Layout) */}
         <div className="team-card__meta-bar">
-          {/* Left Circular Monogram / Emblem */}
           <div
             className="team-card__avatar-badge"
             style={{ backgroundColor: styleConfig.bgColor }}
@@ -85,24 +87,25 @@ export const TeamMemberCard: React.FC<TeamMemberCardProps> = React.memo(({ membe
             {styleConfig.icon}
           </div>
 
-          {/* Center Name & Orange Category Text */}
           <div className="team-card__text-group">
             <h3 className="team-card__name">{member.name}</h3>
             <span className="team-card__category">{styleConfig.category}</span>
           </div>
 
-          {/* Right Vibrant Orange Arrow Button */}
           <div className="team-card__action-btn" aria-hidden="true">
             <ArrowUpRight size={24} strokeWidth={2.6} />
           </div>
         </div>
       </motion.article>
 
-      {/* Modal Dialog for Dr. Ahalya (Structured 10-Step Approach) or General Modal */}
-      {member.id === 'dr-ahalya' ? (
-        <DrAhalyaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
-      ) : (
-        <DoctorBioModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} member={member} />
+      {isModalOpen && (
+        <Suspense fallback={null}>
+          {member.id === 'dr-ahalya' ? (
+            <DrAhalyaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+          ) : (
+            <DoctorBioModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} member={member} />
+          )}
+        </Suspense>
       )}
     </>
   );

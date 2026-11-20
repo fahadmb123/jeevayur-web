@@ -6,5 +6,6 @@ export * from './components/TeamSection';
 export * from './components/DrAhalyaModal';
 export * from './components/DrAhalyaSpotlightSection';
 export * from './components/DoctorIntroSection';
+export * from './components/LiquidWavePortrait';
 export * from './data/drAhalyaData';
 export * from './pages/TeamPage';
