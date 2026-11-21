@@ -21,6 +21,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -34,6 +35,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
       setTitle('');
       setDescription('');
       setImageUrl('');
+      setSelectedFile(null);
       setImagePreview('');
       setError(null);
       setIsSubmitting(false);
@@ -58,17 +60,17 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
       return;
     }
 
-    if (file.size > 8 * 1024 * 1024) {
-      setError('File size exceeds 8MB. Please select a smaller image.');
+    if (file.size > 10 * 1024 * 1024) {
+      setError('File size exceeds 10MB. Please select a smaller image.');
       return;
     }
 
     setError(null);
+    setSelectedFile(file);
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') {
         setImagePreview(reader.result);
-        setImageUrl(reader.result);
         if (!title.trim()) {
           const cleanName = file.name
             .replace(/\.[^/.]+$/, '')
@@ -111,18 +113,26 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
       setError('Please enter an image title.');
       return;
     }
-    if (!imageUrl.trim() && !imagePreview.trim()) {
-      setError('Please provide an image either via upload or image URL.');
+
+    if (uploadMode === 'file' && !selectedFile && !imagePreview.trim()) {
+      setError('Please select an image file to upload.');
+      return;
+    }
+
+    if (uploadMode === 'url' && !imageUrl.trim()) {
+      setError('Please enter an image URL.');
       return;
     }
 
     try {
       setIsSubmitting(true);
       setError(null);
+
       await onSave({
         title: title.trim(),
         category,
-        imageUrl: imagePreview || imageUrl.trim(),
+        file: uploadMode === 'file' && selectedFile ? selectedFile : undefined,
+        imageUrl: uploadMode === 'url' ? imageUrl.trim() : imagePreview || undefined,
         description: description.trim() || undefined,
       });
     } catch {
@@ -239,7 +249,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                   type="file"
                   ref={fileInputRef}
                   className="add-gallery-modal__file-input"
-                  accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                  accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       handleFileChange(e.target.files[0]);
@@ -267,7 +277,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                       Click to choose an image or drag & drop
                     </span>
                     <span className="add-gallery-modal__dropzone-hint">
-                      PNG, JPG, WEBP, or SVG (up to 8MB)
+                      PNG, JPG, WEBP, or SVG (up to 10MB)
                     </span>
                   </div>
                 )}

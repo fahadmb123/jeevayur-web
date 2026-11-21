@@ -159,22 +159,55 @@ export const galleryService = {
 
   async addItem(data: GalleryFormData): Promise<GalleryItem> {
     try {
-      const response = await apiClient.post<{ success: boolean; data: GalleryItem }>('/api/gallery', {
-        title: data.title.trim(),
-        category: data.category,
-        imageUrl: data.imageUrl.trim(),
-        description: data.description?.trim(),
-      });
+      if (data.file) {
+        const formData = new FormData();
+        formData.append('file', data.file);
+        formData.append('title', data.title.trim());
+        formData.append('category', data.category);
+        if (data.description) formData.append('description', data.description.trim());
+        if (data.author) formData.append('author', data.author.trim());
+        if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
 
-      if (response && response.success && response.data) {
-        const item = {
-          ...response.data,
-          imageUrl: resolveImageUrl(response.data.imageUrl),
-        };
-        const cached = this.getCachedItems();
-        this.cacheItems([item, ...cached]);
-        window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
-        return item;
+        const url = `${environment.apiBaseUrl}/api/gallery`;
+        const res = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          body: formData,
+        });
+
+        if (res.ok) {
+          const body = await res.json();
+          if (body?.success && body?.data) {
+            const item: GalleryItem = {
+              ...body.data,
+              imageUrl: resolveImageUrl(body.data.imageUrl),
+            };
+            const cached = this.getCachedItems();
+            this.cacheItems([item, ...cached]);
+            window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+            return item;
+          }
+        }
+      } else if (data.imageUrl) {
+        const response = await apiClient.post<{ success: boolean; data: GalleryItem }>('/api/gallery', {
+          title: data.title.trim(),
+          category: data.category,
+          imageUrl: data.imageUrl.trim(),
+          description: data.description?.trim(),
+          author: data.author?.trim(),
+          aspectRatio: data.aspectRatio,
+        });
+
+        if (response && response.success && response.data) {
+          const item: GalleryItem = {
+            ...response.data,
+            imageUrl: resolveImageUrl(response.data.imageUrl),
+          };
+          const cached = this.getCachedItems();
+          this.cacheItems([item, ...cached]);
+          window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+          return item;
+        }
       }
     } catch {
     }
@@ -183,11 +216,11 @@ export const galleryService = {
       id: `${data.category}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       title: data.title.trim(),
       category: data.category,
-      imageUrl: data.imageUrl.trim(),
+      imageUrl: data.imageUrl ? data.imageUrl.trim() : '',
       description: data.description?.trim(),
       createdAt: new Date().toISOString().split('T')[0],
-      author: 'Doctor / Wellness Admin',
-      aspectRatio: 'landscape',
+      author: data.author?.trim() || 'Doctor / Wellness Admin',
+      aspectRatio: data.aspectRatio || 'landscape',
     };
     const cached = this.getCachedItems();
     this.cacheItems([fallbackItem, ...cached]);
