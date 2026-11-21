@@ -2,8 +2,15 @@ import type { GalleryItem, GalleryFormData } from '../types';
 import { apiClient } from '@/shared/lib/api/apiClient';
 import { environment } from '@/shared/config/environment';
 
-const GALLERY_STORAGE_KEY = 'jeevayurniketan_gallery_items';
+const GALLERY_STORAGE_KEY = 'jeevayurniketan_gallery_items_v2';
 const GALLERY_UPDATED_EVENT = 'jeevayurniketan_gallery_updated';
+
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('jeevayurniketan_gallery_items');
+  } catch {
+  }
+}
 
 const resolveImageUrl = (url: string): string => {
   if (!url) return '';
