@@ -60,8 +60,8 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
       return;
     }
 
-    if (file.size > 10 * 1024 * 1024) {
-      setError('File size exceeds 10MB. Please select a smaller image.');
+    if (file.size > 2 * 1024 * 1024) {
+      setError('Image file size must be less than 2MB. Please select a smaller image.');
       return;
     }
 
@@ -277,7 +277,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                       Click to choose an image or drag & drop
                     </span>
                     <span className="add-gallery-modal__dropzone-hint">
-                      PNG, JPG, WEBP, or SVG (up to 10MB)
+                      PNG, JPG, WEBP, or SVG (less than 2MB)
                     </span>
                   </div>
                 )}

@@ -158,6 +158,9 @@ export const galleryService = {
   },
 
   async addItem(data: GalleryFormData): Promise<GalleryItem> {
+    if (data.file && data.file.size > 2 * 1024 * 1024) {
+      throw new Error('Image file size must be less than 2MB.');
+    }
     try {
       if (data.file) {
         const formData = new FormData();
