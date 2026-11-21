@@ -124,15 +124,15 @@
 .image-cropper-modal__crop-container {
   position: relative;
   width: 100%;
-  height: 360px;
+  height: 380px;
   background-color: #07100b;
 }
 
 .image-cropper-modal__controls {
-  padding: 18px 24px;
+  padding: 16px 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   background-color: var(--surface-secondary, #f3f6f1);
   border-top: 1px solid var(--border-color, #e2e8de);
 }
@@ -156,91 +156,42 @@
   color: var(--text-secondary, #a6c2b4);
 }
 
-.image-cropper-modal__ratio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.image-cropper-modal__ratio-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.image-cropper-modal__ratio-btn {
-  padding: 7px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border-color, #e2e8de);
-  background-color: var(--surface-color, #ffffff);
-  color: var(--text-primary, #14241c);
-  font-size: 0.84rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.image-cropper-modal__ratio-btn:not(.active):hover {
-  border-color: var(--primary-green, #1b6b50);
-  background-color: var(--primary-green-tint, rgba(27, 107, 80, 0.12));
-  color: var(--primary-green, #1b6b50);
-  transform: translateY(-1px);
-}
-
-.image-cropper-modal__ratio-btn.active {
-  background: linear-gradient(135deg, var(--primary-green, #1b6b50) 0%, var(--primary-green-dark, #124c38) 100%);
-  border-color: var(--primary-green, #1b6b50);
-  color: #ffffff;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(27, 107, 80, 0.28);
-}
-
-.image-cropper-modal__ratio-btn.active:hover {
-  background: linear-gradient(135deg, var(--primary-green-light, #2a8566) 0%, var(--primary-green, #1b6b50) 100%);
-  border-color: var(--primary-green-light, #2a8566);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(27, 107, 80, 0.36);
-}
-
-[data-theme='dark'] .image-cropper-modal__ratio-btn,
-.dark .image-cropper-modal__ratio-btn {
-  background-color: rgba(255, 255, 255, 0.05);
-  border-color: var(--border-color, #1f3c30);
-  color: var(--text-secondary, #a6c2b4);
-}
-
-[data-theme='dark'] .image-cropper-modal__ratio-btn:not(.active):hover,
-.dark .image-cropper-modal__ratio-btn:not(.active):hover {
-  background-color: rgba(46, 157, 119, 0.18);
-  border-color: var(--primary-green, #2e9d77);
-  color: var(--primary-green-light, #41ba91);
-}
-
-[data-theme='dark'] .image-cropper-modal__ratio-btn.active,
-.dark .image-cropper-modal__ratio-btn.active {
-  background: linear-gradient(135deg, var(--primary-green, #2e9d77) 0%, var(--primary-green-dark, #227a5c) 100%);
-  border-color: var(--primary-green, #2e9d77);
-  color: #ffffff;
-}
-
-[data-theme='dark'] .image-cropper-modal__ratio-btn.active:hover,
-.dark .image-cropper-modal__ratio-btn.active:hover {
-  background: linear-gradient(135deg, var(--primary-green-light, #41ba91) 0%, var(--primary-green, #2e9d77) 100%);
-  border-color: var(--primary-green-light, #41ba91);
-  color: #ffffff;
-}
-
 .image-cropper-modal__slider-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .image-cropper-modal__slider-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.image-cropper-modal__ratio-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.image-cropper-modal__ratio-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background-color: var(--primary-green-tint, rgba(27, 107, 80, 0.12));
+  color: var(--primary-green, #1b6b50);
+  border: 1px solid var(--primary-green, #1b6b50);
+}
+
+[data-theme='dark'] .image-cropper-modal__ratio-badge,
+.dark .image-cropper-modal__ratio-badge {
+  background-color: rgba(46, 157, 119, 0.16);
+  color: var(--primary-green-light, #41ba91);
+  border-color: rgba(46, 157, 119, 0.4);
 }
 
 .image-cropper-modal__rotate-btn {
@@ -414,15 +365,6 @@
 
 @media (max-width: 640px) {
   .image-cropper-modal__crop-container {
-    height: 280px;
-  }
-
-  .image-cropper-modal__ratio-buttons {
-    gap: 6px;
-  }
-
-  .image-cropper-modal__ratio-btn {
-    padding: 6px 12px;
-    font-size: 0.78rem;
+    height: 300px;
   }
 }

@@ -4,18 +4,8 @@ import { X, Check, RotateCw, ZoomIn, ZoomOut, Crop } from 'lucide-react';
 import { getCroppedImg } from '../../utils/cropImage';
 import './ImageCropperModal.css';
 
-export type AspectRatioOption = {
-  label: string;
-  value: number;
-  type: 'landscape' | 'portrait' | 'square';
-};
-
-export const ASPECT_RATIO_OPTIONS: AspectRatioOption[] = [
-  { label: '16:9 Landscape', value: 16 / 9, type: 'landscape' },
-  { label: '4:3 Standard', value: 4 / 3, type: 'landscape' },
-  { label: '1:1 Square', value: 1, type: 'square' },
-  { label: '3:4 Portrait', value: 3 / 4, type: 'portrait' },
-];
+export const STANDARD_ASPECT_RATIO = 16 / 10;
+export const STANDARD_ASPECT_LABEL = '16:10 Standard';
 
 interface ImageCropperModalProps {
   isOpen: boolean;
@@ -34,15 +24,9 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
   isOpen,
   imageSrc,
   originalFileName = 'gallery-upload.jpg',
-  initialAspectRatioType = 'landscape',
   onClose,
   onCropComplete,
 }) => {
-  const defaultOption =
-    ASPECT_RATIO_OPTIONS.find((opt) => opt.type === initialAspectRatioType) ||
-    ASPECT_RATIO_OPTIONS[0];
-
-  const [selectedRatio, setSelectedRatio] = useState<AspectRatioOption>(defaultOption);
   const [crop, setCrop] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState<number>(1);
   const [rotation, setRotation] = useState<number>(0);
@@ -66,7 +50,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
       onCropComplete({
         file: cropped.file,
         dataUrl: cropped.dataUrl,
-        aspectRatioType: selectedRatio.type,
+        aspectRatioType: 'landscape',
       });
       onClose();
     } catch {
@@ -100,7 +84,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
             <div>
               <h3 className="image-cropper-modal__title">Crop & Adjust Image</h3>
               <p className="image-cropper-modal__subtitle">
-                Drag to reposition, use slider to zoom, and select your preferred ratio.
+                Reposition, zoom, and frame your image to the standard 16:10 gallery size.
               </p>
             </div>
           </div>
@@ -120,7 +104,7 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
             crop={crop}
             zoom={zoom}
             rotation={rotation}
-            aspect={selectedRatio.value}
+            aspect={STANDARD_ASPECT_RATIO}
             onCropChange={setCrop}
             onZoomChange={setZoom}
             onCropComplete={handleCropComplete}
@@ -129,32 +113,17 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
         </div>
 
         <div className="image-cropper-modal__controls">
-          <div className="image-cropper-modal__ratio-group">
-            <span className="image-cropper-modal__control-label">Aspect Ratio</span>
-            <div className="image-cropper-modal__ratio-buttons">
-              {ASPECT_RATIO_OPTIONS.map((option) => (
-                <button
-                  key={option.label}
-                  type="button"
-                  className={`image-cropper-modal__ratio-btn ${
-                    selectedRatio.label === option.label ? 'active' : ''
-                  }`}
-                  onClick={() => setSelectedRatio(option)}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <div className="image-cropper-modal__slider-group">
             <div className="image-cropper-modal__slider-row">
-              <span className="image-cropper-modal__control-label">Zoom</span>
+              <div className="image-cropper-modal__ratio-info">
+                <span className="image-cropper-modal__control-label">Standard Ratio</span>
+                <span className="image-cropper-modal__ratio-badge">16:10 Landscape</span>
+              </div>
               <button
                 type="button"
                 className="image-cropper-modal__rotate-btn"
                 onClick={handleRotate}
-                title="Rotate 90 degrees"
+                title="Rotate 90 degrees clockwise"
               >
                 <RotateCw size={14} />
                 <span>Rotate</span>

@@ -293,7 +293,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                         className="add-gallery-modal__preview-img"
                       />
                       <div className="add-gallery-modal__crop-badge">
-                        <span>{aspectRatio.toUpperCase()}</span>
+                        <span>16:10 STANDARD</span>
                       </div>
                       <div className="add-gallery-modal__preview-actions">
                         <button
