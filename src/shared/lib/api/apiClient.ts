@@ -84,6 +84,9 @@ async function request<TResponse>(path: string, options: RequestInit = {}, isRet
 
   if (response.status === 401) {
     tokenStorage.clearAccessToken();
+    if (!isAuthRoute && typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+    }
   }
 
   if (response.status === 204) {
