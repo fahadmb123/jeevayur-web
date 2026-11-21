@@ -14,6 +14,7 @@ import {
 import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaClassCard } from '../components/YogaClassCard';
 import { YogaClassModal } from '../components/YogaClassModal';
+import { YogaClassCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { DAYS_OF_WEEK } from '../types/yoga.types';
 import './DoctorYogaSchedulePage.css';
 
@@ -184,10 +185,9 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
             </div>
           </div>
 
-          {/* Loading / Error States */}
           {isLoading && (
-            <div style={{ textAlign: 'center', padding: '40px 0', color: 'var(--text-secondary)' }}>
-              Loading yoga programs...
+            <div className="doctor-yoga-grid" role="status" aria-label="Loading yoga schedule">
+              <YogaClassCardSkeleton count={6} />
             </div>
           )}
 

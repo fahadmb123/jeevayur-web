@@ -14,9 +14,9 @@
 }
 
 .treatments-container {
-  max-width: 1200px;
+  max-width: 1720px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 clamp(20px, 3.5vw, 48px);
 }
 
 /* ==========================================================================
@@ -30,7 +30,7 @@
 }
 
 .treatments-hero__inner {
-  max-width: 780px;
+  max-width: 860px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
   font-size: clamp(0.95rem, 1.2vw, 1.08rem);
   line-height: 1.65;
   color: var(--text-secondary, #485E53);
-  max-width: 640px;
+  max-width: 720px;
   margin: 0 0 24px;
 }
 
@@ -101,8 +101,8 @@
 .treatments-filter-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
@@ -114,7 +114,12 @@
   padding: 2px 0;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  flex: 1;
+}
+
+@media (min-width: 900px) {
+  .treatments-tabs {
+    justify-content: center;
+  }
 }
 
 .treatments-tabs::-webkit-scrollbar {
@@ -205,7 +210,9 @@
 }
 
 .treatments-section-title-wrap {
-  margin-bottom: 24px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 32px;
 }
 
 .treatments-section-title {
@@ -270,8 +277,16 @@
 
 .treatments-images-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
   gap: 24px;
+}
+
+@media (max-width: 1360px) {
+  .treatments-images-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -314,7 +329,8 @@
 .treatment-image-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 16 / 13;
+  min-height: 290px;
   overflow: hidden;
   background-color: var(--surface-secondary, #F3F6F1);
 }
@@ -343,7 +359,7 @@
 .treatment-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.15) 0%, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.2) 0%, transparent 35%, rgba(14, 30, 22, 0.9) 100%);
   pointer-events: none;
 }
 
@@ -352,10 +368,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   z-index: 2;
 }
 
