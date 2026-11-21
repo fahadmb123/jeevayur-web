@@ -314,7 +314,8 @@
 .treatment-image-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 16 / 13;
+  min-height: 290px;
   overflow: hidden;
   background-color: var(--surface-secondary, #F3F6F1);
 }
@@ -343,7 +344,7 @@
 .treatment-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.15) 0%, transparent 40%, rgba(14, 30, 22, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.2) 0%, transparent 35%, rgba(14, 30, 22, 0.9) 100%);
   pointer-events: none;
 }
 
@@ -352,10 +353,10 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 16px;
+  padding: 18px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   z-index: 2;
 }
 
