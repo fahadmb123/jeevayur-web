@@ -34,51 +34,27 @@ const CATEGORY_FILTERS: CategoryFilter[] = [
 ];
 
 export const ServicesPage: React.FC = React.memo(() => {
-  const { services, loading } = useTreatments();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const { services, loading } = useTreatments(selectedCategory, searchQuery);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const cols = useGridColumns(gridRef, 4);
 
-  const filteredServices = useMemo(() => {
-    return services.filter((service) => {
-      let matchesCategory = true;
-      if (selectedCategory !== 'all') {
-        const activeFilter = CATEGORY_FILTERS.find((f) => f.id === selectedCategory);
-        if (activeFilter?.tags) {
-          matchesCategory = activeFilter.tags.includes(service.id);
-        }
-      }
-
-      let matchesSearch = true;
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        const inTitle = service.title.toLowerCase().includes(query);
-        const inDesc = service.description.toLowerCase().includes(query);
-        const inTag = (service.categoryTag || '').toLowerCase().includes(query);
-        const inBenefits = (service.benefits || []).some((b) => b.toLowerCase().includes(query));
-        matchesSearch = inTitle || inDesc || inTag || inBenefits;
-      }
-
-      return matchesCategory && matchesSearch;
-    });
-  }, [services, selectedCategory, searchQuery]);
-
   useEffect(() => {
-    if (filteredServices.length > 0) {
-      const exists = filteredServices.some((s) => s.id === selectedServiceId);
+    if (services.length > 0) {
+      const exists = services.some((s) => s.id === selectedServiceId);
       if (!exists) {
-        setSelectedServiceId(filteredServices[0].id);
+        setSelectedServiceId(services[0].id);
       }
     } else {
       setSelectedServiceId(null);
     }
-  }, [filteredServices, selectedServiceId]);
+  }, [services, selectedServiceId]);
 
   const activeService = useMemo(() => {
-    return filteredServices.find((s) => s.id === selectedServiceId) || filteredServices[0] || null;
-  }, [filteredServices, selectedServiceId]);
+    return services.find((s) => s.id === selectedServiceId) || services[0] || null;
+  }, [services, selectedServiceId]);
 
   const handleSelectService = (service: AyurvedaService) => {
     setSelectedServiceId(service.id);
@@ -202,7 +178,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                   <TreatmentDetailsCardSkeleton />
                 </div>
               </div>
-            ) : filteredServices.length === 0 ? (
+            ) : services.length === 0 ? (
               <div className="treatments-empty-state">
                 <Leaf size={40} className="treatments-empty-icon" />
                 <h3>No treatments found</h3>
@@ -236,7 +212,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                     initial="hidden"
                     animate="visible"
                   >
-                    {filteredServices.map((service, index) => {
+                    {services.map((service, index) => {
                       const rowIndex = Math.floor(index / (cols || 1));
                       return (
                         <motion.div
@@ -267,7 +243,7 @@ export const ServicesPage: React.FC = React.memo(() => {
 
                     <TreatmentDetailsCard
                       service={activeService}
-                      services={filteredServices}
+                      services={services}
                       onSelectService={handleSelectService}
                     />
                   </div>

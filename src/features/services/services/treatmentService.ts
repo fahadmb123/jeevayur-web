@@ -1,4 +1,5 @@
 import type { AyurvedaService, FaqItem } from '../types';
+import { apiClient } from '@/shared/lib/api';
 import metabolicImg from '@/assets/treatment_metabolic.jpg';
 import womensHealthImg from '@/assets/treatment_womens_health.jpg';
 import musculoskeletalImg from '@/assets/treatment_musculoskeletal.jpg';
@@ -9,6 +10,19 @@ import smritiImg from '@/assets/smriti_meditation.jpg';
 import heroFlatlayImg from '@/assets/ayurveda_hero_flatlay.jpg';
 import consultationImg from '@/assets/ayurveda_consultation.jpg';
 import sanctuaryImg from '@/assets/login_sanctuary.jpg';
+
+const IMAGE_MAP: Record<string, string> = {
+  'metabolic-health': metabolicImg,
+  'womens-health': womensHealthImg,
+  'musculoskeletal-care': musculoskeletalImg,
+  'mental-wellbeing': mentalWellbeingImg,
+  'digestive-health': digestiveImg,
+  'skin-hair-health': skinHairImg,
+  'neurological-health': smritiImg,
+  'respiratory-health': heroFlatlayImg,
+  'geriatric-health': sanctuaryImg,
+  'preventive-healthcare': consultationImg,
+};
 
 export const MOCK_SERVICES: AyurvedaService[] = [
   {
@@ -137,12 +151,72 @@ export const MOCK_FAQS: FaqItem[] = [
 ];
 
 export const treatmentService = {
-  async getServices(): Promise<AyurvedaService[]> {
-    await new Promise((resolve) => setTimeout(resolve, 150));
-    return MOCK_SERVICES;
+  async getServices(params?: { category?: string; search?: string }): Promise<AyurvedaService[]> {
+    const query = new URLSearchParams();
+    if (params?.category && params.category !== 'all') {
+      query.set('category', params.category);
+    }
+    if (params?.search && params.search.trim()) {
+      query.set('search', params.search.trim());
+    }
+
+    const queryString = query.toString() ? `?${query.toString()}` : '';
+
+    try {
+      const response = await apiClient.get<{
+        treatments?: AyurvedaService[];
+        data?: { treatments?: AyurvedaService[] };
+      }>(`/api/treatments${queryString}`);
+
+      const remoteTreatments = response.treatments ?? response.data?.treatments;
+      if (Array.isArray(remoteTreatments)) {
+        return remoteTreatments.map((t) => ({
+          ...t,
+          image: IMAGE_MAP[t.id] || t.image || metabolicImg,
+        }));
+      }
+    } catch {
+    }
+
+    let fallback = [...MOCK_SERVICES];
+    if (params?.category && params.category !== 'all') {
+      const catMap: Record<string, string[]> = {
+        metabolic: ['metabolic-health', 'digestive-health'],
+        women: ['womens-health'],
+        joints: ['musculoskeletal-care'],
+        mind: ['mental-wellbeing', 'neurological-health'],
+        skin: ['skin-hair-health'],
+        preventive: ['preventive-healthcare', 'geriatric-health', 'respiratory-health'],
+      };
+      const allowed = catMap[params.category] || [params.category];
+      fallback = fallback.filter((s) => allowed.includes(s.id));
+    }
+    if (params?.search && params.search.trim()) {
+      const q = params.search.trim().toLowerCase();
+      fallback = fallback.filter(
+        (s) =>
+          s.title.toLowerCase().includes(q) ||
+          s.description.toLowerCase().includes(q) ||
+          (s.categoryTag || '').toLowerCase().includes(q) ||
+          (s.benefits || []).some((b) => b.toLowerCase().includes(q))
+      );
+    }
+    return fallback;
   },
 
   async getFaqs(): Promise<FaqItem[]> {
+    try {
+      const response = await apiClient.get<{
+        faqs?: FaqItem[];
+        data?: { faqs?: FaqItem[] };
+      }>('/api/treatments/faqs');
+
+      const remoteFaqs = response.faqs ?? response.data?.faqs;
+      if (Array.isArray(remoteFaqs) && remoteFaqs.length > 0) {
+        return remoteFaqs;
+      }
+    } catch {
+    }
     return MOCK_FAQS;
   },
 };
