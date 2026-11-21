@@ -28,7 +28,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Sync category with prop when opened
   useEffect(() => {
     if (isOpen) {
       setCategory(defaultCategory);
@@ -41,7 +40,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
     }
   }, [isOpen, defaultCategory]);
 
-  // Handle escape key
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -72,7 +70,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
         setImagePreview(reader.result);
         setImageUrl(reader.result);
         if (!title.trim()) {
-          // Auto-derive readable title from filename
           const cleanName = file.name
             .replace(/\.[^/.]+$/, '')
             .replace(/[-_]/g, ' ')
@@ -141,7 +138,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
         className="add-gallery-modal__container"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Modal Header */}
         <div className="add-gallery-modal__header">
           <div className="add-gallery-modal__header-info">
             <h2 className="add-gallery-modal__title">Add Showcase Image</h2>
@@ -159,7 +155,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
           </button>
         </div>
 
-        {/* Form Body */}
         <form onSubmit={handleSubmit} className="add-gallery-modal__form">
           {error && (
             <div className="add-gallery-modal__error">
@@ -168,7 +163,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             </div>
           )}
 
-          {/* Type / Category Selector */}
           <div className="add-gallery-modal__field">
             <label className="add-gallery-modal__label">
               Showcase Category <span className="add-gallery-modal__required">*</span>
@@ -206,7 +200,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             </div>
           </div>
 
-          {/* Image Input Source Tabs */}
           <div className="add-gallery-modal__field">
             <div className="add-gallery-modal__label-row">
               <label className="add-gallery-modal__label">
@@ -305,7 +298,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             )}
           </div>
 
-          {/* Title Field */}
           <div className="add-gallery-modal__field">
             <label className="add-gallery-modal__label" htmlFor="gallery-title">
               Image Title / Name <span className="add-gallery-modal__required">*</span>
@@ -321,7 +313,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             />
           </div>
 
-          {/* Description Field */}
           <div className="add-gallery-modal__field">
             <label className="add-gallery-modal__label" htmlFor="gallery-description">
               Description / Clinical Details <span className="add-gallery-modal__optional">(Optional)</span>
@@ -336,7 +327,6 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             />
           </div>
 
-          {/* Modal Footer */}
           <div className="add-gallery-modal__footer">
             <button
               type="button"

@@ -86,7 +86,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content doctor-gallery-page">
-      {/* Page Actions */}
       <div className="doctor-gallery-header">
         <div className="doctor-gallery-header__actions">
           <button
@@ -109,7 +108,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       </div>
 
-      {/* Feedback Toast */}
       {feedbackMessage && (
         <div className="doctor-gallery-page__feedback" role="alert">
           <CheckCircle2 size={16} />
@@ -117,7 +115,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* KPI Metrics Row */}
       <div className="doctor-gallery-kpis">
         <div className="doctor-gallery-kpi">
           <div className="doctor-gallery-kpi__icon doctor-gallery-kpi__icon--total">
@@ -153,7 +150,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       </div>
 
-      {/* Search & Filter Strip */}
       <DoctorSearchFilterStrip
         searchPlaceholder="Search images by title, author, or description..."
         searchValue={searchQuery}
@@ -170,7 +166,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         resetTitle="Reset filters"
       />
 
-      {/* Image Grid */}
       {filteredItems.length > 0 ? (
         <motion.div
           className="doctor-gallery-page__grid"
@@ -201,7 +196,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   }}
                 />
 
-                {/* Category Pill Tag */}
                 <div className="doctor-gallery-card__badges">
                   <span
                     className={`doctor-gallery-card__category-badge doctor-gallery-card__category-badge--${item.category}`}
@@ -220,7 +214,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   </span>
                 </div>
 
-                {/* Hover Action Overlay */}
                 <div className="doctor-gallery-card__hover-overlay">
                   <div className="doctor-gallery-card__zoom-action">
                     <Maximize2 size={16} />
@@ -229,7 +222,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                 </div>
               </div>
 
-              {/* Card Footer Content */}
               <div className="doctor-gallery-card__info">
                 <div className="doctor-gallery-card__title-row">
                   <h3
@@ -306,7 +298,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* Add Modal */}
       <AddGalleryModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -314,7 +305,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         defaultCategory={selectedCategory === 'treatment' ? 'treatment' : 'yoga'}
       />
 
-      {/* Lightbox Modal */}
       <GalleryLightboxModal
         item={activeLightboxItem}
         onClose={() => setActiveLightboxItem(null)}

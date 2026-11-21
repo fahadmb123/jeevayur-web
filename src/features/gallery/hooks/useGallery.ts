@@ -5,22 +5,31 @@ import { galleryService } from '../services/galleryService';
 export type GalleryFilterTab = 'all' | GalleryCategory;
 
 export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
-  const [items, setItems] = useState<GalleryItem[]>(() => galleryService.getItems());
+  const [items, setItems] = useState<GalleryItem[]>(() => galleryService.getCachedItems());
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<GalleryFilterTab>(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeLightboxItem, setActiveLightboxItem] = useState<GalleryItem | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
-  // Sync with service updates
-  useEffect(() => {
-    const unsubscribe = galleryService.subscribe(() => {
-      setItems(galleryService.getItems());
-    });
-    return unsubscribe;
+  const loadGallery = useCallback(async () => {
+    try {
+      const data = await galleryService.getItems();
+      setItems(data);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  // Clear feedback message automatically
+  useEffect(() => {
+    loadGallery();
+    const unsubscribe = galleryService.subscribe(() => {
+      setItems(galleryService.getCachedItems());
+    });
+    return unsubscribe;
+  }, [loadGallery]);
+
   useEffect(() => {
     if (feedbackMessage) {
       const timer = setTimeout(() => setFeedbackMessage(null), 3500);
@@ -58,39 +67,40 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
   }, [items, selectedCategory, searchQuery]);
 
   const handleAddItem = useCallback(async (data: GalleryFormData) => {
-    const newItem = galleryService.addItem(data);
-    setItems(galleryService.getItems());
+    const newItem = await galleryService.addItem(data);
+    await loadGallery();
     setFeedbackMessage(`Image "${newItem.title}" added to ${newItem.category === 'yoga' ? 'Yoga' : 'Treatment'} showcase.`);
     setIsModalOpen(false);
-  }, []);
+  }, [loadGallery]);
 
-  const handleDeleteItem = useCallback((id: string, title?: string) => {
+  const handleDeleteItem = useCallback(async (id: string, title?: string) => {
     const confirmed = window.confirm(
       `Are you sure you want to remove "${title || 'this image'}" from the gallery?`
     );
     if (!confirmed) return;
 
-    const success = galleryService.deleteItem(id);
+    const success = await galleryService.deleteItem(id);
     if (success) {
-      setItems(galleryService.getItems());
+      await loadGallery();
       setFeedbackMessage('Image removed successfully.');
       if (activeLightboxItem?.id === id) {
         setActiveLightboxItem(null);
       }
     }
-  }, [activeLightboxItem]);
+  }, [activeLightboxItem, loadGallery]);
 
-  const handleResetDefaults = useCallback(() => {
+  const handleResetDefaults = useCallback(async () => {
     const confirmed = window.confirm('Reset gallery showcase to authentic clinic defaults?');
     if (!confirmed) return;
 
-    galleryService.resetDefaults();
-    setItems(galleryService.getItems());
+    await galleryService.resetDefaults();
+    await loadGallery();
     setFeedbackMessage('Gallery restored to clinic defaults.');
-  }, []);
+  }, [loadGallery]);
 
   return {
     items,
+    isLoading,
     filteredItems,
     selectedCategory,
     setSelectedCategory,
