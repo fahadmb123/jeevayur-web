@@ -3,3 +3,4 @@ export * from './ServiceDetailModal';
 export * from './ServicesSection';
 export * from './TreatmentDetailsCard';
 export * from './TreatmentImageCard';
+export * from './TreatmentCardSkeleton';

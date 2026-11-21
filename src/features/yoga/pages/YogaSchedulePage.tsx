@@ -14,6 +14,7 @@ import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
 import { YogaProgramDetailsCard } from '../components/YogaProgramDetailsCard';
 import { YogaBookingCard } from '../components/YogaBookingCard';
+import { YogaTimetableCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import type { YogaProgram } from '../data/yogaathmaData';
@@ -239,8 +240,8 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
 
             {isLoading ? (
-              <div className="yoga-schedule-loading">
-                <p>Loading weekly timetable...</p>
+              <div className="yoga-classes-grid" role="status" aria-label="Loading timetable">
+                <YogaTimetableCardSkeleton count={4} />
               </div>
             ) : filteredSessions.length === 0 ? (
               <div className="yoga-schedule-empty">

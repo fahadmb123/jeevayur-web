@@ -8,6 +8,7 @@ import { useTreatments } from '../hooks/useTreatments';
 import type { AyurvedaService } from '../types';
 import { TreatmentImageCard } from '../components/TreatmentImageCard';
 import { TreatmentDetailsCard } from '../components/TreatmentDetailsCard';
+import { TreatmentCardSkeleton, TreatmentDetailsCardSkeleton } from '../components/TreatmentCardSkeleton';
 import {
   fadeUpVariants,
   rowContainerVariants,
@@ -187,9 +188,19 @@ export const ServicesPage: React.FC = React.memo(() => {
         <section className="treatments-catalog-section">
           <div className="treatments-container">
             {loading ? (
-              <div className="treatments-loading">
-                <div className="treatments-spinner" />
-                <p>Loading treatments...</p>
+              <div className="treatments-images-section" role="status" aria-label="Loading treatments">
+                <div className="treatments-section-title-wrap">
+                  <h2 className="treatments-section-title">Treatments &amp; Therapies</h2>
+                  <p className="treatments-section-subtitle">
+                    Select a treatment to view full clinical details below.
+                  </p>
+                </div>
+                <div className="treatments-images-grid">
+                  <TreatmentCardSkeleton count={6} />
+                </div>
+                <div className="treatments-details-section">
+                  <TreatmentDetailsCardSkeleton />
+                </div>
               </div>
             ) : filteredServices.length === 0 ? (
               <div className="treatments-empty-state">
