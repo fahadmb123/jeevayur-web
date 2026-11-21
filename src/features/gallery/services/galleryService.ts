@@ -136,9 +136,9 @@ export const galleryService = {
   getCachedItems(): GalleryItem[] {
     try {
       const stored = localStorage.getItem(GALLERY_STORAGE_KEY);
-      if (stored) {
+      if (stored !== null) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
+        if (Array.isArray(parsed)) {
           return parsed.map((item: GalleryItem) => ({
             ...item,
             imageUrl: resolveImageUrl(item.imageUrl),
@@ -147,7 +147,7 @@ export const galleryService = {
       }
     } catch {
     }
-    return INITIAL_GALLERY_ITEMS;
+    return [];
   },
 
   cacheItems(items: GalleryItem[]): void {
