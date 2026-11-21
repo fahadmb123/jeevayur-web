@@ -122,7 +122,9 @@
 }
 
 .yoga-section-header {
-  margin-bottom: 28px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 32px;
 }
 
 .yoga-section-heading {
@@ -616,10 +618,16 @@
 .yoga-schedule-controls {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 18px;
+  justify-content: center;
+  gap: 20px;
   flex-wrap: wrap;
   margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+  .yoga-day-tabs {
+    justify-content: center;
+  }
 }
 
 .yoga-day-tabs {
