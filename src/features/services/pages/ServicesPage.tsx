@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, Search, Leaf } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
@@ -9,9 +9,11 @@ import type { AyurvedaService } from '../types';
 import { TreatmentImageCard } from '../components/TreatmentImageCard';
 import { TreatmentDetailsCard } from '../components/TreatmentDetailsCard';
 import {
-  staggerContainerVariants,
   fadeUpVariants,
+  rowContainerVariants,
+  rowFadeUpVariants,
 } from '@/shared/lib/animations';
+import { useGridColumns } from '@/shared/lib/useGridColumns';
 import './ServicesPage.css';
 
 interface CategoryFilter {
@@ -35,6 +37,8 @@ export const ServicesPage: React.FC = React.memo(() => {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const cols = useGridColumns(gridRef, 3);
 
   const filteredServices = useMemo(() => {
     return services.filter((service) => {
@@ -214,25 +218,30 @@ export const ServicesPage: React.FC = React.memo(() => {
                   </div>
 
                   <motion.div
+                    ref={gridRef}
+                    key={selectedCategory}
                     className="treatments-images-grid"
-                    variants={staggerContainerVariants}
+                    variants={rowContainerVariants}
                     initial="hidden"
                     animate="visible"
                   >
-                    {filteredServices.map((service, index) => (
-                      <motion.div
-                        key={service.id}
-                        variants={fadeUpVariants}
-                        custom={index}
-                        viewport={{ once: true, amount: 0.1 }}
-                      >
-                        <TreatmentImageCard
-                          service={service}
-                          isSelected={activeService?.id === service.id}
-                          onSelect={() => handleSelectService(service)}
-                        />
-                      </motion.div>
-                    ))}
+                    {filteredServices.map((service, index) => {
+                      const rowIndex = Math.floor(index / (cols || 1));
+                      return (
+                        <motion.div
+                          key={service.id}
+                          variants={rowFadeUpVariants}
+                          custom={rowIndex}
+                          viewport={{ once: true, amount: 0.1 }}
+                        >
+                          <TreatmentImageCard
+                            service={service}
+                            isSelected={activeService?.id === service.id}
+                            onSelect={() => handleSelectService(service)}
+                          />
+                        </motion.div>
+                      );
+                    })}
                   </motion.div>
                 </div>
 
