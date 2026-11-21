@@ -1,12 +1,13 @@
 import { useState, useEffect, type RefObject } from 'react';
 
-export const useGridColumns = (containerRef?: RefObject<HTMLElement | null>, defaultCols = 3) => {
+export const useGridColumns = (containerRef?: RefObject<HTMLElement | null>, defaultCols = 4) => {
   const getInitialCols = () => {
     if (typeof window === 'undefined') return defaultCols;
     const width = window.innerWidth;
     if (width <= 640) return 1;
     if (width <= 1024) return 2;
-    return defaultCols;
+    if (width <= 1360) return 3;
+    return 4;
   };
 
   const [cols, setCols] = useState<number>(getInitialCols);
@@ -37,8 +38,10 @@ export const useGridColumns = (containerRef?: RefObject<HTMLElement | null>, def
         setCols(1);
       } else if (width <= 1024) {
         setCols(2);
+      } else if (width <= 1360) {
+        setCols(3);
       } else {
-        setCols(defaultCols);
+        setCols(4);
       }
     };
 

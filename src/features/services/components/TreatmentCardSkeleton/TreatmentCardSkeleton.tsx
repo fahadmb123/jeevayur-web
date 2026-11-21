@@ -6,7 +6,7 @@ export interface TreatmentCardSkeletonProps {
 }
 
 export const TreatmentCardSkeleton: React.FC<TreatmentCardSkeletonProps> = React.memo(
-  ({ count = 6 }) => {
+  ({ count = 8 }) => {
     return (
       <>
         {Array.from({ length: count }).map((_, idx) => (

@@ -39,7 +39,7 @@ export const ServicesPage: React.FC = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const cols = useGridColumns(gridRef, 3);
+  const cols = useGridColumns(gridRef, 4);
 
   const filteredServices = useMemo(() => {
     return services.filter((service) => {

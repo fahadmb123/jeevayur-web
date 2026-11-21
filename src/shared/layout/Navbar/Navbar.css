@@ -35,9 +35,9 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: 1440px;
+  max-width: 1720px;
   margin: 0 auto;
-  padding: 14px 32px;
+  padding: 14px clamp(20px, 3.5vw, 48px);
   border-radius: 0;
   background: transparent;
   border: none;
@@ -45,7 +45,7 @@
 }
 
 .navbar-wrapper.scrolled .navbar {
-  padding: 14px 32px;
+  padding: 14px clamp(20px, 3.5vw, 48px);
 }
 
 /* Brand Section */

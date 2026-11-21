@@ -14,9 +14,9 @@
 }
 
 .treatments-container {
-  max-width: 1440px;
+  max-width: 1720px;
   margin: 0 auto;
-  padding: 0 32px;
+  padding: 0 clamp(20px, 3.5vw, 48px);
 }
 
 /* ==========================================================================
@@ -270,8 +270,15 @@
 
 .treatments-images-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+}
+
+@media (max-width: 1360px) {
+  .treatments-images-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
 }
 
 @media (max-width: 1024px) {

@@ -50,7 +50,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
   const yogaGridRef = useRef<HTMLDivElement>(null);
-  const yogaCols = useGridColumns(yogaGridRef, 3);
+  const yogaCols = useGridColumns(yogaGridRef, 4);
 
   const { hero, programs } = YOGAATHMA_DATA;
 
