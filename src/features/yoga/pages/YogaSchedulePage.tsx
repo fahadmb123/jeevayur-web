@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   Calendar,
@@ -14,15 +14,18 @@ import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
 import { YogaProgramDetailsCard } from '../components/YogaProgramDetailsCard';
 import { YogaBookingCard } from '../components/YogaBookingCard';
+import { YogaTimetableCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import type { YogaProgram } from '../data/yogaathmaData';
 import { Navbar, Footer } from '@/shared/layout';
 import type { DayOfWeek, YogaFormat } from '../types/yoga.types';
 import {
-  staggerContainerVariants,
   fadeUpVariants,
+  rowContainerVariants,
+  rowFadeUpVariants,
 } from '@/shared/lib/animations';
+import { useGridColumns } from '@/shared/lib/useGridColumns';
 import './YogaSchedulePage.css';
 
 const DAYS_OF_WEEK: { key: DayOfWeek; label: string }[] = [
@@ -46,6 +49,8 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const [selectedProgramId, setSelectedProgramId] = useState<string>(
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
+  const yogaGridRef = useRef<HTMLDivElement>(null);
+  const yogaCols = useGridColumns(yogaGridRef, 4);
 
   const { hero, programs } = YOGAATHMA_DATA;
 
@@ -134,25 +139,29 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
 
             <motion.div
+              ref={yogaGridRef}
               className="yoga-images-grid"
-              variants={staggerContainerVariants}
+              variants={rowContainerVariants}
               initial="hidden"
               animate="visible"
             >
-              {programs.map((program, index) => (
-                <motion.div
-                  key={program.id}
-                  variants={fadeUpVariants}
-                  custom={index}
-                  viewport={{ once: true, amount: 0.1 }}
-                >
-                  <YogaProgramImageCard
-                    program={program}
-                    isSelected={activeProgram?.id === program.id}
-                    onSelect={() => handleSelectProgram(program)}
-                  />
-                </motion.div>
-              ))}
+              {programs.map((program, index) => {
+                const rowIndex = Math.floor(index / (yogaCols || 1));
+                return (
+                  <motion.div
+                    key={program.id}
+                    variants={rowFadeUpVariants}
+                    custom={rowIndex}
+                    viewport={{ once: true, amount: 0.1 }}
+                  >
+                    <YogaProgramImageCard
+                      program={program}
+                      isSelected={activeProgram?.id === program.id}
+                      onSelect={() => handleSelectProgram(program)}
+                    />
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {activeProgram && (
@@ -231,8 +240,8 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
 
             {isLoading ? (
-              <div className="yoga-schedule-loading">
-                <p>Loading weekly timetable...</p>
+              <div className="yoga-classes-grid" role="status" aria-label="Loading timetable">
+                <YogaTimetableCardSkeleton count={4} />
               </div>
             ) : filteredSessions.length === 0 ? (
               <div className="yoga-schedule-empty">

@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { AUTH_QUERY_KEY } from '@/features/auth/hooks/useAuthMutation';
 import { authService } from '@/features/auth/services/authService';
+import { getErrorMessage } from '@/shared/lib/api';
 import { DoctorSessionsCard } from '../components/DoctorSessionsCard/index';
 import { DoctorSocialLinksTab } from '../components/DoctorSocialLinksTab/index';
 import { socialLinksService, type SocialLink } from '@/shared/services/socialLinksService';
@@ -95,7 +96,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
       setTimeout(() => setSavedSocial(false), 2500);
     } catch (err: unknown) {
       console.error('Failed to save social links:', err);
-      const message = err instanceof Error ? err.message : 'Failed to save social links';
+      const message = getErrorMessage(err, 'Failed to save social links');
       setSocialSaveError(message);
     } finally {
       setIsSavingSocial(false);
@@ -116,7 +117,7 @@ export const DoctorSettingsPage: React.FC = React.memo(() => {
         setTimeout(() => setSaved(false), 2500);
       } catch (err: unknown) {
         console.error('Failed to update profile:', err);
-        const message = err instanceof Error ? err.message : 'Failed to update profile';
+        const message = getErrorMessage(err, 'Failed to update profile');
         setGeneralError(message);
       }
     },

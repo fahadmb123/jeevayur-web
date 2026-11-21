@@ -16,6 +16,7 @@ import {
 import { ROUTES } from '@/shared/config/routes';
 import { BrandLogo } from '@/shared/ui/BrandLogo';
 import { Button } from '@/shared/ui/button';
+import { getErrorMessage } from '@/shared/lib/api';
 import { authService } from '../services/authService';
 import loginSanctuaryImg from '@/assets/login_sanctuary.jpg';
 import './AuthPages.css';
@@ -58,9 +59,7 @@ export const ResetPasswordPage: React.FC = React.memo(() => {
       }
     } catch (err: unknown) {
       setTokenStatus('invalid');
-      setTokenErrorMessage(
-        err instanceof Error ? err.message : 'Unable to verify password reset link.'
-      );
+      setTokenErrorMessage(getErrorMessage(err, 'Unable to verify password reset link.'));
     }
   }, []);
 
@@ -95,10 +94,10 @@ export const ResetPasswordPage: React.FC = React.memo(() => {
       await authService.resetPassword(token, password);
       setCompleted(true);
     } catch (err: unknown) {
-      const msg =
-        err instanceof Error
-          ? err.message
-          : 'Failed to update password. Your reset link may have expired.';
+      const msg = getErrorMessage(
+        err,
+        'Failed to update password. Your reset link may have expired.'
+      );
       setFormError(msg);
 
       if (msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('invalid')) {

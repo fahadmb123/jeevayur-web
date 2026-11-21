@@ -45,3 +45,31 @@ export const standardViewport = {
   once: true,
   amount: 0.15,
 } as const;
+
+export const rowContainerVariants: Variants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      delayChildren: 0.04,
+    },
+  },
+};
+
+export const rowFadeUpVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    y: 55,
+  },
+  visible: (rowIndex: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.85,
+      delay: rowIndex * 0.16,
+      ease: [0.16, 1, 0.3, 1],
+    },
+  }),
+};

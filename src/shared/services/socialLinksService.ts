@@ -1,16 +1,10 @@
-import { apiClient } from '@/shared/lib/api/apiClient';
+import { apiClient, unwrapApiResponse, type ApiResponse } from '@/shared/lib/api';
 
 export interface SocialLink {
   id: string;
   platform: string;
   url: string;
   isVisible?: boolean;
-}
-
-interface ApiResponse<T> {
-  success: boolean;
-  message?: string;
-  data: T;
 }
 
 export const socialLinksService = {
@@ -23,7 +17,7 @@ export const socialLinksService = {
       const response = await apiClient.get<ApiResponse<SocialLink[]>>(
         `/api/social-links${all ? '?all=true' : ''}`
       );
-      return response.data || [];
+      return unwrapApiResponse(response, []);
     } catch (error) {
       console.warn('[socialLinksService] Using fallback links:', error);
       return [
@@ -43,7 +37,7 @@ export const socialLinksService = {
       '/api/social-links',
       { links }
     );
-    return response.data || [];
+    return unwrapApiResponse(response, []);
   },
 
   /**
@@ -54,7 +48,7 @@ export const socialLinksService = {
       '/api/social-links',
       { platform, url, isVisible }
     );
-    return response.data;
+    return unwrapApiResponse(response);
   },
 
   /**
