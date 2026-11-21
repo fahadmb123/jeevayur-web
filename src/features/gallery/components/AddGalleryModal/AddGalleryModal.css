@@ -288,7 +288,9 @@
 .add-gallery-modal__preview-wrapper {
   position: relative;
   width: 100%;
-  height: 220px;
+  height: 240px;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .add-gallery-modal__preview-img {
@@ -298,25 +300,85 @@
   display: block;
 }
 
-.add-gallery-modal__preview-overlay {
+.add-gallery-modal__crop-badge {
   position: absolute;
-  inset: 0;
-  background-color: rgba(15, 23, 42, 0.55);
+  top: 12px;
+  left: 12px;
+  background-color: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(4px);
   color: #ffffff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  z-index: 2;
+}
+
+.add-gallery-modal__preview-actions {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
   display: flex;
-  flex-direction: column;
+  gap: 8px;
+  z-index: 2;
+}
+
+.add-gallery-modal__action-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.add-gallery-modal__action-pill--crop {
+  background-color: var(--primary-color, #1b6b50);
+  color: #ffffff;
+}
+
+.add-gallery-modal__action-pill--crop:hover {
+  background-color: #124e3a;
+  transform: translateY(-1px);
+}
+
+.add-gallery-modal__action-pill--change {
+  background-color: rgba(15, 23, 42, 0.75);
+  color: #ffffff;
+}
+
+.add-gallery-modal__action-pill--change:hover {
+  background-color: rgba(15, 23, 42, 0.9);
+  transform: translateY(-1px);
+}
+
+.add-gallery-modal__crop-url-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  font-size: 0.82rem;
-  font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #cbd5e1);
+  background-color: var(--surface-color, #ffffff);
+  color: var(--primary-color, #1b6b50);
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-.add-gallery-modal__preview-wrapper:hover .add-gallery-modal__preview-overlay {
-  opacity: 1;
+.add-gallery-modal__crop-url-btn:hover {
+  background-color: rgba(27, 107, 80, 0.06);
+  border-color: var(--primary-color, #1b6b50);
 }
 
 /* URL input & preview */
