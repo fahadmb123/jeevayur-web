@@ -5,6 +5,7 @@ import { LoadingScreen } from '@/shared/ui';
 import { DoctorLayout } from '@/shared/layout';
 import { PublicRoute } from './guards/PublicRoute';
 import { PrivateRoute } from './guards/PrivateRoute';
+import { LoginPage } from '@/features/auth/pages/LoginPage';
 import {
   HomePage,
   AboutPage,
@@ -14,7 +15,6 @@ import {
   BlogPage,
   ContactPage,
   NotFoundPage,
-  LoginPage,
   ForgotPasswordPage,
   ResetPasswordPage,
   DoctorDashboardPage,
