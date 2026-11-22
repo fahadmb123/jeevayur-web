@@ -33,11 +33,12 @@ const DURATION_PRESETS = [
 ];
 
 const PRICE_UNIT_PRESETS = [
-  'per session',
-  'per class',
-  'per month',
-  'per week',
-  'one-time',
+  'session',
+  'class',
+  'month',
+  'week',
+  'package',
+  'person',
 ];
 
 interface FormContentProps {
@@ -63,7 +64,10 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
     suitableFor: initialData?.suitableFor || SUITABLE_FOR_OPTIONS[0],
     days: initialData?.days || ['Monday', 'Wednesday', 'Friday'],
     priceAmount: initialData?.priceAmount || priceParsed.amount || '500',
-    priceUnit: initialData?.priceUnit || priceParsed.unit || 'per session',
+    priceUnit:
+      initialData?.priceUnit?.replace(/^per\s+/i, '') ||
+      priceParsed.unit ||
+      'session',
     description: initialData?.description || '',
   };
 
@@ -82,6 +86,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
   const selectedFormat = watch('format');
   const selectedDays = watch('days') || [];
+  const currentPriceAmount = watch('priceAmount');
+  const currentPriceUnit = watch('priceUnit');
 
   const handleFormatChange = (format: YogaFormat) => {
     setValue('format', format, {
@@ -111,6 +117,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         values.priceAmount,
         values.priceUnit
       );
+      const normalizedUnit = values.priceUnit.trim().replace(/^per\s+/i, '');
       const payload: YogaFormData = {
         title: values.title.trim(),
         format: values.format,
@@ -119,7 +126,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         days: values.days,
         price: computedPrice,
         priceAmount: values.priceAmount.trim(),
-        priceUnit: values.priceUnit.trim(),
+        priceUnit: normalizedUnit,
         description: values.description.trim(),
         scheduleItems: values.days.map((day) => ({
           day,
@@ -320,19 +327,26 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
           <div className="yoga-modal__field">
             <label htmlFor="yoga-price-unit">
-              Billing Unit / Period <span className="required">*</span>
+              Billing Frequency / Unit <span className="required">*</span>
             </label>
-            <input
-              id="yoga-price-unit"
-              type="text"
-              list="price-unit-presets"
-              className={`yoga-modal__input ${
+            <div
+              className={`yoga-modal__input-prefix-wrap ${
                 errors.priceUnit ? 'has-error' : ''
               }`}
-              placeholder="e.g. per session, per month"
-              aria-invalid={Boolean(errors.priceUnit)}
-              {...register('priceUnit')}
-            />
+            >
+              <span className="yoga-modal__input-prefix">per</span>
+              <input
+                id="yoga-price-unit"
+                type="text"
+                list="price-unit-presets"
+                className={`yoga-modal__input ${
+                  errors.priceUnit ? 'has-error' : ''
+                }`}
+                placeholder="e.g. session, class, month"
+                aria-invalid={Boolean(errors.priceUnit)}
+                {...register('priceUnit')}
+              />
+            </div>
             <datalist id="price-unit-presets">
               {PRICE_UNIT_PRESETS.map((unit) => (
                 <option key={unit} value={unit} />
@@ -346,6 +360,15 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
             )}
           </div>
         </div>
+
+        {currentPriceAmount && currentPriceUnit && !errors.priceAmount && !errors.priceUnit && (
+          <div className="yoga-modal__price-preview">
+            <span className="yoga-modal__price-preview-label">Displayed Fee:</span>
+            <span className="yoga-modal__price-preview-value">
+              {formatPriceString(currentPriceAmount, currentPriceUnit)}
+            </span>
+          </div>
+        )}
 
         <div className="yoga-modal__field">
           <label htmlFor="yoga-desc">

@@ -39,7 +39,7 @@ export const yogaClassSchema = z.object({
   priceUnit: z
     .string()
     .trim()
-    .min(1, 'Billing unit / period is required (e.g. per session)')
+    .min(1, 'Billing unit is required (e.g. session, class, month)')
     .max(50, 'Billing unit is too long'),
   description: z
     .string()
@@ -55,27 +55,28 @@ export const parsePriceString = (
   priceStr?: string
 ): { amount: string; unit: string } => {
   if (!priceStr || !priceStr.trim()) {
-    return { amount: '', unit: 'per session' };
+    return { amount: '', unit: 'session' };
   }
   const clean = priceStr.trim();
   if (clean.includes('/')) {
     const parts = clean.split('/');
     const amountPart = parts[0]?.trim() || '';
-    const unitPart = parts.slice(1).join('/').trim() || 'per session';
+    const unitPart =
+      parts.slice(1).join('/').trim().replace(/^per\s+/i, '') || 'session';
     return {
       amount: amountPart,
-      unit: unitPart.startsWith('per ') ? unitPart : `per ${unitPart}`,
+      unit: unitPart,
     };
   }
   return {
     amount: clean,
-    unit: 'per session',
+    unit: 'session',
   };
 };
 
 export const formatPriceString = (amount: string, unit: string): string => {
   const cleanAmount = amount.trim();
-  const cleanUnit = unit.trim();
+  const cleanUnit = unit.trim().replace(/^per\s+/i, '');
   if (!cleanUnit) {
     return cleanAmount;
   }

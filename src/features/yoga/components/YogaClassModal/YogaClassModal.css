@@ -146,6 +146,83 @@
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
 }
 
+.yoga-modal__input-prefix-wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.yoga-modal__input-prefix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  height: 41px;
+  background: var(--surface-secondary, #F3F6F1);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-right: none;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-green, #1B6B50);
+  user-select: none;
+  flex-shrink: 0;
+  letter-spacing: 0.2px;
+}
+
+[data-theme='dark'] .yoga-modal__input-prefix,
+.dark .yoga-modal__input-prefix {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--border-color, #1F3C30);
+  color: var(--primary-green-light, #41BA91);
+}
+
+.yoga-modal__input-prefix-wrap .yoga-modal__input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.yoga-modal__input-prefix-wrap.has-error .yoga-modal__input-prefix {
+  border-color: #DC2626 !important;
+  background-color: #FEF2F2;
+  color: #DC2626;
+}
+
+.yoga-modal__price-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--primary-green-tint, #EDF6F1);
+  border: 1px solid rgba(27, 107, 80, 0.2);
+  border-radius: 8px;
+  font-size: 0.825rem;
+  margin-top: -8px;
+  width: fit-content;
+}
+
+[data-theme='dark'] .yoga-modal__price-preview,
+.dark .yoga-modal__price-preview {
+  background: rgba(46, 157, 119, 0.12);
+  border-color: rgba(46, 157, 119, 0.3);
+}
+
+.yoga-modal__price-preview-label {
+  font-weight: 500;
+  color: var(--text-secondary, #485E53);
+}
+
+.yoga-modal__price-preview-value {
+  font-weight: 700;
+  color: var(--primary-green-deep, #0B3326);
+}
+
+[data-theme='dark'] .yoga-modal__price-preview-value,
+.dark .yoga-modal__price-preview-value {
+  color: #A7F3D0;
+}
+
 .yoga-modal__format-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
