@@ -15,7 +15,10 @@ import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
 import { YogaProgramDetailsCard } from '../components/YogaProgramDetailsCard';
 import { YogaBookingCard } from '../components/YogaBookingCard';
-import { YogaTimetableCardSkeleton } from '../components/YogaScheduleSkeleton';
+import {
+  YogaTimetableCardSkeleton,
+  YogaProgramCardSkeleton,
+} from '../components/YogaScheduleSkeleton';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import type { YogaProgram } from '../data/yogaathmaData';
@@ -54,7 +57,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
   const [activeLightbox, setActiveLightbox] = useState<GalleryItem | null>(null);
-  const { items: yogaGalleryItems } = usePublicGallery('yoga');
+  const { items: yogaGalleryItems, isLoading: isGalleryLoading } = usePublicGallery('yoga');
   const yogaGridRef = useRef<HTMLDivElement>(null);
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
@@ -144,7 +147,11 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </p>
             </div>
 
-            {programs.length === 0 ? (
+            {isGalleryLoading ? (
+              <div className="yoga-images-grid" role="status" aria-label="Loading yoga programs">
+                <YogaProgramCardSkeleton />
+              </div>
+            ) : programs.length === 0 ? (
               <div className="yoga-empty-state-large">
                 <Leaf size={48} className="yoga-empty-icon-large" />
                 <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
@@ -366,7 +373,11 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </p>
             </div>
 
-            {yogaGalleryItems.length === 0 ? (
+            {isGalleryLoading ? (
+              <div className="yoga-atmosphere-grid" role="status" aria-label="Loading practice atmosphere">
+                <YogaProgramCardSkeleton count={4} />
+              </div>
+            ) : yogaGalleryItems.length === 0 ? (
               <div className="yoga-empty-state-large">
                 <Leaf size={48} className="yoga-empty-icon-large" />
                 <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
