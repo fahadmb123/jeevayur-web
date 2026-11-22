@@ -500,47 +500,6 @@
   align-items: center;
 }
 
-/* Quick Demo Pills */
-.auth-demo-pills {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-  padding: 10px 14px;
-  background: var(--surface-secondary, #F4F7F4);
-  border-radius: 12px;
-  border: 1px dashed var(--border-color, #CCD6C6);
-  margin-bottom: 4px;
-}
-
-.auth-demo-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.76rem;
-  font-weight: 600;
-  color: var(--primary-green, #1B6B50);
-}
-
-.auth-demo-btn {
-  padding: 4px 10px;
-  font-size: 0.74rem;
-  font-weight: 600;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 1px solid var(--border-color, #CCD6C6);
-  background: #ffffff;
-  color: var(--text-primary, #14241C);
-  transition: all 0.2s ease;
-}
-
-.auth-demo-btn:hover {
-  background: var(--primary-green, #1B6B50);
-  color: #ffffff;
-  border-color: var(--primary-green, #1B6B50);
-  transform: translateY(-1px);
-}
-
 /* Form Groups & Inputs */
 .auth-form {
   display: flex;
@@ -748,21 +707,6 @@
 
 [data-theme='dark'] .auth-split-subtitle {
   color: #A3BDB0;
-}
-
-[data-theme='dark'] .auth-demo-pills {
-  background-color: #152B21;
-  border-color: #1F3C30;
-}
-
-[data-theme='dark'] .auth-demo-label {
-  color: #41BA91;
-}
-
-[data-theme='dark'] .auth-demo-btn {
-  background: #11221B;
-  border-color: #1F3C30;
-  color: #EDF7F2;
 }
 
 [data-theme='dark'] .auth-form__group label {
