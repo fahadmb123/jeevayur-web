@@ -148,6 +148,13 @@
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
 }
 
+.yoga-modal__custom-time-wrap {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .yoga-modal__unit-input-wrap {
   display: flex;
   align-items: center;

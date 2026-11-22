@@ -12,6 +12,7 @@ import { DAYS_OF_WEEK, SUITABLE_FOR_OPTIONS } from '../../types/yoga.types';
 import {
   yogaClassSchema,
   type YogaClassFormValues,
+  TIME_PRESETS,
   parsePriceString,
   formatPriceString,
 } from '../../validation/yogaClassSchema';
@@ -48,10 +49,15 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
   const priceParsed = parsePriceString(initialData?.price);
 
+  const initialTime = initialData?.time || '06:30 AM - 07:30 AM';
+  const isPresetTime = (TIME_PRESETS as readonly string[]).includes(initialTime);
+
   const defaultValues: YogaClassFormValues = {
     title: initialData?.title || '',
     format: initialData?.format || 'offline',
     duration: initialData?.duration || '60 mins',
+    time: isPresetTime ? initialTime : 'custom',
+    customTime: isPresetTime ? '' : initialTime,
     suitableFor: initialData?.suitableFor || SUITABLE_FOR_OPTIONS[0],
     days: initialData?.days || ['Monday', 'Wednesday', 'Friday'],
     priceAmount: initialData?.priceAmount || priceParsed.amount || '500',
@@ -77,6 +83,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
   const selectedFormat = watch('format');
   const selectedDays = watch('days') || [];
+  const selectedTime = watch('time');
   const currentPriceAmount = watch('priceAmount');
   const currentPriceUnit = watch('priceUnit');
 
@@ -113,10 +120,16 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         values.priceUnit
       );
       const normalizedUnit = values.priceUnit.trim().replace(/^per\s+/i, '');
+      const resolvedTime =
+        values.time === 'custom'
+          ? values.customTime?.trim() || '06:30 AM - 07:30 AM'
+          : values.time;
+
       const payload: YogaFormData = {
         title: values.title.trim(),
         format: values.format,
         duration: values.duration.trim(),
+        time: resolvedTime,
         suitableFor: values.suitableFor.trim(),
         days: values.days,
         price: computedPrice,
@@ -125,7 +138,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         description: values.description.trim(),
         scheduleItems: values.days.map((day) => ({
           day,
-          time: initialData?.time || '06:30 AM - 07:30 AM',
+          time: resolvedTime,
         })),
       };
       await onSave(payload);
@@ -243,28 +256,84 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
           </div>
 
           <div className="yoga-modal__field">
-            <label htmlFor="yoga-suitable">
-              Suitable For <span className="required">*</span>
+            <label htmlFor="yoga-time-select">
+              Class Time / Schedule <span className="required">*</span>
             </label>
             <select
-              id="yoga-suitable"
-              className={`yoga-modal__select ${errors.suitableFor ? 'has-error' : ''}`}
-              aria-invalid={Boolean(errors.suitableFor)}
-              {...register('suitableFor')}
+              id="yoga-time-select"
+              className={`yoga-modal__select ${errors.time ? 'has-error' : ''}`}
+              aria-invalid={Boolean(errors.time)}
+              {...register('time')}
             >
-              {SUITABLE_FOR_OPTIONS.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
+              <optgroup label="Morning Practice">
+                {TIME_PRESETS.slice(0, 5).map((preset) => (
+                  <option key={preset} value={preset}>
+                    {preset}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Evening Practice">
+                {TIME_PRESETS.slice(5).map((preset) => (
+                  <option key={preset} value={preset}>
+                    {preset}
+                  </option>
+                ))}
+              </optgroup>
+              <optgroup label="Manual Entry">
+                <option value="custom">Custom / Enter manually...</option>
+              </optgroup>
             </select>
-            {errors.suitableFor && (
+            {errors.time && (
               <span className="yoga-modal__error-hint" role="alert">
                 <AlertCircle size={13} />
-                <span>{errors.suitableFor.message}</span>
+                <span>{errors.time.message}</span>
               </span>
             )}
+
+            {selectedTime === 'custom' && (
+              <div className="yoga-modal__custom-time-wrap">
+                <input
+                  type="text"
+                  className={`yoga-modal__input ${
+                    errors.customTime ? 'has-error' : ''
+                  }`}
+                  placeholder="e.g. 07:15 AM - 08:15 AM"
+                  aria-label="Custom class time"
+                  {...register('customTime')}
+                />
+                {errors.customTime && (
+                  <span className="yoga-modal__error-hint" role="alert">
+                    <AlertCircle size={13} />
+                    <span>{errors.customTime.message}</span>
+                  </span>
+                )}
+              </div>
+            )}
           </div>
+        </div>
+
+        <div className="yoga-modal__field">
+          <label htmlFor="yoga-suitable">
+            Suitable For <span className="required">*</span>
+          </label>
+          <select
+            id="yoga-suitable"
+            className={`yoga-modal__select ${errors.suitableFor ? 'has-error' : ''}`}
+            aria-invalid={Boolean(errors.suitableFor)}
+            {...register('suitableFor')}
+          >
+            {SUITABLE_FOR_OPTIONS.map((opt) => (
+              <option key={opt} value={opt}>
+                {opt}
+              </option>
+            ))}
+          </select>
+          {errors.suitableFor && (
+            <span className="yoga-modal__error-hint" role="alert">
+              <AlertCircle size={13} />
+              <span>{errors.suitableFor.message}</span>
+            </span>
+          )}
         </div>
 
         <div className="yoga-modal__field">

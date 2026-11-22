@@ -1,6 +1,13 @@
 import type { YogaSession, YogaFormData } from '../types/yoga.types';
 import { apiClient } from '@/shared/lib/api/apiClient';
 
+export interface YogaFilterParams {
+  day?: string;
+  format?: string;
+  level?: string;
+  search?: string;
+}
+
 const STORAGE_KEY = 'jeevayurniketan_yoga_sessions_v3';
 const YOGA_UPDATED_EVENT = 'jeevayurniketan_yoga_updated';
 
@@ -40,26 +47,57 @@ const saveSessionsToStorage = (sessions: YogaSession[]): void => {
 };
 
 export const yogaService = {
-  getAll: async (format?: string, search?: string): Promise<YogaSession[]> => {
+  getAll: async (filters?: YogaFilterParams): Promise<YogaSession[]> => {
     try {
       const params = new URLSearchParams();
-      if (format && format !== 'all') {
-        params.append('format', format.toLowerCase());
+      if (filters?.day && filters.day.toLowerCase() !== 'all') {
+        params.append('day', filters.day);
       }
-      if (search && search.trim() !== '') {
-        params.append('search', search.trim());
+      if (filters?.format && filters.format.toLowerCase() !== 'all') {
+        params.append('format', filters.format.toLowerCase());
+      }
+      if (filters?.level && filters.level.toLowerCase() !== 'all') {
+        params.append('level', filters.level);
+      }
+      if (filters?.search && filters.search.trim() !== '') {
+        params.append('search', filters.search.trim());
       }
       const queryString = params.toString();
       const endpoint = queryString ? `/api/yoga?${queryString}` : '/api/yoga';
 
       const response = await apiClient.get<{ success: boolean; data: YogaSession[] }>(endpoint);
       if (response && response.success && Array.isArray(response.data)) {
-        saveSessionsToStorage(response.data);
+        if (!queryString) {
+          saveSessionsToStorage(response.data);
+        }
         return response.data;
       }
     } catch {
     }
-    return loadSessionsFromStorage();
+
+    const cached = loadSessionsFromStorage();
+    if (!filters) return cached;
+    return cached.filter((session) => {
+      if (filters.day && filters.day.toLowerCase() !== 'all' && !session.days.includes(filters.day as any)) {
+        return false;
+      }
+      if (filters.format && filters.format.toLowerCase() !== 'all' && session.format !== filters.format) {
+        return false;
+      }
+      if (filters.level && filters.level.toLowerCase() !== 'all') {
+        const matchesLevel = session.level === filters.level;
+        const matchesSuitable = session.suitableFor?.toLowerCase().includes(filters.level.toLowerCase());
+        if (!matchesLevel && !matchesSuitable) return false;
+      }
+      if (filters.search && filters.search.trim()) {
+        const q = filters.search.toLowerCase();
+        const matchesTitle = session.title.toLowerCase().includes(q);
+        const matchesDesc = session.description.toLowerCase().includes(q);
+        const matchesInstructor = Boolean(session.instructor?.toLowerCase().includes(q));
+        if (!matchesTitle && !matchesDesc && !matchesInstructor) return false;
+      }
+      return true;
+    });
   },
 
   getById: async (id: string): Promise<YogaSession | undefined> => {

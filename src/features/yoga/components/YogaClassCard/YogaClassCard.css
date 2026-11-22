@@ -176,6 +176,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--primary-green-dark, #124C38);
+  margin-top: 4px;
 }
 
 .yoga-card__day-times-list {

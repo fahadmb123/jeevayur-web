@@ -86,6 +86,12 @@ export const YogaClassCard: React.FC<YogaClassCardProps> = React.memo(({
               );
             })}
           </div>
+          {(session.time || session.scheduleItems?.[0]?.time) && (
+            <div className="yoga-card__time-row">
+              <Clock size={13} />
+              <span>{session.time || session.scheduleItems?.[0]?.time}</span>
+            </div>
+          )}
         </div>
 
         <div className="yoga-card__meta-tags">
