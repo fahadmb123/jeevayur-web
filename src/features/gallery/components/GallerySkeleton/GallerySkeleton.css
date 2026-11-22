@@ -121,3 +121,30 @@
 .gallery-skeleton-meta-item--author {
   width: 100px;
 }
+
+.gallery-skeleton-bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color, #E2E8DE);
+}
+
+[data-theme='dark'] .gallery-skeleton-bottom-actions,
+.dark .gallery-skeleton-bottom-actions {
+  border-top-color: var(--border-color, #1F3C30);
+}
+
+.gallery-skeleton-action-pill--delete {
+  width: 76px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+.gallery-skeleton-action-pill--edit {
+  flex: 1;
+  height: 32px;
+  border-radius: 8px;
+}

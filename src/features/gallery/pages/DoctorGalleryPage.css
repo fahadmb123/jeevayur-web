@@ -357,23 +357,61 @@
   opacity: 1;
 }
 
-.doctor-gallery-card__zoom-action {
+.doctor-gallery-card__hover-actions {
   display: flex;
   align-items: center;
-  gap: 7px;
-  padding: 7px 16px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.96);
-  color: #0B3326;
-  font-size: 0.8rem;
-  font-weight: 700;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  gap: 8px;
   transform: translateY(4px);
   transition: transform 0.2s ease;
 }
 
-.doctor-gallery-card:hover .doctor-gallery-card__zoom-action {
+.doctor-gallery-card:hover .doctor-gallery-card__hover-actions {
   transform: translateY(0);
+}
+
+.doctor-gallery-card__hover-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.doctor-gallery-card__hover-btn--view {
+  background: rgba(255, 255, 255, 0.96);
+  color: #0B3326;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.doctor-gallery-card__hover-btn--view:hover {
+  background: #FFFFFF;
+  transform: scale(1.05);
+}
+
+.doctor-gallery-card__hover-btn--edit {
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.doctor-gallery-card__hover-btn--edit:hover {
+  background: var(--primary-green-light, #2A8566);
+  transform: scale(1.05);
+}
+
+[data-theme='dark'] .doctor-gallery-card__hover-btn--edit,
+.dark .doctor-gallery-card__hover-btn--edit {
+  background: var(--primary-green, #2E9D77);
+}
+
+[data-theme='dark'] .doctor-gallery-card__hover-btn--edit:hover,
+.dark .doctor-gallery-card__hover-btn--edit:hover {
+  background: var(--primary-green-light, #41BA91);
 }
 
 .doctor-gallery-card__info {
@@ -526,6 +564,97 @@
 [data-theme='dark'] .doctor-gallery-card__author,
 .dark .doctor-gallery-card__author {
   color: var(--primary-green-light, #41BA91);
+}
+
+.doctor-gallery-card__bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color, #E2E8DE);
+}
+
+[data-theme='dark'] .doctor-gallery-card__bottom-actions,
+.dark .doctor-gallery-card__bottom-actions {
+  border-top-color: var(--border-color, #1F3C30);
+}
+
+.doctor-gallery-card__btn-delete {
+  background: none;
+  border: 1px solid var(--border-color, #E2E8DE);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-light, #7E9387);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doctor-gallery-card__btn-delete:hover {
+  border-color: #FCA5A5;
+  color: #DC2626;
+  background: #FEF2F2;
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .doctor-gallery-card__btn-delete,
+.dark .doctor-gallery-card__btn-delete {
+  border-color: var(--border-color, #1F3C30);
+  color: var(--text-secondary, #A6C2B4);
+}
+
+[data-theme='dark'] .doctor-gallery-card__btn-delete:hover,
+.dark .doctor-gallery-card__btn-delete:hover {
+  border-color: rgba(239, 68, 68, 0.45);
+  background: rgba(239, 68, 68, 0.14);
+  color: #F87171;
+}
+
+.doctor-gallery-card__btn-edit {
+  flex: 1;
+  background: var(--primary-green-tint, #EDF6F1);
+  border: 1px solid rgba(27, 107, 80, 0.22);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--primary-green, #1B6B50);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doctor-gallery-card__btn-edit:hover {
+  border-color: var(--primary-green, #1B6B50);
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(27, 107, 80, 0.22);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .doctor-gallery-card__btn-edit,
+.dark .doctor-gallery-card__btn-edit {
+  background: rgba(46, 157, 119, 0.14);
+  border-color: rgba(46, 157, 119, 0.35);
+  color: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .doctor-gallery-card__btn-edit:hover,
+.dark .doctor-gallery-card__btn-edit:hover {
+  background: var(--primary-green, #2E9D77);
+  border-color: var(--primary-green, #2E9D77);
+  color: #FFFFFF;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
 .doctor-gallery-page__empty {

@@ -37,6 +37,11 @@ export const GalleryCardSkeleton: React.FC<GallerySkeletonProps> = React.memo(
                 <div className="gallery-skeleton-meta-item gallery-skeleton-box" />
                 <div className="gallery-skeleton-meta-item gallery-skeleton-meta-item--author gallery-skeleton-box" />
               </div>
+
+              <div className="doctor-gallery-card__bottom-actions gallery-skeleton-bottom-actions">
+                <div className="gallery-skeleton-action-pill gallery-skeleton-action-pill--delete gallery-skeleton-box" />
+                <div className="gallery-skeleton-action-pill gallery-skeleton-action-pill--edit gallery-skeleton-box" />
+              </div>
             </div>
           </div>
         ))}

@@ -222,10 +222,32 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                 </div>
 
                 <div className="doctor-gallery-card__hover-overlay">
-                  <span className="doctor-gallery-card__zoom-action">
-                    <Maximize2 size={16} />
-                    <span>View Image</span>
-                  </span>
+                  <div className="doctor-gallery-card__hover-actions">
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__hover-btn doctor-gallery-card__hover-btn--view"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveLightboxItem(item);
+                      }}
+                      title="View full resolution image"
+                    >
+                      <Maximize2 size={15} />
+                      <span>View</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__hover-btn doctor-gallery-card__hover-btn--edit"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(item);
+                      }}
+                      title="Edit image details"
+                    >
+                      <Pencil size={15} />
+                      <span>Edit</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -277,6 +299,35 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   {item.author && (
                     <span className="doctor-gallery-card__author">{item.author}</span>
                   )}
+                </div>
+
+                <div className="doctor-gallery-card__bottom-actions">
+                  <button
+                    type="button"
+                    className="doctor-gallery-card__btn-delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDeleteModal(item.id, item.title);
+                    }}
+                    title="Delete image from gallery"
+                    aria-label={`Delete ${item.title}`}
+                  >
+                    <Trash2 size={14} />
+                    <span>Delete</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="doctor-gallery-card__btn-edit"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditModal(item);
+                    }}
+                    title="Edit image and details"
+                    aria-label={`Edit ${item.title}`}
+                  >
+                    <Pencil size={14} />
+                    <span>Edit Gallery</span>
+                  </button>
                 </div>
               </div>
             </motion.div>
