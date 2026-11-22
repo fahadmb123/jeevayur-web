@@ -32,15 +32,6 @@ const DURATION_PRESETS = [
   '120 mins',
 ];
 
-const PRICE_UNIT_PRESETS = [
-  'session',
-  'class',
-  'month',
-  'week',
-  'package',
-  'person',
-];
-
 interface FormContentProps {
   initialData?: YogaSession | null;
   onClose: () => void;
@@ -338,18 +329,12 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               <input
                 id="yoga-price-unit"
                 type="text"
-                list="price-unit-presets"
                 className="yoga-modal__unit-field"
                 placeholder="session, class, month"
                 aria-invalid={Boolean(errors.priceUnit)}
                 {...register('priceUnit')}
               />
             </div>
-            <datalist id="price-unit-presets">
-              {PRICE_UNIT_PRESETS.map((unit) => (
-                <option key={unit} value={unit} />
-              ))}
-            </datalist>
             {errors.priceUnit && (
               <span className="yoga-modal__error-hint" role="alert">
                 <AlertCircle size={13} />

@@ -204,6 +204,12 @@
   width: 100%;
 }
 
+.yoga-modal__unit-field::-webkit-calendar-picker-indicator {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
 [data-theme='dark'] .yoga-modal__unit-field,
 .dark .yoga-modal__unit-field {
   color: var(--text-primary, #F2F7F4);
