@@ -57,12 +57,35 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const yogaGridRef = useRef<HTMLDivElement>(null);
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
-  const { hero, programs } = YOGAATHMA_DATA;
+  const { hero } = YOGAATHMA_DATA;
+
+  const programs: YogaProgram[] = useMemo(() => {
+    return yogaGalleryItems.map((item, idx) => ({
+      id: item.id,
+      number: String(idx + 1).padStart(2, '0'),
+      title: item.title,
+      tagline: 'Authentic yogic harmony and breath awareness.',
+      categoryTag: 'YOGA & MEDITATION',
+      accentColor: '#1B6B50',
+      description: item.description || 'Guided mindful movement, restorative postures, and breath awareness to nurture vital prana.',
+      image: item.imageUrl,
+      idealForTitle: 'Ideal for:',
+      idealFor: [
+        'Beginners and experienced practitioners',
+        'Stress alleviation and nervous relaxation',
+        'Musculoskeletal flexibility and spinal mobility',
+        'Developing a healthy daily rhythm',
+      ],
+      focus: 'Mindful alignment, appropriate modifications, and sustainable practice.',
+      format: 'In-Shala & Live Stream',
+      duration: '45–60 mins',
+    }));
+  }, [yogaGalleryItems]);
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
   const activeProgram = useMemo(() => {
-    return programs.find((p) => p.id === selectedProgramId) || programs[0];
+    return programs.find((p) => p.id === selectedProgramId) || programs[0] || null;
   }, [programs, selectedProgramId]);
 
   const handleSelectProgram = (program: YogaProgram) => {
@@ -120,47 +143,57 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </p>
             </div>
 
-            <motion.div
-              ref={yogaGridRef}
-              className="yoga-images-grid"
-              variants={rowContainerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              {programs.map((program, index) => {
-                const rowIndex = Math.floor(index / (yogaCols || 1));
-                return (
-                  <motion.div
-                    key={program.id}
-                    variants={rowFadeUpVariants}
-                    custom={rowIndex}
-                    viewport={{ once: true, amount: 0.1 }}
-                  >
-                    <YogaProgramImageCard
-                      program={program}
-                      isSelected={activeProgram?.id === program.id}
-                      onSelect={() => handleSelectProgram(program)}
-                    />
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-
-            {activeProgram && (
-              <div className="yoga-program-details-wrap">
-                <div className="yoga-section-header text-center">
-                  <h2 className="yoga-section-heading">Program Details</h2>
-                  <p className="yoga-section-desc">
-                    Full curriculum, therapeutic focus, and reservation options.
-                  </p>
-                </div>
-
-                <YogaProgramDetailsCard
-                  program={activeProgram}
-                  programs={programs}
-                  onSelectProgram={handleSelectProgram}
-                />
+            {programs.length === 0 ? (
+              <div className="yoga-schedule-empty">
+                <Inbox size={32} className="text-accent-gold" />
+                <h4>No Yoga Programs Available</h4>
+                <p>New yoga programs and guided therapies will be announced soon.</p>
               </div>
+            ) : (
+              <>
+                <motion.div
+                  ref={yogaGridRef}
+                  className="yoga-images-grid"
+                  variants={rowContainerVariants}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {programs.map((program, index) => {
+                    const rowIndex = Math.floor(index / (yogaCols || 1));
+                    return (
+                      <motion.div
+                        key={program.id}
+                        variants={rowFadeUpVariants}
+                        custom={rowIndex}
+                        viewport={{ once: true, amount: 0.1 }}
+                      >
+                        <YogaProgramImageCard
+                          program={program}
+                          isSelected={activeProgram?.id === program.id}
+                          onSelect={() => handleSelectProgram(program)}
+                        />
+                      </motion.div>
+                    );
+                  })}
+                </motion.div>
+
+                {activeProgram && (
+                  <div className="yoga-program-details-wrap">
+                    <div className="yoga-section-header text-center">
+                      <h2 className="yoga-section-heading">Program Details</h2>
+                      <p className="yoga-section-desc">
+                        Full curriculum, therapeutic focus, and reservation options.
+                      </p>
+                    </div>
+
+                    <YogaProgramDetailsCard
+                      program={activeProgram}
+                      programs={programs}
+                      onSelectProgram={handleSelectProgram}
+                    />
+                  </div>
+                )}
+              </>
             )}
           </div>
         </section>
