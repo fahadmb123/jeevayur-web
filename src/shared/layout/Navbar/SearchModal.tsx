@@ -100,7 +100,6 @@ export const SearchModal: React.FC<SearchModalProps> = React.memo(({ isOpen, onC
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={onClose}
         >
           <motion.div
             className="search-modal-card"

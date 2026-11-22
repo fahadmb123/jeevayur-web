@@ -23,10 +23,9 @@ export const DrAhalyaModal: React.FC<DrAhalyaModalProps> = React.memo(({ isOpen,
 
   return (
     <AnimatePresence>
-      <div className="ahalya-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="ahalya-modal-backdrop" role="dialog" aria-modal="true">
         <motion.div
           className="ahalya-modal-card"
-          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.94, y: 25 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}

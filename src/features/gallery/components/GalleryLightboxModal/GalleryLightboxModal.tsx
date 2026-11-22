@@ -31,7 +31,7 @@ export const GalleryLightboxModal: React.FC<GalleryLightboxModalProps> = ({
   if (!item) return null;
 
   return (
-    <div className="gallery-lightbox__overlay" onClick={onClose} role="dialog" aria-modal="true">
+    <div className="gallery-lightbox__overlay" role="dialog" aria-modal="true">
       <div
         className="gallery-lightbox__container"
         onClick={(e) => e.stopPropagation()}

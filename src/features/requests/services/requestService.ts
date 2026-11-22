@@ -62,6 +62,26 @@ function mapApiToPatientRequest(apt: ApiAppointment): PatientRequest {
   };
 }
 
+export interface RequestFilterQuery {
+  status?: string;
+  service?: string;
+  mode?: string;
+  search?: string;
+}
+
+export interface RequestCounts {
+  all: number;
+  pending: number;
+  accepted: number;
+  rejected: number;
+}
+
+export interface GetRequestsResult {
+  requests: PatientRequest[];
+  total: number;
+  counts: RequestCounts;
+}
+
 let cachedRequests: PatientRequest[] = [];
 const listeners = new Set<(requests: PatientRequest[]) => void>();
 
@@ -78,18 +98,58 @@ export const requestService = {
     };
   },
 
-  async getRequests(): Promise<PatientRequest[]> {
+  async getRequests(query?: RequestFilterQuery): Promise<GetRequestsResult> {
+    const params = new URLSearchParams();
+    if (query?.status && query.status !== 'All' && query.status !== 'all') {
+      params.set('status', query.status.toLowerCase());
+    }
+    if (query?.service && query.service !== 'All' && query.service !== 'all') {
+      params.set('service', query.service);
+    }
+    if (query?.mode && query.mode !== 'All' && query.mode !== 'all') {
+      params.set('mode', query.mode);
+    }
+    if (query?.search && query.search.trim()) {
+      params.set('search', query.search.trim());
+    }
+
+    const queryString = params.toString() ? `?${params.toString()}` : '';
+
     try {
       const res = await apiClient.get<{
         success: boolean;
-        data: { appointments: ApiAppointment[]; total: number };
-      }>('/api/appointments');
+        data: {
+          appointments: ApiAppointment[];
+          total: number;
+          counts?: RequestCounts;
+        };
+      }>(`/api/appointments${queryString}`);
       const items = res?.data?.appointments || [];
-      cachedRequests = items.map(mapApiToPatientRequest);
+      const mapped = items.map(mapApiToPatientRequest);
+      cachedRequests = mapped;
       notify();
-      return cachedRequests;
+      const counts = res?.data?.counts || {
+        all: res?.data?.total ?? mapped.length,
+        pending: mapped.filter((r) => r.status === 'pending').length,
+        accepted: mapped.filter((r) => r.status === 'accepted').length,
+        rejected: mapped.filter((r) => r.status === 'rejected').length,
+      };
+      return {
+        requests: mapped,
+        total: res?.data?.total ?? mapped.length,
+        counts,
+      };
     } catch {
-      return cachedRequests;
+      return {
+        requests: cachedRequests,
+        total: cachedRequests.length,
+        counts: {
+          all: cachedRequests.length,
+          pending: cachedRequests.filter((r) => r.status === 'pending').length,
+          accepted: cachedRequests.filter((r) => r.status === 'accepted').length,
+          rejected: cachedRequests.filter((r) => r.status === 'rejected').length,
+        },
+      };
     }
   },
 

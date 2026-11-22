@@ -43,7 +43,7 @@ export const BookingConfirmModal: React.FC<BookingConfirmModalProps> = React.mem
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="booking-confirm-backdrop" onClick={onClose}>
+        <div className="booking-confirm-backdrop">
           <motion.div
             className="booking-confirm-modal"
             onClick={(e) => e.stopPropagation()}

@@ -44,10 +44,9 @@ export const AcceptConfirmModal: React.FC<AcceptConfirmModalProps> = React.memo(
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="accept-confirm-backdrop" onClick={onClose}>
+        <div className="accept-confirm-backdrop">
           <motion.div
             className="accept-confirm-modal"
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 14 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 14 }}

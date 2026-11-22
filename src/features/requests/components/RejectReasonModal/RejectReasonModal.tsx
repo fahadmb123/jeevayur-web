@@ -47,10 +47,9 @@ export const RejectReasonModal: React.FC<RejectReasonModalProps> = React.memo(({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="reject-modal-backdrop" onClick={onClose}>
+        <div className="reject-modal-backdrop">
           <motion.div
             className="reject-modal"
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 12 }}
