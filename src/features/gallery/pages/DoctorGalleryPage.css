@@ -421,6 +421,42 @@
   color: var(--primary-green-light, #41BA91);
 }
 
+.doctor-gallery-card__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.doctor-gallery-card__edit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-light, #7E9387);
+  cursor: pointer;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.doctor-gallery-card__edit-btn:hover {
+  background-color: var(--primary-green-tint, rgba(27, 107, 80, 0.12));
+  border-color: var(--primary-green, #1B6B50);
+  color: var(--primary-green, #1B6B50);
+  transform: scale(1.05);
+}
+
+[data-theme='dark'] .doctor-gallery-card__edit-btn:hover,
+.dark .doctor-gallery-card__edit-btn:hover {
+  background-color: rgba(46, 157, 119, 0.16);
+  border-color: var(--primary-green, #2E9D77);
+  color: var(--primary-green-light, #41BA91);
+}
+
 .doctor-gallery-card__delete-btn {
   display: flex;
   align-items: center;

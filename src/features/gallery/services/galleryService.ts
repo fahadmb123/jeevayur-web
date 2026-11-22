@@ -238,6 +238,86 @@ export const galleryService = {
     return fallbackItem;
   },
 
+  async updateItem(id: string, data: Partial<GalleryFormData>): Promise<GalleryItem> {
+    if (data.file && data.file.size > 2 * 1024 * 1024) {
+      throw new Error('Image file size must be less than 2MB.');
+    }
+    try {
+      if (data.file) {
+        const formData = new FormData();
+        formData.append('file', data.file);
+        if (data.title) formData.append('title', data.title.trim());
+        if (data.category) formData.append('category', data.category);
+        if (data.description !== undefined) formData.append('description', (data.description || '').trim());
+        if (data.author !== undefined) formData.append('author', (data.author || '').trim());
+        if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
+
+        const url = `${environment.apiBaseUrl}/api/gallery/${id}`;
+        const res = await fetch(url, {
+          method: 'PUT',
+          credentials: 'include',
+          body: formData,
+        });
+
+        if (res.ok) {
+          const body = await res.json();
+          if (body?.success && body?.data) {
+            const item: GalleryItem = {
+              ...body.data,
+              imageUrl: resolveImageUrl(body.data.imageUrl),
+            };
+            const cached = this.getCachedItems();
+            this.cacheItems(cached.map((c) => (c.id === id ? item : c)));
+            window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+            return item;
+          }
+        }
+      } else {
+        const payload: Record<string, any> = {};
+        if (data.title) payload.title = data.title.trim();
+        if (data.category) payload.category = data.category;
+        if (data.imageUrl) payload.imageUrl = data.imageUrl.trim();
+        if (data.description !== undefined) payload.description = data.description ? data.description.trim() : null;
+        if (data.author !== undefined) payload.author = data.author ? data.author.trim() : null;
+        if (data.aspectRatio) payload.aspectRatio = data.aspectRatio;
+
+        const response = await apiClient.put<{ success: boolean; data: GalleryItem }>(`/api/gallery/${id}`, payload);
+        if (response && response.success && response.data) {
+          const item: GalleryItem = {
+            ...response.data,
+            imageUrl: resolveImageUrl(response.data.imageUrl),
+          };
+          const cached = this.getCachedItems();
+          this.cacheItems(cached.map((c) => (c.id === id ? item : c)));
+          window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+          return item;
+        }
+      }
+    } catch {
+    }
+
+    const cached = this.getCachedItems();
+    const existing = cached.find((c) => c.id === id);
+    const updated: GalleryItem = {
+      ...(existing || {
+        id,
+        title: data.title || '',
+        category: data.category || 'yoga',
+        imageUrl: data.imageUrl || '',
+        createdAt: new Date().toISOString().split('T')[0],
+      }),
+      ...(data.title ? { title: data.title.trim() } : {}),
+      ...(data.category ? { category: data.category } : {}),
+      ...(data.imageUrl ? { imageUrl: data.imageUrl.trim() } : {}),
+      ...(data.description !== undefined ? { description: data.description?.trim() } : {}),
+      ...(data.author !== undefined ? { author: data.author?.trim() } : {}),
+      ...(data.aspectRatio ? { aspectRatio: data.aspectRatio } : {}),
+    };
+    this.cacheItems(cached.map((c) => (c.id === id ? updated : c)));
+    window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+    return updated;
+  },
+
   async deleteItem(id: string): Promise<boolean> {
     try {
       await apiClient.delete(`/api/gallery/${id}`);

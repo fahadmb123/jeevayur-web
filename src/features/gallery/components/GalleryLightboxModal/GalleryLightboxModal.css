@@ -180,7 +180,9 @@
 
 .gallery-lightbox__actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 12px;
   margin-top: 8px;
   padding-top: 14px;
   border-top: 1px solid var(--border-color, #e2e8de);
@@ -189,6 +191,42 @@
 [data-theme='dark'] .gallery-lightbox__actions,
 .dark .gallery-lightbox__actions {
   border-top-color: var(--border-color, #1f3c30);
+}
+
+.gallery-lightbox__edit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: var(--surface-secondary, #f3f6f1);
+  border: 1px solid var(--border-color, #e2e8de);
+  color: var(--text-primary, #14241c);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-lightbox__edit-btn:hover {
+  background-color: var(--surface-color, #ffffff);
+  border-color: var(--primary-green, #1b6b50);
+  color: var(--primary-green, #1b6b50);
+  transform: translateY(-1px);
+}
+
+[data-theme='dark'] .gallery-lightbox__edit-btn,
+.dark .gallery-lightbox__edit-btn {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--border-color, #1f3c30);
+  color: var(--text-secondary, #a6c2b4);
+}
+
+[data-theme='dark'] .gallery-lightbox__edit-btn:hover,
+.dark .gallery-lightbox__edit-btn:hover {
+  background-color: rgba(46, 157, 119, 0.16);
+  border-color: var(--primary-green, #2e9d77);
+  color: var(--primary-green-light, #41ba91);
 }
 
 .gallery-lightbox__delete-btn {

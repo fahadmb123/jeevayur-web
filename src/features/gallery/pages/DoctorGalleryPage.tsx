@@ -6,6 +6,7 @@ import {
   Activity,
   Plus,
   Trash2,
+  Pencil,
   Maximize2,
   RotateCcw,
   CheckCircle2,
@@ -13,6 +14,7 @@ import {
 import { useGallery } from '../hooks/useGallery';
 import { AddGalleryModal } from '../components/AddGalleryModal';
 import { GalleryLightboxModal } from '../components/GalleryLightboxModal';
+import { DeleteConfirmModal } from '../components/DeleteConfirmModal/DeleteConfirmModal';
 import {
   DoctorSearchFilterStrip,
   type FilterPillConfig,
@@ -49,11 +51,19 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
     treatmentCount,
     isModalOpen,
     setIsModalOpen,
+    editingItem,
+    deleteConfirmItem,
+    isDeleting,
     activeLightboxItem,
     setActiveLightboxItem,
     feedbackMessage,
     handleAddItem,
-    handleDeleteItem,
+    handleEditItem,
+    openAddModal,
+    openEditModal,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDelete,
     handleResetDefaults,
   } = useGallery();
 
@@ -100,7 +110,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
           <button
             type="button"
             className="doctor-gallery-btn-add"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openAddModal}
           >
             <Plus size={18} />
             <span>Add Image</span>
@@ -122,8 +132,8 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
           </div>
           <div className="doctor-gallery-kpi__info">
             <span className="doctor-gallery-kpi__value">{totalCount}</span>
-            <span className="doctor-gallery-kpi__label">Total Photos</span>
-            <span className="doctor-gallery-kpi__sub">Live in public gallery</span>
+            <span className="doctor-gallery-kpi__label">Total Media</span>
+            <span className="doctor-gallery-kpi__sub">Clinic Showcase</span>
           </div>
         </div>
 
@@ -133,8 +143,8 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
           </div>
           <div className="doctor-gallery-kpi__info">
             <span className="doctor-gallery-kpi__value">{yogaCount}</span>
-            <span className="doctor-gallery-kpi__label">Yoga Photos</span>
-            <span className="doctor-gallery-kpi__sub">Asanas & shala sessions</span>
+            <span className="doctor-gallery-kpi__label">Yoga Sessions</span>
+            <span className="doctor-gallery-kpi__sub">Asana & Dhyana</span>
           </div>
         </div>
 
@@ -144,26 +154,17 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
           </div>
           <div className="doctor-gallery-kpi__info">
             <span className="doctor-gallery-kpi__value">{treatmentCount}</span>
-            <span className="doctor-gallery-kpi__label">Treatment Photos</span>
-            <span className="doctor-gallery-kpi__sub">Clinical therapies & herbs</span>
+            <span className="doctor-gallery-kpi__label">Clinical Treatments</span>
+            <span className="doctor-gallery-kpi__sub">Therapeutic Care</span>
           </div>
         </div>
       </div>
 
       <DoctorSearchFilterStrip
-        searchPlaceholder="Search images by title, author, or description..."
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
+        searchPlaceholder="Search images by title, treatment, or author..."
         pills={filterPills}
-        onReset={
-          searchQuery || selectedCategory !== 'all'
-            ? () => {
-                setSearchQuery('');
-                setSelectedCategory('all');
-              }
-            : undefined
-        }
-        resetTitle="Reset filters"
       />
 
       {filteredItems.length > 0 ? (
@@ -178,6 +179,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
               key={item.id}
               className="doctor-gallery-card"
               variants={itemVariants}
+              layout
             >
               <div
                 className="doctor-gallery-card__image-container"
@@ -202,12 +204,12 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   >
                     {item.category === 'yoga' ? (
                       <>
-                        <Sparkles size={13} />
+                        <Sparkles size={12} />
                         <span>Yoga</span>
                       </>
                     ) : (
                       <>
-                        <Activity size={13} />
+                        <Activity size={12} />
                         <span>Treatment</span>
                       </>
                     )}
@@ -215,10 +217,10 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                 </div>
 
                 <div className="doctor-gallery-card__hover-overlay">
-                  <div className="doctor-gallery-card__zoom-action">
+                  <span className="doctor-gallery-card__zoom-action">
                     <Maximize2 size={16} />
-                    <span>View Photo</span>
-                  </div>
+                    <span>View Image</span>
+                  </span>
                 </div>
               </div>
 
@@ -231,18 +233,32 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   >
                     {item.title}
                   </h3>
-                  <button
-                    type="button"
-                    className="doctor-gallery-card__delete-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteItem(item.id, item.title);
-                    }}
-                    title="Remove image"
-                    aria-label={`Remove image ${item.title}`}
-                  >
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="doctor-gallery-card__actions">
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__edit-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(item);
+                      }}
+                      title="Edit image details"
+                      aria-label={`Edit image ${item.title}`}
+                    >
+                      <Pencil size={15} />
+                    </button>
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openDeleteModal(item.id, item.title);
+                      }}
+                      title="Remove image from cloud"
+                      aria-label={`Remove image ${item.title}`}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
 
                 {item.description && (
@@ -287,7 +303,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <button
               type="button"
               className="doctor-gallery-page__empty-add-btn"
-              onClick={() => setIsModalOpen(true)}
+              onClick={openAddModal}
             >
               <Plus size={16} />
               <span>
@@ -300,16 +316,34 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
 
       <AddGalleryModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleAddItem}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+        onSave={async (data, id) => {
+          if (id) {
+            await handleEditItem(id, data);
+          } else {
+            await handleAddItem(data);
+          }
+        }}
         defaultCategory={selectedCategory === 'treatment' ? 'treatment' : 'yoga'}
+        editingItem={editingItem}
       />
 
       <GalleryLightboxModal
         item={activeLightboxItem}
         onClose={() => setActiveLightboxItem(null)}
-        onDelete={handleDeleteItem}
+        onEdit={(item) => openEditModal(item)}
+        onDelete={(id, title) => openDeleteModal(id, title)}
         canManage={true}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deleteConfirmItem}
+        title={deleteConfirmItem?.title || ''}
+        isDeleting={isDeleting}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDelete}
       />
     </div>
   );

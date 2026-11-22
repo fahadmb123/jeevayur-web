@@ -10,6 +10,9 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
   const [selectedCategory, setSelectedCategory] = useState<GalleryFilterTab>(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
+  const [deleteConfirmItem, setDeleteConfirmItem] = useState<{ id: string; title: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [activeLightboxItem, setActiveLightboxItem] = useState<GalleryItem | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
@@ -73,21 +76,56 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
     setIsModalOpen(false);
   }, [loadGallery]);
 
-  const handleDeleteItem = useCallback(async (id: string, title?: string) => {
-    const confirmed = window.confirm(
-      `Are you sure you want to remove "${title || 'this image'}" from the gallery?`
-    );
-    if (!confirmed) return;
-
-    const success = await galleryService.deleteItem(id);
-    if (success) {
-      await loadGallery();
-      setFeedbackMessage('Image removed successfully.');
-      if (activeLightboxItem?.id === id) {
-        setActiveLightboxItem(null);
-      }
+  const handleEditItem = useCallback(async (id: string, data: Partial<GalleryFormData>) => {
+    const updated = await galleryService.updateItem(id, data);
+    await loadGallery();
+    setFeedbackMessage(`Image "${updated.title}" updated successfully.`);
+    setIsModalOpen(false);
+    setEditingItem(null);
+    if (activeLightboxItem?.id === id) {
+      setActiveLightboxItem(updated);
     }
   }, [activeLightboxItem, loadGallery]);
+
+  const openAddModal = useCallback(() => {
+    setEditingItem(null);
+    setIsModalOpen(true);
+  }, []);
+
+  const openEditModal = useCallback((item: GalleryItem) => {
+    setEditingItem(item);
+    setIsModalOpen(true);
+    if (activeLightboxItem?.id === item.id) {
+      setActiveLightboxItem(null);
+    }
+  }, [activeLightboxItem]);
+
+  const openDeleteModal = useCallback((id: string, title?: string) => {
+    setDeleteConfirmItem({ id, title: title || 'this image' });
+  }, []);
+
+  const closeDeleteModal = useCallback(() => {
+    if (isDeleting) return;
+    setDeleteConfirmItem(null);
+  }, [isDeleting]);
+
+  const confirmDelete = useCallback(async () => {
+    if (!deleteConfirmItem) return;
+    try {
+      setIsDeleting(true);
+      const success = await galleryService.deleteItem(deleteConfirmItem.id);
+      if (success) {
+        await loadGallery();
+        setFeedbackMessage(`Image "${deleteConfirmItem.title}" permanently deleted from cloud storage and gallery.`);
+        if (activeLightboxItem?.id === deleteConfirmItem.id) {
+          setActiveLightboxItem(null);
+        }
+      }
+    } finally {
+      setIsDeleting(false);
+      setDeleteConfirmItem(null);
+    }
+  }, [deleteConfirmItem, activeLightboxItem, loadGallery]);
 
   const handleResetDefaults = useCallback(async () => {
     const confirmed = window.confirm('Reset gallery showcase to authentic clinic defaults?');
@@ -111,11 +149,20 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
     treatmentCount,
     isModalOpen,
     setIsModalOpen,
+    editingItem,
+    setEditingItem,
+    deleteConfirmItem,
+    isDeleting,
     activeLightboxItem,
     setActiveLightboxItem,
     feedbackMessage,
     handleAddItem,
-    handleDeleteItem,
+    handleEditItem,
+    openAddModal,
+    openEditModal,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDelete,
     handleResetDefaults,
   };
 };

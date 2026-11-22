@@ -1,14 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { X, UploadCloud, Link as LinkIcon, Sparkles, Activity, AlertCircle, Check, Crop } from 'lucide-react';
-import type { GalleryCategory, GalleryFormData } from '../../types';
+import type { GalleryCategory, GalleryFormData, GalleryItem } from '../../types';
 import { ImageCropperModal } from '../ImageCropperModal';
 import './AddGalleryModal.css';
 
 interface AddGalleryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (data: GalleryFormData) => Promise<void>;
+  onSave: (data: GalleryFormData, id?: string) => Promise<void>;
   defaultCategory?: GalleryCategory;
+  editingItem?: GalleryItem | null;
 }
 
 export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
@@ -16,6 +17,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
   onClose,
   onSave,
   defaultCategory = 'yoga',
+  editingItem = null,
 }) => {
   const [category, setCategory] = useState<GalleryCategory>(defaultCategory);
   const [title, setTitle] = useState('');
@@ -36,20 +38,33 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
-      setCategory(defaultCategory);
-      setTitle('');
-      setDescription('');
-      setImageUrl('');
-      setSelectedFile(null);
-      setImagePreview('');
-      setRawImageForCrop('');
+      if (editingItem) {
+        setCategory(editingItem.category);
+        setTitle(editingItem.title);
+        setDescription(editingItem.description || '');
+        setImageUrl(editingItem.imageUrl);
+        setImagePreview(editingItem.imageUrl);
+        setRawImageForCrop(editingItem.imageUrl);
+        setAspectRatio('landscape');
+        setSelectedFile(null);
+        setUploadMode(editingItem.imageUrl.startsWith('/api/') ? 'file' : 'url');
+      } else {
+        setCategory(defaultCategory);
+        setTitle('');
+        setDescription('');
+        setImageUrl('');
+        setSelectedFile(null);
+        setImagePreview('');
+        setRawImageForCrop('');
+        setAspectRatio('landscape');
+        setUploadMode('file');
+      }
       setOriginalFileName('gallery-upload.jpg');
-      setAspectRatio('landscape');
       setIsCropperOpen(false);
       setError(null);
       setIsSubmitting(false);
     }
-  }, [isOpen, defaultCategory]);
+  }, [isOpen, defaultCategory, editingItem]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -142,7 +157,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
       return;
     }
 
-    if (uploadMode === 'url' && !imageUrl.trim()) {
+    if (uploadMode === 'url' && !imageUrl.trim() && !imagePreview.trim()) {
       setError('Please enter an image URL.');
       return;
     }
@@ -158,7 +173,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
         imageUrl: uploadMode === 'url' ? imageUrl.trim() : imagePreview || undefined,
         description: description.trim() || undefined,
         aspectRatio,
-      });
+      }, editingItem?.id);
     } catch {
       setError('Failed to save image. Please check image data and try again.');
     } finally {
@@ -175,16 +190,20 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
         >
           <div className="add-gallery-modal__header">
             <div className="add-gallery-modal__header-info">
-              <h2 className="add-gallery-modal__title">Add Showcase Image</h2>
+              <h2 className="add-gallery-modal__title">
+                {editingItem ? 'Edit Showcase Image' : 'Add Showcase Image'}
+              </h2>
               <p className="add-gallery-modal__subtitle">
-                Publish photo assets to Yoga sessions or Clinical Ayurveda treatment showcases.
+                {editingItem
+                  ? 'Update image details or replace photo in Backblaze B2 cloud storage.'
+                  : 'Publish photo assets to Yoga sessions or Clinical Ayurveda treatment showcases.'}
               </p>
             </div>
             <button
               type="button"
               className="add-gallery-modal__close-btn"
               onClick={onClose}
-              aria-label="Close dialog"
+              aria-label="Close modal"
             >
               <X size={20} />
             </button>
@@ -192,16 +211,14 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
 
           <form onSubmit={handleSubmit} className="add-gallery-modal__form">
             {error && (
-              <div className="add-gallery-modal__error">
+              <div className="add-gallery-modal__error-banner" role="alert">
                 <AlertCircle size={16} />
                 <span>{error}</span>
               </div>
             )}
 
             <div className="add-gallery-modal__field">
-              <label className="add-gallery-modal__label">
-                Showcase Category <span className="add-gallery-modal__required">*</span>
-              </label>
+              <label className="add-gallery-modal__label">Showcase Category</label>
               <div className="add-gallery-modal__category-toggle">
                 <button
                   type="button"
@@ -213,7 +230,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                   <Sparkles size={18} />
                   <div className="add-gallery-modal__category-text">
                     <span className="add-gallery-modal__category-name">Yoga Showcase</span>
-                    <span className="add-gallery-modal__category-desc">Asanas, Shala, Pranayama</span>
+                    <span className="add-gallery-modal__category-desc">Asanas, Pranayama & Meditation</span>
                   </div>
                   {category === 'yoga' && <Check size={16} className="add-gallery-modal__check-icon" />}
                 </button>
@@ -228,7 +245,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                   <Activity size={18} />
                   <div className="add-gallery-modal__category-text">
                     <span className="add-gallery-modal__category-name">Treatment Showcase</span>
-                    <span className="add-gallery-modal__category-desc">Shirodhara, Swedana, Panchakarma</span>
+                    <span className="add-gallery-modal__category-desc">Shirodhara, Abhyanga & Panchakarma</span>
                   </div>
                   {category === 'treatment' && <Check size={16} className="add-gallery-modal__check-icon" />}
                 </button>
@@ -236,9 +253,9 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             </div>
 
             <div className="add-gallery-modal__field">
-              <div className="add-gallery-modal__label-row">
+              <div className="add-gallery-modal__field-header">
                 <label className="add-gallery-modal__label">
-                  Image Source <span className="add-gallery-modal__required">*</span>
+                  Photo Asset <span className="add-gallery-modal__required">*</span>
                 </label>
                 <div className="add-gallery-modal__mode-toggle">
                   <button
@@ -269,16 +286,14 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                   onDragLeave={handleDragLeave}
                   onDrop={handleDrop}
                   onClick={() => {
-                    if (!imagePreview) {
-                      fileInputRef.current?.click();
-                    }
+                    if (!imagePreview) fileInputRef.current?.click();
                   }}
                 >
                   <input
-                    type="file"
                     ref={fileInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/svg+xml"
                     className="add-gallery-modal__file-input"
-                    accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif"
                     onChange={(e) => {
                       if (e.target.files && e.target.files[0]) {
                         handleFileChange(e.target.files[0]);
@@ -323,13 +338,13 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                   ) : (
                     <div className="add-gallery-modal__dropzone-prompt">
                       <div className="add-gallery-modal__upload-icon-circle">
-                        <UploadCloud size={28} />
+                        <UploadCloud size={24} />
                       </div>
                       <span className="add-gallery-modal__dropzone-title">
-                        Click to choose an image or drag & drop
+                        Choose an image or drag & drop here
                       </span>
                       <span className="add-gallery-modal__dropzone-hint">
-                        PNG, JPG, WEBP, or SVG (less than 2MB)
+                        High resolution JPG, PNG, WEBP up to 2MB. Built-in 16:10 cropper included.
                       </span>
                     </div>
                   )}
@@ -341,7 +356,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                     <input
                       type="url"
                       className="add-gallery-modal__input"
-                      placeholder="https://example.com/ayurveda-photo.jpg"
+                      placeholder="https://images.unsplash.com/..."
                       value={imageUrl}
                       onChange={(e) => handleUrlChange(e.target.value)}
                     />
@@ -350,9 +365,9 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                     <div className="add-gallery-modal__url-preview">
                       <img
                         src={imagePreview}
-                        alt="Preview"
+                        alt="URL Preview"
                         className="add-gallery-modal__url-preview-img"
-                        onError={() => setError('Unable to load image from this URL. Please verify the link.')}
+                        onError={() => setError('Could not load image from the provided URL.')}
                       />
                       <button
                         type="button"
@@ -360,7 +375,7 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                         onClick={() => setIsCropperOpen(true)}
                       >
                         <Crop size={14} />
-                        <span>Crop & Adjust Image</span>
+                        <span>Crop & Adjust URL Image</span>
                       </button>
                     </div>
                   )}
@@ -369,24 +384,28 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
             </div>
 
             <div className="add-gallery-modal__field">
-              <label className="add-gallery-modal__label" htmlFor="gallery-title">
-                Image Title / Name <span className="add-gallery-modal__required">*</span>
+              <label htmlFor="gallery-title" className="add-gallery-modal__label">
+                Image Title <span className="add-gallery-modal__required">*</span>
               </label>
               <input
                 id="gallery-title"
                 type="text"
                 className="add-gallery-modal__input"
-                placeholder={category === 'yoga' ? 'e.g., Morning Hatha Flow & Meditation' : 'e.g., Shirodhara Medicated Herbal Pouring'}
+                placeholder="e.g. Shirodhara Rejuvenation Session"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                maxLength={150}
                 required
               />
             </div>
 
             <div className="add-gallery-modal__field">
-              <label className="add-gallery-modal__label" htmlFor="gallery-description">
-                Description / Clinical Details <span className="add-gallery-modal__optional">(Optional)</span>
-              </label>
+              <div className="add-gallery-modal__field-header">
+                <label htmlFor="gallery-description" className="add-gallery-modal__label">
+                  Description
+                </label>
+                <span className="add-gallery-modal__optional">Optional</span>
+              </div>
               <textarea
                 id="gallery-description"
                 className="add-gallery-modal__textarea"
@@ -412,11 +431,15 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
-                  <span>Publishing...</span>
+                  <span>{editingItem ? 'Saving Changes...' : 'Publishing...'}</span>
                 ) : (
                   <>
                     <Check size={18} />
-                    <span>Publish to {category === 'yoga' ? 'Yoga' : 'Treatment'}</span>
+                    <span>
+                      {editingItem
+                        ? 'Save Changes'
+                        : `Publish to ${category === 'yoga' ? 'Yoga' : 'Treatment'}`}
+                    </span>
                   </>
                 )}
               </button>
