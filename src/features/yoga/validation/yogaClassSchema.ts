@@ -24,6 +24,15 @@ export const TIME_PRESETS = [
   '07:00 PM - 08:00 PM',
 ] as const;
 
+export const DURATION_PRESETS = [
+  '30 mins',
+  '45 mins',
+  '60 mins',
+  '75 mins',
+  '90 mins',
+  '120 mins',
+] as const;
+
 export const yogaClassSchema = z
   .object({
     title: z
@@ -39,25 +48,8 @@ export const yogaClassSchema = z
     duration: z
       .string()
       .trim()
-      .min(1, 'Class duration is required')
-      .max(50, 'Duration is too long')
-      .refine((val) => !val.includes('-'), {
-        message: 'Duration cannot be negative',
-      })
-      .refine(
-        (val) => {
-          const num = parseInt(val.replace(/[^\d-]/g, ''), 10);
-          return !isNaN(num) && num > 0;
-        },
-        { message: 'Enter a valid positive duration in minutes (e.g. 60 mins)' }
-      )
-      .refine(
-        (val) => {
-          const num = parseInt(val.replace(/[^\d-]/g, ''), 10);
-          return !isNaN(num) && num <= 480;
-        },
-        { message: 'Duration cannot exceed 480 minutes (8 hours)' }
-      ),
+      .min(1, 'Class duration is required'),
+    customDuration: z.string().optional(),
     time: z
       .string()
       .trim()
@@ -118,6 +110,36 @@ export const yogaClassSchema = z
       .max(1000, 'Description must not exceed 1000 characters'),
   })
   .superRefine((data, ctx) => {
+    if (data.duration === 'custom') {
+      if (!data.customDuration || !data.customDuration.trim()) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['customDuration'],
+          message: 'Please enter the custom duration (e.g. 50 mins)',
+        });
+      } else if (data.customDuration.includes('-')) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['customDuration'],
+          message: 'Duration cannot be negative',
+        });
+      } else {
+        const num = parseInt(data.customDuration.replace(/[^\d-]/g, ''), 10);
+        if (isNaN(num) || num <= 0) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['customDuration'],
+            message: 'Enter a valid positive duration in minutes (e.g. 50 mins)',
+          });
+        } else if (num > 480) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ['customDuration'],
+            message: 'Duration cannot exceed 480 minutes (8 hours)',
+          });
+        }
+      }
+    }
     if (data.time === 'custom') {
       if (!data.customTime || !data.customTime.trim()) {
         ctx.addIssue({

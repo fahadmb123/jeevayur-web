@@ -13,6 +13,7 @@ import {
   yogaClassSchema,
   type YogaClassFormValues,
   TIME_PRESETS,
+  DURATION_PRESETS,
   parsePriceString,
   formatPriceString,
 } from '../../validation/yogaClassSchema';
@@ -24,14 +25,6 @@ interface YogaClassModalProps {
   onSave: (data: YogaFormData) => Promise<void>;
   initialData?: YogaSession | null;
 }
-
-const DURATION_PRESETS = [
-  '45 mins',
-  '60 mins',
-  '75 mins',
-  '90 mins',
-  '120 mins',
-];
 
 interface FormContentProps {
   initialData?: YogaSession | null;
@@ -49,13 +42,17 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
   const priceParsed = parsePriceString(initialData?.price);
 
+  const initialDuration = initialData?.duration || '60 mins';
+  const isPresetDuration = (DURATION_PRESETS as readonly string[]).includes(initialDuration);
+
   const initialTime = initialData?.time || '06:30 AM - 07:30 AM';
   const isPresetTime = (TIME_PRESETS as readonly string[]).includes(initialTime);
 
   const defaultValues: YogaClassFormValues = {
     title: initialData?.title || '',
     format: initialData?.format || 'offline',
-    duration: initialData?.duration || '60 mins',
+    duration: isPresetDuration ? initialDuration : 'custom',
+    customDuration: isPresetDuration ? '' : initialDuration,
     time: isPresetTime ? initialTime : 'custom',
     customTime: isPresetTime ? '' : initialTime,
     suitableFor: initialData?.suitableFor || SUITABLE_FOR_OPTIONS[0],
@@ -84,6 +81,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
   const watchedValues = watch();
   const selectedFormat = watchedValues.format;
   const selectedDays = watchedValues.days || [];
+  const selectedDuration = watchedValues.duration;
   const selectedTime = watchedValues.time;
   const currentPriceAmount = watchedValues.priceAmount;
   const currentPriceUnit = watchedValues.priceUnit;
@@ -92,7 +90,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
     if (!isEditing) return true;
     if ((watchedValues.title ?? '').trim() !== (defaultValues.title ?? '').trim()) return true;
     if (watchedValues.format !== defaultValues.format) return true;
-    if ((watchedValues.duration ?? '').trim() !== (defaultValues.duration ?? '').trim()) return true;
+    if (watchedValues.duration !== defaultValues.duration) return true;
+    if (watchedValues.duration === 'custom' && (watchedValues.customDuration ?? '').trim() !== (defaultValues.customDuration ?? '').trim()) return true;
     if (watchedValues.time !== defaultValues.time) return true;
     if (watchedValues.time === 'custom' && (watchedValues.customTime ?? '').trim() !== (defaultValues.customTime ?? '').trim()) return true;
     if (watchedValues.suitableFor !== defaultValues.suitableFor) return true;
@@ -142,6 +141,11 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         values.priceUnit
       );
       const normalizedUnit = values.priceUnit.trim().replace(/^per\s+/i, '');
+      let resolvedDuration = values.duration;
+      if (values.duration === 'custom') {
+        const trimmed = (values.customDuration || '').trim();
+        resolvedDuration = /mins?|hours?/i.test(trimmed) ? trimmed : `${trimmed} mins`;
+      }
       const resolvedTime =
         values.time === 'custom'
           ? values.customTime?.trim() || '06:30 AM - 07:30 AM'
@@ -150,7 +154,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
       const payload: YogaFormData = {
         title: values.title.trim(),
         format: values.format,
-        duration: values.duration.trim(),
+        duration: resolvedDuration.trim(),
         time: resolvedTime,
         suitableFor: values.suitableFor.trim(),
         days: values.days,
@@ -220,9 +224,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
           <div className="yoga-modal__format-group">
             <button
               type="button"
-              className={`yoga-modal__format-btn ${
-                selectedFormat === 'offline' ? 'active' : ''
-              }`}
+              className={`yoga-modal__format-btn ${selectedFormat === 'offline' ? 'active' : ''
+                }`}
               onClick={() => handleFormatChange('offline')}
             >
               <MapPin size={16} />
@@ -230,9 +233,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
             </button>
             <button
               type="button"
-              className={`yoga-modal__format-btn ${
-                selectedFormat === 'online' ? 'active' : ''
-              }`}
+              className={`yoga-modal__format-btn ${selectedFormat === 'online' ? 'active' : ''
+                }`}
               onClick={() => handleFormatChange('online')}
             >
               <Video size={16} />
@@ -249,31 +251,50 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
 
         <div className="yoga-modal__grid-2">
           <div className="yoga-modal__field">
-            <label htmlFor="yoga-duration">
+            <label htmlFor="yoga-duration-select">
               Duration <span className="required">*</span>
             </label>
-            <input
-              id="yoga-duration"
-              type="text"
-              list="duration-list"
-              className={`yoga-modal__input ${errors.duration ? 'has-error' : ''}`}
-              placeholder="e.g. 60 mins"
+            <select
+              id="yoga-duration-select"
+              className={`yoga-modal__select ${errors.duration ? 'has-error' : ''}`}
               aria-invalid={Boolean(errors.duration)}
               {...register('duration')}
-              onKeyDown={(e) => {
-                if (e.key === '-' || e.key === 'Minus') e.preventDefault();
-              }}
-            />
-            <datalist id="duration-list">
-              {DURATION_PRESETS.map((p) => (
-                <option key={p} value={p} />
+            >
+              {DURATION_PRESETS.map((preset) => (
+                <option key={preset} value={preset}>
+                  {preset}
+                </option>
               ))}
-            </datalist>
+              <option value="custom">Custom / Enter manually...</option>
+            </select>
             {errors.duration && (
               <span className="yoga-modal__error-hint" role="alert">
                 <AlertCircle size={13} />
                 <span>{errors.duration.message}</span>
               </span>
+            )}
+
+            {selectedDuration === 'custom' && (
+              <div className="yoga-modal__custom-time-wrap">
+                <input
+                  type="text"
+                  className={`yoga-modal__input ${
+                    errors.customDuration ? 'has-error' : ''
+                  }`}
+                  placeholder="e.g. 50 mins"
+                  aria-label="Custom duration"
+                  {...register('customDuration')}
+                  onKeyDown={(e) => {
+                    if (e.key === '-' || e.key === 'Minus') e.preventDefault();
+                  }}
+                />
+                {errors.customDuration && (
+                  <span className="yoga-modal__error-hint" role="alert">
+                    <AlertCircle size={13} />
+                    <span>{errors.customDuration.message}</span>
+                  </span>
+                )}
+              </div>
             )}
           </div>
 
@@ -316,9 +337,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               <div className="yoga-modal__custom-time-wrap">
                 <input
                   type="text"
-                  className={`yoga-modal__input ${
-                    errors.customTime ? 'has-error' : ''
-                  }`}
+                  className={`yoga-modal__input ${errors.customTime ? 'has-error' : ''
+                    }`}
                   placeholder="e.g. 07:15 AM - 08:15 AM"
                   aria-label="Custom class time"
                   {...register('customTime')}
@@ -363,9 +383,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
             Schedule Days (Monday to Sunday) <span className="required">*</span>
           </label>
           <div
-            className={`yoga-modal__days-wrapper ${
-              errors.days ? 'has-error' : ''
-            }`}
+            className={`yoga-modal__days-wrapper ${errors.days ? 'has-error' : ''
+              }`}
           >
             {DAYS_OF_WEEK.map((day) => {
               const isSelected = selectedDays.includes(day);
@@ -373,9 +392,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
                 <button
                   key={day}
                   type="button"
-                  className={`yoga-modal__day-toggle ${
-                    isSelected ? 'selected' : ''
-                  }`}
+                  className={`yoga-modal__day-toggle ${isSelected ? 'selected' : ''
+                    }`}
                   onClick={() => handleDayToggle(day)}
                 >
                   {day.slice(0, 3)}
@@ -399,9 +417,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
             <input
               id="yoga-price-amount"
               type="text"
-              className={`yoga-modal__input ${
-                errors.priceAmount ? 'has-error' : ''
-              }`}
+              className={`yoga-modal__input ${errors.priceAmount ? 'has-error' : ''
+                }`}
               placeholder="e.g. ₹500 or 500"
               aria-invalid={Boolean(errors.priceAmount)}
               {...register('priceAmount')}
@@ -422,9 +439,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               Billing Frequency / Unit <span className="required">*</span>
             </label>
             <div
-              className={`yoga-modal__unit-input-wrap ${
-                errors.priceUnit ? 'has-error' : ''
-              }`}
+              className={`yoga-modal__unit-input-wrap ${errors.priceUnit ? 'has-error' : ''
+                }`}
             >
               <span className="yoga-modal__unit-prefix">per</span>
               <input
@@ -464,9 +480,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
           <textarea
             id="yoga-desc"
             rows={3}
-            className={`yoga-modal__textarea ${
-              errors.description ? 'has-error' : ''
-            }`}
+            className={`yoga-modal__textarea ${errors.description ? 'has-error' : ''
+              }`}
             placeholder="Describe postures, breathing techniques, and therapeutic benefits..."
             aria-invalid={Boolean(errors.description)}
             {...register('description')}
@@ -500,8 +515,8 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               {isSubmitting
                 ? 'Saving...'
                 : isEditing
-                ? 'Update Yoga Class'
-                : 'Add Yoga Class'}
+                  ? 'Update Yoga Class'
+                  : 'Add Yoga Class'}
             </span>
           </button>
         </div>
