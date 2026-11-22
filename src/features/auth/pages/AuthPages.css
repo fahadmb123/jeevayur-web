@@ -593,6 +593,13 @@
   color: var(--text-primary, #0F172A);
 }
 
+.auth-form__input-wrap input::-ms-reveal,
+.auth-form__input-wrap input::-ms-clear {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .auth-form__input-wrap input::placeholder {
   color: var(--text-light, #94A3B8);
   opacity: 0.8;
