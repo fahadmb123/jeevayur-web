@@ -133,7 +133,19 @@
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.18);
 }
 
-/* Format Pill Selectors */
+.yoga-modal__input.has-error,
+.yoga-modal__select.has-error,
+.yoga-modal__textarea.has-error {
+  border-color: #DC2626 !important;
+  background-color: #FFFDFD;
+}
+
+.yoga-modal__input.has-error:focus,
+.yoga-modal__select.has-error:focus,
+.yoga-modal__textarea.has-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
+}
+
 .yoga-modal__format-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -163,11 +175,19 @@
   box-shadow: 0 2px 6px rgba(27, 107, 80, 0.1);
 }
 
-/* Days of Week Checkboxes / Toggles */
 .yoga-modal__days-wrapper {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  padding: 2px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.yoga-modal__days-wrapper.has-error {
+  border: 1px dashed rgba(220, 38, 38, 0.5);
+  padding: 6px;
+  background: rgba(220, 38, 38, 0.02);
 }
 
 .yoga-modal__day-toggle {
@@ -191,84 +211,18 @@
   border-color: var(--primary-green, #1B6B50);
 }
 
-/* Per-Day Time Slots Box */
-.yoga-modal__day-times-box {
-  background: var(--surface-secondary, #F3F6F1);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.yoga-modal__day-times-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.yoga-modal__day-times-title {
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--primary-green-deep, #0B3326);
-}
-
-.yoga-modal__btn-apply-all {
-  background: none;
-  border: none;
-  color: var(--primary-green, #1B6B50);
-  font-size: 0.775rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-}
-
-.yoga-modal__btn-apply-all:hover {
-  color: var(--primary-green-dark, #124C38);
-}
-
-.yoga-modal__day-time-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--surface-color, #FFFFFF);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #E2E8DE);
-}
-
-.yoga-modal__day-label {
-  min-width: 90px;
-  font-weight: 600;
-  font-size: 0.825rem;
-  color: var(--primary-green, #124C38);
-}
-
-.yoga-modal__day-time-input {
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 6px;
-  font-size: 0.85rem;
-  outline: none;
-  color: var(--text-primary, #14241C);
-  background: var(--bg-color, #FBFBF9);
-}
-
-.yoga-modal__day-time-input:focus {
-  border-color: var(--primary-green, #1B6B50);
-  background: var(--surface-color, #FFFFFF);
-}
-
 .yoga-modal__error-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.775rem;
   color: #DC2626;
+  font-weight: 500;
   margin-top: 4px;
+}
+
+.yoga-modal__error-hint svg {
+  flex-shrink: 0;
 }
 
 .yoga-modal__footer {
