@@ -519,9 +519,28 @@
 }
 
 .auth-form__field-error {
-  color: #dc2626;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #DC2626;
   font-size: 0.76rem;
+  font-weight: 500;
   line-height: 1.35;
+  margin-top: 3px;
+}
+
+.auth-form__input-wrap.has-error input {
+  border-color: #DC2626 !important;
+  background: rgba(220, 38, 38, 0.02);
+}
+
+.auth-form__input-wrap.has-error input:focus {
+  border-color: #DC2626 !important;
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.12), 0 8px 20px rgba(220, 38, 38, 0.06);
+}
+
+.auth-form__input-wrap.has-error .auth-form__icon {
+  color: #DC2626;
 }
 
 .auth-form__group label {
@@ -722,6 +741,23 @@
 [data-theme='dark'] .auth-form__input-wrap input:focus {
   border-color: #41BA91;
   box-shadow: 0 0 0 3px rgba(65, 186, 145, 0.2);
+}
+
+[data-theme='dark'] .auth-form__field-error {
+  color: #F87171;
+}
+
+[data-theme='dark'] .auth-form__input-wrap.has-error input {
+  border-color: #EF4444 !important;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+[data-theme='dark'] .auth-form__input-wrap.has-error input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+}
+
+[data-theme='dark'] .auth-form__input-wrap.has-error .auth-form__icon {
+  color: #EF4444;
 }
 
 [data-theme='dark'] .auth-form__checkbox {
