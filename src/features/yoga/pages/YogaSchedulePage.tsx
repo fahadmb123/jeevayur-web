@@ -133,29 +133,6 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               >
                 Personalized yoga practices, therapeutic movement, and breath awareness guided by experienced Yogacharyas.
               </motion.p>
-
-              <motion.div
-                className="yoga-hero-actions"
-                variants={fadeUpVariants}
-                initial="hidden"
-                animate="visible"
-                transition={{ delay: 0.14 }}
-              >
-                <a
-                  href={whatsappHeroUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="yoga-hero-btn-primary"
-                >
-                  <MessageCircle size={17} />
-                  <span>Reserve Session on WhatsApp</span>
-                </a>
-
-                <a href="#yoga-schedule" className="yoga-hero-btn-secondary">
-                  <Calendar size={16} />
-                  <span>View Weekly Timetable</span>
-                </a>
-              </motion.div>
             </div>
           </div>
         </header>
@@ -211,6 +188,27 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                 />
               </div>
             )}
+          </div>
+        </section>
+
+        <section className="yoga-bottom-cta">
+          <div className="yoga-container">
+            <div className="yoga-bottom-cta__inner">
+              <a
+                href={whatsappHeroUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="yoga-hero-btn-primary"
+              >
+                <MessageCircle size={17} />
+                <span>Reserve Session on WhatsApp</span>
+              </a>
+
+              <a href="#yoga-schedule" className="yoga-hero-btn-secondary">
+                <Calendar size={16} />
+                <span>View Weekly Timetable</span>
+              </a>
+            </div>
           </div>
         </section>
 
