@@ -26,6 +26,9 @@ import {
   rowFadeUpVariants,
 } from '@/shared/lib/animations';
 import { useGridColumns } from '@/shared/lib/useGridColumns';
+import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
+import { GalleryLightboxModal } from '@/features/gallery/components/GalleryLightboxModal';
+import type { GalleryItem } from '@/features/gallery/types';
 import './YogaSchedulePage.css';
 
 const DAYS_OF_WEEK: { key: DayOfWeek; label: string }[] = [
@@ -49,6 +52,8 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const [selectedProgramId, setSelectedProgramId] = useState<string>(
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
+  const [activeLightbox, setActiveLightbox] = useState<GalleryItem | null>(null);
+  const { items: yogaGalleryItems } = usePublicGallery('yoga');
   const yogaGridRef = useRef<HTMLDivElement>(null);
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
@@ -328,35 +333,31 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
 
             <div className="yoga-atmosphere-grid">
-              <div className="yoga-atmosphere-item">
-                <img src="/yoga/yoga-1.jpg" alt="Therapeutic Asana Alignment" loading="lazy" />
-                <div className="atmosphere-caption">
-                  <h4>Therapeutic Asana Alignment</h4>
-                  <p>Gentle posture guidance in a tranquil healing setting.</p>
+              {yogaGalleryItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="yoga-atmosphere-item"
+                  onClick={() => setActiveLightbox(item)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <img src={item.imageUrl} alt={item.title} loading="lazy" />
+                  <div className="atmosphere-caption">
+                    <h4>{item.title}</h4>
+                    {item.description && <p>{item.description}</p>}
+                  </div>
                 </div>
-              </div>
-
-              <div className="yoga-atmosphere-item">
-                <img src="/yoga/yoga-2.jpg" alt="Pranayama & Breath Awareness" loading="lazy" />
-                <div className="atmosphere-caption">
-                  <h4>Pranayama &amp; Breath Awareness</h4>
-                  <p>Breathing techniques to calm nervous strain.</p>
-                </div>
-              </div>
-
-              <div className="yoga-atmosphere-item">
-                <img src="/yoga/yoga-3.jpg" alt="Restorative Mind-Body Recovery" loading="lazy" />
-                <div className="atmosphere-caption">
-                  <h4>Restorative Mind-Body Recovery</h4>
-                  <p>Harmonizing movement, conscious breathing, and deep relaxation.</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </section>
 
         <YogaBookingCard />
       </main>
+
+      <GalleryLightboxModal
+        item={activeLightbox}
+        onClose={() => setActiveLightbox(null)}
+      />
 
       <Footer />
     </div>

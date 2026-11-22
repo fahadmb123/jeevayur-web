@@ -866,7 +866,7 @@
 
 .yoga-atmosphere-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
 }
 
@@ -883,6 +883,13 @@
   border-radius: 16px;
   overflow: hidden;
   box-shadow: var(--card-shadow);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.yoga-atmosphere-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(18, 76, 56, 0.12);
+  border-color: var(--accent-gold, #C98D3B);
 }
 
 .yoga-atmosphere-item img {
@@ -890,6 +897,11 @@
   aspect-ratio: 16 / 10;
   object-fit: cover;
   display: block;
+  transition: transform 0.4s ease;
+}
+
+.yoga-atmosphere-item:hover img {
+  transform: scale(1.03);
 }
 
 .atmosphere-caption {
