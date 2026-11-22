@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, Plus, RotateCcw } from 'lucide-react';
+import { Search, Plus } from 'lucide-react';
 import { DAYS_OF_WEEK } from '../../types/yoga.types';
 import './YogaFilterBar.css';
 
@@ -13,7 +13,6 @@ interface YogaFilterBarProps {
   selectedLevel: string;
   onLevelSelect: (level: string) => void;
   onAddClick: () => void;
-  onResetDefaults?: () => void;
 }
 
 export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
@@ -26,11 +25,9 @@ export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
   selectedLevel,
   onLevelSelect,
   onAddClick,
-  onResetDefaults,
 }) => {
   return (
     <div className="yoga-filter-bar">
-      {/* Top Search, Filter Selectors & Add Button */}
       <div className="yoga-filter-bar__top-row">
         <div className="yoga-filter-bar__search-wrap">
           <Search size={18} className="yoga-filter-bar__search-icon" />
@@ -44,7 +41,6 @@ export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
         </div>
 
         <div className="yoga-filter-bar__selectors">
-          {/* Format Select */}
           <select
             className="yoga-filter-bar__select"
             value={selectedFormat}
@@ -56,7 +52,6 @@ export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
             <option value="online">Live Stream (Online)</option>
           </select>
 
-          {/* Level Select */}
           <select
             className="yoga-filter-bar__select"
             value={selectedLevel}
@@ -70,36 +65,21 @@ export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
             <option value="All Levels">All Levels</option>
           </select>
 
-          {onResetDefaults && (
-            <button
-              type="button"
-              className="yoga-card__btn-edit"
-              onClick={onResetDefaults}
-              title="Reset sample classes"
-            >
-              <RotateCcw size={15} />
-            </button>
-          )}
-
-          {/* Add Session CTA */}
           <button
             type="button"
             className="yoga-filter-bar__btn-add"
             onClick={onAddClick}
           >
             <Plus size={18} />
-            <span>Add Yoga Class</span>
+            <span>Schedule New Class</span>
           </button>
         </div>
       </div>
 
-      {/* 7-Day Calendar Filter Strip */}
-      <div className="yoga-filter-bar__days-track" role="tablist" aria-label="Filter by day of week">
+      <div className="yoga-filter-bar__days-strip" role="tablist">
         <button
           type="button"
-          role="tab"
-          aria-selected={selectedDay === 'All'}
-          className={`yoga-filter-bar__day-btn ${selectedDay === 'All' ? 'active' : ''}`}
+          className={`yoga-filter-bar__day-chip ${selectedDay === 'All' ? 'active' : ''}`}
           onClick={() => onDaySelect('All')}
         >
           All Days (Weekly)
@@ -109,9 +89,7 @@ export const YogaFilterBar: React.FC<YogaFilterBarProps> = React.memo(({
           <button
             key={day}
             type="button"
-            role="tab"
-            aria-selected={selectedDay === day}
-            className={`yoga-filter-bar__day-btn ${selectedDay === day ? 'active' : ''}`}
+            className={`yoga-filter-bar__day-chip ${selectedDay === day ? 'active' : ''}`}
             onClick={() => onDaySelect(day)}
           >
             {day}

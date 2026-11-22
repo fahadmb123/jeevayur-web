@@ -11,13 +11,11 @@ export const useYogaSchedule = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Filters
   const [selectedDay, setSelectedDay] = useState<string>('All');
   const [selectedFormat, setSelectedFormat] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingSession, setEditingSession] = useState<YogaSession | null>(null);
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
@@ -60,7 +58,6 @@ export const useYogaSchedule = () => {
     };
   }, []);
 
-  // Flash message helper
   const showToast = useCallback((message: string) => {
     setActionSuccessMessage(message);
     setTimeout(() => {
@@ -68,21 +65,17 @@ export const useYogaSchedule = () => {
     }, 3500);
   }, []);
 
-  // Filtered Sessions
   const filteredSessions = useMemo(() => {
     return sessions.filter((session) => {
-      // Day filter
       if (selectedDay !== 'All') {
         const matchesDay = session.days.includes(selectedDay as DayOfWeek);
         if (!matchesDay) return false;
       }
 
-      // Format filter (online / offline)
       if (selectedFormat !== 'all' && session.format !== selectedFormat) {
         return false;
       }
 
-      // Level / Suitable For filter
       if (selectedLevel !== 'all') {
         const matchesLevel = session.level === selectedLevel;
         const matchesSuitable = session.suitableFor?.toLowerCase().includes(selectedLevel.toLowerCase());
@@ -91,7 +84,6 @@ export const useYogaSchedule = () => {
         }
       }
 
-      // Search Query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesTitle = session.title.toLowerCase().includes(q);
@@ -107,7 +99,6 @@ export const useYogaSchedule = () => {
     });
   }, [sessions, selectedDay, selectedFormat, selectedLevel, searchQuery]);
 
-  // Handlers for Add / Edit / Delete
   const handleOpenAddModal = useCallback(() => {
     setEditingSession(null);
     setIsModalOpen(true);
@@ -155,20 +146,11 @@ export const useYogaSchedule = () => {
     }
   }, [showToast]);
 
-  const handleResetDefaults = useCallback(async () => {
-    if (window.confirm('Reset schedule to default Ayurvedic yoga timetable?')) {
-      const defaults = await yogaService.resetDefaults();
-      setSessions(defaults);
-      showToast('Yoga schedule reset to default sessions.');
-    }
-  }, [showToast]);
-
   return {
     sessions,
     filteredSessions,
     isLoading,
     error,
-    // Filters
     selectedDay,
     setSelectedDay,
     selectedFormat,
@@ -177,7 +159,6 @@ export const useYogaSchedule = () => {
     setSelectedLevel,
     searchQuery,
     setSearchQuery,
-    // Modal
     isModalOpen,
     editingSession,
     actionSuccessMessage,
@@ -186,7 +167,6 @@ export const useYogaSchedule = () => {
     handleCloseModal,
     handleSaveSession,
     handleDeleteSession,
-    handleResetDefaults,
     refresh: fetchSessions,
   };
 };
