@@ -76,10 +76,6 @@ export const NotFoundPage = createLazyComponent(() =>
   import('@/features/home/pages/NotFoundPage').then((m) => ({ default: m.NotFoundPage }))
 );
 
-export const LoginPage = createLazyComponent(() =>
-  import('@/features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage }))
-);
-
 export const ForgotPasswordPage = createLazyComponent(() =>
   import('@/features/auth/pages/ForgotPasswordPage').then((m) => ({ default: m.ForgotPasswordPage }))
 );

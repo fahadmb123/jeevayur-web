@@ -1,5 +1,4 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import {
   Sparkles,
   Plus,
@@ -207,12 +206,7 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
 
           {/* Yoga Classes Grid */}
           {!isLoading && filteredSessions.length > 0 && (
-            <motion.div
-              className="doctor-yoga-grid"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3 }}
-            >
+            <div className="doctor-yoga-grid">
               {filteredSessions.map((session) => (
                 <YogaClassCard
                   key={session.id}
@@ -221,7 +215,7 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
                   onDelete={handleDeleteSession}
                 />
               ))}
-            </motion.div>
+            </div>
           )}
 
           {/* Empty State */}

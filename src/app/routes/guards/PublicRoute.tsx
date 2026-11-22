@@ -2,7 +2,6 @@ import React from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/shared/config/routes';
-import { LoadingScreen } from '@/shared/ui';
 
 export interface PublicRouteProps {
   children?: React.ReactNode;
@@ -15,12 +14,8 @@ export const PublicRoute: React.FC<PublicRouteProps> = ({
   redirectTo,
   restricted = true,
 }) => {
-  const { isAuthenticated, user, loading } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const location = useLocation();
-
-  if (loading) {
-    return <LoadingScreen fullScreen message="Verifying session..." />;
-  }
 
   if (restricted && isAuthenticated) {
     const rawFrom = (location.state as { from?: Location | string })?.from;
