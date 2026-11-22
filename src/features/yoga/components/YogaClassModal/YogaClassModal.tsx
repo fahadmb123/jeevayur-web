@@ -330,19 +330,17 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               Billing Frequency / Unit <span className="required">*</span>
             </label>
             <div
-              className={`yoga-modal__input-prefix-wrap ${
+              className={`yoga-modal__unit-input-wrap ${
                 errors.priceUnit ? 'has-error' : ''
               }`}
             >
-              <span className="yoga-modal__input-prefix">per</span>
+              <span className="yoga-modal__unit-prefix">per</span>
               <input
                 id="yoga-price-unit"
                 type="text"
                 list="price-unit-presets"
-                className={`yoga-modal__input ${
-                  errors.priceUnit ? 'has-error' : ''
-                }`}
-                placeholder="e.g. session, class, month"
+                className="yoga-modal__unit-field"
+                placeholder="session, class, month"
                 aria-invalid={Boolean(errors.priceUnit)}
                 {...register('priceUnit')}
               />
