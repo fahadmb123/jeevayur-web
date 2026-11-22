@@ -145,8 +145,28 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
     setError(null);
   };
 
+  const hasChanges = Boolean(
+    editingItem &&
+      (category !== editingItem.category ||
+        title.trim() !== editingItem.title.trim() ||
+        (description || '').trim() !== (editingItem.description || '').trim() ||
+        selectedFile !== null ||
+        (uploadMode === 'url' && imageUrl.trim() !== (editingItem.imageUrl || '').trim()) ||
+        (imagePreview !== editingItem.imageUrl && imagePreview.length > 0))
+  );
+
+  const isSubmitDisabled =
+    isSubmitting ||
+    !title.trim() ||
+    (editingItem
+      ? !hasChanges
+      : uploadMode === 'file'
+      ? !selectedFile && !imagePreview.trim()
+      : !imageUrl.trim());
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitDisabled) return;
     if (!title.trim()) {
       setError('Please enter an image title.');
       return;
@@ -428,7 +448,8 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
               <button
                 type="submit"
                 className={`add-gallery-modal__submit-btn add-gallery-modal__submit-btn--${category}`}
-                disabled={isSubmitting}
+                disabled={isSubmitDisabled}
+                title={editingItem && !hasChanges ? 'Make changes before saving' : undefined}
               >
                 {isSubmitting ? (
                   <span>{editingItem ? 'Saving Changes...' : 'Publishing...'}</span>

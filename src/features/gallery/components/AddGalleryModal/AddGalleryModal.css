@@ -789,9 +789,16 @@
 }
 
 .add-gallery-modal__submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.45;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
+  filter: grayscale(0.25);
+}
+
+.add-gallery-modal__submit-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 .add-gallery-modal__spinner {
