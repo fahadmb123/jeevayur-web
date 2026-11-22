@@ -124,21 +124,77 @@ export const INITIAL_GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
+export interface GalleryCounts {
+  total: number;
+  yoga: number;
+  treatment: number;
+}
+
+export interface GalleryFetchResult {
+  items: GalleryItem[];
+  counts: GalleryCounts;
+}
+
 export const galleryService = {
-  async getItems(): Promise<GalleryItem[]> {
+  async getItems(category?: string, search?: string): Promise<GalleryFetchResult> {
     try {
-      const response = await apiClient.get<{ success: boolean; data: GalleryItem[] }>('/api/gallery');
-      if (response && response.success && Array.isArray(response.data)) {
-        const mapped = response.data.map((item) => ({
-          ...item,
-          imageUrl: resolveImageUrl(item.imageUrl),
-        }));
-        this.cacheItems(mapped);
-        return mapped;
+      const params = new URLSearchParams();
+      if (category && category !== 'all') {
+        params.append('category', category.toLowerCase());
+      }
+      if (search && search.trim() !== '') {
+        params.append('search', search.trim());
+      }
+      const queryString = params.toString();
+      const endpoint = queryString ? `/api/gallery?${queryString}` : '/api/gallery';
+
+      const response = await apiClient.get<{
+        success: boolean;
+        data:
+          | GalleryItem[]
+          | { items: GalleryItem[]; counts: { total: number; yoga: number; treatment: number } };
+      }>(endpoint);
+
+      if (response && response.success && response.data) {
+        if (Array.isArray(response.data)) {
+          const mapped = response.data.map((item) => ({
+            ...item,
+            imageUrl: resolveImageUrl(item.imageUrl),
+          }));
+          return {
+            items: mapped,
+            counts: {
+              total: mapped.length,
+              yoga: mapped.filter((i) => i.category === 'yoga').length,
+              treatment: mapped.filter((i) => i.category === 'treatment').length,
+            },
+          };
+        } else if (response.data && Array.isArray(response.data.items)) {
+          const mapped = response.data.items.map((item) => ({
+            ...item,
+            imageUrl: resolveImageUrl(item.imageUrl),
+          }));
+          return {
+            items: mapped,
+            counts: response.data.counts || {
+              total: mapped.length,
+              yoga: mapped.filter((i) => i.category === 'yoga').length,
+              treatment: mapped.filter((i) => i.category === 'treatment').length,
+            },
+          };
+        }
       }
     } catch {
     }
-    return this.getCachedItems();
+    const cached = this.getCachedItems();
+    return {
+      items: cached,
+      counts: {
+        total: cached.length,
+        yoga: cached.filter((i) => i.category === 'yoga').length,
+        treatment: cached.filter((i) => i.category === 'treatment').length,
+      },
+    };
   },
 
   getCachedItems(): GalleryItem[] {

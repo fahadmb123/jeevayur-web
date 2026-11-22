@@ -1,14 +1,20 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { GalleryItem, GalleryCategory, GalleryFormData } from '../types';
-import { galleryService } from '../services/galleryService';
+import { galleryService, type GalleryCounts } from '../services/galleryService';
 
 export type GalleryFilterTab = 'all' | GalleryCategory;
 
 export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
   const [items, setItems] = useState<GalleryItem[]>(() => galleryService.getCachedItems());
+  const [counts, setCounts] = useState<GalleryCounts>({
+    total: 0,
+    yoga: 0,
+    treatment: 0,
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<GalleryFilterTab>(initialCategory);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
   const [deleteConfirmItem, setDeleteConfirmItem] = useState<{ id: string; title: string } | null>(null);
@@ -16,21 +22,26 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
   const [activeLightboxItem, setActiveLightboxItem] = useState<GalleryItem | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
   const loadGallery = useCallback(async () => {
     try {
-      const data = await galleryService.getItems();
-      setItems(data);
+      setIsLoading(true);
+      const res = await galleryService.getItems(selectedCategory, debouncedSearch);
+      setItems(res.items);
+      setCounts(res.counts);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [selectedCategory, debouncedSearch]);
 
   useEffect(() => {
     loadGallery();
-    const unsubscribe = galleryService.subscribe(() => {
-      setItems(galleryService.getCachedItems());
-    });
-    return unsubscribe;
   }, [loadGallery]);
 
   useEffect(() => {
@@ -39,35 +50,6 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
       return () => clearTimeout(timer);
     }
   }, [feedbackMessage]);
-
-  const yogaCount = useMemo(
-    () => items.filter((item) => item.category === 'yoga').length,
-    [items]
-  );
-
-  const treatmentCount = useMemo(
-    () => items.filter((item) => item.category === 'treatment').length,
-    [items]
-  );
-
-  const totalCount = items.length;
-
-  const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      const matchesCategory =
-        selectedCategory === 'all' ? true : item.category === selectedCategory;
-
-      const matchesSearch =
-        searchQuery.trim() === ''
-          ? true
-          : item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (item.description &&
-              item.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
-            (item.author && item.author.toLowerCase().includes(searchQuery.toLowerCase()));
-
-      return matchesCategory && matchesSearch;
-    });
-  }, [items, selectedCategory, searchQuery]);
 
   const handleAddItem = useCallback(async (data: GalleryFormData) => {
     const newItem = await galleryService.addItem(data);
@@ -139,14 +121,14 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
   return {
     items,
     isLoading,
-    filteredItems,
+    filteredItems: items,
     selectedCategory,
     setSelectedCategory,
     searchQuery,
     setSearchQuery,
-    totalCount,
-    yogaCount,
-    treatmentCount,
+    totalCount: counts.total,
+    yogaCount: counts.yoga,
+    treatmentCount: counts.treatment,
     isModalOpen,
     setIsModalOpen,
     editingItem,
