@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { motion } from 'framer-motion';
 import {
   Calendar,
   Clock,
@@ -25,7 +24,7 @@ import './RequestCard.css';
 
 export interface RequestCardProps {
   request: PatientRequest;
-  index: number;
+  index?: number;
   onAccept: (request: PatientRequest) => void;
   onReject: (request: PatientRequest) => void;
   onViewDetails: (request: PatientRequest) => void;
@@ -34,7 +33,6 @@ export interface RequestCardProps {
 
 export const RequestCard: React.FC<RequestCardProps> = React.memo(({
   request,
-  index,
   onAccept,
   onReject,
   onViewDetails,
@@ -57,12 +55,7 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
   const isOnline = request.mode === 'Video Call';
 
   return (
-    <motion.div
-      className={`consult-card consult-card--${request.status}`}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, delay: index * 0.04 }}
-    >
+    <div className={`consult-card consult-card--${request.status}`}>
       <div className="consult-card__header">
         <div className="consult-card__patient">
           <PatientAvatar name={request.patientName} id={request.id} size={42} />
@@ -192,7 +185,7 @@ export const RequestCard: React.FC<RequestCardProps> = React.memo(({
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 });
 

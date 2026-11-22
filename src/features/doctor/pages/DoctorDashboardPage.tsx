@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, type Variants } from 'framer-motion';
 import { DoctorStats } from '../components/DoctorStats/index';
 import { RecentPatientsWidget, usePatients } from '@/features/patients';
 import { TodayScheduleWidget, useAppointments } from '@/features/appointments';
@@ -12,19 +11,6 @@ import {
   type FilterPillConfig,
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import './DoctorDashboardPage.css';
-
-const gridVariants: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.1 },
-  },
-};
-
-const cardItemVariants: Variants = {
-  hidden: { y: 20, opacity: 0 },
-  show: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 300, damping: 24 } },
-};
 
 type DashboardTabFilter = 'all' | 'schedule' | 'patients' | 'uncompleted' | 'completed';
 
@@ -171,13 +157,9 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   return (
     <div className="doctor-dashboard-content">
       <div className="doctor-greeting-section">
-        <motion.h1
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          className="doctor-greeting-title"
-        >
+        <h1 className="doctor-greeting-title">
           Good Morning, <span className="doctor-greeting-highlight">{doctorGreetingName}</span>
-        </motion.h1>
+        </h1>
         <p className="doctor-greeting-sub">
           Here is what's happening with your clinic today.
         </p>
@@ -196,11 +178,8 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         pills={pills}
       />
 
-      <motion.div
+      <div
         className="doctor-dashboard-grid"
-        variants={gridVariants}
-        initial="hidden"
-        animate="show"
         style={{
           gridTemplateColumns: showPatients && showSchedule ? undefined : '1fr',
         }}
@@ -209,17 +188,15 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           <RecentPatientsWidget
             patients={filteredPatients}
             searchFilter={searchQuery}
-            variants={cardItemVariants}
             onViewAll={() => navigate(ROUTES.DOCTOR_PATIENTS)}
           />
         )}
         {showSchedule && (
           <TodayScheduleWidget
             appointments={filteredAppointments}
-            variants={cardItemVariants}
           />
         )}
-      </motion.div>
+      </div>
     </div>
   );
 });
