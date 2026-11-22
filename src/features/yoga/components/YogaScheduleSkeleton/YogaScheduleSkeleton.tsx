@@ -59,7 +59,10 @@ export const YogaClassCardSkeleton: React.FC<YogaClassCardSkeletonProps> = React
       <>
         {Array.from({ length: count }).map((_, idx) => (
           <article key={idx} className="yoga-card yoga-card--skeleton" aria-hidden="true">
-            <div className="yoga-card__image-container--skeleton yoga-skeleton-box" />
+            <div className="yoga-card__top-bar">
+              <div className="yoga-skeleton-box" style={{ width: '80px', height: '24px', borderRadius: '20px' }} />
+              <div className="yoga-skeleton-box" style={{ width: '60px', height: '24px', borderRadius: '20px' }} />
+            </div>
 
             <div className="yoga-card__body">
               <div className="yoga-card__header">

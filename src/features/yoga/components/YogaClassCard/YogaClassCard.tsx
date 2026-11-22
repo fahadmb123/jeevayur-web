@@ -42,28 +42,22 @@ export const YogaClassCard: React.FC<YogaClassCardProps> = React.memo(({
 
   return (
     <article className="yoga-card" aria-label={session.title}>
-      <div className="yoga-card__image-container">
-        <img
-          src={session.imageUrl}
-          alt={session.title}
-          className="yoga-card__image"
-          loading="lazy"
-        />
-        <div className="yoga-card__image-overlay">
-          <div className="yoga-card__badge-group">
-            <span
-              className={`yoga-card__format-badge yoga-card__format-badge--${session.format}`}
-            >
-              {formatIcon}
-              {formatLabel}
-            </span>
-            <span className="yoga-card__level-badge">{session.level}</span>
-          </div>
-          <span className="yoga-card__duration-badge">
-            <Clock size={12} />
-            {session.duration}
+      <div className="yoga-card__top-bar">
+        <div className="yoga-card__badge-group">
+          <span
+            className={`yoga-card__format-badge yoga-card__format-badge--${session.format}`}
+          >
+            {formatIcon}
+            {formatLabel}
           </span>
+          {session.level && (
+            <span className="yoga-card__level-badge">{session.level}</span>
+          )}
         </div>
+        <span className="yoga-card__duration-badge">
+          <Clock size={12} />
+          {session.duration}
+        </span>
       </div>
 
       <div className="yoga-card__body">
@@ -77,7 +71,6 @@ export const YogaClassCard: React.FC<YogaClassCardProps> = React.memo(({
           )}
         </div>
 
-        {/* Days Schedule */}
         <div className="yoga-card__days-schedule">
           <div className="yoga-card__days-row">
             {ALL_DAYS_SHORT.map((day) => {
@@ -95,7 +88,6 @@ export const YogaClassCard: React.FC<YogaClassCardProps> = React.memo(({
           </div>
         </div>
 
-        {/* Metadata Details */}
         <div className="yoga-card__meta-tags">
           <div className="yoga-card__meta-item">
             <Target size={14} />
