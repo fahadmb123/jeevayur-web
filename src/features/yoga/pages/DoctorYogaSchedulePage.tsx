@@ -216,7 +216,6 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
               type="button"
               className="doctor-yoga-btn-add"
               onClick={handleOpenAddModal}
-              style={{ marginTop: '8px' }}
             >
               <Sparkles size={16} />
               <span>Add Yoga Class</span>
