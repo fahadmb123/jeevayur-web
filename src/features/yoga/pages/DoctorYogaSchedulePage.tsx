@@ -12,6 +12,7 @@ import {
 import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaClassCard } from '../components/YogaClassCard';
 import { YogaClassModal } from '../components/YogaClassModal';
+import { DeleteYogaConfirmModal } from '../components/DeleteYogaConfirmModal';
 import { YogaClassCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { DAYS_OF_WEEK } from '../types/yoga.types';
 import './DoctorYogaSchedulePage.css';
@@ -32,12 +33,16 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
     setSearchQuery,
     isModalOpen,
     editingSession,
+    sessionToDelete,
+    isDeleting,
     actionSuccessMessage,
     handleOpenAddModal,
     handleOpenEditModal,
     handleCloseModal,
     handleSaveSession,
     handleDeleteSession,
+    handleCancelDelete,
+    handleConfirmDelete,
   } = useYogaSchedule();
 
   const totalClasses = sessions.length;
@@ -229,6 +234,14 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
         onClose={handleCloseModal}
         onSave={handleSaveSession}
         initialData={editingSession}
+      />
+
+      <DeleteYogaConfirmModal
+        isOpen={Boolean(sessionToDelete)}
+        title={sessionToDelete?.title || ''}
+        isDeleting={isDeleting}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
       />
 
       {actionSuccessMessage && (

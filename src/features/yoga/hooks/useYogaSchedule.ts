@@ -19,6 +19,8 @@ export const useYogaSchedule = () => {
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingSession, setEditingSession] = useState<YogaSession | null>(null);
+  const [sessionToDelete, setSessionToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -113,17 +115,29 @@ export const useYogaSchedule = () => {
     }
   }, [editingSession, handleCloseModal, showToast, fetchTotalSessions, fetchFilteredSessions]);
 
-  const handleDeleteSession = useCallback(async (id: string, title: string) => {
-    if (window.confirm(`Are you sure you want to remove "${title}" from the yoga schedule?`)) {
-      try {
-        await yogaService.delete(id);
-        showToast(`"${title}" has been removed.`);
-        await Promise.all([fetchTotalSessions(), fetchFilteredSessions()]);
-      } catch (err) {
-        console.error('Failed to delete session:', err);
-      }
+  const handleOpenDeleteModal = useCallback((id: string, title: string) => {
+    setSessionToDelete({ id, title });
+  }, []);
+
+  const handleCancelDelete = useCallback(() => {
+    if (isDeleting) return;
+    setSessionToDelete(null);
+  }, [isDeleting]);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!sessionToDelete) return;
+    setIsDeleting(true);
+    try {
+      await yogaService.delete(sessionToDelete.id);
+      showToast(`"${sessionToDelete.title}" has been removed.`);
+      setSessionToDelete(null);
+      await Promise.all([fetchTotalSessions(), fetchFilteredSessions()]);
+    } catch (err) {
+      console.error('Failed to delete session:', err);
+    } finally {
+      setIsDeleting(false);
     }
-  }, [showToast, fetchTotalSessions, fetchFilteredSessions]);
+  }, [sessionToDelete, showToast, fetchTotalSessions, fetchFilteredSessions]);
 
   return {
     sessions,
@@ -140,12 +154,17 @@ export const useYogaSchedule = () => {
     setSearchQuery,
     isModalOpen,
     editingSession,
+    sessionToDelete,
+    isDeleting,
     actionSuccessMessage,
     handleOpenAddModal,
     handleOpenEditModal,
     handleCloseModal,
     handleSaveSession,
-    handleDeleteSession,
+    handleDeleteSession: handleOpenDeleteModal,
+    handleOpenDeleteModal,
+    handleCancelDelete,
+    handleConfirmDelete,
     refresh: () => Promise.all([fetchTotalSessions(), fetchFilteredSessions()]),
   };
 };
