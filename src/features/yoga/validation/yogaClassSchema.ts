@@ -17,13 +17,33 @@ export const yogaClassSchema = z.object({
     .trim()
     .min(1, 'Yoga class name is required')
     .min(2, 'Class title must be at least 2 characters')
-    .max(100, 'Class title must not exceed 100 characters'),
+    .max(100, 'Class title must not exceed 100 characters')
+    .refine((val) => /[a-zA-Z]/.test(val), {
+      message: 'Class title must contain valid text characters',
+    }),
   format: z.enum(['offline', 'online']),
   duration: z
     .string()
     .trim()
     .min(1, 'Class duration is required')
-    .max(50, 'Duration is too long'),
+    .max(50, 'Duration is too long')
+    .refine((val) => !val.includes('-'), {
+      message: 'Duration cannot be negative',
+    })
+    .refine(
+      (val) => {
+        const num = parseInt(val.replace(/[^\d-]/g, ''), 10);
+        return !isNaN(num) && num > 0;
+      },
+      { message: 'Enter a valid positive duration in minutes (e.g. 60 mins)' }
+    )
+    .refine(
+      (val) => {
+        const num = parseInt(val.replace(/[^\d-]/g, ''), 10);
+        return !isNaN(num) && num <= 480;
+      },
+      { message: 'Duration cannot exceed 480 minutes (8 hours)' }
+    ),
   suitableFor: z
     .string()
     .trim()
@@ -35,12 +55,42 @@ export const yogaClassSchema = z.object({
     .string()
     .trim()
     .min(1, 'Price / fee amount is required')
-    .max(40, 'Price amount is too long'),
+    .max(40, 'Price amount is too long')
+    .refine((val) => !val.includes('-'), {
+      message: 'Price amount cannot be negative',
+    })
+    .refine(
+      (val) => {
+        const raw = val.replace(/^[₹$\s]+/, '').trim().toLowerCase();
+        if (
+          raw === 'free' ||
+          raw === 'complimentary' ||
+          raw === 'included' ||
+          raw === '0'
+        ) {
+          return true;
+        }
+        const numeric = Number(raw.replace(/,/g, ''));
+        return !isNaN(numeric) && numeric >= 0;
+      },
+      { message: 'Please enter a valid positive price (e.g. 500, ₹500, or Free)' }
+    ),
   priceUnit: z
     .string()
     .trim()
-    .min(1, 'Billing unit is required (e.g. session, class, month)')
-    .max(50, 'Billing unit is too long'),
+    .min(1, 'Billing unit is required')
+    .min(2, 'Billing unit must be at least 2 characters')
+    .max(30, 'Billing unit is too long')
+    .refine((val) => !val.includes('-'), {
+      message: 'Billing unit cannot contain negative signs',
+    })
+    .refine(
+      (val) => /^[a-zA-Z\s]+$/.test(val.replace(/^per\s+/i, '').trim()),
+      {
+        message:
+          'Billing unit must contain only letters (e.g. session, class, month)',
+      }
+    ),
   description: z
     .string()
     .trim()

@@ -104,8 +104,12 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
   const handleFormSubmit = async (values: YogaClassFormValues) => {
     try {
       setIsSubmitting(true);
+      const rawAmount = values.priceAmount.trim();
+      const normalizedAmount = /^\d+(\.\d{1,2})?$/.test(rawAmount)
+        ? `₹${rawAmount}`
+        : rawAmount;
       const computedPrice = formatPriceString(
-        values.priceAmount,
+        normalizedAmount,
         values.priceUnit
       );
       const normalizedUnit = values.priceUnit.trim().replace(/^per\s+/i, '');
@@ -116,7 +120,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         suitableFor: values.suitableFor.trim(),
         days: values.days,
         price: computedPrice,
-        priceAmount: values.priceAmount.trim(),
+        priceAmount: normalizedAmount,
         priceUnit: normalizedUnit,
         description: values.description.trim(),
         scheduleItems: values.days.map((day) => ({
@@ -221,6 +225,9 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               placeholder="e.g. 60 mins"
               aria-invalid={Boolean(errors.duration)}
               {...register('duration')}
+              onKeyDown={(e) => {
+                if (e.key === '-' || e.key === 'Minus') e.preventDefault();
+              }}
             />
             <datalist id="duration-list">
               {DURATION_PRESETS.map((p) => (
@@ -307,6 +314,9 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
               placeholder="e.g. ₹500 or 500"
               aria-invalid={Boolean(errors.priceAmount)}
               {...register('priceAmount')}
+              onKeyDown={(e) => {
+                if (e.key === '-' || e.key === 'Minus') e.preventDefault();
+              }}
             />
             {errors.priceAmount && (
               <span className="yoga-modal__error-hint" role="alert">
@@ -333,6 +343,9 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
                 placeholder="session, class, month"
                 aria-invalid={Boolean(errors.priceUnit)}
                 {...register('priceUnit')}
+                onKeyDown={(e) => {
+                  if (e.key === '-' || e.key === 'Minus') e.preventDefault();
+                }}
               />
             </div>
             {errors.priceUnit && (
