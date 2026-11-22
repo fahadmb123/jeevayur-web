@@ -187,7 +187,7 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
 
           {isLoading && (
             <div className="doctor-yoga-grid" role="status" aria-label="Loading yoga schedule">
-              <YogaClassCardSkeleton count={6} />
+              <YogaClassCardSkeleton />
             </div>
           )}
 

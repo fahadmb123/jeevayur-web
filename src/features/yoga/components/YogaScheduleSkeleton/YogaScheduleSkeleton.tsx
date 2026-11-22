@@ -1,4 +1,5 @@
 import React from 'react';
+import { useResponsiveSkeletonCount } from '@/shared/lib/useResponsiveSkeletonCount';
 import './YogaScheduleSkeleton.css';
 
 export interface YogaTimetableCardSkeletonProps {
@@ -6,7 +7,12 @@ export interface YogaTimetableCardSkeletonProps {
 }
 
 export const YogaTimetableCardSkeleton: React.FC<YogaTimetableCardSkeletonProps> = React.memo(
-  ({ count = 4 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 8, wide: 12 },
+      explicitCount
+    );
+
     return (
       <>
         {Array.from({ length: count }).map((_, idx) => (
@@ -43,7 +49,12 @@ export interface YogaClassCardSkeletonProps {
 }
 
 export const YogaClassCardSkeleton: React.FC<YogaClassCardSkeletonProps> = React.memo(
-  ({ count = 6 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 6, wide: 9 },
+      explicitCount
+    );
+
     return (
       <>
         {Array.from({ length: count }).map((_, idx) => (

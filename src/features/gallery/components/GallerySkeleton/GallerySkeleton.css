@@ -148,3 +148,10 @@
   height: 32px;
   border-radius: 8px;
 }
+
+@media (max-width: 640px) {
+  .doctor-gallery-page__grid--skeleton > .doctor-gallery-card--skeleton:nth-child(n+3) {
+    display: none;
+  }
+}
+

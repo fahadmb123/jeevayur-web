@@ -232,7 +232,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
       <Card className="doctor-consult-card">
         <div className="doctor-consult-list">
           {loading ? (
-            <RequestCardSkeleton count={3} />
+            <RequestCardSkeleton />
           ) : filteredRequests.length > 0 ? (
             filteredRequests.map((request, index) => (
               <RequestCard

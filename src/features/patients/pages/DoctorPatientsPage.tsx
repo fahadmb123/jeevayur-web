@@ -184,7 +184,7 @@ export const DoctorPatientsPage: React.FC = React.memo(() => {
             </thead>
             <tbody>
               {loading ? (
-                <PatientListItemSkeleton count={6} />
+                <PatientListItemSkeleton />
               ) : patients.length > 0 ? (
                 patients.map((patient, index) => (
                   <PatientListItem

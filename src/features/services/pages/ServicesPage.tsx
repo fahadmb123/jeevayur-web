@@ -172,7 +172,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                   </p>
                 </div>
                 <div className="treatments-images-grid">
-                  <TreatmentCardSkeleton count={6} />
+                  <TreatmentCardSkeleton />
                 </div>
                 <div className="treatments-details-section">
                   <TreatmentDetailsCardSkeleton />

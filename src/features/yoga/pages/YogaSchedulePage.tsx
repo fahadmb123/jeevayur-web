@@ -241,7 +241,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
             {isLoading ? (
               <div className="yoga-classes-grid" role="status" aria-label="Loading timetable">
-                <YogaTimetableCardSkeleton count={4} />
+                <YogaTimetableCardSkeleton />
               </div>
             ) : filteredSessions.length === 0 ? (
               <div className="yoga-schedule-empty">

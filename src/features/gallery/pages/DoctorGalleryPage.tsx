@@ -171,7 +171,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
       />
 
       {isLoading ? (
-        <GalleryGridSkeleton count={6} />
+        <GalleryGridSkeleton />
       ) : filteredItems.length > 0 ? (
         <motion.div
           className="doctor-gallery-page__grid"

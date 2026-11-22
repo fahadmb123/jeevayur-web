@@ -1,4 +1,5 @@
 import React from 'react';
+import { useResponsiveSkeletonCount } from '@/shared/lib/useResponsiveSkeletonCount';
 import './GallerySkeleton.css';
 
 export interface GallerySkeletonProps {
@@ -6,7 +7,12 @@ export interface GallerySkeletonProps {
 }
 
 export const GalleryCardSkeleton: React.FC<GallerySkeletonProps> = React.memo(
-  ({ count = 6 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 8, wide: 12 },
+      explicitCount
+    );
+
     return (
       <>
         {Array.from({ length: count }).map((_, idx) => (
@@ -53,7 +59,12 @@ export const GalleryCardSkeleton: React.FC<GallerySkeletonProps> = React.memo(
 GalleryCardSkeleton.displayName = 'GalleryCardSkeleton';
 
 export const GalleryGridSkeleton: React.FC<GallerySkeletonProps> = React.memo(
-  ({ count = 6 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 8, wide: 12 },
+      explicitCount
+    );
+
     return (
       <div
         className="doctor-gallery-page__grid doctor-gallery-page__grid--skeleton"
