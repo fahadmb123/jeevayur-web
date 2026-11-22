@@ -1,5 +1,5 @@
-import React from 'react';
-import { AlertTriangle, Trash2, X, Cloud } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Trash2, X } from 'lucide-react';
 import './DeleteConfirmModal.css';
 
 interface DeleteConfirmModalProps {
@@ -17,45 +17,48 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   onClose,
   onConfirm,
 }) => {
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen && !isDeleting) {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, isDeleting, onClose]);
+
   if (!isOpen) return null;
 
   return (
     <div
       className="delete-confirm-modal__overlay"
-      onClick={onClose}
       role="dialog"
       aria-modal="true"
+      aria-labelledby="delete-confirm-title"
     >
-      <div
-        className="delete-confirm-modal__container"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="delete-confirm-modal__container">
         <button
           type="button"
           className="delete-confirm-modal__close-btn"
           onClick={onClose}
-          aria-label="Close modal"
+          aria-label="Close"
           disabled={isDeleting}
         >
-          <X size={18} />
+          <X size={16} />
         </button>
 
         <div className="delete-confirm-modal__content">
           <div className="delete-confirm-modal__icon-wrap">
-            <AlertTriangle size={28} />
+            <Trash2 size={20} />
           </div>
 
-          <h3 className="delete-confirm-modal__title">
-            Delete Image from Cloud?
-          </h3>
-
-          <p className="delete-confirm-modal__message">
-            Are you sure you want to remove <strong>"{title}"</strong>? This will permanently delete the image from <strong>Backblaze B2 Cloud Storage</strong> and the clinic database.
-          </p>
-
-          <div className="delete-confirm-modal__cloud-notice">
-            <Cloud size={16} />
-            <span>Files deleted from cloud storage cannot be recovered.</span>
+          <div className="delete-confirm-modal__text">
+            <h3 id="delete-confirm-title" className="delete-confirm-modal__title">
+              Delete image?
+            </h3>
+            <p className="delete-confirm-modal__message">
+              Are you sure you want to delete <strong>"{title}"</strong>? This action cannot be undone.
+            </p>
           </div>
         </div>
 
@@ -74,14 +77,7 @@ export const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             onClick={onConfirm}
             disabled={isDeleting}
           >
-            {isDeleting ? (
-              <span>Deleting...</span>
-            ) : (
-              <>
-                <Trash2 size={16} />
-                <span>Yes, Delete from Cloud</span>
-              </>
-            )}
+            {isDeleting ? 'Deleting...' : 'Delete'}
           </button>
         </div>
       </div>

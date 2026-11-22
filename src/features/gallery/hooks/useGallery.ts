@@ -116,7 +116,7 @@ export const useGallery = (initialCategory: GalleryFilterTab = 'all') => {
       const success = await galleryService.deleteItem(deleteConfirmItem.id);
       if (success) {
         await loadGallery();
-        setFeedbackMessage(`Image "${deleteConfirmItem.title}" permanently deleted from cloud storage and gallery.`);
+        setFeedbackMessage(`Image "${deleteConfirmItem.title}" deleted successfully.`);
         if (activeLightboxItem?.id === deleteConfirmItem.id) {
           setActiveLightboxItem(null);
         }

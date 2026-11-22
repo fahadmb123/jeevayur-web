@@ -68,13 +68,11 @@ export const ImageCropperModal: React.FC<ImageCropperModalProps> = ({
   return (
     <div
       className="image-cropper-modal__overlay"
-      onClick={onClose}
       role="dialog"
       aria-modal="true"
     >
       <div
         className="image-cropper-modal__container"
-        onClick={(e) => e.stopPropagation()}
       >
         <div className="image-cropper-modal__header">
           <div className="image-cropper-modal__header-left">

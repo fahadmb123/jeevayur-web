@@ -203,10 +203,9 @@ export const AddGalleryModal: React.FC<AddGalleryModalProps> = ({
 
   return (
     <>
-      <div className="add-gallery-modal__overlay" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="add-gallery-modal__overlay" role="dialog" aria-modal="true">
         <div
           className="add-gallery-modal__container"
-          onClick={(e) => e.stopPropagation()}
         >
           <div className="add-gallery-modal__header">
             <div className="add-gallery-modal__header-info">
