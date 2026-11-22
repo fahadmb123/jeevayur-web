@@ -15,6 +15,7 @@ import { useGallery } from '../hooks/useGallery';
 import { AddGalleryModal } from '../components/AddGalleryModal';
 import { GalleryLightboxModal } from '../components/GalleryLightboxModal';
 import { DeleteConfirmModal } from '../components/DeleteConfirmModal/DeleteConfirmModal';
+import { GalleryGridSkeleton } from '../components/GallerySkeleton/GallerySkeleton';
 import {
   DoctorSearchFilterStrip,
   type FilterPillConfig,
@@ -42,6 +43,7 @@ const DEFAULT_FALLBACK_IMAGE =
 export const DoctorGalleryPage: React.FC = React.memo(() => {
   const {
     filteredItems,
+    isLoading,
     selectedCategory,
     setSelectedCategory,
     searchQuery,
@@ -131,7 +133,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <ImageIcon size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{totalCount}</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : totalCount}</span>
             <span className="doctor-gallery-kpi__label">Total Media</span>
             <span className="doctor-gallery-kpi__sub">Clinic Showcase</span>
           </div>
@@ -142,7 +144,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <Sparkles size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{yogaCount}</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : yogaCount}</span>
             <span className="doctor-gallery-kpi__label">Yoga Sessions</span>
             <span className="doctor-gallery-kpi__sub">Asana & Dhyana</span>
           </div>
@@ -153,7 +155,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <Activity size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{treatmentCount}</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : treatmentCount}</span>
             <span className="doctor-gallery-kpi__label">Clinical Treatments</span>
             <span className="doctor-gallery-kpi__sub">Therapeutic Care</span>
           </div>
@@ -165,9 +167,12 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         onSearchChange={setSearchQuery}
         searchPlaceholder="Search images by title, treatment, or author..."
         pills={filterPills}
+        isLoading={isLoading}
       />
 
-      {filteredItems.length > 0 ? (
+      {isLoading ? (
+        <GalleryGridSkeleton count={6} />
+      ) : filteredItems.length > 0 ? (
         <motion.div
           className="doctor-gallery-page__grid"
           variants={containerVariants}
