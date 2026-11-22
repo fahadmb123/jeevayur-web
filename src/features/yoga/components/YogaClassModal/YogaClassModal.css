@@ -406,9 +406,10 @@
 }
 
 .yoga-modal__btn-submit:disabled {
-  opacity: 0.65;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 @media (max-width: 640px) {

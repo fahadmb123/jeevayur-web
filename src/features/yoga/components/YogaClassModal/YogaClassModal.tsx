@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { X, Video, MapPin, Sparkles, AlertCircle } from 'lucide-react';
@@ -73,7 +73,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
     handleSubmit,
     watch,
     setValue,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<YogaClassFormValues>({
     resolver: zodResolver(yogaClassSchema),
     mode: 'onChange',
@@ -81,11 +81,33 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
     defaultValues,
   });
 
-  const selectedFormat = watch('format');
-  const selectedDays = watch('days') || [];
-  const selectedTime = watch('time');
-  const currentPriceAmount = watch('priceAmount');
-  const currentPriceUnit = watch('priceUnit');
+  const watchedValues = watch();
+  const selectedFormat = watchedValues.format;
+  const selectedDays = watchedValues.days || [];
+  const selectedTime = watchedValues.time;
+  const currentPriceAmount = watchedValues.priceAmount;
+  const currentPriceUnit = watchedValues.priceUnit;
+
+  const hasChanges = useMemo(() => {
+    if (!isEditing) return true;
+    if ((watchedValues.title ?? '').trim() !== (defaultValues.title ?? '').trim()) return true;
+    if (watchedValues.format !== defaultValues.format) return true;
+    if ((watchedValues.duration ?? '').trim() !== (defaultValues.duration ?? '').trim()) return true;
+    if (watchedValues.time !== defaultValues.time) return true;
+    if (watchedValues.time === 'custom' && (watchedValues.customTime ?? '').trim() !== (defaultValues.customTime ?? '').trim()) return true;
+    if (watchedValues.suitableFor !== defaultValues.suitableFor) return true;
+    if ((watchedValues.priceAmount ?? '').trim() !== (defaultValues.priceAmount ?? '').trim()) return true;
+    if ((watchedValues.priceUnit ?? '').trim() !== (defaultValues.priceUnit ?? '').trim()) return true;
+    if ((watchedValues.description ?? '').trim() !== (defaultValues.description ?? '').trim()) return true;
+
+    const currentDays = watchedValues.days || [];
+    const defaultDays = defaultValues.days || [];
+    if (currentDays.length !== defaultDays.length) return true;
+    const daysEqual = currentDays.every((d) => defaultDays.includes(d));
+    if (!daysEqual) return true;
+
+    return Boolean(isDirty);
+  }, [isEditing, isDirty, watchedValues, defaultValues]);
 
   const handleFormatChange = (format: YogaFormat) => {
     setValue('format', format, {
@@ -469,7 +491,9 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
           <button
             type="submit"
             className="yoga-modal__btn-submit"
-            disabled={isSubmitting}
+            disabled={isSubmitting || (isEditing && !hasChanges)}
+            aria-disabled={isSubmitting || (isEditing && !hasChanges)}
+            title={isEditing && !hasChanges ? 'Make changes to update this class' : undefined}
           >
             <Sparkles size={16} />
             <span>
