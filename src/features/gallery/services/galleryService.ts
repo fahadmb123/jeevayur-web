@@ -1,6 +1,7 @@
 import type { GalleryItem, GalleryFormData } from '../types';
 import { apiClient } from '@/shared/lib/api/apiClient';
 import { environment } from '@/shared/config/environment';
+import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
 
 const GALLERY_STORAGE_KEY = 'jeevayurniketan_gallery_items_v2';
 const GALLERY_UPDATED_EVENT = 'jeevayurniketan_gallery_updated';
@@ -178,10 +179,17 @@ export const galleryService = {
         if (data.author) formData.append('author', data.author.trim());
         if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
 
+        const headers: Record<string, string> = {};
+        const token = tokenStorage.getAccessToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const url = `${environment.apiBaseUrl}/api/gallery`;
         const res = await fetch(url, {
           method: 'POST',
           credentials: 'include',
+          headers,
           body: formData,
         });
 
@@ -198,6 +206,8 @@ export const galleryService = {
             return item;
           }
         }
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message || 'Failed to upload image to gallery server.');
       } else if (data.imageUrl) {
         const response = await apiClient.post<{ success: boolean; data: GalleryItem }>('/api/gallery', {
           title: data.title.trim(),
@@ -252,10 +262,17 @@ export const galleryService = {
         if (data.author !== undefined) formData.append('author', (data.author || '').trim());
         if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
 
+        const headers: Record<string, string> = {};
+        const token = tokenStorage.getAccessToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const url = `${environment.apiBaseUrl}/api/gallery/${id}`;
         const res = await fetch(url, {
           method: 'PUT',
           credentials: 'include',
+          headers,
           body: formData,
         });
 
@@ -272,6 +289,8 @@ export const galleryService = {
             return item;
           }
         }
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message || 'Failed to update image on gallery server.');
       } else {
         const payload: Record<string, any> = {};
         if (data.title) payload.title = data.title.trim();
