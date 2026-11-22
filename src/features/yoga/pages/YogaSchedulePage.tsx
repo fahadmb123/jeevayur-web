@@ -57,33 +57,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const yogaGridRef = useRef<HTMLDivElement>(null);
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
-  const { hero, programs: defaultPrograms } = YOGAATHMA_DATA;
-
-  const programs: YogaProgram[] = useMemo(() => {
-    if (yogaGalleryItems.length > 0) {
-      return yogaGalleryItems.map((item, idx) => ({
-        id: item.id,
-        number: String(idx + 1).padStart(2, '0'),
-        title: item.title,
-        tagline: 'Authentic yogic harmony and breath awareness.',
-        categoryTag: 'YOGA & MEDITATION',
-        accentColor: '#1B6B50',
-        description: item.description || 'Guided mindful movement, restorative postures, and breath awareness to nurture vital prana.',
-        image: item.imageUrl,
-        idealForTitle: 'Ideal for:',
-        idealFor: [
-          'Beginners and experienced practitioners',
-          'Stress alleviation and nervous relaxation',
-          'Musculoskeletal flexibility and spinal mobility',
-          'Developing a healthy daily rhythm',
-        ],
-        focus: 'Mindful alignment, appropriate modifications, and sustainable practice.',
-        format: 'In-Shala & Live Stream',
-        duration: '45–60 mins',
-      }));
-    }
-    return defaultPrograms;
-  }, [yogaGalleryItems, defaultPrograms]);
+  const { hero, programs } = YOGAATHMA_DATA;
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 

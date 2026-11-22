@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { treatmentService } from '../services/treatmentService';
-import { galleryService } from '@/features/gallery/services/galleryService';
 import type { AyurvedaService, FaqItem } from '../types';
 
 export const useTreatments = (category = 'all', search = '') => {
@@ -10,24 +9,20 @@ export const useTreatments = (category = 'all', search = '') => {
 
   useEffect(() => {
     let mounted = true;
+    setLoading(true);
 
-    const loadData = () => {
-      setLoading(true);
+    const timer = setTimeout(() => {
       treatmentService.getServices({ category, search }).then((data) => {
         if (mounted) {
           setServices(data);
           setLoading(false);
         }
       });
-    };
-
-    const timer = setTimeout(loadData, search ? 250 : 0);
-    const unsubscribe = galleryService.subscribe(loadData);
+    }, search ? 250 : 0);
 
     return () => {
       mounted = false;
       clearTimeout(timer);
-      unsubscribe();
     };
   }, [category, search]);
 
