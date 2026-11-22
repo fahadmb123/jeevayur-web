@@ -700,6 +700,54 @@
   border: 1px solid var(--border-color, #E2E8DE);
 }
 
+.yoga-empty-state-large {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: clamp(48px, 6vw, 72px) 24px;
+  background: var(--surface-color, #FFFFFF);
+  border-radius: 20px;
+  border: 1px dashed var(--border-color, #D4DFD7);
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.yoga-empty-icon-large {
+  color: var(--primary-green, #1B6B50);
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+.yoga-empty-title-large {
+  font-family: var(--font-serif, 'Playfair Display', serif);
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  font-weight: 600;
+  color: #1A3026;
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+[data-theme='dark'] .yoga-empty-title-large,
+.dark .yoga-empty-title-large {
+  color: #E2ECE6;
+}
+
+.yoga-empty-desc-large {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 1.05rem;
+  color: #5A7065;
+  max-width: 480px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+[data-theme='dark'] .yoga-empty-desc-large,
+.dark .yoga-empty-desc-large {
+  color: #9EB5AA;
+}
+
 .yoga-empty-whatsapp-btn {
   display: inline-flex;
   align-items: center;

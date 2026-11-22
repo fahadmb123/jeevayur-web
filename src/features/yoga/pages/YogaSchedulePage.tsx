@@ -9,6 +9,7 @@ import {
   MessageCircle,
   Inbox,
   User,
+  Leaf,
 } from 'lucide-react';
 import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
@@ -144,10 +145,12 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             </div>
 
             {programs.length === 0 ? (
-              <div className="yoga-schedule-empty">
-                <Inbox size={32} className="text-accent-gold" />
-                <h4>No Yoga Programs Available</h4>
-                <p>New yoga programs and guided therapies will be announced soon.</p>
+              <div className="yoga-empty-state-large">
+                <Leaf size={48} className="yoga-empty-icon-large" />
+                <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
+                <p className="yoga-empty-desc-large">
+                  There are currently no yoga images or programs available in the gallery.
+                </p>
               </div>
             ) : (
               <>
@@ -363,22 +366,32 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </p>
             </div>
 
-            <div className="yoga-atmosphere-grid">
-              {yogaGalleryItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="yoga-atmosphere-item"
-                  onClick={() => setActiveLightbox(item)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <img src={item.imageUrl} alt={item.title} loading="lazy" />
-                  <div className="atmosphere-caption">
-                    <h4>{item.title}</h4>
-                    {item.description && <p>{item.description}</p>}
+            {yogaGalleryItems.length === 0 ? (
+              <div className="yoga-empty-state-large">
+                <Leaf size={48} className="yoga-empty-icon-large" />
+                <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
+                <p className="yoga-empty-desc-large">
+                  No practice atmosphere photographs have been uploaded yet.
+                </p>
+              </div>
+            ) : (
+              <div className="yoga-atmosphere-grid">
+                {yogaGalleryItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="yoga-atmosphere-item"
+                    onClick={() => setActiveLightbox(item)}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img src={item.imageUrl} alt={item.title} loading="lazy" />
+                    <div className="atmosphere-caption">
+                      <h4>{item.title}</h4>
+                      {item.description && <p>{item.description}</p>}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

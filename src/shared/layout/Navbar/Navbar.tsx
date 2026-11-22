@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { ROUTES } from '@/shared/config/routes';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ThemeToggle } from '@/shared/ui/ThemeToggle';
@@ -78,8 +79,14 @@ export const Navbar: React.FC = React.memo(() => {
                       to={link.path}
                       className={`navbar-link-item ${isActive ? 'active-link' : ''}`}
                     >
-                      {isActive && <span className="navbar-link-dot" aria-hidden="true" />}
-                      <span>{link.label}</span>
+                      {isActive && (
+                        <motion.div
+                          layoutId="navbar-active-pill"
+                          className="navbar-active-indicator"
+                          transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      <span className="navbar-link-text">{link.label}</span>
                     </Link>
                   </li>
                 );
@@ -146,7 +153,6 @@ export const Navbar: React.FC = React.memo(() => {
         </nav>
       </header>
 
-      {/* Mobile Drawer Navigation */}
       {isMobileMenuOpen && (
         <div className="mobile-menu-backdrop" onClick={() => setIsMobileMenuOpen(false)}>
           <div className="mobile-menu-drawer" onClick={(e) => e.stopPropagation()}>
