@@ -36,10 +36,9 @@ export const StartConsultationModal: React.FC<StartConsultationModalProps> = Rea
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="consult-modal-backdrop" onClick={onClose}>
+        <div className="consult-modal-backdrop">
           <motion.div
             className="consult-modal"
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}

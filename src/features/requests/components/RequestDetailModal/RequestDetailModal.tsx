@@ -56,10 +56,9 @@ export const RequestDetailModal: React.FC<RequestDetailModalProps> = React.memo(
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="consult-detail-backdrop" onClick={onClose}>
+        <div className="consult-detail-backdrop">
           <motion.div
             className="consult-detail-modal"
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}

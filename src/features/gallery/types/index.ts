@@ -5,6 +5,7 @@ export interface GalleryItem {
   title: string;
   category: GalleryCategory;
   imageUrl: string;
+  imageKey?: string | null;
   description?: string;
   createdAt: string;
   author?: string;
@@ -14,6 +15,9 @@ export interface GalleryItem {
 export interface GalleryFormData {
   title: string;
   category: GalleryCategory;
-  imageUrl: string;
+  imageUrl?: string;
+  file?: File;
   description?: string;
+  author?: string;
+  aspectRatio?: 'landscape' | 'portrait' | 'square';
 }

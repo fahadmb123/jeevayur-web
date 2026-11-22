@@ -217,10 +217,9 @@ export const AddPatientModal: React.FC<AddPatientModalProps> = React.memo(({
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="add-patient-backdrop" onClick={handleClose}>
+        <div className="add-patient-backdrop">
           <motion.div
             className="add-patient-modal"
-            onClick={(e) => e.stopPropagation()}
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 15 }}

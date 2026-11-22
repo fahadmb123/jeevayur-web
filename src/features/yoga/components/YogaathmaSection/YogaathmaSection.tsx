@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -20,6 +20,7 @@ import {
   fadeUpVariants,
   standardViewport,
 } from '@/shared/lib/animations';
+import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
 import './YogaathmaSection.css';
 
 interface GalleryCardItem {
@@ -50,6 +51,18 @@ const PILLAR_ICONS = [Compass, Award, Heart, Sparkles, ShieldCheck];
 
 export const YogaathmaSection: React.FC = React.memo(() => {
   const { hero, approach, programs } = YOGAATHMA_DATA;
+  const { items: galleryYoga } = usePublicGallery('yoga');
+
+  const yogaImages: GalleryCardItem[] = useMemo(() => {
+    if (galleryYoga.length > 0) {
+      return galleryYoga.map((item) => ({
+        id: item.id,
+        src: item.imageUrl,
+        alt: item.title,
+      }));
+    }
+    return YOGA_IMAGES;
+  }, [galleryYoga]);
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
@@ -171,10 +184,10 @@ export const YogaathmaSection: React.FC = React.memo(() => {
         <div className="journey-stream-viewport">
           <div className="journey-stream-track journey-stream-track--reverse">
             {[
-              ...YOGA_IMAGES,
-              ...YOGA_IMAGES,
-              ...YOGA_IMAGES,
-              ...YOGA_IMAGES,
+              ...yogaImages,
+              ...yogaImages,
+              ...yogaImages,
+              ...yogaImages,
             ].map((item, index) => (
               <article
                 key={`yoga-${item.id}-${index}`}

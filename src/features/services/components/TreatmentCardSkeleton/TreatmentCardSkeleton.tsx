@@ -1,4 +1,5 @@
 import React from 'react';
+import { useResponsiveSkeletonCount } from '@/shared/lib/useResponsiveSkeletonCount';
 import './TreatmentCardSkeleton.css';
 
 export interface TreatmentCardSkeletonProps {
@@ -6,7 +7,12 @@ export interface TreatmentCardSkeletonProps {
 }
 
 export const TreatmentCardSkeleton: React.FC<TreatmentCardSkeletonProps> = React.memo(
-  ({ count = 8 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 8, wide: 12 },
+      explicitCount
+    );
+
     return (
       <>
         {Array.from({ length: count }).map((_, idx) => (

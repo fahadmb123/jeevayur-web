@@ -173,3 +173,9 @@
   border-radius: 999px;
   flex-shrink: 0;
 }
+
+@media (max-width: 640px) {
+  .treatments-images-grid > .treatment-image-card--skeleton:nth-child(n+3) {
+    display: none;
+  }
+}

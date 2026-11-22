@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { X, Sparkles, Activity, Calendar, Trash2 } from 'lucide-react';
+import { X, Sparkles, Activity, Calendar, Trash2, Pencil } from 'lucide-react';
 import type { GalleryItem } from '../../types';
 import './GalleryLightboxModal.css';
 
 interface GalleryLightboxModalProps {
   item: GalleryItem | null;
   onClose: () => void;
+  onEdit?: (item: GalleryItem) => void;
   onDelete?: (id: string, title?: string) => void;
   canManage?: boolean;
 }
@@ -13,6 +14,7 @@ interface GalleryLightboxModalProps {
 export const GalleryLightboxModal: React.FC<GalleryLightboxModalProps> = ({
   item,
   onClose,
+  onEdit,
   onDelete,
   canManage = false,
 }) => {
@@ -29,7 +31,7 @@ export const GalleryLightboxModal: React.FC<GalleryLightboxModalProps> = ({
   if (!item) return null;
 
   return (
-    <div className="gallery-lightbox__overlay" onClick={onClose} role="dialog" aria-modal="true">
+    <div className="gallery-lightbox__overlay" role="dialog" aria-modal="true">
       <div
         className="gallery-lightbox__container"
         onClick={(e) => e.stopPropagation()}
@@ -81,16 +83,28 @@ export const GalleryLightboxModal: React.FC<GalleryLightboxModalProps> = ({
             <p className="gallery-lightbox__description">{item.description}</p>
           )}
 
-          {canManage && onDelete && (
+          {canManage && (
             <div className="gallery-lightbox__actions">
-              <button
-                type="button"
-                className="gallery-lightbox__delete-btn"
-                onClick={() => onDelete(item.id, item.title)}
-              >
-                <Trash2 size={16} />
-                <span>Remove Image</span>
-              </button>
+              {onEdit && (
+                <button
+                  type="button"
+                  className="gallery-lightbox__edit-btn"
+                  onClick={() => onEdit(item)}
+                >
+                  <Pencil size={15} />
+                  <span>Edit Details</span>
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  type="button"
+                  className="gallery-lightbox__delete-btn"
+                  onClick={() => onDelete(item.id, item.title)}
+                >
+                  <Trash2 size={15} />
+                  <span>Remove Image</span>
+                </button>
+              )}
             </div>
           )}
         </div>

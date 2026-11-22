@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ROUTES } from '@/shared/config/routes';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
+import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
 import './HealingJourneySection.css';
 
 interface GalleryCardItem {
@@ -32,6 +33,19 @@ const TREATMENT_IMAGES: GalleryCardItem[] = [
 ];
 
 export const HealingJourneySection: React.FC = React.memo(() => {
+  const { items: galleryTreatments } = usePublicGallery('treatment');
+
+  const treatmentImages: GalleryCardItem[] = useMemo(() => {
+    if (galleryTreatments.length > 0) {
+      return galleryTreatments.map((item) => ({
+        id: item.id,
+        src: item.imageUrl,
+        alt: item.title,
+      }));
+    }
+    return TREATMENT_IMAGES;
+  }, [galleryTreatments]);
+
   return (
     <section
       className="healing-journey-section"
@@ -59,10 +73,10 @@ export const HealingJourneySection: React.FC = React.memo(() => {
         <div className="journey-stream-viewport">
           <div className="journey-stream-track">
             {[
-              ...TREATMENT_IMAGES,
-              ...TREATMENT_IMAGES,
-              ...TREATMENT_IMAGES,
-              ...TREATMENT_IMAGES,
+              ...treatmentImages,
+              ...treatmentImages,
+              ...treatmentImages,
+              ...treatmentImages,
             ].map((item, index) => (
               <article
                 key={`treatment-${item.id}-${index}`}

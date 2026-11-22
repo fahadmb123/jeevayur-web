@@ -118,3 +118,11 @@
   height: 32px;
   border-radius: 8px;
 }
+
+@media (max-width: 640px) {
+  .yoga-classes-grid > .yoga-timetable-card--skeleton:nth-child(n+3),
+  .doctor-yoga-grid > .yoga-card--skeleton:nth-child(n+3) {
+    display: none;
+  }
+}
+

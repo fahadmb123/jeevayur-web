@@ -1,10 +1,27 @@
 import type { GalleryItem, GalleryFormData } from '../types';
+import { apiClient } from '@/shared/lib/api/apiClient';
+import { environment } from '@/shared/config/environment';
+import { tokenStorage } from '@/shared/lib/auth/tokenStorage';
 
-const GALLERY_STORAGE_KEY = 'jeevayurniketan_gallery_items';
+const GALLERY_STORAGE_KEY = 'jeevayurniketan_gallery_items_v2';
 const GALLERY_UPDATED_EVENT = 'jeevayurniketan_gallery_updated';
 
+if (typeof window !== 'undefined') {
+  try {
+    localStorage.removeItem('jeevayurniketan_gallery_items');
+  } catch {
+  }
+}
+
+const resolveImageUrl = (url: string): string => {
+  if (!url) return '';
+  if (url.startsWith('/api/')) {
+    return environment.apiBaseUrl ? `${environment.apiBaseUrl}${url}` : url;
+  }
+  return url;
+};
+
 export const INITIAL_GALLERY_ITEMS: GalleryItem[] = [
-  // Yoga Items
   {
     id: 'yoga-1',
     title: 'Surya Namaskar at Dawn',
@@ -55,8 +72,6 @@ export const INITIAL_GALLERY_ITEMS: GalleryItem[] = [
     author: 'Jeevayurniketan Ayurveda',
     aspectRatio: 'landscape',
   },
-
-  // Treatment Items
   {
     id: 'treatment-1',
     title: 'Shirodhara Medicated Oil Pouring',
@@ -109,85 +124,303 @@ export const INITIAL_GALLERY_ITEMS: GalleryItem[] = [
   },
 ];
 
-export const galleryService = {
-  getItems(): GalleryItem[] {
-    try {
-      const stored = localStorage.getItem(GALLERY_STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          let hasMigration = false;
-          const sanitized = parsed.map((item: GalleryItem) => {
-            if (item.imageUrl && item.imageUrl.includes('photo-1608248597359-5484852c038c')) {
-              hasMigration = true;
-              return {
-                ...item,
-                imageUrl: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?auto=format&fit=crop&w=1200&q=80',
-              };
-            }
-            if (item.imageUrl && item.imageUrl.includes('photo-1512290900672-1f55b9e59d43')) {
-              hasMigration = true;
-              return {
-                ...item,
-                imageUrl: 'https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?auto=format&fit=crop&w=1200&q=80',
-              };
-            }
-            return item;
-          });
+export interface GalleryCounts {
+  total: number;
+  yoga: number;
+  treatment: number;
+}
 
-          if (hasMigration) {
-            localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(sanitized));
-          }
-          return sanitized;
+export interface GalleryFetchResult {
+  items: GalleryItem[];
+  counts: GalleryCounts;
+}
+
+export const galleryService = {
+  async getItems(category?: string, search?: string): Promise<GalleryFetchResult> {
+    try {
+      const params = new URLSearchParams();
+      if (category && category !== 'all') {
+        params.append('category', category.toLowerCase());
+      }
+      if (search && search.trim() !== '') {
+        params.append('search', search.trim());
+      }
+      const queryString = params.toString();
+      const endpoint = queryString ? `/api/gallery?${queryString}` : '/api/gallery';
+
+      const response = await apiClient.get<{
+        success: boolean;
+        data:
+          | GalleryItem[]
+          | { items: GalleryItem[]; counts: { total: number; yoga: number; treatment: number } };
+      }>(endpoint);
+
+      if (response && response.success && response.data) {
+        if (Array.isArray(response.data)) {
+          const mapped = response.data.map((item) => ({
+            ...item,
+            imageUrl: resolveImageUrl(item.imageUrl),
+          }));
+          return {
+            items: mapped,
+            counts: {
+              total: mapped.length,
+              yoga: mapped.filter((i) => i.category === 'yoga').length,
+              treatment: mapped.filter((i) => i.category === 'treatment').length,
+            },
+          };
+        } else if (response.data && Array.isArray(response.data.items)) {
+          const mapped = response.data.items.map((item) => ({
+            ...item,
+            imageUrl: resolveImageUrl(item.imageUrl),
+          }));
+          return {
+            items: mapped,
+            counts: response.data.counts || {
+              total: mapped.length,
+              yoga: mapped.filter((i) => i.category === 'yoga').length,
+              treatment: mapped.filter((i) => i.category === 'treatment').length,
+            },
+          };
         }
       }
     } catch {
-      // Fallback to initial items on error
     }
-    // Seed initial items if empty
-    this.saveItems(INITIAL_GALLERY_ITEMS);
-    return INITIAL_GALLERY_ITEMS;
+    const cached = this.getCachedItems();
+    return {
+      items: cached,
+      counts: {
+        total: cached.length,
+        yoga: cached.filter((i) => i.category === 'yoga').length,
+        treatment: cached.filter((i) => i.category === 'treatment').length,
+      },
+    };
   },
 
-  saveItems(items: GalleryItem[]): void {
+  getCachedItems(): GalleryItem[] {
+    try {
+      const stored = localStorage.getItem(GALLERY_STORAGE_KEY);
+      if (stored !== null) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          return parsed.map((item: GalleryItem) => ({
+            ...item,
+            imageUrl: resolveImageUrl(item.imageUrl),
+          }));
+        }
+      }
+    } catch {
+    }
+    return [];
+  },
+
+  cacheItems(items: GalleryItem[]): void {
     try {
       localStorage.setItem(GALLERY_STORAGE_KEY, JSON.stringify(items));
-      window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
-    } catch (e) {
-      console.error('Failed to save gallery items to localStorage', e);
+    } catch {
     }
   },
 
-  addItem(data: GalleryFormData): GalleryItem {
-    const current = this.getItems();
-    const newItem: GalleryItem = {
+  async addItem(data: GalleryFormData): Promise<GalleryItem> {
+    if (data.file && data.file.size > 2 * 1024 * 1024) {
+      throw new Error('Image file size must be less than 2MB.');
+    }
+    try {
+      if (data.file) {
+        const formData = new FormData();
+        formData.append('file', data.file);
+        formData.append('title', data.title.trim());
+        formData.append('category', data.category);
+        if (data.description) formData.append('description', data.description.trim());
+        if (data.author) formData.append('author', data.author.trim());
+        if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
+
+        const headers: Record<string, string> = {};
+        const token = tokenStorage.getAccessToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const url = `${environment.apiBaseUrl}/api/gallery`;
+        const res = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers,
+          body: formData,
+        });
+
+        if (res.ok) {
+          const body = await res.json();
+          if (body?.success && body?.data) {
+            const item: GalleryItem = {
+              ...body.data,
+              imageUrl: resolveImageUrl(body.data.imageUrl),
+            };
+            const cached = this.getCachedItems();
+            this.cacheItems([item, ...cached]);
+            window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+            return item;
+          }
+        }
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message || 'Failed to upload image to gallery server.');
+      } else if (data.imageUrl) {
+        const response = await apiClient.post<{ success: boolean; data: GalleryItem }>('/api/gallery', {
+          title: data.title.trim(),
+          category: data.category,
+          imageUrl: data.imageUrl.trim(),
+          description: data.description?.trim(),
+          author: data.author?.trim(),
+          aspectRatio: data.aspectRatio,
+        });
+
+        if (response && response.success && response.data) {
+          const item: GalleryItem = {
+            ...response.data,
+            imageUrl: resolveImageUrl(response.data.imageUrl),
+          };
+          const cached = this.getCachedItems();
+          this.cacheItems([item, ...cached]);
+          window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+          return item;
+        }
+      }
+    } catch {
+    }
+
+    const fallbackItem: GalleryItem = {
       id: `${data.category}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
       title: data.title.trim(),
       category: data.category,
-      imageUrl: data.imageUrl.trim(),
+      imageUrl: data.imageUrl ? data.imageUrl.trim() : '',
       description: data.description?.trim(),
       createdAt: new Date().toISOString().split('T')[0],
-      author: 'Doctor / Wellness Admin',
-      aspectRatio: 'landscape',
+      author: data.author?.trim() || 'Doctor / Wellness Admin',
+      aspectRatio: data.aspectRatio || 'landscape',
     };
-
-    const updated = [newItem, ...current];
-    this.saveItems(updated);
-    return newItem;
+    const cached = this.getCachedItems();
+    this.cacheItems([fallbackItem, ...cached]);
+    window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+    return fallbackItem;
   },
 
-  deleteItem(id: string): boolean {
-    const current = this.getItems();
-    const filtered = current.filter((item) => item.id !== id);
-    if (filtered.length !== current.length) {
-      this.saveItems(filtered);
-      return true;
+  async updateItem(id: string, data: Partial<GalleryFormData>): Promise<GalleryItem> {
+    if (data.file && data.file.size > 2 * 1024 * 1024) {
+      throw new Error('Image file size must be less than 2MB.');
     }
-    return false;
+    try {
+      if (data.file) {
+        const formData = new FormData();
+        formData.append('file', data.file);
+        if (data.title) formData.append('title', data.title.trim());
+        if (data.category) formData.append('category', data.category);
+        if (data.description !== undefined) formData.append('description', (data.description || '').trim());
+        if (data.author !== undefined) formData.append('author', (data.author || '').trim());
+        if (data.aspectRatio) formData.append('aspectRatio', data.aspectRatio);
+
+        const headers: Record<string, string> = {};
+        const token = tokenStorage.getAccessToken();
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const url = `${environment.apiBaseUrl}/api/gallery/${id}`;
+        const res = await fetch(url, {
+          method: 'PUT',
+          credentials: 'include',
+          headers,
+          body: formData,
+        });
+
+        if (res.ok) {
+          const body = await res.json();
+          if (body?.success && body?.data) {
+            const item: GalleryItem = {
+              ...body.data,
+              imageUrl: resolveImageUrl(body.data.imageUrl),
+            };
+            const cached = this.getCachedItems();
+            this.cacheItems(cached.map((c) => (c.id === id ? item : c)));
+            window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+            return item;
+          }
+        }
+        const errorBody = await res.json().catch(() => null);
+        throw new Error(errorBody?.message || 'Failed to update image on gallery server.');
+      } else {
+        const payload: Record<string, any> = {};
+        if (data.title) payload.title = data.title.trim();
+        if (data.category) payload.category = data.category;
+        if (data.imageUrl) payload.imageUrl = data.imageUrl.trim();
+        if (data.description !== undefined) payload.description = data.description ? data.description.trim() : null;
+        if (data.author !== undefined) payload.author = data.author ? data.author.trim() : null;
+        if (data.aspectRatio) payload.aspectRatio = data.aspectRatio;
+
+        const response = await apiClient.put<{ success: boolean; data: GalleryItem }>(`/api/gallery/${id}`, payload);
+        if (response && response.success && response.data) {
+          const item: GalleryItem = {
+            ...response.data,
+            imageUrl: resolveImageUrl(response.data.imageUrl),
+          };
+          const cached = this.getCachedItems();
+          this.cacheItems(cached.map((c) => (c.id === id ? item : c)));
+          window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+          return item;
+        }
+      }
+    } catch {
+    }
+
+    const cached = this.getCachedItems();
+    const existing = cached.find((c) => c.id === id);
+    const updated: GalleryItem = {
+      ...(existing || {
+        id,
+        title: data.title || '',
+        category: data.category || 'yoga',
+        imageUrl: data.imageUrl || '',
+        createdAt: new Date().toISOString().split('T')[0],
+      }),
+      ...(data.title ? { title: data.title.trim() } : {}),
+      ...(data.category ? { category: data.category } : {}),
+      ...(data.imageUrl ? { imageUrl: data.imageUrl.trim() } : {}),
+      ...(data.description !== undefined ? { description: data.description?.trim() } : {}),
+      ...(data.author !== undefined ? { author: data.author?.trim() } : {}),
+      ...(data.aspectRatio ? { aspectRatio: data.aspectRatio } : {}),
+    };
+    this.cacheItems(cached.map((c) => (c.id === id ? updated : c)));
+    window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+    return updated;
   },
 
-  resetDefaults(): GalleryItem[] {
-    this.saveItems(INITIAL_GALLERY_ITEMS);
+  async deleteItem(id: string): Promise<boolean> {
+    try {
+      await apiClient.delete(`/api/gallery/${id}`);
+    } catch {
+    }
+    const cached = this.getCachedItems();
+    const filtered = cached.filter((item) => item.id !== id);
+    this.cacheItems(filtered);
+    window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+    return true;
+  },
+
+  async resetDefaults(): Promise<GalleryItem[]> {
+    try {
+      const response = await apiClient.post<{ success: boolean; data: GalleryItem[] }>('/api/gallery/reset');
+      if (response && response.success && Array.isArray(response.data)) {
+        const mapped = response.data.map((item) => ({
+          ...item,
+          imageUrl: resolveImageUrl(item.imageUrl),
+        }));
+        this.cacheItems(mapped);
+        window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
+        return mapped;
+      }
+    } catch {
+    }
+    this.cacheItems(INITIAL_GALLERY_ITEMS);
+    window.dispatchEvent(new CustomEvent(GALLERY_UPDATED_EVENT));
     return INITIAL_GALLERY_ITEMS;
   },
 

@@ -18,10 +18,9 @@ export const DoctorBioModal: React.FC<DoctorBioModalProps> = React.memo(({ isOpe
 
   return (
     <AnimatePresence>
-      <div className="doc-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="doc-modal-backdrop" role="dialog" aria-modal="true">
         <motion.div
           className="doc-modal-card"
-          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.94, y: 25 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}

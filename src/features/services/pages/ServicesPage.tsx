@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Search, Leaf } from 'lucide-react';
+import { MessageCircle, Leaf } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
@@ -17,68 +17,26 @@ import {
 import { useGridColumns } from '@/shared/lib/useGridColumns';
 import './ServicesPage.css';
 
-interface CategoryFilter {
-  id: string;
-  label: string;
-  tags?: string[];
-}
-
-const CATEGORY_FILTERS: CategoryFilter[] = [
-  { id: 'all', label: 'All Treatments' },
-  { id: 'metabolic', label: 'Metabolic & Digestion', tags: ['metabolic-health', 'digestive-health'] },
-  { id: 'womens', label: "Women's Health", tags: ['womens-health'] },
-  { id: 'joints', label: 'Joints & Spine', tags: ['musculoskeletal-care'] },
-  { id: 'mind', label: 'Mental Well-being', tags: ['mental-wellbeing', 'neurological-health'] },
-  { id: 'skin', label: 'Skin & Hair', tags: ['skin-hair-health'] },
-  { id: 'preventive', label: 'Preventive Care', tags: ['preventive-healthcare', 'geriatric-health', 'respiratory-health'] },
-];
-
 export const ServicesPage: React.FC = React.memo(() => {
   const { services, loading } = useTreatments();
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const cols = useGridColumns(gridRef, 4);
 
-  const filteredServices = useMemo(() => {
-    return services.filter((service) => {
-      let matchesCategory = true;
-      if (selectedCategory !== 'all') {
-        const activeFilter = CATEGORY_FILTERS.find((f) => f.id === selectedCategory);
-        if (activeFilter?.tags) {
-          matchesCategory = activeFilter.tags.includes(service.id);
-        }
-      }
-
-      let matchesSearch = true;
-      if (searchQuery.trim()) {
-        const query = searchQuery.toLowerCase();
-        const inTitle = service.title.toLowerCase().includes(query);
-        const inDesc = service.description.toLowerCase().includes(query);
-        const inTag = (service.categoryTag || '').toLowerCase().includes(query);
-        const inBenefits = (service.benefits || []).some((b) => b.toLowerCase().includes(query));
-        matchesSearch = inTitle || inDesc || inTag || inBenefits;
-      }
-
-      return matchesCategory && matchesSearch;
-    });
-  }, [services, selectedCategory, searchQuery]);
-
   useEffect(() => {
-    if (filteredServices.length > 0) {
-      const exists = filteredServices.some((s) => s.id === selectedServiceId);
+    if (services.length > 0) {
+      const exists = services.some((s) => s.id === selectedServiceId);
       if (!exists) {
-        setSelectedServiceId(filteredServices[0].id);
+        setSelectedServiceId(services[0].id);
       }
     } else {
       setSelectedServiceId(null);
     }
-  }, [filteredServices, selectedServiceId]);
+  }, [services, selectedServiceId]);
 
   const activeService = useMemo(() => {
-    return filteredServices.find((s) => s.id === selectedServiceId) || filteredServices[0] || null;
-  }, [filteredServices, selectedServiceId]);
+    return services.find((s) => s.id === selectedServiceId) || services[0] || null;
+  }, [services, selectedServiceId]);
 
   const handleSelectService = (service: AyurvedaService) => {
     setSelectedServiceId(service.id);
@@ -113,77 +71,8 @@ export const ServicesPage: React.FC = React.memo(() => {
             >
               Consultations, classical herbal therapies, and personalized care guided by Dr. Ahalya T.S.
             </motion.p>
-
-            <motion.div
-              className="treatments-hero__actions"
-              variants={fadeUpVariants}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.14 }}
-            >
-              <BookAppointmentButton
-                label="Book Consultation"
-                size="lg"
-                variant="primary"
-              />
-              <a
-                href={CLINIC_CONTACT.getWhatsappUrl('Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatments.')}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="treatments-hero__whatsapp-btn"
-              >
-                <MessageCircle size={17} />
-                <span>Enquire on WhatsApp</span>
-              </a>
-            </motion.div>
           </div>
         </header>
-
-        <section className="treatments-filter-strip">
-          <div className="treatments-container">
-            <div className="treatments-filter-row">
-              <div className="treatments-tabs" role="tablist">
-                {CATEGORY_FILTERS.map((cat) => {
-                  const isActive = selectedCategory === cat.id;
-                  return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      role="tab"
-                      aria-selected={isActive}
-                      className={`treatments-tab-btn ${isActive ? 'is-active' : ''}`}
-                      onClick={() => setSelectedCategory(cat.id)}
-                    >
-                      <span className="treatments-tab-label">{cat.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="treatments-search-box">
-                <Search size={16} className="treatments-search-icon" />
-                <input
-                  type="text"
-                  placeholder="Search treatments or conditions..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="treatments-search-input"
-                  aria-label="Search treatments"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    className="treatments-search-clear"
-                    onClick={() => setSearchQuery('')}
-                    aria-label="Clear search"
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-            </div>
-          </div>
-        </section>
 
         <section className="treatments-catalog-section">
           <div className="treatments-container">
@@ -196,27 +85,17 @@ export const ServicesPage: React.FC = React.memo(() => {
                   </p>
                 </div>
                 <div className="treatments-images-grid">
-                  <TreatmentCardSkeleton count={6} />
+                  <TreatmentCardSkeleton />
                 </div>
                 <div className="treatments-details-section">
                   <TreatmentDetailsCardSkeleton />
                 </div>
               </div>
-            ) : filteredServices.length === 0 ? (
+            ) : services.length === 0 ? (
               <div className="treatments-empty-state">
                 <Leaf size={40} className="treatments-empty-icon" />
-                <h3>No treatments found</h3>
-                <p>No treatments matched &ldquo;{searchQuery}&rdquo;. Try another term or reset filters.</p>
-                <button
-                  type="button"
-                  className="treatments-reset-btn"
-                  onClick={() => {
-                    setSelectedCategory('all');
-                    setSearchQuery('');
-                  }}
-                >
-                  View All Treatments
-                </button>
+                <h3>No treatments available</h3>
+                <p>New treatments and clinical therapies will be updated shortly.</p>
               </div>
             ) : (
               <>
@@ -230,13 +109,12 @@ export const ServicesPage: React.FC = React.memo(() => {
 
                   <motion.div
                     ref={gridRef}
-                    key={selectedCategory}
                     className="treatments-images-grid"
                     variants={rowContainerVariants}
                     initial="hidden"
                     animate="visible"
                   >
-                    {filteredServices.map((service, index) => {
+                    {services.map((service, index) => {
                       const rowIndex = Math.floor(index / (cols || 1));
                       return (
                         <motion.div
@@ -267,13 +145,34 @@ export const ServicesPage: React.FC = React.memo(() => {
 
                     <TreatmentDetailsCard
                       service={activeService}
-                      services={filteredServices}
+                      services={services}
                       onSelectService={handleSelectService}
                     />
                   </div>
                 )}
               </>
             )}
+          </div>
+        </section>
+
+        <section className="treatments-bottom-cta">
+          <div className="treatments-container">
+            <div className="treatments-bottom-cta__inner">
+              <BookAppointmentButton
+                label="Book Consultation"
+                size="lg"
+                variant="primary"
+              />
+              <a
+                href={CLINIC_CONTACT.getWhatsappUrl('Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatments.')}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="treatments-hero__whatsapp-btn"
+              >
+                <MessageCircle size={17} />
+                <span>Enquire on WhatsApp</span>
+              </a>
+            </div>
           </div>
         </section>
       </main>

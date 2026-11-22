@@ -305,12 +305,7 @@ export const YogaClassModal: React.FC<YogaClassModalProps> = React.memo(({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="yoga-modal-backdrop"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+    <div className="yoga-modal-backdrop">
       <YogaClassFormContent
         key={initialData?.id || 'new'}
         initialData={initialData}

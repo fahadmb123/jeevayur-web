@@ -1,66 +1,55 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type { PatientRequest } from '../types';
-import { requestService } from '../services/requestService';
+import { requestService, type RequestFilterQuery, type RequestCounts } from '../services/requestService';
 
-export const useRequests = () => {
+export const useRequests = (query?: RequestFilterQuery) => {
   const [requests, setRequests] = useState<PatientRequest[]>([]);
+  const [counts, setCounts] = useState<RequestCounts>({
+    all: 0,
+    pending: 0,
+    accepted: 0,
+    rejected: 0,
+  });
   const [loading, setLoading] = useState(true);
+
+  const queryKey = JSON.stringify(query || {});
 
   const fetchRequests = useCallback(async () => {
     try {
-      const data = await requestService.getRequests();
-      setRequests(data);
+      setLoading(true);
+      const res = await requestService.getRequests(query);
+      setRequests(res.requests);
+      setCounts(res.counts);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [queryKey]);
 
   useEffect(() => {
     fetchRequests();
-
-    const unsubscribe = requestService.subscribe((updated) => {
-      setRequests(updated);
-    });
-
-    return () => {
-      unsubscribe();
-    };
   }, [fetchRequests]);
 
   const acceptRequest = useCallback(async (id: string) => {
     const updated = await requestService.acceptRequest(id);
     setRequests((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    await fetchRequests();
     return updated;
-  }, []);
+  }, [fetchRequests]);
 
   const rejectRequest = useCallback(async (id: string, reason?: string) => {
     const updated = await requestService.rejectRequest(id, reason);
     setRequests((prev) => prev.map((r) => (r.id === id ? updated : r)));
+    await fetchRequests();
     return updated;
-  }, []);
-
-  const { pendingCount, acceptedCount, rejectedCount } = useMemo(() => {
-    let pending = 0;
-    let accepted = 0;
-    let rejected = 0;
-    for (const r of requests) {
-      if (r.status === 'pending') pending++;
-      else if (r.status === 'accepted') accepted++;
-      else if (r.status === 'rejected') rejected++;
-    }
-    return {
-      pendingCount: pending,
-      acceptedCount: accepted,
-      rejectedCount: rejected,
-    };
-  }, [requests]);
+  }, [fetchRequests]);
 
   return {
     requests,
     loading,
-    pendingCount,
-    acceptedCount,
-    rejectedCount,
+    totalCount: counts.all,
+    pendingCount: counts.pending,
+    acceptedCount: counts.accepted,
+    rejectedCount: counts.rejected,
     acceptRequest,
     rejectRequest,
     refresh: fetchRequests,

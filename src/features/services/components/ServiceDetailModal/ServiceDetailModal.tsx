@@ -26,10 +26,9 @@ export const ServiceDetailModal: React.FC<ServiceDetailModalProps> = React.memo(
 
   return (
     <AnimatePresence>
-      <div className="svc-modal-backdrop" onClick={onClose} role="dialog" aria-modal="true">
+      <div className="svc-modal-backdrop" role="dialog" aria-modal="true">
         <motion.div
           className="svc-modal-card"
-          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, scale: 0.94, y: 25 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}

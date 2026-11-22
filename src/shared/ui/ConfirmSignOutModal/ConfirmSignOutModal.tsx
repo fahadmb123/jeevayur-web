@@ -18,8 +18,8 @@ export const ConfirmSignOutModal: React.FC<ConfirmSignOutModalProps> = React.mem
   isOpen,
   onClose,
   onConfirm,
-  title = 'Sign Out Confirmation',
-  description = 'Are you sure you want to sign out of your practitioner account? Any unsaved edits will be discarded.',
+  title = 'Sign out?',
+  description = 'Are you sure you want to sign out? Any unsaved changes may be lost.',
   confirmText = 'Sign Out',
   isLoading = false,
 }) => {
@@ -46,7 +46,7 @@ export const ConfirmSignOutModal: React.FC<ConfirmSignOutModalProps> = React.mem
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="signout-modal-backdrop" onClick={!isLoading ? onClose : undefined}>
+        <div className="signout-modal-backdrop">
           <motion.div
             className="signout-modal"
             role="alertdialog"

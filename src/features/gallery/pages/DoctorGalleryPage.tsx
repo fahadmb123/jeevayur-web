@@ -6,6 +6,7 @@ import {
   Activity,
   Plus,
   Trash2,
+  Pencil,
   Maximize2,
   RotateCcw,
   CheckCircle2,
@@ -13,6 +14,8 @@ import {
 import { useGallery } from '../hooks/useGallery';
 import { AddGalleryModal } from '../components/AddGalleryModal';
 import { GalleryLightboxModal } from '../components/GalleryLightboxModal';
+import { DeleteConfirmModal } from '../components/DeleteConfirmModal/DeleteConfirmModal';
+import { GalleryGridSkeleton } from '../components/GallerySkeleton/GallerySkeleton';
 import {
   DoctorSearchFilterStrip,
   type FilterPillConfig,
@@ -40,6 +43,7 @@ const DEFAULT_FALLBACK_IMAGE =
 export const DoctorGalleryPage: React.FC = React.memo(() => {
   const {
     filteredItems,
+    isLoading,
     selectedCategory,
     setSelectedCategory,
     searchQuery,
@@ -49,11 +53,19 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
     treatmentCount,
     isModalOpen,
     setIsModalOpen,
+    editingItem,
+    deleteConfirmItem,
+    isDeleting,
     activeLightboxItem,
     setActiveLightboxItem,
     feedbackMessage,
     handleAddItem,
-    handleDeleteItem,
+    handleEditItem,
+    openAddModal,
+    openEditModal,
+    openDeleteModal,
+    closeDeleteModal,
+    confirmDelete,
     handleResetDefaults,
   } = useGallery();
 
@@ -86,7 +98,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-page-content doctor-gallery-page">
-      {/* Page Actions */}
       <div className="doctor-gallery-header">
         <div className="doctor-gallery-header__actions">
           <button
@@ -101,7 +112,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
           <button
             type="button"
             className="doctor-gallery-btn-add"
-            onClick={() => setIsModalOpen(true)}
+            onClick={openAddModal}
           >
             <Plus size={18} />
             <span>Add Image</span>
@@ -109,7 +120,6 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       </div>
 
-      {/* Feedback Toast */}
       {feedbackMessage && (
         <div className="doctor-gallery-page__feedback" role="alert">
           <CheckCircle2 size={16} />
@@ -117,16 +127,15 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* KPI Metrics Row */}
       <div className="doctor-gallery-kpis">
         <div className="doctor-gallery-kpi">
           <div className="doctor-gallery-kpi__icon doctor-gallery-kpi__icon--total">
             <ImageIcon size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{totalCount}</span>
-            <span className="doctor-gallery-kpi__label">Total Photos</span>
-            <span className="doctor-gallery-kpi__sub">Live in public gallery</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : totalCount}</span>
+            <span className="doctor-gallery-kpi__label">Total Media</span>
+            <span className="doctor-gallery-kpi__sub">Clinic Showcase</span>
           </div>
         </div>
 
@@ -135,9 +144,9 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <Sparkles size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{yogaCount}</span>
-            <span className="doctor-gallery-kpi__label">Yoga Photos</span>
-            <span className="doctor-gallery-kpi__sub">Asanas & shala sessions</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : yogaCount}</span>
+            <span className="doctor-gallery-kpi__label">Yoga Sessions</span>
+            <span className="doctor-gallery-kpi__sub">Asana & Dhyana</span>
           </div>
         </div>
 
@@ -146,32 +155,24 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <Activity size={22} />
           </div>
           <div className="doctor-gallery-kpi__info">
-            <span className="doctor-gallery-kpi__value">{treatmentCount}</span>
-            <span className="doctor-gallery-kpi__label">Treatment Photos</span>
-            <span className="doctor-gallery-kpi__sub">Clinical therapies & herbs</span>
+            <span className="doctor-gallery-kpi__value">{isLoading ? '—' : treatmentCount}</span>
+            <span className="doctor-gallery-kpi__label">Clinical Treatments</span>
+            <span className="doctor-gallery-kpi__sub">Therapeutic Care</span>
           </div>
         </div>
       </div>
 
-      {/* Search & Filter Strip */}
       <DoctorSearchFilterStrip
-        searchPlaceholder="Search images by title, author, or description..."
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
+        searchPlaceholder="Search images by title, treatment, or author..."
         pills={filterPills}
-        onReset={
-          searchQuery || selectedCategory !== 'all'
-            ? () => {
-                setSearchQuery('');
-                setSelectedCategory('all');
-              }
-            : undefined
-        }
-        resetTitle="Reset filters"
+        isLoading={isLoading}
       />
 
-      {/* Image Grid */}
-      {filteredItems.length > 0 ? (
+      {isLoading ? (
+        <GalleryGridSkeleton />
+      ) : filteredItems.length > 0 ? (
         <motion.div
           className="doctor-gallery-page__grid"
           variants={containerVariants}
@@ -183,6 +184,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
               key={item.id}
               className="doctor-gallery-card"
               variants={itemVariants}
+              layout
             >
               <div
                 className="doctor-gallery-card__image-container"
@@ -201,35 +203,54 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   }}
                 />
 
-                {/* Category Pill Tag */}
                 <div className="doctor-gallery-card__badges">
                   <span
                     className={`doctor-gallery-card__category-badge doctor-gallery-card__category-badge--${item.category}`}
                   >
                     {item.category === 'yoga' ? (
                       <>
-                        <Sparkles size={13} />
+                        <Sparkles size={12} />
                         <span>Yoga</span>
                       </>
                     ) : (
                       <>
-                        <Activity size={13} />
+                        <Activity size={12} />
                         <span>Treatment</span>
                       </>
                     )}
                   </span>
                 </div>
 
-                {/* Hover Action Overlay */}
                 <div className="doctor-gallery-card__hover-overlay">
-                  <div className="doctor-gallery-card__zoom-action">
-                    <Maximize2 size={16} />
-                    <span>View Photo</span>
+                  <div className="doctor-gallery-card__hover-actions">
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__hover-btn doctor-gallery-card__hover-btn--view"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveLightboxItem(item);
+                      }}
+                      title="View full resolution image"
+                    >
+                      <Maximize2 size={15} />
+                      <span>View</span>
+                    </button>
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__hover-btn doctor-gallery-card__hover-btn--edit"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(item);
+                      }}
+                      title="Edit image details"
+                    >
+                      <Pencil size={15} />
+                      <span>Edit</span>
+                    </button>
                   </div>
                 </div>
               </div>
 
-              {/* Card Footer Content */}
               <div className="doctor-gallery-card__info">
                 <div className="doctor-gallery-card__title-row">
                   <h3
@@ -239,18 +260,32 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   >
                     {item.title}
                   </h3>
-                  <button
-                    type="button"
-                    className="doctor-gallery-card__delete-btn"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteItem(item.id, item.title);
-                    }}
-                    title="Remove image"
-                    aria-label={`Remove image ${item.title}`}
-                  >
-                    <Trash2 size={15} />
-                  </button>
+                  <div className="doctor-gallery-card__actions">
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__edit-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openEditModal(item);
+                      }}
+                      title="Edit image details"
+                      aria-label={`Edit image ${item.title}`}
+                    >
+                      <Pencil size={15} />
+                    </button>
+                    <button
+                      type="button"
+                      className="doctor-gallery-card__delete-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openDeleteModal(item.id, item.title);
+                      }}
+                      title="Remove image from cloud"
+                      aria-label={`Remove image ${item.title}`}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </div>
                 </div>
 
                 {item.description && (
@@ -264,6 +299,35 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
                   {item.author && (
                     <span className="doctor-gallery-card__author">{item.author}</span>
                   )}
+                </div>
+
+                <div className="doctor-gallery-card__bottom-actions">
+                  <button
+                    type="button"
+                    className="doctor-gallery-card__btn-delete"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openDeleteModal(item.id, item.title);
+                    }}
+                    title="Delete image from gallery"
+                    aria-label={`Delete ${item.title}`}
+                  >
+                    <Trash2 size={14} />
+                    <span>Delete</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="doctor-gallery-card__btn-edit"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openEditModal(item);
+                    }}
+                    title="Edit image and details"
+                    aria-label={`Edit ${item.title}`}
+                  >
+                    <Pencil size={14} />
+                    <span>Edit Gallery</span>
+                  </button>
                 </div>
               </div>
             </motion.div>
@@ -295,7 +359,7 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
             <button
               type="button"
               className="doctor-gallery-page__empty-add-btn"
-              onClick={() => setIsModalOpen(true)}
+              onClick={openAddModal}
             >
               <Plus size={16} />
               <span>
@@ -306,20 +370,36 @@ export const DoctorGalleryPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      {/* Add Modal */}
       <AddGalleryModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onSave={handleAddItem}
+        onClose={() => {
+          setIsModalOpen(false);
+        }}
+        onSave={async (data, id) => {
+          if (id) {
+            await handleEditItem(id, data);
+          } else {
+            await handleAddItem(data);
+          }
+        }}
         defaultCategory={selectedCategory === 'treatment' ? 'treatment' : 'yoga'}
+        editingItem={editingItem}
       />
 
-      {/* Lightbox Modal */}
       <GalleryLightboxModal
         item={activeLightboxItem}
         onClose={() => setActiveLightboxItem(null)}
-        onDelete={handleDeleteItem}
+        onEdit={(item) => openEditModal(item)}
+        onDelete={(id, title) => openDeleteModal(id, title)}
         canManage={true}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!deleteConfirmItem}
+        title={deleteConfirmItem?.title || ''}
+        isDeleting={isDeleting}
+        onClose={closeDeleteModal}
+        onConfirm={confirmDelete}
       />
     </div>
   );

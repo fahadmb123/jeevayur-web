@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Inbox,
@@ -22,20 +22,36 @@ import { ROUTES } from '@/shared/config/routes';
 import './DoctorRequestsPage.css';
 
 export const DoctorRequestsPage: React.FC = React.memo(() => {
+  const [activeFilter, setActiveFilter] = useState<RequestFilterOption>('Pending');
+  const [localSearch, setLocalSearch] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [selectedService, setSelectedService] = useState('All');
+  const [selectedMode, setSelectedMode] = useState<string>('All');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(localSearch);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [localSearch]);
+
+  const queryParams = useMemo(() => ({
+    status: activeFilter === 'All' ? undefined : activeFilter.toLowerCase(),
+    service: selectedService === 'All' ? undefined : selectedService,
+    mode: selectedMode === 'All' ? undefined : selectedMode,
+    search: debouncedSearch.trim() || undefined,
+  }), [activeFilter, selectedService, selectedMode, debouncedSearch]);
+
   const {
     requests,
     loading,
+    totalCount,
     pendingCount,
     acceptedCount,
     rejectedCount,
     acceptRequest,
     rejectRequest,
-  } = useRequests();
-
-  const [activeFilter, setActiveFilter] = useState<RequestFilterOption>('Pending');
-  const [localSearch, setLocalSearch] = useState('');
-  const [selectedService, setSelectedService] = useState('All');
-  const [selectedMode, setSelectedMode] = useState<string>('All');
+  } = useRequests(queryParams);
 
   const [detailRequest, setDetailRequest] = useState<PatientRequest | null>(null);
   const [rejectingRequest, setRejectingRequest] = useState<PatientRequest | null>(null);
@@ -114,56 +130,18 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
     setSelectedMode('All');
   }, []);
 
-  const servicesList = useMemo(() => {
-    const set = new Set<string>();
-    requests.forEach((r) => set.add(r.service));
-    return ['All', ...Array.from(set)];
-  }, [requests]);
+  const servicesList = ['All', 'Ayurveda Treatment', 'Yoga Class'];
 
-  const filteredRequests = useMemo(() => {
-    return requests.filter((r) => {
-      if (activeFilter === 'Pending' && r.status !== 'pending') return false;
-      if (activeFilter === 'Accepted' && r.status !== 'accepted') return false;
-      if (activeFilter === 'Rejected' && r.status !== 'rejected') return false;
-
-      if (selectedService !== 'All' && r.service !== selectedService) return false;
-
-      if (selectedMode !== 'All' && r.mode !== selectedMode) return false;
-
-      if (localSearch.trim()) {
-        const query = localSearch.toLowerCase().trim();
-        const matchesName = r.patientName.toLowerCase().includes(query);
-        const matchesPhone = r.phone.toLowerCase().includes(query);
-        const matchesEmail = r.email.toLowerCase().includes(query);
-        const matchesConcern = r.primaryConcern.toLowerCase().includes(query);
-        const matchesService = r.service.toLowerCase().includes(query);
-        const matchesLanguage = r.language ? r.language.toLowerCase().includes(query) : false;
-        const matchesCity = r.city ? r.city.toLowerCase().includes(query) : false;
-        const matchesSymptoms = r.symptoms ? r.symptoms.some((s) => s.toLowerCase().includes(query)) : false;
-        return (
-          matchesName ||
-          matchesPhone ||
-          matchesEmail ||
-          matchesConcern ||
-          matchesService ||
-          matchesLanguage ||
-          matchesCity ||
-          matchesSymptoms
-        );
-      }
-
-      return true;
-    });
-  }, [requests, activeFilter, selectedService, selectedMode, localSearch]);
+  const filteredRequests = requests;
 
   const counts = useMemo(
     () => ({
-      All: requests.length,
+      All: totalCount,
       Pending: pendingCount,
       Accepted: acceptedCount,
       Rejected: rejectedCount,
     }),
-    [requests.length, pendingCount, acceptedCount, rejectedCount]
+    [totalCount, pendingCount, acceptedCount, rejectedCount]
   );
 
   const selectFilters: FilterSelectConfig[] = useMemo(() => [
@@ -254,7 +232,7 @@ export const DoctorRequestsPage: React.FC = React.memo(() => {
       <Card className="doctor-consult-card">
         <div className="doctor-consult-list">
           {loading ? (
-            <RequestCardSkeleton count={3} />
+            <RequestCardSkeleton />
           ) : filteredRequests.length > 0 ? (
             filteredRequests.map((request, index) => (
               <RequestCard

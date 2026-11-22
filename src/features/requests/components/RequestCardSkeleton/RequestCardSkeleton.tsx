@@ -1,4 +1,5 @@
 import React from 'react';
+import { useResponsiveSkeletonCount } from '@/shared/lib/useResponsiveSkeletonCount';
 import './RequestCardSkeleton.css';
 
 export interface RequestCardSkeletonProps {
@@ -6,7 +7,12 @@ export interface RequestCardSkeletonProps {
 }
 
 export const RequestCardSkeleton: React.FC<RequestCardSkeletonProps> = React.memo(
-  ({ count = 3 }) => {
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 3, desktop: 4, wide: 6 },
+      explicitCount
+    );
+
     return (
       <div className="request-skeletons-wrapper" role="status" aria-label="Loading appointments">
         {Array.from({ length: count }).map((_, idx) => (

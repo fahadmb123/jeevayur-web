@@ -142,7 +142,7 @@ export const BookAppointmentModal: React.FC<BookAppointmentModalProps> = React.m
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="book-modal-backdrop" onClick={handleClose}>
+        <div className="book-modal-backdrop">
           <motion.div
             className="book-modal"
             onClick={(e) => e.stopPropagation()}
