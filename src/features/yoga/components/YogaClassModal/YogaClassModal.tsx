@@ -120,7 +120,7 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         price: computedPrice,
         priceAmount: values.priceAmount.trim(),
         priceUnit: values.priceUnit.trim(),
-        description: values.description ? values.description.trim() : '',
+        description: values.description.trim(),
         scheduleItems: values.days.map((day) => ({
           day,
           time: initialData?.time || '06:30 AM - 07:30 AM',
@@ -348,7 +348,9 @@ const YogaClassFormContent: React.FC<FormContentProps> = ({
         </div>
 
         <div className="yoga-modal__field">
-          <label htmlFor="yoga-desc">Description & Health Benefits</label>
+          <label htmlFor="yoga-desc">
+            Description & Health Benefits <span className="required">*</span>
+          </label>
           <textarea
             id="yoga-desc"
             rows={3}

@@ -44,9 +44,9 @@ export const yogaClassSchema = z.object({
   description: z
     .string()
     .trim()
-    .max(1000, 'Description must not exceed 1000 characters')
-    .optional()
-    .or(z.literal('')),
+    .min(1, 'Description and health benefits are required')
+    .min(10, 'Description must be at least 10 characters')
+    .max(1000, 'Description must not exceed 1000 characters'),
 });
 
 export type YogaClassFormValues = z.infer<typeof yogaClassSchema>;
