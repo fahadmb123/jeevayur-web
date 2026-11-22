@@ -11,7 +11,7 @@ import {
   Compass,
   Award,
 } from 'lucide-react';
-import { YOGAATHMA_DATA } from '../../data/yogaathmaData';
+import { YOGAATHMA_DATA, type YogaProgram } from '../../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { YogaProgramCard } from '../YogaProgramCard';
 import { ROUTES } from '@/shared/config/routes';
@@ -50,8 +50,34 @@ const YOGA_IMAGES: GalleryCardItem[] = [
 const PILLAR_ICONS = [Compass, Award, Heart, Sparkles, ShieldCheck];
 
 export const YogaathmaSection: React.FC = React.memo(() => {
-  const { hero, approach, programs } = YOGAATHMA_DATA;
+  const { hero, approach, programs: defaultPrograms } = YOGAATHMA_DATA;
   const { items: galleryYoga } = usePublicGallery('yoga');
+
+  const programs: YogaProgram[] = useMemo(() => {
+    if (galleryYoga.length > 0) {
+      return galleryYoga.map((item, idx) => ({
+        id: item.id,
+        number: String(idx + 1).padStart(2, '0'),
+        title: item.title,
+        tagline: 'Authentic yogic harmony and breath awareness.',
+        categoryTag: 'YOGA & MEDITATION',
+        accentColor: '#1B6B50',
+        description: item.description || 'Guided mindful movement, restorative postures, and breath awareness to nurture vital prana.',
+        image: item.imageUrl,
+        idealForTitle: 'Ideal for:',
+        idealFor: [
+          'Beginners and experienced practitioners',
+          'Stress alleviation and nervous relaxation',
+          'Musculoskeletal flexibility and spinal mobility',
+          'Developing a healthy daily rhythm',
+        ],
+        focus: 'Mindful alignment, appropriate modifications, and sustainable practice.',
+        format: 'In-Shala & Live Stream',
+        duration: '45–60 mins',
+      }));
+    }
+    return defaultPrograms;
+  }, [galleryYoga, defaultPrograms]);
 
   const yogaImages: GalleryCardItem[] = useMemo(() => {
     if (galleryYoga.length > 0) {

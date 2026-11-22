@@ -15,9 +15,6 @@ import {
   rowFadeUpVariants,
 } from '@/shared/lib/animations';
 import { useGridColumns } from '@/shared/lib/useGridColumns';
-import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
-import { GalleryLightboxModal } from '@/features/gallery/components/GalleryLightboxModal';
-import type { GalleryItem } from '@/features/gallery/types';
 import './ServicesPage.css';
 
 interface CategoryFilter {
@@ -41,8 +38,6 @@ export const ServicesPage: React.FC = React.memo(() => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { services, loading } = useTreatments(selectedCategory, searchQuery);
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
-  const [activeLightbox, setActiveLightbox] = useState<GalleryItem | null>(null);
-  const { items: treatmentGalleryItems } = usePublicGallery('treatment');
   const gridRef = useRef<HTMLDivElement>(null);
   const cols = useGridColumns(gridRef, 4);
 
@@ -257,42 +252,7 @@ export const ServicesPage: React.FC = React.memo(() => {
             )}
           </div>
         </section>
-
-        {treatmentGalleryItems.length > 0 && (
-          <section className="treatments-gallery-strip">
-            <div className="treatments-container">
-              <div className="treatments-section-title-wrap text-center">
-                <h2 className="treatments-section-title">Clinical Atmosphere &amp; Therapies</h2>
-                <p className="treatments-section-subtitle">
-                  Authentic healing sanctuary, medicated oil preparation, and traditional Ayurvedic procedures.
-                </p>
-              </div>
-
-              <div className="treatments-atmosphere-grid">
-                {treatmentGalleryItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="treatment-atmosphere-item"
-                    onClick={() => setActiveLightbox(item)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img src={item.imageUrl} alt={item.title} loading="lazy" />
-                    <div className="atmosphere-caption">
-                      <h4>{item.title}</h4>
-                      {item.description && <p>{item.description}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </main>
-
-      <GalleryLightboxModal
-        item={activeLightbox}
-        onClose={() => setActiveLightbox(null)}
-      />
 
       <Footer />
     </div>

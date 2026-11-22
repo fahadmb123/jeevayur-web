@@ -1,5 +1,7 @@
 import type { AyurvedaService, FaqItem } from '../types';
 import { apiClient } from '@/shared/lib/api';
+import { galleryService } from '@/features/gallery/services/galleryService';
+import { environment } from '@/shared/config/environment';
 import metabolicImg from '@/assets/treatment_metabolic.jpg';
 import womensHealthImg from '@/assets/treatment_womens_health.jpg';
 import musculoskeletalImg from '@/assets/treatment_musculoskeletal.jpg';
@@ -10,6 +12,14 @@ import smritiImg from '@/assets/smriti_meditation.jpg';
 import heroFlatlayImg from '@/assets/ayurveda_hero_flatlay.jpg';
 import consultationImg from '@/assets/ayurveda_consultation.jpg';
 import sanctuaryImg from '@/assets/login_sanctuary.jpg';
+
+const resolveImageUrl = (url?: string): string => {
+  if (!url) return '';
+  if (url.startsWith('/api/')) {
+    return environment.apiBaseUrl ? `${environment.apiBaseUrl}${url}` : url;
+  }
+  return url;
+};
 
 const IMAGE_MAP: Record<string, string> = {
   'metabolic-health': metabolicImg,
@@ -169,10 +179,31 @@ export const treatmentService = {
       }>(`/api/treatments${queryString}`);
 
       const remoteTreatments = response.treatments ?? response.data?.treatments;
-      if (Array.isArray(remoteTreatments)) {
+      if (Array.isArray(remoteTreatments) && remoteTreatments.length > 0) {
         return remoteTreatments.map((t) => ({
           ...t,
-          image: IMAGE_MAP[t.id] || t.image || metabolicImg,
+          image: resolveImageUrl(t.image) || IMAGE_MAP[t.id] || metabolicImg,
+        }));
+      }
+    } catch {
+    }
+
+    try {
+      const galleryResult = await galleryService.getItems('treatment', params?.search);
+      if (galleryResult.items.length > 0) {
+        return galleryResult.items.map((item) => ({
+          id: item.id,
+          title: item.title,
+          categoryTag: 'Clinical Treatment',
+          description: item.description || 'Authentic clinical Ayurvedic formulation and therapy guided by Dr. Ahalya T.S.',
+          icon: '🌿',
+          image: item.imageUrl,
+          benefits: [
+            'Classical herbal and clinical formulation',
+            'Personalized treatment methodology',
+            'Root-cause holistic healing',
+          ],
+          duration: 'Personalized Care',
         }));
       }
     } catch {
