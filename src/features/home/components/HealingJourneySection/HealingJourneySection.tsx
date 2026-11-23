@@ -5,66 +5,72 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ROUTES } from '@/shared/config/routes';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
-import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
+import treatmentMusculoskeletalImg from '@/assets/treatment_musculoskeletal.jpg';
+import treatmentMentalWellbeingImg from '@/assets/treatment_mental_wellbeing.jpg';
+import treatmentDigestiveImg from '@/assets/treatment_digestive.jpg';
+import treatmentSkinHairImg from '@/assets/treatment_skin_hair.jpg';
+import treatmentMetabolicImg from '@/assets/treatment_metabolic.jpg';
+import treatmentWomensHealthImg from '@/assets/treatment_womens_health.jpg';
+import consultationImg from '@/assets/ayurveda_consultation.jpg';
+import smritiMeditationImg from '@/assets/smriti_meditation.jpg';
 import './HealingJourneySection.css';
 
-interface GalleryCardItem {
+interface ShowcaseImageItem {
   id: string;
   src: string;
   alt: string;
 }
 
-const TREATMENT_IMAGES: GalleryCardItem[] = [
+const SHOWCASE_TREATMENT_IMAGES: ShowcaseImageItem[] = [
   {
-    id: 'shot-6',
-    src: '/treatments/treatment-1.png',
-    alt: 'Ayurvedic Botanical Treatment & Natural Remedies',
+    id: 'shot-digestive',
+    src: treatmentDigestiveImg,
+    alt: 'Classical Ayurvedic Gut & Digestive Metabolic Care',
   },
   {
-    id: 'shot-5',
-    src: '/treatments/treatment-2.jpg',
-    alt: 'Holistic Herbal Therapy & Therapeutic Oils',
+    id: 'shot-mental',
+    src: treatmentMentalWellbeingImg,
+    alt: 'Satvavajaya Chikitsa & Mental Rejuvenation Therapy',
   },
   {
-    id: 'shot-4',
-    src: '/treatments/treatment-3.jpg',
-    alt: 'Ayurvedic Nutrition & Mind-Body Restoration',
+    id: 'shot-musculoskeletal',
+    src: treatmentMusculoskeletalImg,
+    alt: 'Musculoskeletal Rehabilitation & Joint Mobility Therapies',
+  },
+  {
+    id: 'shot-consultation',
+    src: consultationImg,
+    alt: 'Individualized Constitutional Assessment & Herbal Guidance',
+  },
+  {
+    id: 'shot-skin-hair',
+    src: treatmentSkinHairImg,
+    alt: 'Natural Botanical Dermatology & Therapeutic Formulations',
+  },
+  {
+    id: 'shot-metabolic',
+    src: treatmentMetabolicImg,
+    alt: 'Herbal Metabolism Optimization & Detoxification Care',
+  },
+  {
+    id: 'shot-womens',
+    src: treatmentWomensHealthImg,
+    alt: 'Holistic Women’s Health & Hormonal Balance Protocols',
+  },
+  {
+    id: 'shot-meditation',
+    src: smritiMeditationImg,
+    alt: 'Smriti Meditation & Mind-Body Restoration',
   },
 ];
 
 export const HealingJourneySection: React.FC = React.memo(() => {
-  const { items: galleryTreatments } = usePublicGallery('treatment');
-
-  const treatmentImages: GalleryCardItem[] = useMemo(() => {
-    if (galleryTreatments && galleryTreatments.length >= 3) {
-      return galleryTreatments.map((item) => ({
-        id: item.id,
-        src: item.imageUrl,
-        alt: item.title,
-      }));
-    }
-    if (galleryTreatments && galleryTreatments.length > 0) {
-      const mapped = galleryTreatments.map((item) => ({
-        id: item.id,
-        src: item.imageUrl,
-        alt: item.title,
-      }));
-      const remaining = TREATMENT_IMAGES.filter(
-        (fallback) => !mapped.some((m) => m.src === fallback.src)
-      );
-      return [...mapped, ...remaining];
-    }
-    return TREATMENT_IMAGES;
-  }, [galleryTreatments]);
-
   const marqueeItems = useMemo(() => {
     return [
-      ...treatmentImages,
-      ...treatmentImages,
-      ...treatmentImages,
-      ...treatmentImages,
+      ...SHOWCASE_TREATMENT_IMAGES,
+      ...SHOWCASE_TREATMENT_IMAGES,
     ];
-  }, [treatmentImages]);
+  }, []);
 
   return (
     <section
@@ -98,14 +104,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
                   className="journey-card__img"
                   loading="lazy"
                   decoding="async"
-                  onError={(e) => {
-                    const fallback =
-                      TREATMENT_IMAGES[index % TREATMENT_IMAGES.length]?.src ||
-                      '/treatments/treatment-1.png';
-                    if (e.currentTarget.src !== fallback) {
-                      e.currentTarget.src = fallback;
-                    }
-                  }}
                 />
               </article>
             ))}
