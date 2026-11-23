@@ -121,18 +121,18 @@
 
 .journey-card {
   position: relative;
-  width: clamp(300px, 24vw, 380px);
-  min-width: clamp(300px, 24vw, 380px);
-  height: clamp(300px, 24vw, 380px);
-  min-height: clamp(300px, 24vw, 380px);
+  width: clamp(390px, 28vw, 470px);
+  min-width: clamp(390px, 28vw, 470px);
+  height: clamp(390px, 28vw, 470px);
+  min-height: clamp(390px, 28vw, 470px);
   aspect-ratio: 1 / 1;
-  border-radius: 28px;
+  border-radius: 34px;
   padding: 0;
   margin: 0;
   border: 1px solid rgba(27, 107, 80, 0.08);
   background-color: #EDF3EF;
   overflow: hidden;
-  box-shadow: 0 12px 32px rgba(15, 34, 25, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 16px 40px rgba(15, 34, 25, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03);
   cursor: default;
   user-select: none;
   transform: none !important;
@@ -140,7 +140,7 @@
 
 .journey-card:hover {
   transform: none !important;
-  box-shadow: 0 12px 32px rgba(15, 34, 25, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+  box-shadow: 0 16px 40px rgba(15, 34, 25, 0.08), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
 }
 
 .journey-card__img {
@@ -148,7 +148,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 28px;
+  border-radius: 34px;
   pointer-events: none;
   user-select: none;
   -webkit-user-drag: none;
@@ -281,15 +281,15 @@
 
 @media (max-width: 1024px) {
   .journey-card {
-    width: clamp(260px, 32vw, 320px);
-    min-width: clamp(260px, 32vw, 320px);
-    height: clamp(260px, 32vw, 320px);
-    min-height: clamp(260px, 32vw, 320px);
-    border-radius: 22px;
+    width: clamp(320px, 36vw, 390px);
+    min-width: clamp(320px, 36vw, 390px);
+    height: clamp(320px, 36vw, 390px);
+    min-height: clamp(320px, 36vw, 390px);
+    border-radius: 28px;
   }
 
   .journey-card__img {
-    border-radius: 22px;
+    border-radius: 28px;
   }
 }
 
@@ -309,15 +309,15 @@
   }
 
   .journey-card {
-    width: 200px;
-    min-width: 200px;
-    height: 200px;
-    min-height: 200px;
-    border-radius: 16px;
+    width: 250px;
+    min-width: 250px;
+    height: 250px;
+    min-height: 250px;
+    border-radius: 20px;
   }
 
   .journey-card__img {
-    border-radius: 16px;
+    border-radius: 20px;
   }
 
   .journey-actions-bar {
