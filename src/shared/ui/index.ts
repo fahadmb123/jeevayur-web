@@ -7,5 +7,6 @@ export * from './BrandLogo';
 export * from './LoadingScreen';
 export * from './ScrollToTop';
 export * from './ConfirmSignOutModal';
+export * from './ConfirmationModal';
 export * from './InternationalPhoneInput';
 export * from './ErrorBoundary/ErrorBoundary';

@@ -1,7 +1,8 @@
-import React, { useEffect, useCallback } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogOut, X, AlertTriangle, Loader2 } from 'lucide-react';
 import { Button } from '@/shared/ui/button';
+import { useModalDismiss } from '@/shared/lib/useModalDismiss';
 import './ConfirmSignOutModal.css';
 
 export interface ConfirmSignOutModalProps {
@@ -23,25 +24,7 @@ export const ConfirmSignOutModal: React.FC<ConfirmSignOutModalProps> = React.mem
   confirmText = 'Sign Out',
   isLoading = false,
 }) => {
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && !isLoading) {
-        onClose();
-      }
-    },
-    [onClose, isLoading]
-  );
-
-  useEffect(() => {
-    if (isOpen) {
-      document.addEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = 'hidden';
-    }
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, handleKeyDown]);
+  useModalDismiss(isOpen, onClose, isLoading);
 
   return (
     <AnimatePresence>

@@ -1,0 +1,258 @@
+.confirmation-modal__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 18, 13, 0.72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  padding: 16px;
+  animation: confirmationFadeIn 0.18s ease-out;
+}
+
+@keyframes confirmationFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.confirmation-modal__container {
+  position: relative;
+  background-color: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  color: var(--text-primary, #14241C);
+  animation: confirmationSlideUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+@keyframes confirmationSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+[data-theme='dark'] .confirmation-modal__container,
+.dark .confirmation-modal__container {
+  background-color: var(--surface-color, #12221B);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.7);
+  color: var(--text-primary, #F2F7F4);
+}
+
+.confirmation-modal__close-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #7E9387);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  z-index: 2;
+}
+
+.confirmation-modal__close-btn:hover:not(:disabled) {
+  background-color: var(--surface-secondary, #F3F6F1);
+  color: var(--text-primary, #14241C);
+}
+
+[data-theme='dark'] .confirmation-modal__close-btn:hover:not(:disabled),
+.dark .confirmation-modal__close-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #F2F7F4);
+}
+
+.confirmation-modal__content {
+  padding: 24px 24px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.confirmation-modal__icon-wrap {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmation-modal__icon-wrap--danger {
+  background-color: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #DC2626;
+}
+
+.confirmation-modal__icon-wrap--warning {
+  background-color: rgba(217, 119, 6, 0.1);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  color: #D97706;
+}
+
+.confirmation-modal__icon-wrap--primary {
+  background-color: rgba(27, 107, 80, 0.1);
+  border: 1px solid rgba(27, 107, 80, 0.2);
+  color: var(--primary-green, #1B6B50);
+}
+
+.confirmation-modal__text {
+  flex: 1;
+  min-width: 0;
+}
+
+.confirmation-modal__title {
+  margin: 0 0 6px;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: inherit;
+  line-height: 1.35;
+}
+
+.confirmation-modal__message {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #485E53);
+  line-height: 1.55;
+}
+
+.confirmation-modal__message p {
+  margin: 0;
+}
+
+[data-theme='dark'] .confirmation-modal__message,
+.dark .confirmation-modal__message {
+  color: var(--text-secondary, #A3B9AD);
+}
+
+.confirmation-modal__footer {
+  padding: 14px 24px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  background-color: var(--surface-secondary, #F7FAF8);
+  border-top: 1px solid var(--border-color, #E2E8DE);
+}
+
+[data-theme='dark'] .confirmation-modal__footer,
+.dark .confirmation-modal__footer {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.confirmation-modal__cancel-btn {
+  padding: 8px 18px;
+  border-radius: 9px;
+  border: 1px solid var(--border-color, #E2E8DE);
+  background: var(--surface-color, #FFFFFF);
+  color: var(--text-primary, #14241C);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.confirmation-modal__cancel-btn:hover:not(:disabled) {
+  background-color: var(--surface-secondary, #F3F6F1);
+  border-color: var(--border-color-hover, #CCD6C6);
+}
+
+[data-theme='dark'] .confirmation-modal__cancel-btn,
+.dark .confirmation-modal__cancel-btn {
+  background: var(--surface-color, #182A22);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-primary, #F2F7F4);
+}
+
+[data-theme='dark'] .confirmation-modal__cancel-btn:hover:not(:disabled),
+.dark .confirmation-modal__cancel-btn:hover:not(:disabled) {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.confirmation-modal__confirm-btn {
+  padding: 8px 20px;
+  border-radius: 9px;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmation-modal__confirm-btn--danger {
+  background-color: #DC2626;
+  color: #FFFFFF;
+}
+
+.confirmation-modal__confirm-btn--danger:hover:not(:disabled) {
+  background-color: #B91C1C;
+}
+
+.confirmation-modal__confirm-btn--warning {
+  background-color: #D97706;
+  color: #FFFFFF;
+}
+
+.confirmation-modal__confirm-btn--warning:hover:not(:disabled) {
+  background-color: #B45309;
+}
+
+.confirmation-modal__confirm-btn--primary {
+  background-color: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+}
+
+.confirmation-modal__confirm-btn--primary:hover:not(:disabled) {
+  background-color: #14553E;
+}
+
+.confirmation-modal__confirm-btn:disabled,
+.confirmation-modal__cancel-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.confirmation-modal__btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.confirmation-modal__spinner {
+  animation: modalSpin 0.9s linear infinite;
+}
+
+@keyframes modalSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import {
   Sparkles,
   Plus,
-  Search,
   Video,
   MapPin,
   Calendar,
@@ -15,6 +14,7 @@ import { YogaClassModal } from '../components/YogaClassModal';
 import { DeleteYogaConfirmModal } from '../components/DeleteYogaConfirmModal';
 import { YogaClassCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { DAYS_OF_WEEK } from '../types/yoga.types';
+import { DoctorSearchFilterStrip, type FilterSelectConfig } from '@/shared/ui';
 import './DoctorYogaSchedulePage.css';
 
 export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
@@ -46,13 +46,53 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
   } = useYogaSchedule();
 
   const totalClasses = sessions.length;
-  const inShalaCount = React.useMemo(
+  const inShalaCount = useMemo(
     () => sessions.filter((s) => s.format === 'offline').length,
     [sessions]
   );
-  const onlineCount = React.useMemo(
+  const onlineCount = useMemo(
     () => sessions.filter((s) => s.format === 'online').length,
     [sessions]
+  );
+
+  const selectFilters: FilterSelectConfig[] = useMemo(() => [
+    {
+      id: 'format-filter',
+      value: selectedFormat,
+      ariaLabel: 'Filter by format',
+      onChange: setSelectedFormat,
+      options: [
+        { label: 'All Formats', value: 'all' },
+        { label: 'In Shala (Offline)', value: 'offline' },
+        { label: 'Live Stream (Online)', value: 'online' },
+      ],
+    },
+    {
+      id: 'level-filter',
+      value: selectedLevel,
+      ariaLabel: 'Filter by level',
+      onChange: setSelectedLevel,
+      options: [
+        { label: 'All Levels', value: 'all' },
+        { label: 'Beginner', value: 'Beginner' },
+        { label: 'Intermediate', value: 'Intermediate' },
+        { label: 'Advanced', value: 'Advanced' },
+      ],
+    },
+  ], [selectedFormat, selectedLevel, setSelectedFormat, setSelectedLevel]);
+
+  const handleResetFilters = useCallback(() => {
+    setSearchQuery('');
+    setSelectedFormat('all');
+    setSelectedLevel('all');
+    setSelectedDay('All');
+  }, [setSearchQuery, setSelectedFormat, setSelectedLevel, setSelectedDay]);
+
+  const isFiltered = Boolean(
+    searchQuery ||
+    selectedFormat !== 'all' ||
+    selectedLevel !== 'all' ||
+    selectedDay !== 'All'
   );
 
   return (
@@ -112,44 +152,14 @@ export const DoctorYogaSchedulePage: React.FC = React.memo(() => {
         </div>
 
         <div className="doctor-yoga-controls">
-          <div className="doctor-yoga-controls__top">
-            <div className="doctor-yoga-search-wrap">
-              <Search size={18} className="doctor-yoga-search-icon" />
-              <input
-                type="text"
-                className="doctor-yoga-search-input"
-                placeholder="Search class by name, instructor, or target condition..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            <div className="doctor-yoga-filters">
-              <select
-                className="doctor-yoga-select"
-                value={selectedFormat}
-                onChange={(e) => setSelectedFormat(e.target.value)}
-                aria-label="Filter format"
-              >
-                <option value="all">All Formats</option>
-                <option value="offline">In Shala (Offline)</option>
-                <option value="online">Live Stream (Online)</option>
-              </select>
-
-              <select
-                className="doctor-yoga-select"
-                value={selectedLevel}
-                onChange={(e) => setSelectedLevel(e.target.value)}
-                aria-label="Filter level"
-              >
-                <option value="all">All Levels</option>
-                <option value="Beginner">Beginner</option>
-                <option value="Intermediate">Intermediate</option>
-                <option value="Advanced">Advanced</option>
-                <option value="All Levels">All Levels</option>
-              </select>
-            </div>
-          </div>
+          <DoctorSearchFilterStrip
+            searchValue={searchQuery}
+            onSearchChange={setSearchQuery}
+            searchPlaceholder="Search class by name, instructor, or target condition..."
+            selectFilters={selectFilters}
+            onReset={isFiltered ? handleResetFilters : undefined}
+            resetTitle="Reset yoga filters"
+          />
 
           <div className="doctor-yoga-days-track" role="tablist">
             <button

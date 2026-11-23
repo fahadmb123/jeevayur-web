@@ -16,6 +16,8 @@ import {
   Loader2,
 } from 'lucide-react';
 import type { Patient } from '../../types';
+import { parsePatientCondition } from '../../utils/patientCondition.utils';
+import { useModalDismiss } from '@/shared/lib/useModalDismiss';
 import { PatientAvatar } from '../PatientAvatar';
 import './PatientDetailModal.css';
 
@@ -29,47 +31,6 @@ export interface PatientDetailModalProps {
   onToggleStatus?: (patient: Patient) => void;
 }
 
-function parsePatientCondition(rawCondition?: string) {
-  if (!rawCondition) {
-    return {
-      serviceType: null,
-      format: null,
-      reason: null,
-    };
-  }
-
-  const match = rawCondition.match(/^([^()]+)\s*\(([^)]+)\)\s*:\s*(.*)$/i);
-  if (match) {
-    const rawType = match[1].trim();
-    const rawFormat = match[2].trim();
-    const rawReason = match[3].trim();
-
-    const formatLabel =
-      rawFormat.toLowerCase() === 'online'
-        ? 'Online (Video Consultation)'
-        : rawFormat.toLowerCase() === 'offline'
-        ? 'Offline (In-Clinic Consultation)'
-        : rawFormat.charAt(0).toUpperCase() + rawFormat.slice(1);
-
-    const typeLabel = rawType
-      .split(' ')
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ');
-
-    return {
-      serviceType: typeLabel,
-      format: formatLabel,
-      reason: rawReason,
-    };
-  }
-
-  return {
-    serviceType: null,
-    format: null,
-    reason: rawCondition,
-  };
-}
-
 export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(({
   patient,
   isOpen,
@@ -79,6 +40,8 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
   onStartConsultation,
   onToggleStatus,
 }) => {
+  useModalDismiss(isOpen, onClose);
+
   const parsedCondition = useMemo(() => {
     return parsePatientCondition(patient?.condition);
   }, [patient?.condition]);
@@ -288,7 +251,7 @@ export const PatientDetailModal: React.FC<PatientDetailModalProps> = React.memo(
                     <div className="patient-detail-row">
                       <div className="patient-detail-label">Consultation Format</div>
                       <div className="patient-detail-value">
-                        {parsedCondition.format || 'Offline (In-Clinic Consultation)'}
+                        {parsedCondition.formatDetail || parsedCondition.format || 'Offline (In-Clinic Consultation)'}
                       </div>
                     </div>
                   </div>

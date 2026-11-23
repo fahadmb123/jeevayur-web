@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Eye, Phone, Mail, MapPin, Video, Globe, UserPlus, CheckCircle2, RotateCcw, Loader2 } from 'lucide-react';
 import type { Patient } from '../../types';
+import { parsePatientCondition } from '../../utils/patientCondition.utils';
 import { StatusPill } from '@/shared/ui/status-pill';
 import { PatientAvatar } from '../PatientAvatar';
 import './PatientListItem.css';
@@ -13,47 +14,6 @@ export interface PatientListItemProps {
   onToggleStatus?: (patient: Patient) => void;
   isStatusUpdating?: boolean;
   isDetailLoading?: boolean;
-}
-
-function parsePatientCondition(rawCondition?: string) {
-  if (!rawCondition) {
-    return {
-      serviceType: null,
-      format: null,
-      reason: null,
-    };
-  }
-
-  const match = rawCondition.match(/^([^()]+)\s*\(([^)]+)\)\s*:\s*(.*)$/i);
-  if (match) {
-    const rawType = match[1].trim();
-    const rawFormat = match[2].trim();
-    const rawReason = match[3].trim();
-
-    const formatLabel =
-      rawFormat.toLowerCase() === 'online'
-        ? 'Online'
-        : rawFormat.toLowerCase() === 'offline'
-        ? 'Offline'
-        : rawFormat.charAt(0).toUpperCase() + rawFormat.slice(1);
-
-    const typeLabel = rawType
-      .split(' ')
-      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-      .join(' ');
-
-    return {
-      serviceType: typeLabel,
-      format: formatLabel,
-      reason: rawReason,
-    };
-  }
-
-  return {
-    serviceType: null,
-    format: null,
-    reason: rawCondition,
-  };
 }
 
 export const PatientListItem: React.FC<PatientListItemProps> = React.memo(({
