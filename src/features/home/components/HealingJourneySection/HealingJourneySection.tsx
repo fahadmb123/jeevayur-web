@@ -36,15 +36,35 @@ export const HealingJourneySection: React.FC = React.memo(() => {
   const { items: galleryTreatments } = usePublicGallery('treatment');
 
   const treatmentImages: GalleryCardItem[] = useMemo(() => {
-    if (galleryTreatments.length > 0) {
+    if (galleryTreatments && galleryTreatments.length >= 3) {
       return galleryTreatments.map((item) => ({
         id: item.id,
         src: item.imageUrl,
         alt: item.title,
       }));
     }
+    if (galleryTreatments && galleryTreatments.length > 0) {
+      const mapped = galleryTreatments.map((item) => ({
+        id: item.id,
+        src: item.imageUrl,
+        alt: item.title,
+      }));
+      const remaining = TREATMENT_IMAGES.filter(
+        (fallback) => !mapped.some((m) => m.src === fallback.src)
+      );
+      return [...mapped, ...remaining];
+    }
     return TREATMENT_IMAGES;
   }, [galleryTreatments]);
+
+  const marqueeItems = useMemo(() => {
+    return [
+      ...treatmentImages,
+      ...treatmentImages,
+      ...treatmentImages,
+      ...treatmentImages,
+    ];
+  }, [treatmentImages]);
 
   return (
     <section
@@ -53,9 +73,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
       aria-label="Our Treatments and Yoga"
     >
       <div className="healing-journey-container">
-        {/* ==================================================================
-            1. OUR TREATMENTS
-            ================================================================== */}
         <motion.div
           className="healing-journey-header text-center"
           variants={staggerContainerVariants}
@@ -63,21 +80,14 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           whileInView="visible"
           viewport={standardViewport}
         >
-
           <motion.p className="journey-subtitle" variants={fadeUpVariants}>
             Classical Ayurvedic treatments including Abhyanga, Shirodhara, and customized herbal formulations prescribed following individual clinical assessment.
           </motion.p>
         </motion.div>
 
-        {/* Treatments Live Stream Marquee */}
         <div className="journey-stream-viewport">
           <div className="journey-stream-track">
-            {[
-              ...treatmentImages,
-              ...treatmentImages,
-              ...treatmentImages,
-              ...treatmentImages,
-            ].map((item, index) => (
+            {marqueeItems.map((item, index) => (
               <article
                 key={`treatment-${item.id}-${index}`}
                 className="journey-card journey-card--image-only"
@@ -88,16 +98,20 @@ export const HealingJourneySection: React.FC = React.memo(() => {
                   className="journey-card__img"
                   loading="lazy"
                   decoding="async"
+                  onError={(e) => {
+                    const fallback =
+                      TREATMENT_IMAGES[index % TREATMENT_IMAGES.length]?.src ||
+                      '/treatments/treatment-1.png';
+                    if (e.currentTarget.src !== fallback) {
+                      e.currentTarget.src = fallback;
+                    }
+                  }}
                 />
               </article>
             ))}
           </div>
         </div>
 
-        {/* Action Button: View Our Treatments */}
-
-
-        {/* Doctor-Guided Therapeutic Yoga & Chikitsa Synergy Bridge */}
         <motion.div
           className="services-yoga-bridge"
           variants={fadeUpVariants}
@@ -124,12 +138,8 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           </div>
         </motion.div>
 
-        {/* Section Divider */}
         <div className="journey-stream-divider" aria-hidden="true" />
 
-        {/* ==================================================================
-            2. OUR YOGA
-            ================================================================== */}
         <motion.div
           className="healing-journey-header text-center"
           id="yoga"
@@ -150,9 +160,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           </motion.p>
         </motion.div>
 
-        {/* ==================================================================
-            3. BOTTOM CTA BOX
-            ================================================================== */}
         <motion.div
           className="journey-cta-box"
           variants={fadeUpVariants}
