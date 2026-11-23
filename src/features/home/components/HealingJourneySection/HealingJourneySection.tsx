@@ -5,46 +5,72 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { ROUTES } from '@/shared/config/routes';
 import { staggerContainerVariants, fadeUpVariants, standardViewport } from '@/shared/lib/animations';
-import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
+import treatmentMusculoskeletalImg from '@/assets/treatment_musculoskeletal.jpg';
+import treatmentMentalWellbeingImg from '@/assets/treatment_mental_wellbeing.jpg';
+import treatmentDigestiveImg from '@/assets/treatment_digestive.jpg';
+import treatmentSkinHairImg from '@/assets/treatment_skin_hair.jpg';
+import treatmentMetabolicImg from '@/assets/treatment_metabolic.jpg';
+import treatmentWomensHealthImg from '@/assets/treatment_womens_health.jpg';
+import consultationImg from '@/assets/ayurveda_consultation.jpg';
+import smritiMeditationImg from '@/assets/smriti_meditation.jpg';
 import './HealingJourneySection.css';
 
-interface GalleryCardItem {
+interface ShowcaseImageItem {
   id: string;
   src: string;
   alt: string;
 }
 
-const TREATMENT_IMAGES: GalleryCardItem[] = [
+const SHOWCASE_TREATMENT_IMAGES: ShowcaseImageItem[] = [
   {
-    id: 'shot-6',
-    src: '/treatments/treatment-1.png',
-    alt: 'Ayurvedic Botanical Treatment & Natural Remedies',
+    id: 'shot-digestive',
+    src: treatmentDigestiveImg,
+    alt: 'Classical Ayurvedic Gut & Digestive Metabolic Care',
   },
   {
-    id: 'shot-5',
-    src: '/treatments/treatment-2.jpg',
-    alt: 'Holistic Herbal Therapy & Therapeutic Oils',
+    id: 'shot-mental',
+    src: treatmentMentalWellbeingImg,
+    alt: 'Satvavajaya Chikitsa & Mental Rejuvenation Therapy',
   },
   {
-    id: 'shot-4',
-    src: '/treatments/treatment-3.jpg',
-    alt: 'Ayurvedic Nutrition & Mind-Body Restoration',
+    id: 'shot-musculoskeletal',
+    src: treatmentMusculoskeletalImg,
+    alt: 'Musculoskeletal Rehabilitation & Joint Mobility Therapies',
+  },
+  {
+    id: 'shot-consultation',
+    src: consultationImg,
+    alt: 'Individualized Constitutional Assessment & Herbal Guidance',
+  },
+  {
+    id: 'shot-skin-hair',
+    src: treatmentSkinHairImg,
+    alt: 'Natural Botanical Dermatology & Therapeutic Formulations',
+  },
+  {
+    id: 'shot-metabolic',
+    src: treatmentMetabolicImg,
+    alt: 'Herbal Metabolism Optimization & Detoxification Care',
+  },
+  {
+    id: 'shot-womens',
+    src: treatmentWomensHealthImg,
+    alt: 'Holistic Women’s Health & Hormonal Balance Protocols',
+  },
+  {
+    id: 'shot-meditation',
+    src: smritiMeditationImg,
+    alt: 'Smriti Meditation & Mind-Body Restoration',
   },
 ];
 
 export const HealingJourneySection: React.FC = React.memo(() => {
-  const { items: galleryTreatments } = usePublicGallery('treatment');
-
-  const treatmentImages: GalleryCardItem[] = useMemo(() => {
-    if (galleryTreatments.length > 0) {
-      return galleryTreatments.map((item) => ({
-        id: item.id,
-        src: item.imageUrl,
-        alt: item.title,
-      }));
-    }
-    return TREATMENT_IMAGES;
-  }, [galleryTreatments]);
+  const marqueeItems = useMemo(() => {
+    return [
+      ...SHOWCASE_TREATMENT_IMAGES,
+      ...SHOWCASE_TREATMENT_IMAGES,
+    ];
+  }, []);
 
   return (
     <section
@@ -53,9 +79,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
       aria-label="Our Treatments and Yoga"
     >
       <div className="healing-journey-container">
-        {/* ==================================================================
-            1. OUR TREATMENTS
-            ================================================================== */}
         <motion.div
           className="healing-journey-header text-center"
           variants={staggerContainerVariants}
@@ -63,21 +86,14 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           whileInView="visible"
           viewport={standardViewport}
         >
-
           <motion.p className="journey-subtitle" variants={fadeUpVariants}>
             Classical Ayurvedic treatments including Abhyanga, Shirodhara, and customized herbal formulations prescribed following individual clinical assessment.
           </motion.p>
         </motion.div>
 
-        {/* Treatments Live Stream Marquee */}
         <div className="journey-stream-viewport">
           <div className="journey-stream-track">
-            {[
-              ...treatmentImages,
-              ...treatmentImages,
-              ...treatmentImages,
-              ...treatmentImages,
-            ].map((item, index) => (
+            {marqueeItems.map((item, index) => (
               <article
                 key={`treatment-${item.id}-${index}`}
                 className="journey-card journey-card--image-only"
@@ -94,10 +110,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           </div>
         </div>
 
-        {/* Action Button: View Our Treatments */}
-
-
-        {/* Doctor-Guided Therapeutic Yoga & Chikitsa Synergy Bridge */}
         <motion.div
           className="services-yoga-bridge"
           variants={fadeUpVariants}
@@ -124,12 +136,8 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           </div>
         </motion.div>
 
-        {/* Section Divider */}
         <div className="journey-stream-divider" aria-hidden="true" />
 
-        {/* ==================================================================
-            2. OUR YOGA
-            ================================================================== */}
         <motion.div
           className="healing-journey-header text-center"
           id="yoga"
@@ -150,9 +158,6 @@ export const HealingJourneySection: React.FC = React.memo(() => {
           </motion.p>
         </motion.div>
 
-        {/* ==================================================================
-            3. BOTTOM CTA BOX
-            ================================================================== */}
         <motion.div
           className="journey-cta-box"
           variants={fadeUpVariants}

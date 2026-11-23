@@ -59,7 +59,10 @@ export const YogaClassCardSkeleton: React.FC<YogaClassCardSkeletonProps> = React
       <>
         {Array.from({ length: count }).map((_, idx) => (
           <article key={idx} className="yoga-card yoga-card--skeleton" aria-hidden="true">
-            <div className="yoga-card__image-container--skeleton yoga-skeleton-box" />
+            <div className="yoga-card__top-bar">
+              <div className="yoga-skeleton-box" style={{ width: '80px', height: '24px', borderRadius: '20px' }} />
+              <div className="yoga-skeleton-box" style={{ width: '60px', height: '24px', borderRadius: '20px' }} />
+            </div>
 
             <div className="yoga-card__body">
               <div className="yoga-card__header">
@@ -96,3 +99,38 @@ export const YogaClassCardSkeleton: React.FC<YogaClassCardSkeletonProps> = React
 );
 
 YogaClassCardSkeleton.displayName = 'YogaClassCardSkeleton';
+
+export interface YogaProgramCardSkeletonProps {
+  count?: number;
+}
+
+export const YogaProgramCardSkeleton: React.FC<YogaProgramCardSkeletonProps> = React.memo(
+  ({ count: explicitCount }) => {
+    const count = useResponsiveSkeletonCount(
+      { mobile: 2, tablet: 4, desktop: 8, wide: 12 },
+      explicitCount
+    );
+
+    return (
+      <>
+        {Array.from({ length: count }).map((_, idx) => (
+          <article
+            key={idx}
+            className="yoga-image-card yoga-image-card--skeleton"
+            aria-hidden="true"
+          >
+            <div className="yoga-image-card__media yoga-skeleton-box">
+              <div className="yoga-image-card__content">
+                <div className="yoga-skeleton-box" style={{ width: '56px', height: '16px', borderRadius: '4px', marginBottom: '8px' }} />
+                <div className="yoga-skeleton-box" style={{ width: '70%', height: '22px', borderRadius: '6px', marginBottom: '6px' }} />
+                <div className="yoga-skeleton-box" style={{ width: '40%', height: '14px', borderRadius: '4px' }} />
+              </div>
+            </div>
+          </article>
+        ))}
+      </>
+    );
+  }
+);
+
+YogaProgramCardSkeleton.displayName = 'YogaProgramCardSkeleton';

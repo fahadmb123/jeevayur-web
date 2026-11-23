@@ -93,14 +93,6 @@
   user-select: none;
 }
 
-.yoga-card__image-container--skeleton {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  border-radius: 16px 16px 0 0;
-  overflow: hidden;
-}
-
 .yoga-skeleton-day-pill {
   width: 26px;
   height: 26px;
@@ -119,10 +111,12 @@
   border-radius: 8px;
 }
 
-@media (max-width: 640px) {
-  .yoga-classes-grid > .yoga-timetable-card--skeleton:nth-child(n+3),
-  .doctor-yoga-grid > .yoga-card--skeleton:nth-child(n+3) {
-    display: none;
-  }
+.yoga-image-card--skeleton {
+  pointer-events: none;
+  user-select: none;
 }
 
+.yoga-image-card--skeleton .yoga-image-card__media {
+  min-height: 280px;
+  border-radius: 18px;
+}

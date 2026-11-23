@@ -1,66 +1,81 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import type {
   YogaSession,
   YogaFormData,
-  DayOfWeek,
 } from '../types/yoga.types';
 import { yogaService } from '../services/yogaService';
 
 export const useYogaSchedule = () => {
   const [sessions, setSessions] = useState<YogaSession[]>([]);
+  const [filteredSessions, setFilteredSessions] = useState<YogaSession[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Filters
   const [selectedDay, setSelectedDay] = useState<string>('All');
   const [selectedFormat, setSelectedFormat] = useState<string>('all');
   const [selectedLevel, setSelectedLevel] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [debouncedSearch, setDebouncedSearch] = useState<string>('');
 
-  // Modal State
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [editingSession, setEditingSession] = useState<YogaSession | null>(null);
+  const [sessionToDelete, setSessionToDelete] = useState<{ id: string; title: string } | null>(null);
+  const [isDeleting, setIsDeleting] = useState<boolean>(false);
   const [actionSuccessMessage, setActionSuccessMessage] = useState<string | null>(null);
 
-  const fetchSessions = useCallback(() => {
-    setIsLoading(true);
-    yogaService
-      .getAll()
-      .then((data) => {
-        setSessions(data);
-        setError(null);
-      })
-      .catch((err) => {
-        setError(err instanceof Error ? err.message : 'Failed to load yoga schedules');
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const fetchTotalSessions = useCallback(async () => {
+    try {
+      const data = await yogaService.getAll();
+      setSessions(data);
+    } catch (err) {
+      console.error('Failed to load total yoga sessions:', err);
+    }
   }, []);
+
+  const fetchFilteredSessions = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      const data = await yogaService.getAll({
+        day: selectedDay,
+        format: selectedFormat,
+        level: selectedLevel,
+        search: debouncedSearch,
+      });
+      setFilteredSessions(data);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load yoga schedules');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedDay, selectedFormat, selectedLevel, debouncedSearch]);
 
   useEffect(() => {
-    let isMounted = true;
-    yogaService
-      .getAll()
-      .then((data) => {
-        if (isMounted) {
-          setSessions(data);
-          setIsLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (isMounted) {
-          setError(err instanceof Error ? err.message : 'Failed to load yoga schedules');
-          setIsLoading(false);
-        }
-      });
+    fetchTotalSessions();
+  }, [fetchTotalSessions]);
 
-    return () => {
-      isMounted = false;
+  useEffect(() => {
+    fetchFilteredSessions();
+  }, [fetchFilteredSessions]);
+
+  useEffect(() => {
+    const handleUpdate = () => {
+      fetchTotalSessions();
+      fetchFilteredSessions();
     };
-  }, []);
+    window.addEventListener('jeevayurniketan_yoga_updated', handleUpdate);
+    return () => {
+      window.removeEventListener('jeevayurniketan_yoga_updated', handleUpdate);
+    };
+  }, [fetchTotalSessions, fetchFilteredSessions]);
 
-  // Flash message helper
   const showToast = useCallback((message: string) => {
     setActionSuccessMessage(message);
     setTimeout(() => {
@@ -68,46 +83,6 @@ export const useYogaSchedule = () => {
     }, 3500);
   }, []);
 
-  // Filtered Sessions
-  const filteredSessions = useMemo(() => {
-    return sessions.filter((session) => {
-      // Day filter
-      if (selectedDay !== 'All') {
-        const matchesDay = session.days.includes(selectedDay as DayOfWeek);
-        if (!matchesDay) return false;
-      }
-
-      // Format filter (online / offline)
-      if (selectedFormat !== 'all' && session.format !== selectedFormat) {
-        return false;
-      }
-
-      // Level / Suitable For filter
-      if (selectedLevel !== 'all') {
-        const matchesLevel = session.level === selectedLevel;
-        const matchesSuitable = session.suitableFor?.toLowerCase().includes(selectedLevel.toLowerCase());
-        if (!matchesLevel && !matchesSuitable) {
-          return false;
-        }
-      }
-
-      // Search Query
-      if (searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchesTitle = session.title.toLowerCase().includes(q);
-        const matchesInstructor = Boolean(session.instructor?.toLowerCase().includes(q));
-        const matchesSuitable = session.suitableFor.toLowerCase().includes(q);
-        const matchesLocation = Boolean(session.location?.toLowerCase().includes(q));
-        if (!matchesTitle && !matchesInstructor && !matchesSuitable && !matchesLocation) {
-          return false;
-        }
-      }
-
-      return true;
-    });
-  }, [sessions, selectedDay, selectedFormat, selectedLevel, searchQuery]);
-
-  // Handlers for Add / Edit / Delete
   const handleOpenAddModal = useCallback(() => {
     setEditingSession(null);
     setIsModalOpen(true);
@@ -126,49 +101,49 @@ export const useYogaSchedule = () => {
   const handleSaveSession = useCallback(async (formData: YogaFormData) => {
     try {
       if (editingSession) {
-        const updated = await yogaService.update(editingSession.id, formData);
-        setSessions((prev) =>
-          prev.map((s) => (s.id === editingSession.id ? updated : s))
-        );
+        await yogaService.update(editingSession.id, formData);
         showToast(`"${formData.title}" updated successfully.`);
       } else {
-        const created = await yogaService.create(formData);
-        setSessions((prev) => [created, ...prev]);
+        await yogaService.create(formData);
         showToast(`"${formData.title}" scheduled successfully.`);
       }
+      await Promise.all([fetchTotalSessions(), fetchFilteredSessions()]);
       handleCloseModal();
     } catch (err) {
       console.error('Failed to save yoga session:', err);
       throw err;
     }
-  }, [editingSession, handleCloseModal, showToast]);
+  }, [editingSession, handleCloseModal, showToast, fetchTotalSessions, fetchFilteredSessions]);
 
-  const handleDeleteSession = useCallback(async (id: string, title: string) => {
-    if (window.confirm(`Are you sure you want to remove "${title}" from the yoga schedule?`)) {
-      try {
-        await yogaService.delete(id);
-        setSessions((prev) => prev.filter((s) => s.id !== id));
-        showToast(`"${title}" has been removed.`);
-      } catch (err) {
-        console.error('Failed to delete session:', err);
-      }
-    }
-  }, [showToast]);
+  const handleOpenDeleteModal = useCallback((id: string, title: string) => {
+    setSessionToDelete({ id, title });
+  }, []);
 
-  const handleResetDefaults = useCallback(async () => {
-    if (window.confirm('Reset schedule to default Ayurvedic yoga timetable?')) {
-      const defaults = await yogaService.resetDefaults();
-      setSessions(defaults);
-      showToast('Yoga schedule reset to default sessions.');
+  const handleCancelDelete = useCallback(() => {
+    if (isDeleting) return;
+    setSessionToDelete(null);
+  }, [isDeleting]);
+
+  const handleConfirmDelete = useCallback(async () => {
+    if (!sessionToDelete) return;
+    setIsDeleting(true);
+    try {
+      await yogaService.delete(sessionToDelete.id);
+      showToast(`"${sessionToDelete.title}" has been removed.`);
+      setSessionToDelete(null);
+      await Promise.all([fetchTotalSessions(), fetchFilteredSessions()]);
+    } catch (err) {
+      console.error('Failed to delete session:', err);
+    } finally {
+      setIsDeleting(false);
     }
-  }, [showToast]);
+  }, [sessionToDelete, showToast, fetchTotalSessions, fetchFilteredSessions]);
 
   return {
     sessions,
     filteredSessions,
     isLoading,
     error,
-    // Filters
     selectedDay,
     setSelectedDay,
     selectedFormat,
@@ -177,16 +152,19 @@ export const useYogaSchedule = () => {
     setSelectedLevel,
     searchQuery,
     setSearchQuery,
-    // Modal
     isModalOpen,
     editingSession,
+    sessionToDelete,
+    isDeleting,
     actionSuccessMessage,
     handleOpenAddModal,
     handleOpenEditModal,
     handleCloseModal,
     handleSaveSession,
-    handleDeleteSession,
-    handleResetDefaults,
-    refresh: fetchSessions,
+    handleDeleteSession: handleOpenDeleteModal,
+    handleOpenDeleteModal,
+    handleCancelDelete,
+    handleConfirmDelete,
+    refresh: () => Promise.all([fetchTotalSessions(), fetchFilteredSessions()]),
   };
 };

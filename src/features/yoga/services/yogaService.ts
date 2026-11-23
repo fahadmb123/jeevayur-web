@@ -1,121 +1,15 @@
 import type { YogaSession, YogaFormData } from '../types/yoga.types';
+import { apiClient } from '@/shared/lib/api/apiClient';
 
-const STORAGE_KEY = 'jeevayurniketan_yoga_sessions_v2';
+export interface YogaFilterParams {
+  day?: string;
+  format?: string;
+  level?: string;
+  search?: string;
+}
 
-const DEFAULT_YOGA_SESSIONS: YogaSession[] = [
-  {
-    id: 'yoga-1',
-    title: 'Surya Namaskar & Morning Pranayama',
-    duration: '60 mins',
-    format: 'offline',
-    suitableFor: 'Beginner (All Ages)',
-    days: ['Monday', 'Wednesday', 'Friday'],
-    time: '06:30 AM - 07:30 AM',
-    scheduleItems: [
-      { day: 'Monday', time: '06:30 AM - 07:30 AM' },
-      { day: 'Wednesday', time: '06:30 AM - 07:30 AM' },
-      { day: 'Friday', time: '06:30 AM - 07:30 AM' },
-    ],
-    level: 'Beginner',
-    description: 'Awaken your Prana (life-force) through traditional sun salutations combined with Anulom-Vilom and Bhastrika breathing techniques to balance Tridoshas.',
-    price: '₹450 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'yoga-2',
-    title: 'Therapeutic Yoga for Spine & Joints',
-    duration: '45 mins',
-    format: 'offline',
-    suitableFor: 'Gentle & Restorative (Seniors 50+)',
-    days: ['Tuesday', 'Thursday', 'Saturday'],
-    time: '08:00 AM - 08:45 AM',
-    scheduleItems: [
-      { day: 'Tuesday', time: '08:00 AM - 08:45 AM' },
-      { day: 'Thursday', time: '08:00 AM - 08:45 AM' },
-      { day: 'Saturday', time: '08:30 AM - 09:15 AM' },
-    ],
-    level: 'All Levels',
-    description: 'Gentle micro-movements (Sukshma Vyayama) and customized postures targeting lumbar relaxation, cervical comfort, and arthritis alleviation.',
-    price: '₹600 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'yoga-3',
-    title: 'Mindful Yoga Nidra & Stress Dissolution',
-    duration: '60 mins',
-    format: 'online',
-    suitableFor: 'All Levels (All Ages)',
-    days: ['Monday', 'Wednesday', 'Sunday'],
-    time: '07:30 PM - 08:30 PM',
-    scheduleItems: [
-      { day: 'Monday', time: '07:30 PM - 08:30 PM' },
-      { day: 'Wednesday', time: '07:30 PM - 08:30 PM' },
-      { day: 'Sunday', time: '07:30 PM - 08:30 PM' },
-    ],
-    level: 'All Levels',
-    description: 'Deep psychological reset through guided psychic sleep (Yoga Nidra). Reduces cortisol, calms hyperactive Vata dosha, and restores restorative sleep cycles.',
-    price: '₹400 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'yoga-4',
-    title: 'Ashtanga Vinyasa Flow (Agni Booster)',
-    duration: '75 mins',
-    format: 'offline',
-    suitableFor: 'Intermediate (Adults 18-50)',
-    days: ['Tuesday', 'Thursday', 'Saturday'],
-    time: '06:00 AM - 07:15 AM',
-    scheduleItems: [
-      { day: 'Tuesday', time: '06:00 AM - 07:15 AM' },
-      { day: 'Thursday', time: '06:00 AM - 07:15 AM' },
-      { day: 'Saturday', time: '06:30 AM - 07:45 AM' },
-    ],
-    level: 'Intermediate',
-    description: 'Dynamic synchronized breath-movement sequences to kindle digestive fire (Jatharagni), build muscular endurance, and enhance cardiovascular tone.',
-    price: '₹550 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'yoga-5',
-    title: 'Restorative Yin Yoga & Sound Healing',
-    duration: '90 mins',
-    format: 'offline',
-    suitableFor: 'Advanced (Adults 18+)',
-    days: ['Saturday', 'Sunday'],
-    time: 'Sat: 05:00 PM - 06:30 PM | Sun: 06:00 PM - 07:30 PM',
-    scheduleItems: [
-      { day: 'Saturday', time: '05:00 PM - 06:30 PM' },
-      { day: 'Sunday', time: '06:00 PM - 07:30 PM' },
-    ],
-    level: 'Advanced',
-    description: 'Slow-paced restorative poses supported by bolsters and natural herbs, combined with Tibetan singing bowl resonance for cellular harmony.',
-    price: '₹750 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=800&auto=format&fit=crop',
-  },
-  {
-    id: 'yoga-6',
-    title: 'Women’s Hormonal Harmony & Prenatal Care',
-    duration: '60 mins',
-    format: 'online',
-    suitableFor: 'All Levels (All Ages)',
-    days: ['Monday', 'Thursday'],
-    time: '10:00 AM - 11:00 AM',
-    scheduleItems: [
-      { day: 'Monday', time: '10:00 AM - 11:00 AM' },
-      { day: 'Thursday', time: '10:00 AM - 11:00 AM' },
-    ],
-    level: 'All Levels',
-    description: 'Specialized therapeutic sequences designed to nourish the reproductive system, ease pelvic tension, and restore metabolic equilibrium.',
-    price: '₹500 / session',
-    status: 'active',
-    imageUrl: 'https://images.unsplash.com/photo-1510894347713-fc3ed6fdf539?q=80&w=800&auto=format&fit=crop',
-  },
-];
+const STORAGE_KEY = 'jeevayurniketan_yoga_sessions_v3';
+const YOGA_UPDATED_EVENT = 'jeevayurniketan_yoga_updated';
 
 const loadSessionsFromStorage = (): YogaSession[] => {
   try {
@@ -141,8 +35,7 @@ const loadSessionsFromStorage = (): YogaSession[] => {
   } catch (err) {
     console.error('Failed to parse yoga sessions from localStorage:', err);
   }
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_YOGA_SESSIONS));
-  return DEFAULT_YOGA_SESSIONS;
+  return [];
 };
 
 const saveSessionsToStorage = (sessions: YogaSession[]): void => {
@@ -154,56 +47,177 @@ const saveSessionsToStorage = (sessions: YogaSession[]): void => {
 };
 
 export const yogaService = {
-  getAll: async (): Promise<YogaSession[]> => {
-    // Simulate brief network latency for smooth UI transitions
-    await new Promise((resolve) => setTimeout(resolve, 80));
-    return loadSessionsFromStorage();
+  getAll: async (filters?: YogaFilterParams): Promise<YogaSession[]> => {
+    try {
+      const params = new URLSearchParams();
+      if (filters?.day && filters.day.toLowerCase() !== 'all') {
+        params.append('day', filters.day);
+      }
+      if (filters?.format && filters.format.toLowerCase() !== 'all') {
+        params.append('format', filters.format.toLowerCase());
+      }
+      if (filters?.level && filters.level.toLowerCase() !== 'all') {
+        params.append('level', filters.level);
+      }
+      if (filters?.search && filters.search.trim() !== '') {
+        params.append('search', filters.search.trim());
+      }
+      const queryString = params.toString();
+      const endpoint = queryString ? `/api/yoga?${queryString}` : '/api/yoga';
+
+      const response = await apiClient.get<{ success: boolean; data: YogaSession[] }>(endpoint);
+      if (response && response.success && Array.isArray(response.data)) {
+        if (!queryString) {
+          saveSessionsToStorage(response.data);
+        }
+        return response.data;
+      }
+    } catch {
+    }
+
+    const cached = loadSessionsFromStorage();
+    if (!filters) return cached;
+    return cached.filter((session) => {
+      if (filters.day && filters.day.toLowerCase() !== 'all' && !session.days.includes(filters.day as any)) {
+        return false;
+      }
+      if (filters.format && filters.format.toLowerCase() !== 'all' && session.format !== filters.format) {
+        return false;
+      }
+      if (filters.level && filters.level.toLowerCase() !== 'all') {
+        const matchesLevel = session.level === filters.level;
+        const matchesSuitable = session.suitableFor?.toLowerCase().includes(filters.level.toLowerCase());
+        if (!matchesLevel && !matchesSuitable) return false;
+      }
+      if (filters.search && filters.search.trim()) {
+        const q = filters.search.toLowerCase();
+        const matchesTitle = session.title.toLowerCase().includes(q);
+        const matchesDesc = session.description.toLowerCase().includes(q);
+        const matchesInstructor = Boolean(session.instructor?.toLowerCase().includes(q));
+        if (!matchesTitle && !matchesDesc && !matchesInstructor) return false;
+      }
+      return true;
+    });
   },
 
   getById: async (id: string): Promise<YogaSession | undefined> => {
-    const sessions = loadSessionsFromStorage();
-    return sessions.find((s) => s.id === id);
+    try {
+      const response = await apiClient.get<{ success: boolean; data: YogaSession }>(`/api/yoga/${id}`);
+      if (response && response.success && response.data) {
+        return response.data;
+      }
+    } catch {
+    }
+    const cached = loadSessionsFromStorage();
+    return cached.find((s) => s.id === id);
   },
 
   create: async (formData: YogaFormData): Promise<YogaSession> => {
-    const sessions = loadSessionsFromStorage();
-    const newSession: YogaSession = {
+    const payload = {
+      title: formData.title.trim(),
+      duration: formData.duration.trim(),
+      format: formData.format,
+      suitableFor: formData.suitableFor.trim(),
+      days: formData.days,
+      time: formData.time || null,
+      scheduleItems: formData.scheduleItems || null,
+      description: formData.description.trim(),
+      level: formData.level || 'Beginner',
+      ageGroup: formData.ageGroup || null,
+      instructor: formData.instructor || null,
+      location: formData.location || null,
+      capacity: formData.capacity ?? null,
+      price: formData.price || null,
+      priceAmount: formData.priceAmount || null,
+      priceUnit: formData.priceUnit || null,
+      imageUrl: formData.imageUrl || null,
+    };
+
+    try {
+      const response = await apiClient.post<{ success: boolean; data: YogaSession }>('/api/yoga', payload);
+      if (response && response.success && response.data) {
+        const cached = loadSessionsFromStorage();
+        saveSessionsToStorage([response.data, ...cached.filter((s) => s.id !== response.data.id)]);
+        window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
+        return response.data;
+      }
+    } catch {
+    }
+
+    const fallbackSession: YogaSession = {
       ...formData,
       id: `yoga-${Date.now()}`,
       enrolledCount: 0,
       status: 'active',
-      imageUrl: formData.imageUrl?.trim() || 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=800&auto=format&fit=crop',
+      imageUrl: formData.imageUrl?.trim() || '',
     };
-    const updated = [newSession, ...sessions];
-    saveSessionsToStorage(updated);
-    return newSession;
+    const cached = loadSessionsFromStorage();
+    saveSessionsToStorage([fallbackSession, ...cached]);
+    window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
+    return fallbackSession;
   },
 
   update: async (id: string, formData: Partial<YogaFormData>): Promise<YogaSession> => {
-    const sessions = loadSessionsFromStorage();
-    const index = sessions.findIndex((s) => s.id === id);
+    const payload: Record<string, any> = {};
+    if (formData.title !== undefined) payload.title = formData.title.trim();
+    if (formData.duration !== undefined) payload.duration = formData.duration.trim();
+    if (formData.format !== undefined) payload.format = formData.format;
+    if (formData.suitableFor !== undefined) payload.suitableFor = formData.suitableFor.trim();
+    if (formData.days !== undefined) payload.days = formData.days;
+    if (formData.time !== undefined) payload.time = formData.time;
+    if (formData.scheduleItems !== undefined) payload.scheduleItems = formData.scheduleItems;
+    if (formData.description !== undefined) payload.description = formData.description.trim();
+    if (formData.level !== undefined) payload.level = formData.level;
+    if (formData.ageGroup !== undefined) payload.ageGroup = formData.ageGroup;
+    if (formData.instructor !== undefined) payload.instructor = formData.instructor;
+    if (formData.location !== undefined) payload.location = formData.location;
+    if (formData.capacity !== undefined) payload.capacity = formData.capacity;
+    if (formData.price !== undefined) payload.price = formData.price;
+    if (formData.priceAmount !== undefined) payload.priceAmount = formData.priceAmount;
+    if (formData.priceUnit !== undefined) payload.priceUnit = formData.priceUnit;
+    if (formData.imageUrl !== undefined) payload.imageUrl = formData.imageUrl;
+
+    try {
+      const response = await apiClient.put<{ success: boolean; data: YogaSession }>(`/api/yoga/${id}`, payload);
+      if (response && response.success && response.data) {
+        const cached = loadSessionsFromStorage();
+        saveSessionsToStorage(cached.map((s) => (s.id === id ? response.data : s)));
+        window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
+        return response.data;
+      }
+    } catch {
+    }
+
+    const cached = loadSessionsFromStorage();
+    const index = cached.findIndex((s) => s.id === id);
     if (index === -1) {
       throw new Error(`Yoga session with ID ${id} not found.`);
     }
     const updatedSession: YogaSession = {
-      ...sessions[index],
+      ...cached[index],
       ...formData,
     };
-    sessions[index] = updatedSession;
-    saveSessionsToStorage(sessions);
+    cached[index] = updatedSession;
+    saveSessionsToStorage(cached);
+    window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
     return updatedSession;
   },
 
   delete: async (id: string): Promise<boolean> => {
-    const sessions = loadSessionsFromStorage();
-    const filtered = sessions.filter((s) => s.id !== id);
-    if (filtered.length === sessions.length) return false;
+    try {
+      await apiClient.delete(`/api/yoga/${id}`);
+    } catch {
+    }
+    const cached = loadSessionsFromStorage();
+    const filtered = cached.filter((s) => s.id !== id);
     saveSessionsToStorage(filtered);
+    window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
     return true;
   },
 
-  resetDefaults: async (): Promise<YogaSession[]> => {
-    saveSessionsToStorage(DEFAULT_YOGA_SESSIONS);
-    return DEFAULT_YOGA_SESSIONS;
+  clearAll: async (): Promise<YogaSession[]> => {
+    saveSessionsToStorage([]);
+    window.dispatchEvent(new CustomEvent(YOGA_UPDATED_EVENT));
+    return [];
   },
 };

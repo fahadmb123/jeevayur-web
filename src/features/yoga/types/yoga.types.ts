@@ -31,17 +31,17 @@ export const SUITABLE_FOR_OPTIONS = [
 
 export interface DayScheduleItem {
   day: DayOfWeek;
-  time: string; // e.g. "06:30 AM - 07:30 AM"
+  time: string;
 }
 
 export interface YogaSession {
   id: string;
   title: string;
-  duration: string;           // e.g. "60 mins"
-  format: YogaFormat;         // 'online' | 'offline'
-  suitableFor: string;        // e.g. "Beginner (All Ages)"
-  days: DayOfWeek[];          // ['Monday', 'Wednesday', 'Friday']
-  time?: string;              // Optional time slot
+  duration: string;
+  format: YogaFormat;
+  suitableFor: string;
+  days: DayOfWeek[];
+  time?: string;
   scheduleItems?: DayScheduleItem[];
   description: string;
   level?: YogaLevel;
@@ -50,7 +50,9 @@ export interface YogaSession {
   location?: string;
   capacity?: number;
   enrolledCount?: number;
-  price?: string;             // e.g. "₹500 / session" or "Included in Retreat"
+  price?: string;
+  priceAmount?: string;
+  priceUnit?: string;
   status?: 'active' | 'upcoming';
   imageUrl?: string;
 }
@@ -70,5 +72,7 @@ export interface YogaFormData {
   location?: string;
   capacity?: number;
   price?: string;
+  priceAmount?: string;
+  priceUnit?: string;
   imageUrl?: string;
 }

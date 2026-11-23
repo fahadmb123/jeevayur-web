@@ -1,5 +1,6 @@
 export * from './YogaClassCard';
 export * from './YogaClassModal';
+export * from './DeleteYogaConfirmModal';
 export * from './YogaFilterBar';
 export * from './YogaProgramCard';
 export * from './YogaProgramDetailsCard';

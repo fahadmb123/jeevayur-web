@@ -27,9 +27,6 @@ import {
   rowFadeUpVariants,
 } from '@/shared/lib/animations';
 import { useGridColumns } from '@/shared/lib/useGridColumns';
-import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
-import { GalleryLightboxModal } from '@/features/gallery/components/GalleryLightboxModal';
-import type { GalleryItem } from '@/features/gallery/types';
 import './YogaSchedulePage.css';
 
 const DAYS_OF_WEEK: { key: DayOfWeek; label: string }[] = [
@@ -53,35 +50,11 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const [selectedProgramId, setSelectedProgramId] = useState<string>(
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
-  const [activeLightbox, setActiveLightbox] = useState<GalleryItem | null>(null);
-  const { items: yogaGalleryItems } = usePublicGallery('yoga');
   const yogaGridRef = useRef<HTMLDivElement>(null);
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
   const { hero } = YOGAATHMA_DATA;
-
-  const programs: YogaProgram[] = useMemo(() => {
-    return yogaGalleryItems.map((item, idx) => ({
-      id: item.id,
-      number: String(idx + 1).padStart(2, '0'),
-      title: item.title,
-      tagline: 'Authentic yogic harmony and breath awareness.',
-      categoryTag: 'YOGA & MEDITATION',
-      accentColor: '#1B6B50',
-      description: item.description || 'Guided mindful movement, restorative postures, and breath awareness to nurture vital prana.',
-      image: item.imageUrl,
-      idealForTitle: 'Ideal for:',
-      idealFor: [
-        'Beginners and experienced practitioners',
-        'Stress alleviation and nervous relaxation',
-        'Musculoskeletal flexibility and spinal mobility',
-        'Developing a healthy daily rhythm',
-      ],
-      focus: 'Mindful alignment, appropriate modifications, and sustainable practice.',
-      format: 'In-Shala & Live Stream',
-      duration: '45–60 mins',
-    }));
-  }, [yogaGalleryItems]);
+  const programs: YogaProgram[] = YOGAATHMA_DATA.programs;
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
@@ -147,9 +120,9 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
             {programs.length === 0 ? (
               <div className="yoga-empty-state-large">
                 <Leaf size={48} className="yoga-empty-icon-large" />
-                <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
+                <h3 className="yoga-empty-title-large">No Yoga Programs Available</h3>
                 <p className="yoga-empty-desc-large">
-                  There are currently no yoga images or programs available in the gallery.
+                  There are currently no yoga programs available.
                 </p>
               </div>
             ) : (
@@ -225,33 +198,29 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
         <section id="yoga-schedule" className="yoga-schedule-section">
           <div className="yoga-container">
             <div className="yoga-section-header text-center">
-              <h2 className="yoga-section-heading">Weekly Timetable</h2>
+              <h2 className="yoga-section-heading">Weekly Class Timetable</h2>
               <p className="yoga-section-desc">
-                Attend sessions in our Kottakkal Shala or join live online from anywhere.
+                Filter by day and preferred format to find the session that fits your rhythm.
               </p>
             </div>
 
-            <div className="yoga-schedule-controls">
-              <div className="yoga-day-tabs" role="tablist">
-                {DAYS_OF_WEEK.map((d) => {
-                  const isActive = activeDay === d.key;
-                  return (
-                    <button
-                      key={d.key}
-                      type="button"
-                      role="tab"
-                      aria-selected={isActive}
-                      className={`yoga-day-tab ${isActive ? 'is-active' : ''}`}
-                      onClick={() => setActiveDay(d.key)}
-                    >
-                      <span className="yoga-day-short">{d.label}</span>
-                      <span className="yoga-day-full">{d.key}</span>
-                    </button>
-                  );
-                })}
+            <div className="yoga-filter-bar">
+              <div className="yoga-days-nav" role="tablist" aria-label="Days of week">
+                {DAYS_OF_WEEK.map(({ key, label }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    role="tab"
+                    aria-selected={activeDay === key}
+                    className={`yoga-day-btn ${activeDay === key ? 'is-active' : ''}`}
+                    onClick={() => setActiveDay(key)}
+                  >
+                    <span>{label}</span>
+                  </button>
+                ))}
               </div>
 
-              <div className="yoga-format-filter">
+              <div className="yoga-format-toggle" role="group" aria-label="Session format">
                 <button
                   type="button"
                   className={`yoga-format-btn ${activeFormat === 'all' ? 'is-active' : ''}`}
@@ -357,51 +326,8 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
           </div>
         </section>
 
-        <section className="yoga-gallery-strip">
-          <div className="yoga-container">
-            <div className="yoga-section-header text-center">
-              <h2 className="yoga-section-heading">Practice Atmosphere</h2>
-              <p className="yoga-section-desc">
-                Tranquil natural surroundings and compassionate guidance to nurture your practice.
-              </p>
-            </div>
-
-            {yogaGalleryItems.length === 0 ? (
-              <div className="yoga-empty-state-large">
-                <Leaf size={48} className="yoga-empty-icon-large" />
-                <h3 className="yoga-empty-title-large">No Yoga Images Available</h3>
-                <p className="yoga-empty-desc-large">
-                  No practice atmosphere photographs have been uploaded yet.
-                </p>
-              </div>
-            ) : (
-              <div className="yoga-atmosphere-grid">
-                {yogaGalleryItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="yoga-atmosphere-item"
-                    onClick={() => setActiveLightbox(item)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <img src={item.imageUrl} alt={item.title} loading="lazy" />
-                    <div className="atmosphere-caption">
-                      <h4>{item.title}</h4>
-                      {item.description && <p>{item.description}</p>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </section>
-
         <YogaBookingCard />
       </main>
-
-      <GalleryLightboxModal
-        item={activeLightbox}
-        onClose={() => setActiveLightbox(null)}
-      />
 
       <Footer />
     </div>

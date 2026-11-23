@@ -11,7 +11,7 @@ import {
   Compass,
   Award,
 } from 'lucide-react';
-import { YOGAATHMA_DATA, type YogaProgram } from '../../data/yogaathmaData';
+import { YOGAATHMA_DATA } from '../../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
 import { YogaProgramCard } from '../YogaProgramCard';
 import { ROUTES } from '@/shared/config/routes';
@@ -20,79 +20,65 @@ import {
   fadeUpVariants,
   standardViewport,
 } from '@/shared/lib/animations';
-import { usePublicGallery } from '@/features/gallery/hooks/usePublicGallery';
+import therapeuticImg from '@/assets/yoga_therapeutic.jpg';
+import pranayamaImg from '@/assets/yoga_pranayama.jpg';
+import personalizedImg from '@/assets/yoga_personalized.jpg';
+import meditationImg from '@/assets/smriti_meditation.jpg';
+import groupImg from '@/assets/yoga_group.jpg';
 import './YogaathmaSection.css';
 
-interface GalleryCardItem {
+interface ShowcaseYogaItem {
   id: string;
   src: string;
   alt: string;
 }
 
-const YOGA_IMAGES: GalleryCardItem[] = [
+const SHOWCASE_YOGA_IMAGES: ShowcaseYogaItem[] = [
   {
-    id: 'yoga-1',
-    src: '/yoga/yoga-1.jpg',
-    alt: 'Therapeutic Asana & Mindful Movement',
+    id: 'yoga-therapeutic',
+    src: therapeuticImg,
+    alt: 'Doctor-Guided Therapeutic Yoga & Spinal Mobility Care',
   },
   {
-    id: 'yoga-2',
-    src: '/yoga/yoga-2.jpg',
-    alt: 'Pranayama Breathwork & Guided Meditation',
+    id: 'yoga-pranayama',
+    src: pranayamaImg,
+    alt: 'Classical Pranayama Breath Regulation & Vital Energy Balance',
   },
   {
-    id: 'yoga-3',
-    src: '/yoga/yoga-3.jpg',
-    alt: 'Restorative Yogic Healing & Dosha Balance',
+    id: 'yoga-personalized',
+    src: personalizedImg,
+    alt: 'Personalized 1-on-1 Constitutional Movement Flow',
+  },
+  {
+    id: 'yoga-meditation',
+    src: meditationImg,
+    alt: 'Restorative Dhyana Meditation & Nervous System Calmitude',
+  },
+  {
+    id: 'yoga-group',
+    src: groupImg,
+    alt: 'Community Yoga Shala & Guided Asana Practice',
   },
 ];
 
 const PILLAR_ICONS = [Compass, Award, Heart, Sparkles, ShieldCheck];
 
 export const YogaathmaSection: React.FC = React.memo(() => {
-  const { hero, approach } = YOGAATHMA_DATA;
-  const { items: galleryYoga } = usePublicGallery('yoga');
+  const { hero, approach, programs } = YOGAATHMA_DATA;
 
-  const programs: YogaProgram[] = useMemo(() => {
-    return galleryYoga.map((item, idx) => ({
-      id: item.id,
-      number: String(idx + 1).padStart(2, '0'),
-      title: item.title,
-      tagline: 'Authentic yogic harmony and breath awareness.',
-      categoryTag: 'YOGA & MEDITATION',
-      accentColor: '#1B6B50',
-      description: item.description || 'Guided mindful movement, restorative postures, and breath awareness to nurture vital prana.',
-      image: item.imageUrl,
-      idealForTitle: 'Ideal for:',
-      idealFor: [
-        'Beginners and experienced practitioners',
-        'Stress alleviation and nervous relaxation',
-        'Musculoskeletal flexibility and spinal mobility',
-        'Developing a healthy daily rhythm',
-      ],
-      focus: 'Mindful alignment, appropriate modifications, and sustainable practice.',
-      format: 'In-Shala & Live Stream',
-      duration: '45–60 mins',
-    }));
-  }, [galleryYoga]);
-
-  const yogaImages: GalleryCardItem[] = useMemo(() => {
-    if (galleryYoga.length > 0) {
-      return galleryYoga.map((item) => ({
-        id: item.id,
-        src: item.imageUrl,
-        alt: item.title,
-      }));
-    }
-    return YOGA_IMAGES;
-  }, [galleryYoga]);
+  const marqueeItems = useMemo(() => {
+    return [
+      ...SHOWCASE_YOGA_IMAGES,
+      ...SHOWCASE_YOGA_IMAGES,
+      ...SHOWCASE_YOGA_IMAGES,
+    ];
+  }, []);
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
   return (
     <section id="yoga" className="yogaathma-section">
       <div className="yogaathma-container">
-        {/* Section Header */}
         <motion.div
           className="yogaathma-header text-center"
           variants={staggerContainerVariants}
@@ -119,7 +105,6 @@ export const YogaathmaSection: React.FC = React.memo(() => {
             {hero.description}
           </motion.p>
 
-          {/* Quick CTA Actions */}
           <motion.div className="yogaathma-hero-actions" variants={fadeUpVariants}>
             <a
               href={whatsappHeroUrl}
@@ -139,7 +124,6 @@ export const YogaathmaSection: React.FC = React.memo(() => {
           </motion.div>
         </motion.div>
 
-        {/* 5 Approach Pillars Row */}
         <motion.div
           className="yogaathma-pillars-row"
           variants={staggerContainerVariants}
@@ -173,7 +157,6 @@ export const YogaathmaSection: React.FC = React.memo(() => {
           </div>
         </motion.div>
 
-        {/* 5 Yoga Programs Grid: Open & Close animated cards "like in the treatment" */}
         <motion.div
           className="yogaathma-programs-block"
           variants={staggerContainerVariants}
@@ -201,17 +184,10 @@ export const YogaathmaSection: React.FC = React.memo(() => {
         </motion.div>
       </div>
 
-      {/* Continuous Yoga Live Stream Showcase */}
       <div className="yogaathma-stream-wrapper">
-        {/* Yoga Live Stream Marquee (Flows from Left to Right) */}
         <div className="journey-stream-viewport">
           <div className="journey-stream-track journey-stream-track--reverse">
-            {[
-              ...yogaImages,
-              ...yogaImages,
-              ...yogaImages,
-              ...yogaImages,
-            ].map((item, index) => (
+            {marqueeItems.map((item, index) => (
               <article
                 key={`yoga-${item.id}-${index}`}
                 className="journey-card journey-card--image-only"
@@ -228,7 +204,6 @@ export const YogaathmaSection: React.FC = React.memo(() => {
           </div>
         </div>
 
-        {/* Action Button: View Our Yoga */}
         <motion.div
           className="journey-actions-bar"
           variants={fadeUpVariants}

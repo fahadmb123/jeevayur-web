@@ -123,6 +123,8 @@
   font-family: inherit;
   transition: all 0.2s ease;
   outline: none;
+  min-height: 42px;
+  box-sizing: border-box;
 }
 
 .yoga-modal__input:focus,
@@ -133,7 +135,127 @@
   box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.18);
 }
 
-/* Format Pill Selectors */
+.yoga-modal__input.has-error,
+.yoga-modal__select.has-error,
+.yoga-modal__textarea.has-error {
+  border-color: #DC2626 !important;
+  background-color: #FFFDFD;
+}
+
+.yoga-modal__input.has-error:focus,
+.yoga-modal__select.has-error:focus,
+.yoga-modal__textarea.has-error:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
+}
+
+.yoga-modal__custom-time-wrap {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.yoga-modal__unit-input-wrap {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0 14px;
+  min-height: 42px;
+  border: 1px solid var(--border-color, #E2E8DE);
+  border-radius: 10px;
+  background-color: var(--bg-color, #FBFBF9);
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.yoga-modal__unit-input-wrap:focus-within {
+  border-color: var(--primary-green, #1B6B50);
+  background-color: var(--surface-color, #FFFFFF);
+  box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.18);
+}
+
+.yoga-modal__unit-input-wrap.has-error {
+  border-color: #DC2626 !important;
+  background-color: #FFFDFD;
+}
+
+.yoga-modal__unit-input-wrap.has-error:focus-within {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.14) !important;
+}
+
+.yoga-modal__unit-prefix {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--primary-green, #1B6B50);
+  margin-right: 8px;
+  user-select: none;
+  flex-shrink: 0;
+  letter-spacing: 0.2px;
+}
+
+[data-theme='dark'] .yoga-modal__unit-prefix,
+.dark .yoga-modal__unit-prefix {
+  color: var(--primary-green-light, #41BA91);
+}
+
+.yoga-modal__unit-field {
+  flex: 1;
+  border: none !important;
+  background: transparent !important;
+  padding: 10px 0 !important;
+  outline: none !important;
+  box-shadow: none !important;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: var(--text-primary, #14241C);
+  width: 100%;
+}
+
+.yoga-modal__unit-field::-webkit-calendar-picker-indicator {
+  display: none !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-theme='dark'] .yoga-modal__unit-field,
+.dark .yoga-modal__unit-field {
+  color: var(--text-primary, #F2F7F4);
+}
+
+.yoga-modal__price-preview {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--primary-green-tint, #EDF6F1);
+  border: 1px solid rgba(27, 107, 80, 0.2);
+  border-radius: 8px;
+  font-size: 0.825rem;
+  margin-top: -8px;
+  width: fit-content;
+}
+
+[data-theme='dark'] .yoga-modal__price-preview,
+.dark .yoga-modal__price-preview {
+  background: rgba(46, 157, 119, 0.12);
+  border-color: rgba(46, 157, 119, 0.3);
+}
+
+.yoga-modal__price-preview-label {
+  font-weight: 500;
+  color: var(--text-secondary, #485E53);
+}
+
+.yoga-modal__price-preview-value {
+  font-weight: 700;
+  color: var(--primary-green-deep, #0B3326);
+}
+
+[data-theme='dark'] .yoga-modal__price-preview-value,
+.dark .yoga-modal__price-preview-value {
+  color: #A7F3D0;
+}
+
 .yoga-modal__format-group {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -163,11 +285,19 @@
   box-shadow: 0 2px 6px rgba(27, 107, 80, 0.1);
 }
 
-/* Days of Week Checkboxes / Toggles */
 .yoga-modal__days-wrapper {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  padding: 2px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.yoga-modal__days-wrapper.has-error {
+  border: 1px dashed rgba(220, 38, 38, 0.5);
+  padding: 6px;
+  background: rgba(220, 38, 38, 0.02);
 }
 
 .yoga-modal__day-toggle {
@@ -191,84 +321,18 @@
   border-color: var(--primary-green, #1B6B50);
 }
 
-/* Per-Day Time Slots Box */
-.yoga-modal__day-times-box {
-  background: var(--surface-secondary, #F3F6F1);
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 12px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.yoga-modal__day-times-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.yoga-modal__day-times-title {
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--primary-green-deep, #0B3326);
-}
-
-.yoga-modal__btn-apply-all {
-  background: none;
-  border: none;
-  color: var(--primary-green, #1B6B50);
-  font-size: 0.775rem;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  padding: 0;
-}
-
-.yoga-modal__btn-apply-all:hover {
-  color: var(--primary-green-dark, #124C38);
-}
-
-.yoga-modal__day-time-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: var(--surface-color, #FFFFFF);
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color, #E2E8DE);
-}
-
-.yoga-modal__day-label {
-  min-width: 90px;
-  font-weight: 600;
-  font-size: 0.825rem;
-  color: var(--primary-green, #124C38);
-}
-
-.yoga-modal__day-time-input {
-  flex: 1;
-  padding: 6px 10px;
-  border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 6px;
-  font-size: 0.85rem;
-  outline: none;
-  color: var(--text-primary, #14241C);
-  background: var(--bg-color, #FBFBF9);
-}
-
-.yoga-modal__day-time-input:focus {
-  border-color: var(--primary-green, #1B6B50);
-  background: var(--surface-color, #FFFFFF);
-}
-
 .yoga-modal__error-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 0.775rem;
   color: #DC2626;
+  font-weight: 500;
   margin-top: 4px;
+}
+
+.yoga-modal__error-hint svg {
+  flex-shrink: 0;
 }
 
 .yoga-modal__footer {
@@ -342,9 +406,10 @@
 }
 
 .yoga-modal__btn-submit:disabled {
-  opacity: 0.65;
+  opacity: 0.55;
   cursor: not-allowed;
   transform: none;
+  box-shadow: none;
 }
 
 @media (max-width: 640px) {
