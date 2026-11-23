@@ -54,6 +54,8 @@ export const usePatients = (initialQuery?: PatientFilterQuery) => {
   }, []);
 
   const updatePatientStatus = useCallback(async (id: number | string, status: PatientStatus) => {
+    const prevPatients = [...patients];
+    const prevCounts = { ...counts };
     setPatients((prev) =>
       prev.map((p) => (String(p.id) === String(id) ? { ...p, status } : p))
     );
@@ -65,8 +67,14 @@ export const usePatients = (initialQuery?: PatientFilterQuery) => {
         Uncompleted: isComplete ? Math.max(0, prev.Uncompleted - 1) : prev.Uncompleted + 1,
       };
     });
-    await patientService.updatePatientStatus(id, status);
-  }, []);
+    try {
+      await patientService.updatePatientStatus(id, status);
+    } catch (err) {
+      setPatients(prevPatients);
+      setCounts(prevCounts);
+      throw err;
+    }
+  }, [patients, counts]);
 
   return {
     patients,

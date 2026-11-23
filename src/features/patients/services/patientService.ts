@@ -85,17 +85,20 @@ export const patientService = {
     try {
       const res = await apiClient.get<{
         success: boolean;
-        data: {
-          patients: ApiPatient[];
-          total: number;
+        data?: {
+          patients?: ApiPatient[];
+          total?: number;
           counts?: { all: number; completed: number; uncompleted: number };
         };
+        patients?: ApiPatient[];
+        total?: number;
+        counts?: { all: number; completed: number; uncompleted: number };
       }>(`/api/patients${queryString}`);
 
-      const apiPatients = res.data?.patients || [];
+      const apiPatients = res.data?.patients || res.patients || [];
       const mapped = apiPatients.map(mapApiPatient);
-      const total = res.data?.total ?? mapped.length;
-      const counts = res.data?.counts || {
+      const total = res.data?.total ?? res.total ?? mapped.length;
+      const counts = res.data?.counts || res.counts || {
         all: total,
         completed: mapped.filter((p) => p.status === 'Completed').length,
         uncompleted: mapped.filter((p) => p.status === 'Uncompleted').length,
@@ -166,9 +169,6 @@ export const patientService = {
     if (idx !== -1) {
       inMemoryPatients[idx] = { ...inMemoryPatients[idx], status };
     }
-    try {
-      await apiClient.patch(`/api/patients/${id}/status`, { status });
-    } catch {
-    }
+    await apiClient.patch(`/api/patients/${encodeURIComponent(String(id))}/status`, { status });
   },
 };
