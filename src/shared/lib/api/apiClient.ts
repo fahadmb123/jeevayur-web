@@ -69,7 +69,8 @@ async function request<TResponse>(path: string, options: RequestInit = {}, isRet
   const isAuthRoute =
     path.startsWith('/api/auth/login') ||
     path.startsWith('/api/auth/refresh') ||
-    path.startsWith('/api/auth/logout');
+    path.startsWith('/api/auth/logout') ||
+    path.startsWith('/api/auth/me');
 
   if (response.status === 401 && !isRetry && !isAuthRoute) {
     if (!refreshPromise) {
