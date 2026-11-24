@@ -1,7 +1,3 @@
-/* ==========================================================================
-   Header & Navbar Component Styles (Premium Human-Crafted Sanctuary Navigation)
-   ========================================================================== */
-
 .navbar-wrapper {
   position: fixed;
   top: 0;
@@ -22,14 +18,13 @@
 }
 
 .navbar-wrapper.scrolled {
-  background: rgba(254, 253, 250, 0.90);
+  background: rgba(254, 253, 250, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(27, 107, 80, 0.08);
   box-shadow: 0 4px 24px -2px rgba(10, 36, 25, 0.05), 0 1px 2px rgba(10, 36, 25, 0.02);
 }
 
-/* Plain Edge-to-Edge Navbar Inner Container */
 .navbar {
   display: flex;
   align-items: center;
@@ -48,7 +43,6 @@
   padding: 14px clamp(20px, 3.5vw, 48px);
 }
 
-/* Brand Section */
 .navbar-brand-section {
   display: flex;
   align-items: center;
@@ -56,33 +50,30 @@
   margin-right: clamp(16px, 2.5vw, 36px);
 }
 
-/* --------------------------------------------------------------------------
-   Center Navigation Pill Tray (Bespoke Segmented Rail)
-   -------------------------------------------------------------------------- */
 .navbar-nav-pill {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid rgba(27, 107, 80, 0.09);
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(27, 107, 80, 0.12);
   border-radius: 999px;
-  padding: 4px 6px;
-  box-shadow: 0 2px 8px -2px rgba(10, 46, 32, 0.04);
+  padding: 5px 8px;
+  box-shadow: 0 2px 10px -2px rgba(10, 46, 32, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   transition: all 0.25s ease;
 }
 
 .navbar-wrapper.scrolled .navbar-nav-pill {
-  background: rgba(246, 248, 246, 0.65);
-  border-color: rgba(27, 107, 80, 0.1);
-  box-shadow: 0 2px 10px -2px rgba(10, 46, 32, 0.06);
+  background: rgba(246, 248, 246, 0.75);
+  border-color: rgba(27, 107, 80, 0.12);
+  box-shadow: 0 2px 12px -2px rgba(10, 46, 32, 0.07);
 }
 
 .navbar-links {
   display: flex;
   align-items: center;
   list-style: none;
-  gap: 2px;
+  gap: 4px;
   margin: 0;
   padding: 0;
 }
@@ -93,12 +84,12 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.875rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #22382D;
   letter-spacing: -0.01em;
   text-decoration: none;
-  padding: 7px 16px;
+  padding: 8px 18px;
   border-radius: 999px;
   transition: color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
@@ -108,7 +99,7 @@
 .navbar-active-indicator {
   position: absolute;
   inset: 0;
-  background: rgba(27, 107, 80, 0.09);
+  background: rgba(27, 107, 80, 0.10);
   border-radius: 999px;
   z-index: 1;
   pointer-events: none;
@@ -128,48 +119,42 @@
   font-weight: 700;
 }
 
-/* Desktop Theme Toggle Container */
 .navbar-theme-toggle-desktop {
   display: flex;
   align-items: center;
 }
 
-/* --------------------------------------------------------------------------
-   Action Buttons Cluster
-   -------------------------------------------------------------------------- */
 .navbar-actions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-/* Subtle Hairline Vertical Divider */
 .navbar-action-divider {
   width: 1px;
-  height: 22px;
-  background: rgba(27, 107, 80, 0.12);
+  height: 24px;
+  background: rgba(27, 107, 80, 0.14);
   margin: 0 2px;
   flex-shrink: 0;
 }
 
-/* Clean Crafted Login / Portal Pill */
 .navbar-login-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  height: 38px;
-  padding: 0 16px;
+  gap: 8px;
+  height: 42px;
+  padding: 0 18px;
   border-radius: 999px;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.84rem;
+  font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   text-decoration: none;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(27, 107, 80, 0.18);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(27, 107, 80, 0.20);
   color: var(--text-primary, #14241C);
-  box-shadow: 0 2px 6px rgba(18, 76, 56, 0.03);
+  box-shadow: 0 2px 6px rgba(18, 76, 56, 0.04);
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   white-space: nowrap;
 }
@@ -181,7 +166,7 @@
 }
 
 .navbar-login-btn:hover {
-  background: rgba(27, 107, 80, 0.08);
+  background: rgba(27, 107, 80, 0.09);
   border-color: var(--primary-green, #1B6B50);
   color: var(--primary-green, #1B6B50);
   transform: translateY(-1px);
@@ -193,26 +178,25 @@
 }
 
 .navbar-login-btn.active {
-  background: rgba(27, 107, 80, 0.12);
+  background: rgba(27, 107, 80, 0.14);
   border-color: var(--primary-green, #1B6B50);
   color: var(--primary-green, #1B6B50);
 }
 
-/* Subtle, Polished Logout Pill */
 .navbar-logout-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 13px;
+  gap: 7px;
+  height: 42px;
+  padding: 0 16px;
   border-radius: 999px;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 650;
   letter-spacing: -0.01em;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(220, 38, 38, 0.22);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(220, 38, 38, 0.24);
   color: var(--text-secondary, #475569);
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
@@ -262,26 +246,33 @@
 }
 
 @media (max-width: 1240px) {
+  .navbar-link-item {
+    font-size: 0.91rem;
+    padding: 8px 14px;
+  }
   .navbar-logout-text {
     display: none;
   }
   .navbar-logout-btn {
-    padding: 0 10px;
-    width: 38px;
+    padding: 0 12px;
+    width: 42px;
   }
 }
 
-/* High-End Pill CTA Button */
 .navbar-cta-wrap {
   display: block;
 }
 
 .navbar-cta-wrap .app-btn {
   border-radius: 999px !important;
-  padding: 9px 20px !important;
-  font-size: 0.84rem !important;
+  height: 42px !important;
+  padding: 0 22px !important;
+  font-size: 0.92rem !important;
   font-weight: 700 !important;
   letter-spacing: -0.01em;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   background: var(--primary-green, #1B6B50) !important;
   color: #FFFFFF !important;
   border: 1px solid rgba(255, 255, 255, 0.15) !important;
@@ -295,7 +286,6 @@
   box-shadow: 0 5px 16px rgba(27, 107, 80, 0.32) !important;
 }
 
-/* Mobile Toggle Button */
 .navbar-mobile-toggle {
   display: none;
   background: none;
@@ -314,9 +304,6 @@
   color: var(--primary-green, #1B6B50);
 }
 
-/* --------------------------------------------------------------------------
-   Mobile Drawer Navigation
-   -------------------------------------------------------------------------- */
 .mobile-menu-backdrop {
   position: fixed;
   inset: 0;
@@ -466,7 +453,6 @@
   color: #F87171;
 }
 
-/* Mobile Drawer Theme Switcher Row */
 .mobile-menu-theme-row {
   display: flex;
   align-items: center;
@@ -519,9 +505,6 @@
   padding: 12px 20px !important;
 }
 
-/* --------------------------------------------------------------------------
-   Dark Mode Accommodations
-   -------------------------------------------------------------------------- */
 [data-theme='dark'] .navbar-wrapper.transparent-top,
 .dark .navbar-wrapper.transparent-top {
   background: transparent;
@@ -530,7 +513,7 @@
 
 [data-theme='dark'] .navbar-wrapper.scrolled,
 .dark .navbar-wrapper.scrolled {
-  background: rgba(10, 22, 16, 0.90);
+  background: rgba(10, 22, 16, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(65, 186, 145, 0.14);
@@ -539,15 +522,15 @@
 
 [data-theme='dark'] .navbar-nav-pill,
 .dark .navbar-nav-pill {
-  background: rgba(18, 36, 28, 0.65);
-  border-color: rgba(65, 186, 145, 0.16);
+  background: rgba(18, 36, 28, 0.75);
+  border-color: rgba(65, 186, 145, 0.18);
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.35);
 }
 
 [data-theme='dark'] .navbar-wrapper.scrolled .navbar-nav-pill,
 .dark .navbar-wrapper.scrolled .navbar-nav-pill {
-  background: rgba(14, 30, 22, 0.7);
-  border-color: rgba(65, 186, 145, 0.18);
+  background: rgba(14, 30, 22, 0.8);
+  border-color: rgba(65, 186, 145, 0.20);
 }
 
 [data-theme='dark'] .navbar-link-item,
@@ -579,8 +562,8 @@
 
 [data-theme='dark'] .navbar-login-btn,
 .dark .navbar-login-btn {
-  background: rgba(20, 42, 32, 0.7);
-  border-color: rgba(65, 186, 145, 0.25);
+  background: rgba(20, 42, 32, 0.75);
+  border-color: rgba(65, 186, 145, 0.28);
   color: var(--text-primary, #F2F7F4);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
@@ -673,9 +656,6 @@
   color: #92AA9E;
 }
 
-/* --------------------------------------------------------------------------
-   Responsive Breakpoints
-   -------------------------------------------------------------------------- */
 @media (max-width: 1040px) {
   .navbar-nav-pill {
     display: none;
@@ -727,10 +707,10 @@
     gap: 8px;
   }
   .navbar-login-btn {
-    height: 35px;
-    padding: 0 13px;
-    font-size: 0.8rem;
-    gap: 6px;
+    height: 38px;
+    padding: 0 15px;
+    font-size: 0.86rem;
+    gap: 7px;
   }
 }
 
@@ -748,10 +728,10 @@
     gap: 6px;
   }
   .navbar-login-btn {
-    height: 33px;
-    padding: 0 10px;
-    font-size: 0.76rem;
-    gap: 5px;
+    height: 36px;
+    padding: 0 12px;
+    font-size: 0.82rem;
+    gap: 6px;
   }
   .navbar-mobile-toggle {
     padding: 4px;
