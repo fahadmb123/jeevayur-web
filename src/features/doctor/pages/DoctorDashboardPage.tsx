@@ -1,6 +1,17 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RotateCw, UserPlus, Inbox, Sparkles, CheckCircle2 } from 'lucide-react';
+import {
+  RotateCw,
+  UserPlus,
+  Inbox,
+  Sparkles,
+  CheckCircle2,
+  Calendar,
+  Compass,
+  ArrowRight,
+  ShieldCheck,
+  HeartPulse,
+} from 'lucide-react';
 import { DoctorStats, DoctorQuickRequestsDrawer } from '../components';
 import {
   RecentPatientsWidget,
@@ -34,7 +45,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const { user } = useAuth();
   const {
     patients,
-    counts: patientCounts,
     fetchPatients,
     addPatient,
     updatePatientStatus,
@@ -43,6 +53,17 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const { stats, refreshStats } = useDoctorStats();
 
   const doctorGreetingName = user?.name || 'Dr. Ahalya T.S.';
+
+  const doctorInitials = useMemo(() => {
+    return doctorGreetingName
+      .split(' ')
+      .map((part) => part.replace(/[^a-zA-Z]/g, ''))
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0])
+      .join('')
+      .toUpperCase() || 'DR';
+  }, [doctorGreetingName]);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<DashboardTabFilter>('all');
@@ -213,8 +234,8 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
       onChange: (val) => setSelectedSection(val as 'All' | 'Patients' | 'Appointments'),
       options: [
         { value: 'All', label: 'All Sections' },
-        { value: 'Patients', label: 'Patients Only' },
-        { value: 'Appointments', label: 'Schedule Only' },
+        { value: 'Patients', label: 'Patients Directory' },
+        { value: 'Appointments', label: "Today's Schedule" },
       ],
     },
     {
@@ -224,8 +245,8 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
       onChange: setSelectedStatus,
       options: [
         { value: 'All', label: 'All Statuses' },
-        { value: 'Uncompleted', label: 'Uncompleted' },
-        { value: 'Completed', label: 'Completed' },
+        { value: 'Uncompleted', label: 'Active in Care' },
+        { value: 'Completed', label: 'Therapy Concluded' },
       ],
     },
   ], [selectedSection, selectedStatus]);
@@ -240,7 +261,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const pills: FilterPillConfig[] = useMemo(() => [
     {
       id: 'all',
-      label: 'Overview (All)',
+      label: 'Clinical Overview',
       count: patients.length + appointments.length,
       isActive: activeTab === 'all',
       onClick: () => {
@@ -260,7 +281,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     },
     {
       id: 'patients',
-      label: 'Recent Patients',
+      label: 'Patients Directory',
       count: patients.length,
       isActive: activeTab === 'patients' || selectedSection === 'Patients',
       onClick: () => {
@@ -270,7 +291,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     },
     {
       id: 'uncompleted',
-      label: 'Uncompleted',
+      label: 'Active Care',
       count: uncompletedCount,
       isActive: activeTab === 'uncompleted',
       onClick: () => {
@@ -280,7 +301,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     },
     {
       id: 'completed',
-      label: 'Completed',
+      label: 'Completed Therapies',
       count: completedCount,
       isActive: activeTab === 'completed',
       onClick: () => {
@@ -306,48 +327,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
 
   return (
     <div className="doctor-dashboard-content">
-      <div className="doctor-dashboard-live-strip">
-        <div className="doctor-dashboard-live-indicator">
-          <span className="doctor-dashboard-pulse-dot" />
-          <span className="doctor-dashboard-live-text">Clinic Active • Live Realtime Feed</span>
-          <span className="doctor-dashboard-date-badge">{todayFormatted}</span>
-        </div>
-
-        <div className="doctor-dashboard-quick-actions">
-          <button
-            type="button"
-            className={`doctor-dashboard-sync-btn ${isSyncing ? 'is-syncing' : ''}`}
-            onClick={handleSyncAll}
-            disabled={isSyncing}
-            title="Refresh dashboard feed with backend"
-          >
-            <RotateCw size={14} className={isSyncing ? 'spin-icon' : ''} />
-            <span>{isSyncing ? 'Syncing...' : 'Sync Feed'}</span>
-          </button>
-
-          <button
-            type="button"
-            className="doctor-dashboard-inbound-btn"
-            onClick={() => setIsRequestsDrawerOpen(true)}
-          >
-            <Inbox size={14} />
-            <span>Inbound Requests</span>
-            {pendingRequestsCount > 0 && (
-              <span className="doctor-dashboard-inbound-badge">{pendingRequestsCount}</span>
-            )}
-          </button>
-
-          <button
-            type="button"
-            className="doctor-dashboard-add-btn"
-            onClick={() => setIsAddModalOpen(true)}
-          >
-            <UserPlus size={14} />
-            <span>+ Add Patient</span>
-          </button>
-        </div>
-      </div>
-
       {successBanner && (
         <div className="doctor-dashboard-toast">
           <CheckCircle2 size={16} />
@@ -355,18 +334,74 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         </div>
       )}
 
-      <div className="doctor-greeting-section">
-        <div className="doctor-greeting-main">
-          <h1 className="doctor-greeting-title">
-            {timeGreeting}, <span className="doctor-greeting-highlight">{doctorGreetingName}</span>
-          </h1>
-          <p className="doctor-greeting-sub">
-            Reviewing live Ayurvedic sanctuary records, patient appointments, and clinical treatment progress.
-          </p>
+      <div className="doctor-modern-hero">
+        <div className="doctor-modern-hero__pattern" />
+        <div className="doctor-modern-hero__left">
+          <div className="doctor-modern-hero__avatar-box">
+            <div className="doctor-modern-hero__avatar">
+              <span>{doctorInitials}</span>
+            </div>
+            <span className="doctor-modern-hero__status-ring" title="Clinical desk active" />
+          </div>
+
+          <div className="doctor-modern-hero__details">
+            <div className="doctor-modern-hero__meta-pill-row">
+              <span className="doctor-modern-hero__pulse-pill">
+                <span className="doctor-modern-hero__pulse-dot" />
+                <span>Live Sanctuary Feed</span>
+              </span>
+              <span className="doctor-modern-hero__date-pill">
+                <Calendar size={12} />
+                <span>{todayFormatted}</span>
+              </span>
+              <span className="doctor-modern-hero__ritu-pill">
+                <Sparkles size={12} />
+                <span>Hemanta Ritu • Vata Pacification</span>
+              </span>
+            </div>
+
+            <h1 className="doctor-modern-hero__title">
+              {timeGreeting}, <span className="doctor-modern-hero__title-accent">{doctorGreetingName}</span>
+            </h1>
+
+            <p className="doctor-modern-hero__subtitle">
+              Ayurvedic Sanctuary Clinical Command Center • Classical Panchakarma, Patient Records & Real-Time Consultations
+            </p>
+          </div>
         </div>
-        <div className="doctor-greeting-badge">
-          <Sparkles size={15} />
-          <span>{patientCounts.All} Registered Patients</span>
+
+        <div className="doctor-modern-hero__actions">
+          <button
+            type="button"
+            className={`doctor-hero-btn doctor-hero-btn--sync ${isSyncing ? 'is-syncing' : ''}`}
+            onClick={handleSyncAll}
+            disabled={isSyncing}
+            title="Synchronize records with live database"
+          >
+            <RotateCw size={14} className={isSyncing ? 'spin-icon' : ''} />
+            <span>{isSyncing ? 'Syncing...' : 'Sync Feed'}</span>
+          </button>
+
+          <button
+            type="button"
+            className="doctor-hero-btn doctor-hero-btn--inbound"
+            onClick={() => setIsRequestsDrawerOpen(true)}
+          >
+            <Inbox size={15} />
+            <span>Inbound Triage</span>
+            {pendingRequestsCount > 0 && (
+              <span className="doctor-hero-btn__badge">{pendingRequestsCount}</span>
+            )}
+          </button>
+
+          <button
+            type="button"
+            className="doctor-hero-btn doctor-hero-btn--primary"
+            onClick={() => setIsAddModalOpen(true)}
+          >
+            <UserPlus size={15} />
+            <span>+ Add Patient</span>
+          </button>
         </div>
       </div>
 
@@ -395,17 +430,62 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
             onViewAll={() => navigate(ROUTES.DOCTOR_PATIENTS)}
             onViewDetails={(patient) => setDetailPatient(patient)}
             onToggleStatus={handleTogglePatientStatus}
+            onAddPatient={() => setIsAddModalOpen(true)}
             updatingPatientId={updatingPatientId}
           />
         )}
+
         {showSchedule && (
-          <TodayScheduleWidget
-            appointments={filteredAppointments}
-            onConsultationComplete={handleConsultationFinished}
-            onViewDetails={(apt) => setSelectedAppointmentDetail(apt)}
-            onStartAppointment={(apt) => setActiveConsultationAppointment(apt)}
-            onOpenCalendar={() => setIsRequestsDrawerOpen(true)}
-          />
+          <div className="doctor-schedule-column">
+            <TodayScheduleWidget
+              appointments={filteredAppointments}
+              onConsultationComplete={handleConsultationFinished}
+              onViewDetails={(apt) => setSelectedAppointmentDetail(apt)}
+              onStartAppointment={(apt) => setActiveConsultationAppointment(apt)}
+              onOpenCalendar={() => setIsRequestsDrawerOpen(true)}
+            />
+
+            <div className="doctor-dinacharya-card">
+              <div className="doctor-dinacharya-card__header">
+                <div className="doctor-dinacharya-card__icon-wrap">
+                  <Compass size={18} />
+                </div>
+                <div>
+                  <h3 className="doctor-dinacharya-card__title">Ayurvedic Sanctuary Protocols</h3>
+                  <span className="doctor-dinacharya-card__sub">Seasonal Dinacharya & Clinical Pathways</span>
+                </div>
+              </div>
+
+              <div className="doctor-dinacharya-card__body">
+                <div className="doctor-dinacharya-item">
+                  <ShieldCheck size={14} className="doctor-dinacharya-item__icon" />
+                  <div>
+                    <strong>Dosha Assessment Focus</strong>
+                    <p>Screening Vata imbalance, sleep rhythm disturbances, and digestive Agni weakness.</p>
+                  </div>
+                </div>
+
+                <div className="doctor-dinacharya-item">
+                  <HeartPulse size={14} className="doctor-dinacharya-item__icon" />
+                  <div>
+                    <strong>Prescription Formulations</strong>
+                    <p>Brahmi Thailam Shirodhara, warm Mahanarayan Abhyanga, and customized herbal decoctions.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="doctor-dinacharya-card__footer">
+                <button
+                  type="button"
+                  className="doctor-dinacharya-btn"
+                  onClick={() => navigate(ROUTES.DOCTOR_YOGA)}
+                >
+                  <span>Yoga & Meditation Timetable</span>
+                  <ArrowRight size={13} />
+                </button>
+              </div>
+            </div>
+          </div>
         )}
       </div>
 

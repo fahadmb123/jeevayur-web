@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { doctorService } from '../services/doctorService';
+import { doctorService, INITIAL_STATS } from '../services/doctorService';
 import type { DoctorStatItem } from '../types';
 
 export const useDoctorStats = () => {
-  const [stats, setStats] = useState<DoctorStatItem[]>([]);
+  const [stats, setStats] = useState<DoctorStatItem[]>(INITIAL_STATS);
   const [loading, setLoading] = useState<boolean>(true);
 
   const refreshStats = useCallback(async () => {
