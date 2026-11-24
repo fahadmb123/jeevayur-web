@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { MessageCircle, Leaf } from 'lucide-react';
+import { MessageCircle, Leaf, Sparkles, Clock } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
@@ -51,26 +51,59 @@ export const ServicesPage: React.FC = React.memo(() => {
       <Navbar />
 
       <main className="services-page">
-        <header className="treatments-hero">
-          <div className="treatments-hero__inner">
-            <motion.h1
-              className="treatments-hero__title"
+        <header className="treatments-hero-section">
+          <div className="treatments-container">
+            <motion.div
+              className="treatments-hero-card"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
             >
-              Ayurvedic Treatments &amp; Therapies
-            </motion.h1>
+              <div className="hero-designer-badge">
+                <Sparkles size={13} className="hero-badge-sparkle" />
+                <span>Jeevayurniketan Sanctuary &bull; Authentic Chikitsa</span>
+              </div>
 
-            <motion.p
-              className="treatments-hero__subtitle"
-              variants={fadeUpVariants}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.08 }}
-            >
-              Consultations, classical herbal therapies, and personalized care guided by Dr. Ahalya T.S.
-            </motion.p>
+              <h1 className="treatments-hero__title">
+                Ayurvedic Treatments <span className="treatments-hero-title-accent">&amp; Therapies</span>
+              </h1>
+
+              <p className="treatments-hero__subtitle">
+                Consultations, classical herbal therapies, and personalized healing guided by Dr. Ahalya T.S.
+              </p>
+
+              <div className="hero-designer-pills">
+                <div className="hero-designer-pill">
+                  <Leaf size={12} />
+                  <span>Classical Herbal Formulations</span>
+                </div>
+                <div className="hero-designer-pill">
+                  <Sparkles size={12} />
+                  <span>Personalized Chikitsa</span>
+                </div>
+                <div className="hero-designer-pill">
+                  <Clock size={12} />
+                  <span>Dr. Ahalya T.S. Guided</span>
+                </div>
+              </div>
+
+              <div className="hero-designer-actions">
+                <BookAppointmentButton
+                  label="Book Consultation"
+                  size="md"
+                  variant="primary"
+                />
+                <a
+                  href={CLINIC_CONTACT.getWhatsappUrl('Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatments.')}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hero-designer-btn-secondary"
+                >
+                  <MessageCircle size={16} />
+                  <span>Enquire on WhatsApp</span>
+                </a>
+              </div>
+            </motion.div>
           </div>
         </header>
 
