@@ -1,24 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Home,
+  ArrowLeft,
   Leaf,
   Calendar,
-  MessageCircle,
-  Sparkles,
-  ArrowRight,
+  PhoneCall,
+  ChevronRight,
 } from 'lucide-react';
 import { ROUTES } from '@/shared/config/routes';
-import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
-import { Navbar, Footer } from '@/shared/layout';
+import { Navbar } from '@/shared/layout';
 import { fadeUpVariants, staggerContainerVariants } from '@/shared/lib/animations';
 import './NotFoundPage.css';
 
 export const NotFoundPage: React.FC = React.memo(() => {
-  const whatsappUrl = CLINIC_CONTACT.getWhatsappUrl(
-    'Hello Jeevayurniketan, I am looking for assistance finding a page on the website.'
-  );
+  const navigate = useNavigate();
 
   return (
     <div className="not-found-page">
@@ -31,64 +28,66 @@ export const NotFoundPage: React.FC = React.memo(() => {
           initial="hidden"
           animate="visible"
         >
-          <motion.div className="not-found-badge-wrap" variants={fadeUpVariants}>
-            <span className="not-found-badge">
-              <Sparkles size={13} className="not-found-badge-icon" />
-              <span>AYURVEDIC SANCTUARY • 404</span>
-            </span>
-          </motion.div>
+          <motion.span className="not-found-badge" variants={fadeUpVariants}>
+            Error 404
+          </motion.span>
 
-          <motion.div className="not-found-code-wrap" variants={fadeUpVariants}>
-            <span className="not-found-code">404</span>
+          <motion.div className="not-found-code" variants={fadeUpVariants}>
+            404
           </motion.div>
 
           <motion.h1 className="not-found-title" variants={fadeUpVariants}>
-            Path Not Found
+            Page Not Found
           </motion.h1>
 
           <motion.p className="not-found-desc" variants={fadeUpVariants}>
-            The pathway you were seeking does not exist or may have been relocated.
-            Allow us to guide you back to our classical Ayurvedic therapies, yoga disciplines, or direct clinic consultation.
+            The page you are looking for doesn&apos;t exist or may have been moved.
+            Return to the sanctuary or jump straight to a section below.
           </motion.p>
 
           <motion.div className="not-found-actions" variants={fadeUpVariants}>
             <Link to={ROUTES.HOME} className="not-found-btn not-found-btn--primary">
-              <Home size={17} />
-              <span>Return to Sanctuary</span>
+              <Home size={16} />
+              <span>Back to Home</span>
             </Link>
 
-            <Link to={ROUTES.SERVICES} className="not-found-btn not-found-btn--secondary">
-              <Leaf size={16} />
-              <span>Explore Treatments</span>
-              <ArrowRight size={14} />
-            </Link>
-
-            <Link to={ROUTES.YOGA} className="not-found-btn not-found-btn--secondary">
-              <Calendar size={16} />
-              <span>Yoga Timetable</span>
-              <ArrowRight size={14} />
-            </Link>
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="not-found-btn not-found-btn--ghost"
+            >
+              <ArrowLeft size={16} />
+              <span>Go Back</span>
+            </button>
           </motion.div>
 
-          <motion.div className="not-found-help-banner" variants={fadeUpVariants}>
-            <div className="not-found-help-text">
-              <span className="not-found-help-lead">Need personal assistance?</span>
-              <span className="not-found-help-sub">Our clinical desk is available to guide you directly.</span>
-            </div>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="not-found-whatsapp-btn"
-            >
-              <MessageCircle size={15} />
-              <span>Enquire on WhatsApp</span>
-            </a>
+          <motion.div className="not-found-links-grid" variants={fadeUpVariants}>
+            <Link to={ROUTES.SERVICES} className="not-found-quick-link">
+              <span className="not-found-quick-link__icon">
+                <Leaf size={16} />
+              </span>
+              <span className="not-found-quick-link__label">Treatments</span>
+              <ChevronRight size={14} className="not-found-quick-link__arrow" />
+            </Link>
+
+            <Link to={ROUTES.YOGA} className="not-found-quick-link">
+              <span className="not-found-quick-link__icon">
+                <Calendar size={16} />
+              </span>
+              <span className="not-found-quick-link__label">Yoga Schedule</span>
+              <ChevronRight size={14} className="not-found-quick-link__arrow" />
+            </Link>
+
+            <Link to={ROUTES.CONTACT} className="not-found-quick-link">
+              <span className="not-found-quick-link__icon">
+                <PhoneCall size={16} />
+              </span>
+              <span className="not-found-quick-link__label">Contact Desk</span>
+              <ChevronRight size={14} className="not-found-quick-link__arrow" />
+            </Link>
           </motion.div>
         </motion.div>
       </main>
-
-      <Footer />
     </div>
   );
 });
