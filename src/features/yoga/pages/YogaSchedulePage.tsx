@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Calendar,
   Video,
@@ -49,6 +49,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const [activeDay, setActiveDay] = useState<DayOfWeek>('Monday');
   const [activeFormat, setActiveFormat] = useState<YogaFormat | 'all'>('all');
   const [programs, setPrograms] = useState<YogaProgram[]>(YOGAATHMA_DATA.programs);
+  const [activeProgramFilter, setActiveProgramFilter] = useState<string>('all');
   const [selectedProgramId, setSelectedProgramId] = useState<string>(
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
@@ -104,9 +105,36 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
+  const programFilters = useMemo(() => {
+    const set = new Set<string>();
+    programs.forEach((p) => {
+      if (p.categoryTag && p.categoryTag.trim()) set.add(p.categoryTag.trim());
+      if (p.format && p.format.trim()) set.add(p.format.trim());
+    });
+    return Array.from(set);
+  }, [programs]);
+
+  const filteredPrograms = useMemo(() => {
+    if (activeProgramFilter === 'all') return programs;
+    return programs.filter((p) => {
+      const matchCategory = p.categoryTag?.toLowerCase() === activeProgramFilter.toLowerCase();
+      const matchFormat = p.format?.toLowerCase() === activeProgramFilter.toLowerCase();
+      return matchCategory || matchFormat;
+    });
+  }, [programs, activeProgramFilter]);
+
+  useEffect(() => {
+    if (filteredPrograms.length > 0) {
+      const exists = filteredPrograms.some((p) => p.id === selectedProgramId);
+      if (!exists) {
+        setSelectedProgramId(filteredPrograms[0].id);
+      }
+    }
+  }, [filteredPrograms, selectedProgramId]);
+
   const activeProgram = useMemo(() => {
-    return programs.find((p) => p.id === selectedProgramId) || programs[0] || null;
-  }, [programs, selectedProgramId]);
+    return filteredPrograms.find((p) => p.id === selectedProgramId) || filteredPrograms[0] || null;
+  }, [filteredPrograms, selectedProgramId]);
 
   const handleSelectProgram = (program: YogaProgram) => {
     setSelectedProgramId(program.id);
@@ -115,6 +143,23 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
+
+  const dayCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    DAYS_OF_WEEK.forEach(({ key }) => {
+      counts[key] = sessions.filter((s) => s.days.includes(key)).length;
+    });
+    return counts;
+  }, [sessions]);
+
+  const formatCounts = useMemo(() => {
+    const onDay = sessions.filter((s) => s.days.includes(activeDay));
+    return {
+      all: onDay.length,
+      offline: onDay.filter((s) => s.format === 'offline').length,
+      online: onDay.filter((s) => s.format === 'online').length,
+    };
+  }, [sessions, activeDay]);
 
   const filteredSessions = useMemo(() => {
     return sessions.filter((session) => {
@@ -189,6 +234,33 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </div>
             ) : (
               <>
+                {programFilters.length > 0 && (
+                  <div className="yoga-programs-filter-bar">
+                    <button
+                      type="button"
+                      className={`yoga-quick-tab ${activeProgramFilter === 'all' ? 'is-active' : ''}`}
+                      onClick={() => setActiveProgramFilter('all')}
+                    >
+                      All Programs ({programs.length})
+                    </button>
+                    {programFilters.map((tag) => {
+                      const count = programs.filter(
+                        (p) => p.categoryTag?.toLowerCase() === tag.toLowerCase() || p.format?.toLowerCase() === tag.toLowerCase()
+                      ).length;
+                      return (
+                        <button
+                          key={tag}
+                          type="button"
+                          className={`yoga-quick-tab ${activeProgramFilter.toLowerCase() === tag.toLowerCase() ? 'is-active' : ''}`}
+                          onClick={() => setActiveProgramFilter(tag)}
+                        >
+                          {tag} ({count})
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+
                 <motion.div
                   ref={yogaGridRef}
                   className="yoga-images-grid"
@@ -196,7 +268,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                   initial="hidden"
                   animate="visible"
                 >
-                  {programs.map((program, index) => {
+                  {filteredPrograms.map((program, index) => {
                     const rowIndex = Math.floor(index / (yogaCols || 1));
                     return (
                       <motion.div
@@ -216,7 +288,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                 </motion.div>
 
                 {activeProgram && (
-                  <div className="yoga-program-details-wrap">
+                  <div id="yoga-program-details" className="yoga-program-details-wrap">
                     <div className="yoga-section-header text-center">
                       <h2 className="yoga-section-heading">Program Details</h2>
                       <p className="yoga-section-desc">
@@ -224,11 +296,21 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                       </p>
                     </div>
 
-                    <YogaProgramDetailsCard
-                      program={activeProgram}
-                      programs={programs}
-                      onSelectProgram={handleSelectProgram}
-                    />
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeProgram.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -12 }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        <YogaProgramDetailsCard
+                          program={activeProgram}
+                          programs={filteredPrograms}
+                          onSelectProgram={handleSelectProgram}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 )}
               </>
@@ -266,29 +348,30 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
               </p>
             </div>
 
-            <div className="yoga-filter-bar">
-              <div className="yoga-days-nav" role="tablist" aria-label="Days of week">
+            <div className="yoga-schedule-controls">
+              <div className="yoga-day-tabs" role="tablist" aria-label="Days of week">
                 {DAYS_OF_WEEK.map(({ key, label }) => (
                   <button
                     key={key}
                     type="button"
                     role="tab"
                     aria-selected={activeDay === key}
-                    className={`yoga-day-btn ${activeDay === key ? 'is-active' : ''}`}
+                    className={`yoga-day-tab ${activeDay === key ? 'is-active' : ''}`}
                     onClick={() => setActiveDay(key)}
                   >
-                    <span>{label}</span>
+                    <span className="yoga-day-short">{label}</span>
+                    <span className="yoga-day-count">{dayCounts[key] || 0}</span>
                   </button>
                 ))}
               </div>
 
-              <div className="yoga-format-toggle" role="group" aria-label="Session format">
+              <div className="yoga-format-filter" role="group" aria-label="Session format">
                 <button
                   type="button"
                   className={`yoga-format-btn ${activeFormat === 'all' ? 'is-active' : ''}`}
                   onClick={() => setActiveFormat('all')}
                 >
-                  All Formats
+                  All Formats ({formatCounts.all})
                 </button>
                 <button
                   type="button"
@@ -296,7 +379,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                   onClick={() => setActiveFormat('offline')}
                 >
                   <MapPin size={12} />
-                  <span>In Shala</span>
+                  <span>In Shala ({formatCounts.offline})</span>
                 </button>
                 <button
                   type="button"
@@ -304,7 +387,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
                   onClick={() => setActiveFormat('online')}
                 >
                   <Video size={12} />
-                  <span>Live Online</span>
+                  <span>Live Online ({formatCounts.online})</span>
                 </button>
               </div>
             </div>

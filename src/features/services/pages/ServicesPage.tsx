@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { MessageCircle, Leaf } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageCircle, Leaf, Search } from 'lucide-react';
 import { Navbar, Footer } from '@/shared/layout';
 import { BookAppointmentButton } from '@/shared/components/BookAppointmentButton';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
@@ -20,23 +20,51 @@ import './ServicesPage.css';
 export const ServicesPage: React.FC = React.memo(() => {
   const { services, loading } = useTreatments();
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const gridRef = useRef<HTMLDivElement>(null);
   const cols = useGridColumns(gridRef, 4);
 
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    services.forEach((s) => {
+      if (s.categoryTag && s.categoryTag.trim()) {
+        set.add(s.categoryTag.trim());
+      }
+    });
+    return Array.from(set);
+  }, [services]);
+
+  const filteredServices = useMemo(() => {
+    return services.filter((s) => {
+      const matchesCategory =
+        activeCategory === 'all' ||
+        (s.categoryTag && s.categoryTag.toLowerCase() === activeCategory.toLowerCase());
+      const query = searchQuery.trim().toLowerCase();
+      const matchesSearch =
+        !query ||
+        s.title.toLowerCase().includes(query) ||
+        (s.description && s.description.toLowerCase().includes(query)) ||
+        (s.categoryTag && s.categoryTag.toLowerCase().includes(query)) ||
+        (s.benefits && s.benefits.some((b) => b.toLowerCase().includes(query)));
+      return matchesCategory && matchesSearch;
+    });
+  }, [services, activeCategory, searchQuery]);
+
   useEffect(() => {
-    if (services.length > 0) {
-      const exists = services.some((s) => s.id === selectedServiceId);
+    if (filteredServices.length > 0) {
+      const exists = filteredServices.some((s) => s.id === selectedServiceId);
       if (!exists) {
-        setSelectedServiceId(services[0].id);
+        setSelectedServiceId(filteredServices[0].id);
       }
     } else {
       setSelectedServiceId(null);
     }
-  }, [services, selectedServiceId]);
+  }, [filteredServices, selectedServiceId]);
 
   const activeService = useMemo(() => {
-    return services.find((s) => s.id === selectedServiceId) || services[0] || null;
-  }, [services, selectedServiceId]);
+    return filteredServices.find((s) => s.id === selectedServiceId) || filteredServices[0] || null;
+  }, [filteredServices, selectedServiceId]);
 
   const handleSelectService = (service: AyurvedaService) => {
     setSelectedServiceId(service.id);
@@ -88,6 +116,59 @@ export const ServicesPage: React.FC = React.memo(() => {
           </div>
         </header>
 
+        {services.length > 0 && (
+          <div className="treatments-filter-strip">
+            <div className="treatments-container">
+              <div className="treatments-filter-row">
+                <div className="treatments-tabs" role="tablist" aria-label="Treatment categories">
+                  <button
+                    type="button"
+                    className={`treatments-tab-btn ${activeCategory === 'all' ? 'is-active' : ''}`}
+                    onClick={() => setActiveCategory('all')}
+                  >
+                    <span className="treatments-tab-label">All Treatments ({services.length})</span>
+                  </button>
+                  {categories.map((cat) => {
+                    const count = services.filter((s) => s.categoryTag?.toLowerCase() === cat.toLowerCase()).length;
+                    return (
+                      <button
+                        key={cat}
+                        type="button"
+                        className={`treatments-tab-btn ${activeCategory.toLowerCase() === cat.toLowerCase() ? 'is-active' : ''}`}
+                        onClick={() => setActiveCategory(cat)}
+                      >
+                        <span className="treatments-tab-label">{cat} ({count})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                <div className="treatments-search-box">
+                  <Search size={16} className="treatments-search-icon" />
+                  <input
+                    type="text"
+                    className="treatments-search-input"
+                    placeholder="Search treatments or benefits..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    aria-label="Search treatments"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      className="treatments-search-clear"
+                      onClick={() => setSearchQuery('')}
+                      aria-label="Clear search"
+                    >
+                      &times;
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <section className="treatments-catalog-section">
           <div className="treatments-container">
             {loading ? (
@@ -111,6 +192,20 @@ export const ServicesPage: React.FC = React.memo(() => {
                 <h3>No treatments available</h3>
                 <p>New treatments and clinical therapies will be updated shortly.</p>
               </div>
+            ) : filteredServices.length === 0 ? (
+              <div className="treatments-empty-state">
+                <Leaf size={40} className="treatments-empty-icon" />
+                <h3>No treatments match your search</h3>
+                <p>Try searching with another keyword or resetting the category filter.</p>
+                <button
+                  type="button"
+                  className="editorial-action-btn"
+                  onClick={() => { setActiveCategory('all'); setSearchQuery(''); }}
+                  style={{ marginTop: '16px' }}
+                >
+                  Reset Filters
+                </button>
+              </div>
             ) : (
               <>
                 <div className="treatments-images-section">
@@ -128,7 +223,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                     initial="hidden"
                     animate="visible"
                   >
-                    {services.map((service, index) => {
+                    {filteredServices.map((service, index) => {
                       const rowIndex = Math.floor(index / (cols || 1));
                       return (
                         <motion.div
@@ -149,7 +244,7 @@ export const ServicesPage: React.FC = React.memo(() => {
                 </div>
 
                 {activeService && (
-                  <div className="treatments-details-section">
+                  <div id="treatment-details" className="treatments-details-section">
                     <div className="treatments-section-title-wrap">
                       <h2 className="treatments-section-title">Treatment Details</h2>
                       <p className="treatments-section-subtitle">
@@ -157,11 +252,21 @@ export const ServicesPage: React.FC = React.memo(() => {
                       </p>
                     </div>
 
-                    <TreatmentDetailsCard
-                      service={activeService}
-                      services={services}
-                      onSelectService={handleSelectService}
-                    />
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={activeService.id}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -12 }}
+                        transition={{ duration: 0.22 }}
+                      >
+                        <TreatmentDetailsCard
+                          service={activeService}
+                          services={filteredServices}
+                          onSelectService={handleSelectService}
+                        />
+                      </motion.div>
+                    </AnimatePresence>
                   </div>
                 )}
               </>
