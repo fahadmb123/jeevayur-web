@@ -10,7 +10,6 @@ import {
   Inbox,
   User,
   Leaf,
-  Sparkles,
 } from 'lucide-react';
 import { useYogaSchedule } from '../hooks/useYogaSchedule';
 import { YogaProgramImageCard } from '../components/YogaProgramImageCard';
@@ -133,58 +132,39 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
         <header className="yoga-hero-section">
           <div className="yoga-container">
             <motion.div
-              className="yoga-hero-content"
+              className="yoga-editorial-header"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
             >
-              <div className="hero-designer-badge">
-                <Sparkles size={13} className="hero-badge-sparkle" />
-                <span>Jeevayurniketan Sanctuary &bull; Authentic Yogaathma</span>
+              <div className="editorial-eyebrow">
+                <span className="editorial-eyebrow-text">Authentic Yogaathma</span>
+                <span className="editorial-eyebrow-line" />
               </div>
 
-              <h1 className="yoga-hero-title">
-                Yoga for Mind, Body <span className="yoga-hero-title-accent">&amp; Spirit</span>
-              </h1>
-
-              <p className="yoga-hero-subtitle">
-                Personalized yoga practices, therapeutic movement, and breath awareness guided by experienced Yogacharyas.
-              </p>
-
-              <div className="hero-designer-pills">
-                <div className="hero-designer-pill">
-                  <Sparkles size={12} />
-                  <span>Mind–Body Alignment</span>
+              <div className="editorial-grid">
+                <div className="editorial-left">
+                  <h1 className="editorial-headline">
+                    Yoga for Mind, Body <span className="editorial-italic">&amp; Spirit</span>
+                  </h1>
                 </div>
-                <div className="hero-designer-pill">
-                  <MapPin size={12} />
-                  <span>In Shala &amp; Live Online</span>
-                </div>
-                <div className="hero-designer-pill">
-                  <Clock size={12} />
-                  <span>Daily Guided Practices</span>
-                </div>
-                <div className="hero-designer-pill">
-                  <Award size={12} />
-                  <span>Experienced Yogacharyas</span>
-                </div>
-              </div>
 
-              <div className="hero-designer-actions">
-                <a
-                  href={whatsappHeroUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hero-designer-btn-primary"
-                >
-                  <MessageCircle size={16} />
-                  <span>Reserve Session on WhatsApp</span>
-                </a>
-
-                <a href="#yoga-schedule" className="hero-designer-btn-secondary">
-                  <Calendar size={15} />
-                  <span>View Weekly Timetable</span>
-                </a>
+                <div className="editorial-right">
+                  <p className="editorial-description">
+                    Personalized yoga practices, therapeutic movement, and breath awareness guided by experienced Yogacharyas.
+                  </p>
+                  <div className="editorial-action">
+                    <a
+                      href={whatsappHeroUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="editorial-action-btn"
+                    >
+                      <MessageCircle size={15} />
+                      <span>Reserve a Session</span>
+                    </a>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </div>
