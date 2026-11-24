@@ -254,6 +254,22 @@
   right: 12px;
   background: none;
   border: none;
+  font-size: 1.25rem;
+  color: var(--text-light, #7E9387);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.treatments-search-clear:hover {
+  color: var(--text-primary, #14241C);
+}
+
+.treatments-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
   color: var(--text-light, #7E9387);
   font-size: 1.1rem;
   cursor: pointer;

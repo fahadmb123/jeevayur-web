@@ -171,6 +171,15 @@
   margin: 0;
 }
 
+.yoga-programs-filter-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+
 .yoga-images-grid {
   display: flex;
   flex-wrap: wrap;
@@ -687,6 +696,27 @@
   color: #FAF9F5;
 }
 
+.yoga-day-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  background: rgba(27, 107, 80, 0.1);
+  color: var(--primary-green, #1B6B50);
+  margin-top: 4px;
+  transition: all 0.2s ease;
+}
+
+.yoga-day-tab.is-active .yoga-day-count {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+}
+
 .yoga-format-filter {
   display: flex;
   align-items: center;
@@ -1014,6 +1044,18 @@
 [data-theme='dark'] .editorial-action-btn:hover,
 .dark .editorial-action-btn:hover {
   background: var(--primary-green-light, #41BA91);
+}
+
+[data-theme='dark'] .yoga-day-count,
+.dark .yoga-day-count {
+  background: rgba(65, 186, 145, 0.18);
+  color: #41BA91;
+}
+
+[data-theme='dark'] .yoga-day-tab.is-active .yoga-day-count,
+.dark .yoga-day-tab.is-active .yoga-day-count {
+  background: rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
 }
 
 [data-theme='dark'] .yoga-hero-btn-primary,
