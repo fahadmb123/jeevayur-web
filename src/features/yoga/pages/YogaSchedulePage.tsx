@@ -133,7 +133,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
         <header className="yoga-hero-section">
           <div className="yoga-container">
             <motion.div
-              className="yoga-hero-card"
+              className="yoga-hero-content"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"

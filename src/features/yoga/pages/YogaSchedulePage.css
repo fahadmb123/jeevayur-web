@@ -22,42 +22,21 @@
 .yoga-hero-section {
   padding: clamp(96px, 11vw, 130px) 0 clamp(24px, 3.5vw, 40px);
   background: transparent;
-  text-align: center;
+  text-align: left;
 }
 
-.yoga-hero-card {
+.yoga-hero-content {
   position: relative;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: clamp(36px, 5vw, 56px) clamp(22px, 4vw, 50px);
-  background: linear-gradient(155deg, rgba(255, 255, 255, 0.96) 0%, rgba(247, 250, 247, 0.92) 100%);
-  border: 1px solid rgba(27, 107, 80, 0.12);
-  border-radius: 28px;
-  box-shadow: 0 20px 48px -12px rgba(10, 36, 25, 0.08), 0 2px 6px rgba(10, 36, 25, 0.03);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  max-width: 960px;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-}
-
-.yoga-hero-card::before {
-  content: '';
-  position: absolute;
-  top: -60px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 440px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(201, 141, 59, 0.12) 0%, rgba(27, 107, 80, 0.08) 50%, transparent 70%);
-  filter: blur(36px);
-  pointer-events: none;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .hero-designer-badge {
   position: relative;
-  z-index: 2;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -80,14 +59,14 @@
 
 .yoga-hero-title {
   position: relative;
-  z-index: 2;
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: clamp(2.1rem, 4vw, 3.2rem);
+  font-size: clamp(2.6rem, 5.2vw, 4.2rem);
   font-weight: 700;
   color: var(--text-primary, #14241C);
-  line-height: 1.2;
+  line-height: 1.12;
   letter-spacing: -0.025em;
-  margin: 0 0 14px;
+  margin: 0 0 16px;
+  text-align: left;
 }
 
 .yoga-hero-title-accent {
@@ -98,21 +77,20 @@
 
 .yoga-hero-subtitle {
   position: relative;
-  z-index: 2;
   font-family: var(--font-sans, 'Inter', sans-serif);
-  font-size: clamp(1rem, 1.2vw, 1.12rem);
+  font-size: clamp(1.05rem, 1.3vw, 1.22rem);
   line-height: 1.65;
   color: var(--text-secondary, #485E53);
-  max-width: 680px;
+  max-width: 720px;
   margin: 0 0 24px;
+  text-align: left;
 }
 
 .hero-designer-pills {
   position: relative;
-  z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   flex-wrap: wrap;
   margin-bottom: 28px;
@@ -141,10 +119,9 @@
 
 .hero-designer-actions {
   position: relative;
-  z-index: 2;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 14px;
   flex-wrap: wrap;
 }
@@ -1033,16 +1010,14 @@
 /* ==========================================================================
    5. DARK MODE THEME ACCOMMODATIONS
    ========================================================================== */
-[data-theme='dark'] .yoga-hero-card,
-.dark .yoga-hero-card {
-  background: linear-gradient(155deg, rgba(16, 34, 26, 0.94) 0%, rgba(10, 22, 16, 0.96) 100%);
-  border-color: rgba(65, 186, 145, 0.18);
-  box-shadow: 0 24px 56px -12px rgba(0, 0, 0, 0.65);
+[data-theme='dark'] .yoga-hero-title,
+.dark .yoga-hero-title {
+  color: var(--text-primary, #F2F7F4);
 }
 
-[data-theme='dark'] .yoga-hero-card::before,
-.dark .yoga-hero-card::before {
-  background: radial-gradient(circle, rgba(201, 141, 59, 0.18) 0%, rgba(65, 186, 145, 0.12) 50%, transparent 70%);
+[data-theme='dark'] .yoga-hero-subtitle,
+.dark .yoga-hero-subtitle {
+  color: var(--text-secondary, #A6C2B4);
 }
 
 [data-theme='dark'] .hero-designer-badge,
