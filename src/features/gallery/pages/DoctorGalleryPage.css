@@ -2,8 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  flex: 1;
-  min-height: 100%;
+  flex: 1 0 auto;
 }
 
 .doctor-gallery-header {
@@ -664,13 +663,13 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 60px 24px;
+  padding: 48px 24px;
   background: var(--surface-color, #FFFFFF);
   border: 1px dashed var(--border-color, #E2E8DE);
   border-radius: 18px;
   text-align: center;
   flex: 1;
-  min-height: calc(100vh - 380px);
+  min-height: 220px;
   box-sizing: border-box;
 }
 
