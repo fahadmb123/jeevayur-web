@@ -45,7 +45,7 @@ export const AppRoutes: React.FC = React.memo(() => {
           <Route path={ROUTES.RESET_PASSWORD} element={<ResetPasswordPage />} />
         </Route>
 
-        <Route element={<PrivateRoute allowedRoles={['doctor']} />}>
+        <Route element={<PrivateRoute allowedRoles={['doctor']} unauthenticatedFallback={<NotFoundPage />} />}>
           <Route element={<DoctorLayout />}>
             <Route path={ROUTES.DOCTOR} element={<DoctorDashboardPage />} />
             <Route path={ROUTES.DOCTOR_REQUESTS} element={<DoctorRequestsPage />} />

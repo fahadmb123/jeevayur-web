@@ -8,12 +8,14 @@ export interface PrivateRouteProps {
   children?: React.ReactNode;
   allowedRoles?: Array<'doctor' | 'patient' | 'admin'>;
   redirectTo?: string;
+  unauthenticatedFallback?: React.ReactNode;
 }
 
 export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   children,
   allowedRoles,
   redirectTo = ROUTES.LOGIN,
+  unauthenticatedFallback,
 }) => {
   const { isAuthenticated, user, loading } = useAuth();
   const location = useLocation();
@@ -23,6 +25,9 @@ export const PrivateRoute: React.FC<PrivateRouteProps> = ({
   }
 
   if (!isAuthenticated) {
+    if (unauthenticatedFallback) {
+      return <>{unauthenticatedFallback}</>;
+    }
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
