@@ -144,7 +144,10 @@
   border-radius: 18px;
   box-shadow: var(--card-shadow);
   margin-top: 8px;
-  gap: 8px;
+  gap: 12px;
+  flex: 1;
+  min-height: calc(100vh - 460px);
+  box-sizing: border-box;
 }
 
 [data-theme='dark'] .yoga-empty-state,

@@ -9,9 +9,11 @@
   max-width: 100%;
   margin: 0;
   box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
-/* 1. Main Canvas Card - Seamless Full-Width Premium Surface */
 .settings-canvas-card {
   width: 100%;
   background-color: var(--surface-color, #FFFFFF);
@@ -21,6 +23,10 @@
   box-shadow: 0 4px 20px -2px rgba(18, 76, 56, 0.05), 0 1px 3px rgba(18, 76, 56, 0.03);
   box-sizing: border-box;
   transition: background-color 0.25s ease, border-color 0.25s ease;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 160px);
 }
 
 [data-theme='dark'] .settings-canvas-card,
