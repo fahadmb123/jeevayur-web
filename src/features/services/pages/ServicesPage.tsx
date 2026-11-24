@@ -54,7 +54,7 @@ export const ServicesPage: React.FC = React.memo(() => {
         <header className="treatments-hero-section">
           <div className="treatments-container">
             <motion.div
-              className="treatments-hero-card"
+              className="treatments-hero-content"
               variants={fadeUpVariants}
               initial="hidden"
               animate="visible"
