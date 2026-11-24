@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { CalendarClock, Inbox } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { AppointmentListItem } from '../AppointmentListItem';
 import { StartConsultationModal } from '@/features/patients';
@@ -66,9 +67,14 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
         <Card className="today-schedule-widget__card">
           <div className="today-schedule-widget__header">
             <div>
-              <h2 className="today-schedule-widget__title">Today's Schedule</h2>
+              <div className="today-schedule-widget__title-row">
+                <h2 className="today-schedule-widget__title">Today's Schedule</h2>
+                <span className="today-schedule-widget__badge">
+                  {appointments.length} Sessions
+                </span>
+              </div>
               <span className="today-schedule-widget__subtitle">
-                {appointments.length} clinical appointments for today
+                Scheduled consultations & therapy sessions
               </span>
             </div>
             <button
@@ -76,7 +82,8 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
               className="today-schedule-widget__calendar-btn"
               onClick={onOpenCalendar || (() => navigate(ROUTES.DOCTOR_REQUESTS))}
             >
-              Inbound Requests
+              <Inbox size={13} />
+              <span>Inbound Requests</span>
             </button>
           </div>
 
@@ -92,13 +99,20 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
               ))
             ) : (
               <div className="today-schedule-widget__empty">
-                <p>No appointments scheduled for today.</p>
+                <div className="today-schedule-widget__empty-icon-wrap">
+                  <CalendarClock size={28} />
+                </div>
+                <h4 className="today-schedule-widget__empty-title">All Caught Up for Today</h4>
+                <p className="today-schedule-widget__empty-sub">
+                  No appointments are scheduled for today. New requests will appear in your inbound triage feed.
+                </p>
                 <button
                   type="button"
                   className="today-schedule-widget__empty-btn"
-                  onClick={() => navigate(ROUTES.DOCTOR_REQUESTS)}
+                  onClick={onOpenCalendar || (() => navigate(ROUTES.DOCTOR_REQUESTS))}
                 >
-                  Review Inbound Requests
+                  <Inbox size={14} />
+                  <span>Review Inbound Requests</span>
                 </button>
               </div>
             )}

@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, type Variants } from 'framer-motion';
+import { Users, UserPlus, ArrowRight } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { PatientListItem } from '../PatientListItem';
 import { PatientFilterTabs, type PatientFilterOption } from '../PatientFilterTabs';
@@ -13,6 +14,7 @@ export interface RecentPatientsWidgetProps {
   onSelectPatient?: (patient: Patient) => void;
   onViewDetails?: (patient: Patient) => void;
   onToggleStatus?: (patient: Patient) => void;
+  onAddPatient?: () => void;
   updatingPatientId?: number | string | null;
   variants?: Variants;
   searchFilter?: string;
@@ -24,6 +26,7 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
   onSelectPatient,
   onViewDetails,
   onToggleStatus,
+  onAddPatient,
   updatingPatientId,
   variants,
   searchFilter = '',
@@ -61,10 +64,15 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
     <motion.section variants={variants} className="recent-patients-widget">
       <Card className="recent-patients-widget__card">
         <div className="recent-patients-widget__header">
-          <div>
-            <h2 className="recent-patients-widget__title">Recent Patients</h2>
+          <div className="recent-patients-widget__header-info">
+            <div className="recent-patients-widget__title-row">
+              <h2 className="recent-patients-widget__title">Recent Patients</h2>
+              <span className="recent-patients-widget__badge">
+                {filteredPatients.length} Active
+              </span>
+            </div>
             <span className="recent-patients-widget__subtitle">
-              {filteredPatients.length} records matching current view
+              Ayurvedic treatment records, dosha profiles & consultations
             </span>
           </div>
           <button
@@ -72,7 +80,8 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
             className="recent-patients-widget__view-all-btn"
             onClick={onViewAll}
           >
-            View All ({patients.length})
+            <span>View All ({patients.length})</span>
+            <ArrowRight size={14} />
           </button>
         </div>
 
@@ -85,12 +94,12 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
         </div>
 
         <div className="recent-patients-widget__table-wrap">
-          <table className="doctor-patient-table">
+          <table className="doctor-patients-table">
             <thead>
-              <tr className="doctor-patient-th-row">
-                <th className="col-num">#</th>
-                <th className="col-profile">Patient Profile</th>
-                <th className="col-contact">Contact</th>
+              <tr className="doctor-patients-th-row">
+                <th className="col-number">#</th>
+                <th className="col-patient">Patient Profile</th>
+                <th className="col-contact">Contact Info</th>
                 <th className="col-service">Service & Mode</th>
                 <th className="col-concern">Chief Concern</th>
                 <th className="col-status">Status</th>
@@ -107,13 +116,33 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
                     onSelect={onSelectPatient}
                     onViewDetails={onViewDetails}
                     onToggleStatus={onToggleStatus}
-                    isStatusUpdating={Boolean(updatingPatientId && String(updatingPatientId) === String(patient.id))}
+                    isStatusUpdating={updatingPatientId === patient.id}
                   />
                 ))
               ) : (
                 <tr>
                   <td colSpan={7} className="recent-patients-widget__empty-row">
-                    No patient records match the current filter criteria.
+                    <div className="recent-patients-widget__empty-container">
+                      <div className="recent-patients-widget__empty-icon-wrap">
+                        <Users size={28} />
+                      </div>
+                      <h4 className="recent-patients-widget__empty-title">No Patient Records Match</h4>
+                      <p className="recent-patients-widget__empty-text">
+                        {searchFilter
+                          ? `No patient records match the search term "${searchFilter}". Try adjusting your keywords.`
+                          : 'Your Ayurvedic clinical patient roster is ready. Register a new patient or review inbound requests.'}
+                      </p>
+                      {onAddPatient && (
+                        <button
+                          type="button"
+                          className="recent-patients-widget__empty-add-btn"
+                          onClick={onAddPatient}
+                        >
+                          <UserPlus size={14} />
+                          <span>+ Register New Patient</span>
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )}

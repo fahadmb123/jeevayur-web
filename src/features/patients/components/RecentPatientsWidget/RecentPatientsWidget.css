@@ -4,20 +4,50 @@
 
 .recent-patients-widget__card {
   padding: 24px;
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
 }
 
 .recent-patients-widget__header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.recent-patients-widget__header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recent-patients-widget__title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .recent-patients-widget__title {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-primary, #0F172A);
-  margin: 0 0 2px 0;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.recent-patients-widget__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
 }
 
 .recent-patients-widget__subtitle {
@@ -26,38 +56,152 @@
 }
 
 .recent-patients-widget__view-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   background: none;
   border: 1px solid var(--border-color, #E2E8F0);
   color: var(--primary-green, #1B6B50);
   font-weight: 600;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   cursor: pointer;
-  padding: 5px 12px;
-  border-radius: 8px;
-  transition: all 0.2s;
+  padding: 6px 14px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
 }
 
 .recent-patients-widget__view-all-btn:hover {
   background-color: rgba(27, 107, 80, 0.08);
   border-color: var(--primary-green, #1B6B50);
+  transform: translateY(-1px);
 }
 
 .recent-patients-widget__filter-bar {
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .recent-patients-widget__table-wrap {
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border-color, #E2E8F0);
+  background: var(--surface-color, #FFFFFF);
+}
+
+.doctor-patients-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  min-width: 800px;
+}
+
+.doctor-patients-th-row {
+  background: var(--surface-secondary, #F8FAFC);
+  border-bottom: 1px solid var(--border-color, #E2E8F0);
+}
+
+.doctor-patients-table th {
+  padding: 13px 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-secondary, #64748B);
+  white-space: nowrap;
+}
+
+.col-number {
+  width: 48px;
+  text-align: center;
+}
+
+.col-patient {
+  min-width: 180px;
+}
+
+.col-contact {
+  min-width: 170px;
+}
+
+.col-service {
+  min-width: 140px;
+}
+
+.col-concern {
+  min-width: 170px;
+}
+
+.col-status {
+  width: 110px;
+}
+
+.col-actions {
+  width: 90px;
+  text-align: right;
+  padding-right: 20px !important;
 }
 
 .recent-patients-widget__empty-row {
-  padding: 32px 16px;
+  padding: 44px 20px;
   text-align: center;
-  color: var(--text-light, #94A3B8);
-  font-size: 0.875rem;
-  background-color: var(--surface-secondary, #F8FAFC);
+  background-color: var(--surface-color, #FFFFFF);
+}
+
+.recent-patients-widget__empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.recent-patients-widget__empty-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: rgba(27, 107, 80, 0.08);
+  color: var(--primary-green, #1B6B50);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.recent-patients-widget__empty-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  margin: 0;
+}
+
+.recent-patients-widget__empty-text {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #64748B);
+  margin: 0 0 8px 0;
+}
+
+.recent-patients-widget__empty-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: var(--primary-green, #1B6B50);
+  color: #FFFFFF;
+  border: 1px solid var(--primary-green, #1B6B50);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(27, 107, 80, 0.15);
+}
+
+.recent-patients-widget__empty-add-btn:hover {
+  background: #14553F;
+  border-color: #14553F;
+  transform: translateY(-1px);
 }
