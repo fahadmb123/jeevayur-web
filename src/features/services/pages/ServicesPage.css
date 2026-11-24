@@ -280,15 +280,15 @@
   flex-wrap: wrap;
   justify-content: center;
   align-items: stretch;
-  gap: 24px;
-  max-width: 1440px;
+  gap: 28px;
+  max-width: 1480px;
   margin: 0 auto;
 }
 
 .treatments-images-grid > * {
-  flex: 0 1 320px;
+  flex: 0 1 380px;
   width: 100%;
-  max-width: 340px;
+  max-width: 420px;
 }
 
 @media (max-width: 640px) {
@@ -298,12 +298,11 @@
   }
 }
 
-/* Treatment Image Card */
 .treatment-image-card {
   position: relative;
   background: var(--surface-color, #FFFFFF);
   border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -324,8 +323,8 @@
 .treatment-image-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 13;
-  min-height: 290px;
+  aspect-ratio: 16 / 12;
+  min-height: 340px;
   overflow: hidden;
   background-color: var(--surface-secondary, #F3F6F1);
 }
@@ -354,7 +353,7 @@
 .treatment-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.2) 0%, transparent 35%, rgba(14, 30, 22, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.2) 0%, transparent 35%, rgba(14, 30, 22, 0.92) 100%);
   pointer-events: none;
 }
 
@@ -363,21 +362,21 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 18px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   z-index: 2;
 }
 
 .treatment-image-card__tag {
   align-self: flex-start;
-  padding: 3px 8px;
+  padding: 4px 10px;
   background: rgba(20, 56, 38, 0.88);
-  border-radius: 4px;
+  border-radius: 6px;
   color: #FAF9F5;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -385,7 +384,7 @@
 
 .treatment-image-card__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+  font-size: 1.30rem;
   font-weight: 700;
   color: #FFFFFF;
   margin: 2px 0 0;
@@ -395,9 +394,9 @@
 .treatment-image-card__duration {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  color: rgba(255, 255, 255, 0.88);
-  font-size: 0.76rem;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.92);
+  font-size: 0.82rem;
   font-weight: 500;
 }
 

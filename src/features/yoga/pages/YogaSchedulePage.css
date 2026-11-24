@@ -142,21 +142,20 @@
   margin: 0;
 }
 
-/* Images Grid */
 .yoga-images-grid {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: stretch;
-  gap: 24px;
-  max-width: 1440px;
+  gap: 28px;
+  max-width: 1480px;
   margin: 0 auto 56px;
 }
 
 .yoga-images-grid > * {
-  flex: 0 1 320px;
+  flex: 0 1 380px;
   width: 100%;
-  max-width: 340px;
+  max-width: 420px;
   display: flex;
 }
 
@@ -171,12 +170,11 @@
   }
 }
 
-/* Program Image Card */
 .yoga-image-card {
   position: relative;
   background: var(--surface-color, #FFFFFF);
   border: 1px solid var(--border-color, #E2E8DE);
-  border-radius: 16px;
+  border-radius: 18px;
   overflow: hidden;
   cursor: pointer;
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
@@ -197,8 +195,8 @@
 .yoga-image-card__media {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 13;
-  min-height: 290px;
+  aspect-ratio: 16 / 12;
+  min-height: 340px;
   overflow: hidden;
   background-color: var(--surface-secondary, #F3F6F1);
 }
@@ -217,15 +215,15 @@
 .yoga-image-card__overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(14, 30, 22, 0.22) 0%, transparent 35%, rgba(14, 30, 22, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(14, 30, 22, 0.22) 0%, transparent 35%, rgba(14, 30, 22, 0.92) 100%);
   pointer-events: none;
 }
 
 .yoga-image-card__top {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  right: 14px;
+  top: 16px;
+  left: 16px;
+  right: 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -234,12 +232,12 @@
 }
 
 .yoga-image-card__tag {
-  padding: 3px 8px;
+  padding: 4px 10px;
   background: rgba(20, 56, 38, 0.88);
-  border-radius: 4px;
+  border-radius: 6px;
   color: #FAF9F5;
   font-family: var(--font-display, 'Outfit', sans-serif);
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -248,12 +246,12 @@
 .yoga-image-card__format {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 8px;
+  gap: 5px;
+  padding: 4px 10px;
   background: rgba(0, 0, 0, 0.65);
   border-radius: 999px;
   color: #FFFFFF;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 500;
 }
 
@@ -262,16 +260,16 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 18px;
+  padding: 22px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   z-index: 2;
 }
 
 .yoga-image-card__title {
   font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
-  font-size: 1.15rem;
+  font-size: 1.30rem;
   font-weight: 700;
   color: #FFFFFF;
   margin: 0;
@@ -281,7 +279,7 @@
 .yoga-image-card__meta {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
 
 .yoga-image-card__duration {
