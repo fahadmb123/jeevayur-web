@@ -297,7 +297,7 @@
 }
 
 .doctor-consult-empty {
-  padding: 60px 24px;
+  padding: 48px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -308,7 +308,7 @@
   border: 1px dashed var(--border-color, #E2E8DE);
   border-radius: 18px;
   flex: 1;
-  min-height: calc(100vh - 290px);
+  min-height: 240px;
   box-sizing: border-box;
 }
 
