@@ -1,8 +1,6 @@
 import React from 'react';
 import { Users, Activity, CheckCircle2, Inbox } from 'lucide-react';
 import type { DoctorStatItem } from '../types';
-import { appointmentService, type Appointment } from '@/features/appointments';
-import { patientService, type Patient } from '@/features/patients';
 import { ROUTES } from '@/shared/config/routes';
 import { apiClient } from '@/shared/lib/api/apiClient';
 
@@ -43,30 +41,30 @@ export const INITIAL_STATS: DoctorStatItem[] = [
   },
 ];
 
+interface DoctorDashboardApiResponse {
+  success: boolean;
+  data?: {
+    stats?: {
+      activePatients: number;
+      totalPatients?: number;
+      completedTherapies: number;
+      pendingReviews: number;
+      inboundRequests?: number;
+    };
+  };
+  stats?: {
+    activePatients: number;
+    totalPatients?: number;
+    completedTherapies: number;
+    pendingReviews: number;
+    inboundRequests?: number;
+  };
+}
+
 export const doctorService = {
   async getStats(): Promise<DoctorStatItem[]> {
     try {
-      const res = await apiClient.get<{
-        success: boolean;
-        data?: {
-          stats?: {
-            activePatients: number;
-            totalPatients?: number;
-            todayConsultations: number;
-            completedTherapies: number;
-            pendingReviews: number;
-            inboundRequests?: number;
-          };
-        };
-        stats?: {
-          activePatients: number;
-          totalPatients?: number;
-          todayConsultations: number;
-          completedTherapies: number;
-          pendingReviews: number;
-          inboundRequests?: number;
-        };
-      }>('/api/doctor/dashboard');
+      const res = await apiClient.get<DoctorDashboardApiResponse>('/api/doctor/dashboard');
 
       const s = res?.data?.stats || res?.stats;
       if (s) {
@@ -116,18 +114,5 @@ export const doctorService = {
     }
 
     return INITIAL_STATS;
-  },
-
-  async getAppointments(): Promise<Appointment[]> {
-    return appointmentService.getAppointments();
-  },
-
-  async getPatients(): Promise<Patient[]> {
-    const res = await patientService.getPatients();
-    return res.patients;
-  },
-
-  async addPatient(patient: Omit<Patient, 'id'>): Promise<Patient> {
-    return patientService.addPatient(patient);
   },
 };
