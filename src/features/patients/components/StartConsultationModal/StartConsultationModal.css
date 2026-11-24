@@ -16,7 +16,9 @@
   border: 1px solid var(--border-color, #E2E8F0);
   border-radius: 16px;
   width: 100%;
-  max-width: 500px;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
   padding: 24px;
   box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.45);
 }
@@ -25,7 +27,9 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color, #E2E8F0);
 }
 
 .consult-modal__title-wrap {
@@ -35,7 +39,7 @@
 }
 
 .consult-modal__icon {
-  color: var(--primary-green, #059669);
+  color: var(--primary-green, #1B6B50);
 }
 
 .consult-modal__title {
@@ -57,6 +61,7 @@
   cursor: pointer;
   padding: 4px;
   border-radius: 6px;
+  transition: all 0.2s;
 }
 
 .consult-modal__close-btn:hover {
@@ -67,7 +72,57 @@
 .consult-modal__body {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+}
+
+.consult-modal__section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.consult-modal__label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.consult-modal__label-icon {
+  color: var(--primary-green, #1B6B50);
+}
+
+.consult-modal__chips-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.consult-modal__chip {
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  background: var(--surface-secondary, #F8FAFC);
+  color: var(--text-secondary, #475569);
+  border: 1px solid var(--border-color, #E2E8F0);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.consult-modal__chip:hover {
+  background: #EDF2F7;
+  color: var(--text-primary, #0F172A);
+  border-color: #CBD5E1;
+}
+
+.consult-modal__chip.chip--active {
+  background: rgba(27, 107, 80, 0.1);
+  color: var(--primary-green, #1B6B50);
+  border-color: var(--primary-green, #1B6B50);
+  font-weight: 700;
 }
 
 .consult-modal__field {
@@ -76,53 +131,49 @@
   gap: 6px;
 }
 
-.consult-modal__field label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text-primary, #0F172A);
-}
-
 .consult-modal__field textarea {
   border: 1px solid var(--border-color, #E2E8F0);
   border-radius: 8px;
   padding: 12px;
   background-color: var(--bg-color, #F8FAFC);
-  font-size: 0.875rem;
+  font-size: 0.85rem;
   font-family: inherit;
   color: var(--text-primary, #0F172A);
   outline: none;
   resize: vertical;
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .consult-modal__field textarea:focus {
-  border-color: var(--primary-green, #059669);
+  border-color: var(--primary-green, #1B6B50);
   background-color: var(--surface-color, #FFFFFF);
-  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.15);
+  box-shadow: 0 0 0 3px rgba(27, 107, 80, 0.12);
 }
 
 .consult-modal__actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 8px;
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-color, #E2E8F0);
 }
 
 .consult-modal__success {
   text-align: center;
-  padding: 28px 16px;
+  padding: 36px 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
 .consult-modal__success-icon {
-  color: var(--primary-green, #059669);
+  color: var(--primary-green, #1B6B50);
 }
 
 .consult-modal__success h4 {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--text-primary, #0F172A);
   margin: 0;

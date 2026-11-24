@@ -13,6 +13,7 @@ export interface TodayScheduleWidgetProps {
   appointments?: Appointment[];
   onOpenCalendar?: () => void;
   onStartAppointment?: (appointment: Appointment) => void;
+  onViewDetails?: (appointment: Appointment) => void;
   onConsultationComplete?: (appointment: Appointment) => void;
   variants?: Variants;
 }
@@ -21,6 +22,7 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
   appointments: propAppointments,
   onOpenCalendar,
   onStartAppointment,
+  onViewDetails,
   onConsultationComplete,
   variants,
 }) => {
@@ -35,8 +37,11 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
 
   const handleStart = React.useCallback(
     (apt: Appointment) => {
-      setSelectedAppointment(apt);
-      onStartAppointment?.(apt);
+      if (onStartAppointment) {
+        onStartAppointment(apt);
+      } else {
+        setSelectedAppointment(apt);
+      }
     },
     [onStartAppointment]
   );
@@ -82,6 +87,7 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
                   key={apt.id}
                   appointment={apt}
                   onStart={handleStart}
+                  onViewDetails={onViewDetails}
                 />
               ))
             ) : (
@@ -100,12 +106,14 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
         </Card>
       </motion.section>
 
-      <StartConsultationModal
-        appointment={selectedAppointment}
-        isOpen={Boolean(selectedAppointment)}
-        onClose={handleClose}
-        onComplete={handleConsultationFinished}
-      />
+      {!onStartAppointment && (
+        <StartConsultationModal
+          appointment={selectedAppointment}
+          isOpen={Boolean(selectedAppointment)}
+          onClose={handleClose}
+          onComplete={handleConsultationFinished}
+        />
+      )}
     </>
   );
 });
