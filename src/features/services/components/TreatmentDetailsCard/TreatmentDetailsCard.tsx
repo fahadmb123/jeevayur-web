@@ -23,20 +23,29 @@ export const TreatmentDetailsCard: React.FC<TreatmentDetailsCardProps> = React.m
     `Hello Dr. Ahalya / Jeevayurniketan, I would like to enquire about Ayurvedic treatment for: ${service.title}.`
   );
 
+  const hasTag = Boolean(service.categoryTag?.trim());
+  const hasDuration = Boolean(service.duration?.trim());
+  const hasDescription = Boolean(service.description?.trim());
+  const hasBenefits = Boolean(service.benefits && service.benefits.length > 0);
+
   return (
     <article className="treatment-details-card" id="treatment-details">
       <div className="treatment-details-card__top">
-        <div className="treatment-details-card__badges">
-          {service.categoryTag && (
-            <span className="treatment-details-card__category">{service.categoryTag}</span>
-          )}
-          {service.duration && (
-            <span className="treatment-details-card__duration">
-              <Clock size={13} />
-              <span>{service.duration}</span>
-            </span>
-          )}
-        </div>
+        {(hasTag || hasDuration) ? (
+          <div className="treatment-details-card__badges">
+            {hasTag && (
+              <span className="treatment-details-card__category">{service.categoryTag}</span>
+            )}
+            {hasDuration && (
+              <span className="treatment-details-card__duration">
+                <Clock size={13} />
+                <span>{service.duration}</span>
+              </span>
+            )}
+          </div>
+        ) : (
+          <div className="treatment-details-card__badges" />
+        )}
 
         <div className="treatment-details-card__nav-arrows">
           <button
@@ -63,13 +72,15 @@ export const TreatmentDetailsCard: React.FC<TreatmentDetailsCardProps> = React.m
       <div className="treatment-details-card__main">
         <div className="treatment-details-card__body">
           <h2 className="treatment-details-card__title">{service.title}</h2>
-          <p className="treatment-details-card__desc">{service.description}</p>
+          {hasDescription && (
+            <p className="treatment-details-card__desc">{service.description}</p>
+          )}
 
-          {service.benefits && service.benefits.length > 0 && (
+          {hasBenefits && (
             <div className="treatment-details-card__benefits">
               <h3 className="treatment-details-card__benefits-title">Key Indications & Benefits</h3>
               <ul className="treatment-details-card__benefits-list">
-                {service.benefits.map((b, i) => (
+                {service.benefits!.map((b, i) => (
                   <li key={i} className="treatment-details-benefit-item">
                     <Check size={15} className="treatment-benefit-check" />
                     <span>{b}</span>

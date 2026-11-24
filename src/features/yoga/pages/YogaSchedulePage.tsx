@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import {
   Calendar,
@@ -18,6 +18,7 @@ import { YogaBookingCard } from '../components/YogaBookingCard';
 import { YogaTimetableCardSkeleton } from '../components/YogaScheduleSkeleton';
 import { YOGAATHMA_DATA } from '../data/yogaathmaData';
 import { CLINIC_CONTACT } from '@/shared/config/clinicContact';
+import { galleryService } from '@/features/gallery/services/galleryService';
 import type { YogaProgram } from '../data/yogaathmaData';
 import { Navbar, Footer } from '@/shared/layout';
 import type { DayOfWeek, YogaFormat } from '../types/yoga.types';
@@ -47,6 +48,7 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
 
   const [activeDay, setActiveDay] = useState<DayOfWeek>('Monday');
   const [activeFormat, setActiveFormat] = useState<YogaFormat | 'all'>('all');
+  const [programs, setPrograms] = useState<YogaProgram[]>(YOGAATHMA_DATA.programs);
   const [selectedProgramId, setSelectedProgramId] = useState<string>(
     YOGAATHMA_DATA.programs[0]?.id || ''
   );
@@ -54,7 +56,51 @@ export const YogaSchedulePage: React.FC = React.memo(() => {
   const yogaCols = useGridColumns(yogaGridRef, 4);
 
   const { hero } = YOGAATHMA_DATA;
-  const programs: YogaProgram[] = YOGAATHMA_DATA.programs;
+
+  useEffect(() => {
+    let mounted = true;
+    const loadPrograms = async () => {
+      try {
+        const galleryResult = await galleryService.getItems('yoga');
+        if (mounted && galleryResult.items.length > 0) {
+          const mapped: YogaProgram[] = galleryResult.items.map((item, index) => ({
+            id: item.id,
+            number: String(index + 1).padStart(2, '0'),
+            title: item.title,
+            tagline: '',
+            categoryTag: '',
+            accentColor: '#1B6B50',
+            description: item.description?.trim() || '',
+            image: item.imageUrl,
+            idealForTitle: '',
+            idealFor: [],
+            focus: '',
+            format: '',
+            duration: '',
+          }));
+          setPrograms(mapped);
+          setSelectedProgramId((prev) => {
+            return mapped.some((p) => p.id === prev) ? prev : (mapped[0]?.id || '');
+          });
+          return;
+        }
+      } catch {
+      }
+      if (mounted) {
+        setPrograms(YOGAATHMA_DATA.programs);
+        setSelectedProgramId((prev) => {
+          return YOGAATHMA_DATA.programs.some((p) => p.id === prev) ? prev : (YOGAATHMA_DATA.programs[0]?.id || '');
+        });
+      }
+    };
+
+    loadPrograms();
+    const unsubscribe = galleryService.subscribe(loadPrograms);
+    return () => {
+      mounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const whatsappHeroUrl = CLINIC_CONTACT.getWhatsappUrl(hero.whatsappMessage);
 
