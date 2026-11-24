@@ -1,7 +1,12 @@
 import type { AyurvedaService, FaqItem } from '../types';
-import { apiClient } from '@/shared/lib/api';
+import { apiClient } from '@/shared/lib/api/apiClient';
 import { galleryService } from '@/features/gallery/services/galleryService';
 import { environment } from '@/shared/config/environment';
+
+export interface TreatmentSearchParams {
+  category?: string;
+  search?: string;
+}
 
 const resolveImageUrl = (url?: string): string => {
   if (!url) return '';
@@ -12,18 +17,17 @@ const resolveImageUrl = (url?: string): string => {
 };
 
 export const treatmentService = {
-  async getServices(params?: { category?: string; search?: string }): Promise<AyurvedaService[]> {
-    const query = new URLSearchParams();
-    if (params?.category && params.category !== 'all') {
-      query.set('category', params.category);
-    }
-    if (params?.search && params.search.trim()) {
-      query.set('search', params.search.trim());
-    }
-
-    const queryString = query.toString() ? `?${query.toString()}` : '';
-
+  async getServices(params?: TreatmentSearchParams): Promise<AyurvedaService[]> {
     try {
+      const searchParams = new URLSearchParams();
+      if (params?.category && params.category !== 'all') {
+        searchParams.append('category', params.category);
+      }
+      if (params?.search && params.search.trim()) {
+        searchParams.append('search', params.search.trim());
+      }
+      const queryString = searchParams.toString() ? `?${searchParams.toString()}` : '';
+
       const response = await apiClient.get<{
         treatments?: AyurvedaService[];
         data?: { treatments?: AyurvedaService[] };
@@ -45,16 +49,12 @@ export const treatmentService = {
         return galleryResult.items.map((item) => ({
           id: item.id,
           title: item.title,
-          categoryTag: 'Clinical Treatment',
-          description: item.description || 'Authentic clinical Ayurvedic formulation and therapy guided by Dr. Ahalya T.S.',
+          categoryTag: '',
+          description: item.description?.trim() || '',
           icon: '🌿',
           image: item.imageUrl,
-          benefits: [
-            'Classical herbal and clinical formulation',
-            'Personalized treatment methodology',
-            'Root-cause holistic healing',
-          ],
-          duration: 'Personalized Care',
+          benefits: [],
+          duration: '',
           category: 'all',
         }));
       }

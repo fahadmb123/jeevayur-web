@@ -13,7 +13,10 @@ export const YogaProgramImageCard: React.FC<YogaProgramImageCardProps> = React.m
   isSelected = false,
   onSelect,
 }) => {
-  const isOnline = program.format.toLowerCase().includes('online');
+  const hasTag = Boolean(program.categoryTag?.trim());
+  const hasFormat = Boolean(program.format?.trim());
+  const hasDuration = Boolean(program.duration?.trim());
+  const isOnline = program.format ? program.format.toLowerCase().includes('online') : false;
 
   return (
     <article
@@ -39,22 +42,30 @@ export const YogaProgramImageCard: React.FC<YogaProgramImageCardProps> = React.m
         />
         <div className="yoga-image-card__overlay" />
 
-        <div className="yoga-image-card__top">
-          <span className="yoga-image-card__tag">{program.categoryTag}</span>
-          <span className="yoga-image-card__format">
-            {isOnline ? <Video size={11} /> : <MapPin size={11} />}
-            <span>{program.format}</span>
-          </span>
-        </div>
+        {(hasTag || hasFormat) && (
+          <div className="yoga-image-card__top">
+            {hasTag ? (
+              <span className="yoga-image-card__tag">{program.categoryTag}</span>
+            ) : <span />}
+            {hasFormat && (
+              <span className="yoga-image-card__format">
+                {isOnline ? <Video size={11} /> : <MapPin size={11} />}
+                <span>{program.format}</span>
+              </span>
+            )}
+          </div>
+        )}
 
         <div className="yoga-image-card__content">
           <h3 className="yoga-image-card__title">{program.title}</h3>
-          <div className="yoga-image-card__meta">
-            <span className="yoga-image-card__duration">
-              <Clock size={12} />
-              <span>{program.duration}</span>
-            </span>
-          </div>
+          {hasDuration && (
+            <div className="yoga-image-card__meta">
+              <span className="yoga-image-card__duration">
+                <Clock size={12} />
+                <span>{program.duration}</span>
+              </span>
+            </div>
+          )}
         </div>
 
         {isSelected && (
@@ -68,4 +79,3 @@ export const YogaProgramImageCard: React.FC<YogaProgramImageCardProps> = React.m
 });
 
 YogaProgramImageCard.displayName = 'YogaProgramImageCard';
-

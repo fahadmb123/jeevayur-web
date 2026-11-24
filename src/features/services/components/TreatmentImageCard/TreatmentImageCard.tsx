@@ -13,6 +13,9 @@ export const TreatmentImageCard: React.FC<TreatmentImageCardProps> = React.memo(
   isSelected = false,
   onSelect,
 }) => {
+  const hasTag = Boolean(service.categoryTag?.trim());
+  const hasDuration = Boolean(service.duration?.trim());
+
   return (
     <article
       className={`treatment-image-card ${isSelected ? 'is-selected' : ''}`}
@@ -45,11 +48,11 @@ export const TreatmentImageCard: React.FC<TreatmentImageCardProps> = React.memo(
         <div className="treatment-image-card__overlay" />
 
         <div className="treatment-image-card__content">
-          {service.categoryTag && (
+          {hasTag && (
             <span className="treatment-image-card__tag">{service.categoryTag}</span>
           )}
           <h3 className="treatment-image-card__title">{service.title}</h3>
-          {service.duration && (
+          {hasDuration && (
             <span className="treatment-image-card__duration">
               <Clock size={12} />
               <span>{service.duration}</span>

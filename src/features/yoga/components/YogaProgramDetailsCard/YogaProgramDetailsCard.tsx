@@ -22,22 +22,37 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
     `Hello Jeevayurniketan | Yogaathma, I would like to book or enquire about the "${program.title}" program.`
   );
 
-  const isOnline = program.format.toLowerCase().includes('online');
+  const hasTag = Boolean(program.categoryTag?.trim());
+  const hasFormat = Boolean(program.format?.trim());
+  const hasDuration = Boolean(program.duration?.trim());
+  const hasTagline = Boolean(program.tagline?.trim());
+  const hasDescription = Boolean(program.description?.trim());
+  const hasHighlights = Boolean(program.idealFor && program.idealFor.length > 0);
+  const hasFocus = Boolean(program.focus?.trim());
+  const isOnline = program.format ? program.format.toLowerCase().includes('online') : false;
 
   return (
     <article className="yoga-details-card" id="yoga-program-details">
       <div className="yoga-details-card__top">
-        <div className="yoga-details-card__badges">
-          <span className="yoga-details-card__tag">{program.categoryTag}</span>
-          <span className="yoga-details-card__format">
-            {isOnline ? <Video size={12} /> : <MapPin size={12} />}
-            <span>{program.format}</span>
-          </span>
-          <span className="yoga-details-card__duration">
-            <Clock size={12} />
-            <span>{program.duration}</span>
-          </span>
-        </div>
+        {(hasTag || hasFormat || hasDuration) ? (
+          <div className="yoga-details-card__badges">
+            {hasTag && <span className="yoga-details-card__tag">{program.categoryTag}</span>}
+            {hasFormat && (
+              <span className="yoga-details-card__format">
+                {isOnline ? <Video size={12} /> : <MapPin size={12} />}
+                <span>{program.format}</span>
+              </span>
+            )}
+            {hasDuration && (
+              <span className="yoga-details-card__duration">
+                <Clock size={12} />
+                <span>{program.duration}</span>
+              </span>
+            )}
+          </div>
+        ) : (
+          <div className="yoga-details-card__badges" />
+        )}
 
         <div className="yoga-details-card__nav-arrows">
           <button
@@ -63,16 +78,16 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
 
       <div className="yoga-details-card__main">
         <h2 className="yoga-details-card__title">{program.title}</h2>
-        {program.tagline && <p className="yoga-details-card__tagline">{program.tagline}</p>}
-        <p className="yoga-details-card__desc">{program.description}</p>
+        {hasTagline && <p className="yoga-details-card__tagline">{program.tagline}</p>}
+        {hasDescription && <p className="yoga-details-card__desc">{program.description}</p>}
 
-        {program.idealFor && program.idealFor.length > 0 && (
+        {hasHighlights && (
           <div className="yoga-details-card__highlights">
             <h3 className="yoga-details-card__highlights-title">
               {program.idealForTitle || 'Program Highlights:'}
             </h3>
             <ul className="yoga-details-card__highlights-list">
-              {program.idealFor.map((item, i) => (
+              {program.idealFor!.map((item, i) => (
                 <li key={i} className="yoga-details-highlight-item">
                   <Check size={15} className="yoga-highlight-check" />
                   <span>{item}</span>
@@ -82,7 +97,7 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
           </div>
         )}
 
-        {program.focus && (
+        {hasFocus && (
           <div className="yoga-details-card__focus-box">
             <span className="yoga-focus-label">Program Focus:</span>
             <p className="yoga-focus-text">{program.focus}</p>
@@ -131,4 +146,3 @@ export const YogaProgramDetailsCard: React.FC<YogaProgramDetailsCardProps> = Rea
 });
 
 YogaProgramDetailsCard.displayName = 'YogaProgramDetailsCard';
-
