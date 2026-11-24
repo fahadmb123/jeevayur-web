@@ -109,6 +109,10 @@ export const authService = {
   },
 
   async getCurrentUser(): Promise<User | null> {
+    const token = tokenStorage.getAccessToken();
+    if (!token) {
+      return null;
+    }
     try {
       const response = await apiClient.get<{ user: User }>('/api/auth/me');
       return response.user;

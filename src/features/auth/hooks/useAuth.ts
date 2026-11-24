@@ -10,13 +10,12 @@ export const useAuth = () => {
     queryFn: authService.getCurrentUser,
     retry: false,
     staleTime: 5 * 60 * 1000,
-    refetchOnWindowFocus: true,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     const handleUnauthorized = () => {
       queryClient.setQueryData(AUTH_QUERY_KEY, null);
-      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
     };
 
     window.addEventListener('auth:unauthorized', handleUnauthorized);
@@ -31,7 +30,6 @@ export const useAuth = () => {
     logout: async () => {
       await authService.logout();
       queryClient.setQueryData(AUTH_QUERY_KEY, null);
-      queryClient.removeQueries({ queryKey: AUTH_QUERY_KEY });
     },
   };
 };
