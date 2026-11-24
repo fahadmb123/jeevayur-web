@@ -45,12 +45,22 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const { user } = useAuth();
   const {
     patients,
+    loading: patientsLoading,
     fetchPatients,
     addPatient,
     updatePatientStatus,
   } = usePatients();
-  const { appointments, refreshAppointments, completeAppointment } = useAppointments();
-  const { stats, refreshStats } = useDoctorStats();
+  const {
+    appointments,
+    loading: appointmentsLoading,
+    refreshAppointments,
+    completeAppointment,
+  } = useAppointments();
+  const {
+    stats,
+    loading: statsLoading,
+    refreshStats,
+  } = useDoctorStats();
 
   const doctorGreetingName = user?.name || 'Dr. Ahalya T.S.';
 
@@ -405,7 +415,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         </div>
       </div>
 
-      <DoctorStats stats={interactiveStats} />
+      <DoctorStats stats={interactiveStats} loading={statsLoading || isSyncing} />
 
       <DoctorSearchFilterStrip
         searchPlaceholder="Search today's patients, appointments, phone numbers or chief complaints..."
@@ -415,6 +425,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         onReset={handleReset}
         resetTitle="Reset dashboard filters"
         pills={pills}
+        isLoading={patientsLoading || appointmentsLoading || statsLoading || isSyncing}
       />
 
       <div
@@ -426,6 +437,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         {showPatients && (
           <RecentPatientsWidget
             patients={filteredPatients}
+            isLoading={patientsLoading || isSyncing}
             searchFilter={searchQuery}
             onViewAll={() => navigate(ROUTES.DOCTOR_PATIENTS)}
             onViewDetails={(patient) => setDetailPatient(patient)}
@@ -439,6 +451,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           <div className="doctor-schedule-column">
             <TodayScheduleWidget
               appointments={filteredAppointments}
+              isLoading={appointmentsLoading || isSyncing}
               onConsultationComplete={handleConsultationFinished}
               onViewDetails={(apt) => setSelectedAppointmentDetail(apt)}
               onStartAppointment={(apt) => setActiveConsultationAppointment(apt)}

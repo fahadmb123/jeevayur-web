@@ -3,6 +3,7 @@ import { motion, type Variants } from 'framer-motion';
 import { Users, UserPlus, ArrowRight } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { PatientListItem } from '../PatientListItem';
+import { PatientListItemSkeleton } from '../PatientListItemSkeleton';
 import { PatientFilterTabs, type PatientFilterOption } from '../PatientFilterTabs';
 import { usePatients } from '../../hooks/usePatients';
 import type { Patient } from '../../types';
@@ -10,6 +11,7 @@ import './RecentPatientsWidget.css';
 
 export interface RecentPatientsWidgetProps {
   patients?: Patient[];
+  isLoading?: boolean;
   onViewAll?: () => void;
   onSelectPatient?: (patient: Patient) => void;
   onViewDetails?: (patient: Patient) => void;
@@ -22,6 +24,7 @@ export interface RecentPatientsWidgetProps {
 
 export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.memo(({
   patients: propPatients,
+  isLoading: propIsLoading,
   onViewAll,
   onSelectPatient,
   onViewDetails,
@@ -31,8 +34,9 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
   variants,
   searchFilter = '',
 }) => {
-  const { patients: hookPatients } = usePatients();
+  const { patients: hookPatients, loading: hookLoading } = usePatients();
   const patients = propPatients || hookPatients;
+  const isLoading = propIsLoading !== undefined ? propIsLoading : hookLoading;
 
   const [activeFilter, setActiveFilter] = useState<PatientFilterOption>('All');
 
@@ -107,7 +111,9 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
               </tr>
             </thead>
             <tbody>
-              {filteredPatients.length > 0 ? (
+              {isLoading ? (
+                <PatientListItemSkeleton count={5} />
+              ) : filteredPatients.length > 0 ? (
                 filteredPatients.map((patient, index) => (
                   <PatientListItem
                     key={patient.id}
