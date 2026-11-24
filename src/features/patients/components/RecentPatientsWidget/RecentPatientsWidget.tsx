@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { motion, type Variants } from 'framer-motion';
 import { Users, UserPlus, ArrowRight } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { PatientListItem } from '../PatientListItem';
 import { PatientListItemSkeleton } from '../PatientListItemSkeleton';
-import { PatientFilterTabs, type PatientFilterOption } from '../PatientFilterTabs';
 import { usePatients } from '../../hooks/usePatients';
 import type { Patient } from '../../types';
 import './RecentPatientsWidget.css';
@@ -38,32 +37,6 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
   const patients = propPatients || hookPatients;
   const isLoading = propIsLoading !== undefined ? propIsLoading : hookLoading;
 
-  const [activeFilter, setActiveFilter] = useState<PatientFilterOption>('All');
-
-  const handleFilterChange = React.useCallback((filter: PatientFilterOption) => {
-    setActiveFilter(filter);
-  }, []);
-
-  const filteredPatients = useMemo(() => {
-    return patients.filter((patient) => {
-      const matchesStatus = activeFilter === 'All' || patient.status === activeFilter;
-      const matchesSearch =
-        !searchFilter ||
-        patient.name.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        (patient.condition ? patient.condition.toLowerCase().includes(searchFilter.toLowerCase()) : false) ||
-        (patient.phone ? patient.phone.toLowerCase().includes(searchFilter.toLowerCase()) : false);
-      return matchesStatus && matchesSearch;
-    });
-  }, [patients, activeFilter, searchFilter]);
-
-  const counts = useMemo(() => {
-    return {
-      All: patients.length,
-      Uncompleted: patients.filter((p) => p.status !== 'Completed').length,
-      Completed: patients.filter((p) => p.status === 'Completed').length,
-    };
-  }, [patients]);
-
   return (
     <motion.section variants={variants} className="recent-patients-widget">
       <Card className="recent-patients-widget__card">
@@ -72,7 +45,7 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
             <div className="recent-patients-widget__title-row">
               <h2 className="recent-patients-widget__title">Recent Patients</h2>
               <span className="recent-patients-widget__badge">
-                {filteredPatients.length} Active
+                {patients.length} {patients.length === 1 ? 'Patient' : 'Patients'}
               </span>
             </div>
             <span className="recent-patients-widget__subtitle">
@@ -87,14 +60,6 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
             <span>View All ({patients.length})</span>
             <ArrowRight size={14} />
           </button>
-        </div>
-
-        <div className="recent-patients-widget__filter-bar">
-          <PatientFilterTabs
-            activeFilter={activeFilter}
-            onFilterChange={handleFilterChange}
-            counts={counts}
-          />
         </div>
 
         <div className="recent-patients-widget__table-wrap">
@@ -113,8 +78,8 @@ export const RecentPatientsWidget: React.FC<RecentPatientsWidgetProps> = React.m
             <tbody>
               {isLoading ? (
                 <PatientListItemSkeleton count={5} />
-              ) : filteredPatients.length > 0 ? (
-                filteredPatients.map((patient, index) => (
+              ) : patients.length > 0 ? (
+                patients.map((patient, index) => (
                   <PatientListItem
                     key={patient.id}
                     patient={patient}
