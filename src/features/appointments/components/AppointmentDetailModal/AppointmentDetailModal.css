@@ -1,0 +1,191 @@
+.appointment-detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.appointment-detail-modal {
+  background: var(--surface-color, #FFFFFF);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+  border: 1px solid var(--border-color, #E2E8F0);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px 16px 24px;
+  border-bottom: 1px solid var(--border-color, #E2E8F0);
+}
+
+.appointment-detail-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.appointment-detail-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--primary-green, #1B6B50);
+}
+
+.appointment-detail-patient-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  margin: 0;
+}
+
+.appointment-detail-close-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary, #64748B);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.appointment-detail-close-btn:hover {
+  background-color: #F1F5F9;
+  color: var(--text-primary, #0F172A);
+}
+
+.appointment-detail-body {
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.appointment-detail-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.appointment-detail-meta-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  background-color: var(--surface-secondary, #F8FAFC);
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 10px;
+}
+
+.appointment-detail-meta-icon {
+  color: var(--primary-green, #1B6B50);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.appointment-detail-meta-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-secondary, #64748B);
+}
+
+.appointment-detail-meta-val {
+  display: block;
+  font-size: 0.84rem;
+  color: var(--text-primary, #0F172A);
+  font-weight: 600;
+}
+
+.appointment-detail-meta-val.val--done {
+  color: #059669;
+}
+
+.appointment-detail-meta-val.val--pending {
+  color: #0284C7;
+}
+
+.appointment-detail-section-title {
+  display: block;
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary, #64748B);
+  margin-bottom: 8px;
+}
+
+.appointment-detail-contact-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.appointment-detail-contact-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.appointment-detail-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: var(--surface-secondary, #F1F5F9);
+  border: 1px solid var(--border-color, #E2E8F0);
+  color: var(--text-primary, #0F172A);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.appointment-detail-contact-btn:hover {
+  background-color: #E2E8F0;
+}
+
+.appointment-detail-contact-btn--wa {
+  background-color: rgba(37, 211, 102, 0.1);
+  color: #128C7E;
+  border-color: rgba(37, 211, 102, 0.3);
+}
+
+.appointment-detail-contact-btn--wa:hover {
+  background-color: rgba(37, 211, 102, 0.2);
+}
+
+.appointment-detail-concern-box {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+}
+
+.appointment-detail-concern-text {
+  font-size: 0.85rem;
+  color: var(--text-primary, #0F172A);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.appointment-detail-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 16px 24px;
+  background-color: var(--surface-secondary, #F8FAFC);
+  border-top: 1px solid var(--border-color, #E2E8F0);
+}

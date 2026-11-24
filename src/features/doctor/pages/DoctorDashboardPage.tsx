@@ -1,16 +1,22 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RotateCw, UserPlus, Inbox, Sparkles, CheckCircle2 } from 'lucide-react';
-import { DoctorStats } from '../components/DoctorStats/index';
+import { DoctorStats, DoctorQuickRequestsDrawer } from '../components';
 import {
   RecentPatientsWidget,
   PatientDetailModal,
   AddPatientModal,
+  StartConsultationModal,
   usePatients,
   type Patient,
   type PatientStatus,
 } from '@/features/patients';
-import { TodayScheduleWidget, useAppointments, type Appointment } from '@/features/appointments';
+import {
+  TodayScheduleWidget,
+  AppointmentDetailModal,
+  useAppointments,
+  type Appointment,
+} from '@/features/appointments';
 import { useDoctorStats } from '../hooks/useDoctorStats';
 import { ROUTES } from '@/shared/config/routes';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -33,7 +39,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     addPatient,
     updatePatientStatus,
   } = usePatients();
-  const { appointments, refreshAppointments } = useAppointments();
+  const { appointments, refreshAppointments, completeAppointment } = useAppointments();
   const { stats, refreshStats } = useDoctorStats();
 
   const doctorGreetingName = user?.name || 'Dr. Ahalya T.S.';
@@ -44,7 +50,10 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isRequestsDrawerOpen, setIsRequestsDrawerOpen] = useState<boolean>(false);
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
+  const [selectedAppointmentDetail, setSelectedAppointmentDetail] = useState<Appointment | null>(null);
+  const [activeConsultationAppointment, setActiveConsultationAppointment] = useState<Appointment | null>(null);
   const [updatingPatientId, setUpdatingPatientId] = useState<number | string | null>(null);
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
 
@@ -158,6 +167,22 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
 
   const interactiveStats = useMemo(() => {
     return stats.map((item) => {
+      if (item.id === 'consultation-requests') {
+        return {
+          ...item,
+          link: undefined,
+          onClick: () => setIsRequestsDrawerOpen(true),
+        };
+      }
+      if (item.id === 'total-patients') {
+        return {
+          ...item,
+          onClick: () => {
+            setActiveTab('patients');
+            setSelectedSection('Patients');
+          },
+        };
+      }
       if (item.id === 'today-appointments') {
         return {
           ...item,
@@ -303,7 +328,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           <button
             type="button"
             className="doctor-dashboard-inbound-btn"
-            onClick={() => navigate(ROUTES.DOCTOR_REQUESTS)}
+            onClick={() => setIsRequestsDrawerOpen(true)}
           >
             <Inbox size={14} />
             <span>Inbound Requests</span>
@@ -377,10 +402,52 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           <TodayScheduleWidget
             appointments={filteredAppointments}
             onConsultationComplete={handleConsultationFinished}
-            onOpenCalendar={() => navigate(ROUTES.DOCTOR_REQUESTS)}
+            onViewDetails={(apt) => setSelectedAppointmentDetail(apt)}
+            onStartAppointment={(apt) => setActiveConsultationAppointment(apt)}
+            onOpenCalendar={() => setIsRequestsDrawerOpen(true)}
           />
         )}
       </div>
+
+      <DoctorQuickRequestsDrawer
+        isOpen={isRequestsDrawerOpen}
+        onClose={() => setIsRequestsDrawerOpen(false)}
+        onAccepted={(req) => {
+          handleSyncAll();
+          setSuccessBanner(`Accepted consultation request for ${req.patientName}`);
+          setTimeout(() => setSuccessBanner(null), 3500);
+        }}
+      />
+
+      <AppointmentDetailModal
+        appointment={selectedAppointmentDetail}
+        isOpen={Boolean(selectedAppointmentDetail)}
+        onClose={() => setSelectedAppointmentDetail(null)}
+        onStartConsultation={(apt: Appointment) => {
+          setSelectedAppointmentDetail(null);
+          setActiveConsultationAppointment(apt);
+        }}
+        onMarkCompleted={async (id: string | number) => {
+          await completeAppointment(id);
+          refreshAppointments();
+          refreshStats();
+          setSuccessBanner('Appointment marked completed.');
+          setTimeout(() => setSuccessBanner(null), 3000);
+        }}
+      />
+
+      <StartConsultationModal
+        appointment={activeConsultationAppointment}
+        isOpen={Boolean(activeConsultationAppointment)}
+        onClose={() => setActiveConsultationAppointment(null)}
+        onComplete={async (aptId: string | number, notes?: string) => {
+          await completeAppointment(aptId, notes);
+          if (activeConsultationAppointment) {
+            handleConsultationFinished(activeConsultationAppointment);
+          }
+          setActiveConsultationAppointment(null);
+        }}
+      />
 
       <PatientDetailModal
         patient={detailPatient}

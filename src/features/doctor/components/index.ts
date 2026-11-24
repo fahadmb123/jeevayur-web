@@ -6,3 +6,4 @@ export * from './DoctorSessionsCard';
 export * from './DoctorProfileCard';
 export * from './DoctorProtocolsCard';
 export * from './DoctorNotificationsCard';
+export * from './DoctorQuickRequestsDrawer';
