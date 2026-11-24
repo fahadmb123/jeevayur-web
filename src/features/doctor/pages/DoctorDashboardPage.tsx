@@ -11,8 +11,18 @@ import {
   ArrowRight,
   ShieldCheck,
   HeartPulse,
+  Sun,
+  Flame,
+  Wind,
+  Moon,
+  Shield,
 } from 'lucide-react';
-import { DoctorStats, DoctorQuickRequestsDrawer } from '../components';
+import {
+  DoctorStats,
+  DoctorQuickRequestsDrawer,
+  DoctorTelemetryBar,
+  DoctorClinicalInsights,
+} from '../components';
 import {
   RecentPatientsWidget,
   PatientDetailModal,
@@ -89,6 +99,101 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     });
   }, []);
 
+  const doshaMetrics = useMemo(() => {
+    let vata = 0;
+    let pitta = 0;
+    let kapha = 0;
+
+    patients.forEach((p) => {
+      const cond = (p.condition || '').toLowerCase();
+      if (
+        cond.includes('joint') ||
+        cond.includes('arthrit') ||
+        cond.includes('nerve') ||
+        cond.includes('insomnia') ||
+        cond.includes('stress') ||
+        cond.includes('pain') ||
+        cond.includes('anxiety')
+      ) {
+        vata += 2;
+      } else if (
+        cond.includes('digest') ||
+        cond.includes('skin') ||
+        cond.includes('acid') ||
+        cond.includes('liver') ||
+        cond.includes('burn') ||
+        cond.includes('inflam')
+      ) {
+        pitta += 2;
+      } else if (
+        cond.includes('respirat') ||
+        cond.includes('asthma') ||
+        cond.includes('weight') ||
+        cond.includes('sinus') ||
+        cond.includes('letharg')
+      ) {
+        kapha += 2;
+      } else {
+        vata += 1;
+        pitta += 1;
+        kapha += 1;
+      }
+    });
+
+    const total = vata + pitta + kapha || 1;
+    const vataPct = Math.round((vata / total) * 100);
+    const pittaPct = Math.round((pitta / total) * 100);
+    const kaphaPct = Math.max(10, 100 - vataPct - pittaPct);
+
+    return {
+      vata: Math.max(15, vataPct),
+      pitta: Math.max(15, pittaPct),
+      kapha: kaphaPct,
+    };
+  }, [patients]);
+
+  const circadianPhase = useMemo(() => {
+    const hour = new Date().getHours();
+    if (hour >= 6 && hour < 10) {
+      return {
+        phase: 'Kapha Synthesis',
+        timeRange: '06:00 - 10:00',
+        focus: 'Vyayama (Therapeutic Movement) & Respiratory Detoxification',
+        icon: Sun,
+      };
+    }
+    if (hour >= 10 && hour < 14) {
+      return {
+        phase: 'Pitta Solar Peak',
+        timeRange: '10:00 - 14:00',
+        focus: 'Optimal Jatharagni (Metabolic Strength) & Active Clinical Formulations',
+        icon: Flame,
+      };
+    }
+    if (hour >= 14 && hour < 18) {
+      return {
+        phase: 'Vata Movement',
+        timeRange: '14:00 - 18:00',
+        focus: 'Nadi Pariksha, Herbal Decoctions & Patient Dosha Reassessment',
+        icon: Wind,
+      };
+    }
+    if (hour >= 18 && hour < 22) {
+      return {
+        phase: 'Kapha Rest & Assimilation',
+        timeRange: '18:00 - 22:00',
+        focus: 'Warm Abhyanga, Light Pathya Ahara & Dosha Equilibrium',
+        icon: Moon,
+      };
+    }
+    return {
+      phase: 'Brahma Muhurta Rejuvenation',
+      timeRange: '22:00 - 06:00',
+      focus: 'Rasayana Cellular Repair, Tissue Regeneration & Deep Sanctuary Rest',
+      icon: Shield,
+    };
+  }, []);
+
   const handleSyncAll = useCallback(async () => {
     setIsSyncing(true);
     try {
@@ -96,12 +201,38 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         fetchPatients(),
         refreshStats(),
       ]);
-      setSuccessBanner('Clinic dashboard synced with live records');
+      setSuccessBanner('Clinical dashboard synchronized with Turso Edge database');
       setTimeout(() => setSuccessBanner(null), 3000);
     } finally {
       setIsSyncing(false);
     }
   }, [fetchPatients, refreshStats]);
+
+  const handleExportCSV = useCallback(() => {
+    if (patients.length === 0) return;
+    const headers = ['ID', 'Name', 'Phone', 'Gender', 'Condition', 'Source', 'Status'];
+    const rows = patients.map((p) => [
+      `"${p.id}"`,
+      `"${p.name.replace(/"/g, '""')}"`,
+      `"${p.phone || ''}"`,
+      `"${p.gender || ''}"`,
+      `"${(p.condition || '').replace(/"/g, '""')}"`,
+      `"${p.source || 'doctor'}"`,
+      `"${p.status}"`,
+    ]);
+    const csvContent = [headers.join(','), ...rows.map((r) => r.join(','))].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `jeevayur_patient_registry_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    setSuccessBanner(`Exported ${patients.length} patient records to CSV`);
+    setTimeout(() => setSuccessBanner(null), 3000);
+  }, [patients]);
 
   const handleTogglePatientStatus = useCallback(
     async (patient: Patient) => {
@@ -267,6 +398,8 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     },
   ], [activeTab, selectedStatus, patients.length, uncompletedCount, completedCount]);
 
+  const CircadianIcon = circadianPhase.icon;
+
   return (
     <div className="doctor-dashboard-content">
       {successBanner && (
@@ -307,7 +440,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
             </h1>
 
             <p className="doctor-modern-hero__subtitle">
-              Ayurvedic Sanctuary Clinical Command Center • Classical Panchakarma, Patient Records & Real-Time Consultations
+              Ayurvedic Sanctuary Clinical Command Center • Classical Panchakarma, Patient Records & Real-Time Telemetry
             </p>
           </div>
         </div>
@@ -347,7 +480,29 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         </div>
       </div>
 
+      <DoctorTelemetryBar
+        patientCount={patients.length}
+        isSyncing={isSyncing}
+        onSync={handleSyncAll}
+        onExportCSV={handleExportCSV}
+      />
+
       <DoctorStats stats={interactiveStats} loading={statsLoading || isSyncing} />
+
+      <DoctorClinicalInsights
+        doshaMetrics={doshaMetrics}
+        activeCount={uncompletedCount}
+        completedCount={completedCount}
+        totalCount={patients.length}
+        onFilterActive={() => {
+          setActiveTab('uncompleted');
+          setSelectedStatus('Uncompleted');
+        }}
+        onFilterCompleted={() => {
+          setActiveTab('completed');
+          setSelectedStatus('Completed');
+        }}
+      />
 
       <DoctorSearchFilterStrip
         searchPlaceholder="Search patients by name, contact, health condition, or service..."
@@ -378,8 +533,14 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
               <Compass size={18} />
             </div>
             <div>
-              <h3 className="doctor-dinacharya-card__title">Ayurvedic Sanctuary Protocols</h3>
-              <span className="doctor-dinacharya-card__sub">Hemanta Ritu Seasonal Dinacharya & Clinical Care Directives</span>
+              <div className="doctor-dinacharya-card__title-row">
+                <h3 className="doctor-dinacharya-card__title">Ayurvedic Sanctuary Protocols</h3>
+                <span className="doctor-dinacharya-card__phase-chip">
+                  <CircadianIcon size={12} />
+                  <span>{circadianPhase.phase.toUpperCase()} · {circadianPhase.timeRange}</span>
+                </span>
+              </div>
+              <span className="doctor-dinacharya-card__sub">{circadianPhase.focus}</span>
             </div>
           </div>
 

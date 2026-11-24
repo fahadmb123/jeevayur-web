@@ -320,6 +320,27 @@
   justify-content: center;
 }
 
+.doctor-dinacharya-card__title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.doctor-dinacharya-card__phase-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(201, 141, 59, 0.1);
+  color: #B45309;
+  border: 1px solid rgba(201, 141, 59, 0.25);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+}
+
 .doctor-dinacharya-card__title {
   font-size: 0.95rem;
   font-weight: 700;
