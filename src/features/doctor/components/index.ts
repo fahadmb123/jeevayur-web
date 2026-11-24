@@ -7,3 +7,5 @@ export * from './DoctorProfileCard';
 export * from './DoctorProtocolsCard';
 export * from './DoctorNotificationsCard';
 export * from './DoctorQuickRequestsDrawer';
+export * from './DoctorTelemetryBar';
+export * from './DoctorClinicalInsights';

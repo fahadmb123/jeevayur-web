@@ -1,0 +1,330 @@
+.doctor-clinical-insights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1200px) {
+  .doctor-clinical-insights {
+    grid-template-columns: 1fr;
+  }
+}
+
+.doctor-insight-card {
+  background: var(--surface-color, #FFFFFF);
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 18px;
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.02);
+  transition: all 0.2s ease;
+}
+
+.doctor-insight-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+}
+
+.doctor-insight-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.doctor-insight-card__title-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.doctor-insight-card__icon {
+  color: var(--primary-green, #1B6B50);
+}
+
+.doctor-insight-card__title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.doctor-insight-card__badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.doctor-insight-card__badge--mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  background: rgba(14, 165, 233, 0.08);
+  color: #0284C7;
+  border: 1px solid rgba(14, 165, 233, 0.2);
+}
+
+.doctor-insight-card__badge--green {
+  background: rgba(16, 185, 129, 0.1);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.doctor-dosha-bar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #F1F5F9;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.doctor-dosha-segment {
+  height: 100%;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.doctor-dosha-segment--vata {
+  background: linear-gradient(90deg, #F59E0B, #D97706);
+}
+
+.doctor-dosha-segment--pitta {
+  background: linear-gradient(90deg, #EF4444, #DC2626);
+}
+
+.doctor-dosha-segment--kapha {
+  background: linear-gradient(90deg, #14B8A6, #0D9488);
+}
+
+.doctor-dosha-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.doctor-dosha-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+}
+
+.doctor-dosha-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.doctor-dosha-dot--vata {
+  background: #D97706;
+}
+
+.doctor-dosha-dot--pitta {
+  background: #DC2626;
+}
+
+.doctor-dosha-dot--kapha {
+  background: #0D9488;
+}
+
+.doctor-dosha-name {
+  color: var(--text-secondary, #64748B);
+  flex: 1;
+}
+
+.doctor-dosha-value {
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.doctor-insight-card__note {
+  font-size: 0.72rem;
+  color: var(--text-secondary, #64748B);
+  line-height: 1.4;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color, #E2E8F0);
+}
+
+.doctor-velocity-stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.doctor-stage-step {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 8px;
+  background: var(--surface-secondary, #F8FAFC);
+  border: 1px solid var(--border-color, #E2E8F0);
+  border-radius: 8px;
+  text-align: center;
+}
+
+.doctor-stage-step--active {
+  background: rgba(27, 107, 80, 0.05);
+  border-color: rgba(27, 107, 80, 0.2);
+}
+
+.doctor-stage-index {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: var(--primary-green, #1B6B50);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.doctor-stage-name {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-primary, #0F172A);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.doctor-velocity-bar-wrap {
+  margin-bottom: 14px;
+}
+
+.doctor-velocity-bar {
+  height: 7px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.doctor-velocity-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #059669);
+  border-radius: 999px;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.4);
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.doctor-velocity-stats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.doctor-velocity-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: var(--surface-secondary, #F8FAFC);
+  border: 1px solid var(--border-color, #E2E8F0);
+  font-size: 0.74rem;
+  color: var(--text-primary, #0F172A);
+}
+
+.doctor-velocity-stat-pill--interactive {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.doctor-velocity-stat-pill--interactive:hover {
+  background: #EDF2F7;
+  border-color: #CBD5E1;
+  transform: translateY(-1px);
+}
+
+.doctor-velocity-stat-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.doctor-velocity-stat-dot--blue {
+  background: #0284C7;
+}
+
+.doctor-velocity-stat-icon--green {
+  color: #10B981;
+}
+
+.doctor-modality-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.doctor-modality-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.doctor-modality-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+}
+
+.doctor-modality-label {
+  color: var(--text-secondary, #64748B);
+  font-weight: 500;
+}
+
+.doctor-modality-percent {
+  font-weight: 700;
+  color: var(--text-primary, #0F172A);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.doctor-modality-progress {
+  height: 5px;
+  background: #F1F5F9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.doctor-modality-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.doctor-modality-fill--green {
+  background: #10B981;
+}
+
+.doctor-modality-fill--blue {
+  background: #0284C7;
+}
+
+.doctor-modality-fill--orange {
+  background: #F59E0B;
+}
+
+.doctor-telemetry-chips {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-color, #E2E8F0);
+}
+
+.doctor-telemetry-chip {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-secondary, #F8FAFC);
+  color: var(--text-secondary, #64748B);
+  border: 1px solid var(--border-color, #E2E8F0);
+}
