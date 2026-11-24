@@ -9,46 +9,55 @@
 .recent-patients-widget__header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   margin-bottom: 16px;
 }
 
 .recent-patients-widget__title {
   font-size: 1.05rem;
-  font-weight: 600;
+  font-weight: 700;
   color: var(--text-primary, #0F172A);
-  margin: 0;
+  margin: 0 0 2px 0;
+}
+
+.recent-patients-widget__subtitle {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #64748B);
 }
 
 .recent-patients-widget__view-all-btn {
   background: none;
-  border: none;
-  color: var(--primary-green, #059669);
+  border: 1px solid var(--border-color, #E2E8F0);
+  color: var(--primary-green, #1B6B50);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
+  padding: 5px 12px;
+  border-radius: 8px;
   transition: all 0.2s;
 }
 
 .recent-patients-widget__view-all-btn:hover {
-  background-color: rgba(5, 150, 105, 0.08);
+  background-color: rgba(27, 107, 80, 0.08);
+  border-color: var(--primary-green, #1B6B50);
 }
 
 .recent-patients-widget__filter-bar {
   margin-bottom: 16px;
 }
 
-.recent-patients-widget__list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.recent-patients-widget__table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  border: 1px solid var(--border-color, #E2E8F0);
 }
 
-.recent-patients-widget__empty {
-  padding: 24px 16px;
+.recent-patients-widget__empty-row {
+  padding: 32px 16px;
   text-align: center;
   color: var(--text-light, #94A3B8);
   font-size: 0.875rem;
+  background-color: var(--surface-secondary, #F8FAFC);
 }

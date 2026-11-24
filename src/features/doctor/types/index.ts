@@ -10,6 +10,7 @@ export interface DoctorStatItem {
   variant: 'green' | 'blue' | 'orange';
   icon: React.ReactNode;
   link?: string;
+  onClick?: () => void;
 }
 
 export interface DoctorNavItem {
