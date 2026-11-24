@@ -1,10 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { doctorService } from '../services/doctorService';
 import type { DoctorStatItem } from '../types';
 
 export const useDoctorStats = () => {
   const [stats, setStats] = useState<DoctorStatItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+
+  const refreshStats = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await doctorService.getStats();
+      setStats(data);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     let mounted = true;
@@ -19,5 +29,5 @@ export const useDoctorStats = () => {
     };
   }, []);
 
-  return { stats, loading };
+  return { stats, loading, refreshStats };
 };

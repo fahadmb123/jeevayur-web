@@ -16,21 +16,26 @@ export const DoctorStats: React.FC<DoctorStatsProps> = React.memo(({ stats: prop
   return (
     <div className="doctor-stats-grid">
       {stats.map((item) => {
-        const handleClick = item.link ? () => navigate(item.link!) : undefined;
+        const hasAction = Boolean(item.onClick || item.link);
+        const handleClick = item.onClick
+          ? item.onClick
+          : item.link
+          ? () => navigate(item.link!)
+          : undefined;
 
         return (
           <div
             key={item.id}
-            className={`doctor-stat-card doctor-stat-card--${item.variant} ${item.link ? 'doctor-stat-card--clickable' : ''}`}
+            className={`doctor-stat-card doctor-stat-card--${item.variant} ${hasAction ? 'doctor-stat-card--clickable' : ''}`}
             onClick={handleClick}
-            role={item.link ? 'button' : undefined}
-            tabIndex={item.link ? 0 : undefined}
+            role={hasAction ? 'button' : undefined}
+            tabIndex={hasAction ? 0 : undefined}
             onKeyDown={
-              item.link
+              hasAction
                 ? (e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      navigate(item.link!);
+                      handleClick?.();
                     }
                   }
                 : undefined

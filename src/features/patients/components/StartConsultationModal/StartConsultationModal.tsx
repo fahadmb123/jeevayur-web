@@ -9,7 +9,7 @@ export interface StartConsultationModalProps {
   appointment: Appointment | null;
   isOpen: boolean;
   onClose: () => void;
-  onComplete?: (appointmentId: number) => void;
+  onComplete?: (appointmentId: number | string) => void;
 }
 
 export const StartConsultationModal: React.FC<StartConsultationModalProps> = React.memo(({
