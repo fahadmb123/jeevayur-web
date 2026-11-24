@@ -113,12 +113,12 @@ export const Navbar: React.FC = React.memo(() => {
             >
               {isAuthenticated ? (
                 <>
-                  <User size={17} />
+                  <User size={15} />
                   <span>Portal</span>
                 </>
               ) : (
                 <>
-                  <LogIn size={17} />
+                  <LogIn size={15} />
                   <span>Login</span>
                 </>
               )}
@@ -132,7 +132,7 @@ export const Navbar: React.FC = React.memo(() => {
                 aria-label="Log Out"
                 title="Log Out of Jeevayurniketan"
               >
-                <LogOut size={16} />
+                <LogOut size={14} />
                 <span className="navbar-logout-text">Logout</span>
               </button>
             )}
