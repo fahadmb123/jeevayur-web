@@ -182,3 +182,63 @@
 .doctor-stat-card--orange .doctor-stat-card__trend-dot {
   background: #D97706;
 }
+
+@keyframes doctorStatShimmerSweep {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.doctor-stat-card--skeleton {
+  pointer-events: none;
+}
+
+.doctor-skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(226, 232, 222, 0.45) 0%,
+    rgba(245, 248, 244, 0.95) 50%,
+    rgba(226, 232, 222, 0.45) 100%
+  );
+  background-size: 200% 100%;
+  animation: doctorStatShimmerSweep 1.6s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+[data-theme='dark'] .doctor-skeleton-shimmer,
+.dark .doctor-skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(24, 44, 34, 0.55) 0%,
+    rgba(34, 64, 48, 0.85) 50%,
+    rgba(24, 44, 34, 0.55) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.skeleton-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.skeleton-stat-title {
+  width: 90px;
+  height: 14px;
+  margin-bottom: 8px;
+}
+
+.skeleton-stat-value {
+  width: 120px;
+  height: 28px;
+  margin-bottom: 12px;
+}
+
+.skeleton-stat-trend {
+  width: 100px;
+  height: 20px;
+  border-radius: 6px;
+}

@@ -9,16 +9,37 @@ import './DoctorStats.css';
 
 export interface DoctorStatsProps {
   stats?: DoctorStatItem[];
+  loading?: boolean;
 }
 
-export const DoctorStats: React.FC<DoctorStatsProps> = React.memo(({ stats: propStats }) => {
+export const DoctorStats: React.FC<DoctorStatsProps> = React.memo(({ stats: propStats, loading: propLoading }) => {
   const navigate = useNavigate();
-  const { stats: hookStats } = useDoctorStats();
+  const { stats: hookStats, loading: hookLoading } = useDoctorStats();
+  const isLoading = propLoading !== undefined ? propLoading : hookLoading;
   const stats = React.useMemo(() => {
     if (propStats && propStats.length > 0) return propStats;
     if (hookStats && hookStats.length > 0) return hookStats;
     return INITIAL_STATS;
   }, [propStats, hookStats]);
+
+  if (isLoading) {
+    return (
+      <div className="doctor-stats-grid" role="status" aria-label="Loading clinical statistics">
+        {Array.from({ length: 4 }).map((_, idx) => (
+          <div key={idx} className="doctor-stat-card doctor-stat-card--skeleton">
+            <div className="doctor-stat-card__top">
+              <div className="doctor-skeleton-shimmer skeleton-stat-icon" />
+            </div>
+            <div className="doctor-stat-card__content">
+              <div className="doctor-skeleton-shimmer skeleton-stat-title" />
+              <div className="doctor-skeleton-shimmer skeleton-stat-value" />
+              <div className="doctor-skeleton-shimmer skeleton-stat-trend" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="doctor-stats-grid">

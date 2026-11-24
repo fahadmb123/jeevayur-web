@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { CalendarClock, Inbox } from 'lucide-react';
 import { Card } from '@/shared/ui/card';
 import { AppointmentListItem } from '../AppointmentListItem';
+import { AppointmentListItemSkeleton } from '../AppointmentListItemSkeleton';
 import { StartConsultationModal } from '@/features/patients';
 import { useAppointments } from '@/features/appointments/hooks/useAppointments';
 import type { Appointment } from '@/features/appointments/types';
@@ -12,6 +13,7 @@ import './TodayScheduleWidget.css';
 
 export interface TodayScheduleWidgetProps {
   appointments?: Appointment[];
+  isLoading?: boolean;
   onOpenCalendar?: () => void;
   onStartAppointment?: (appointment: Appointment) => void;
   onViewDetails?: (appointment: Appointment) => void;
@@ -21,6 +23,7 @@ export interface TodayScheduleWidgetProps {
 
 export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.memo(({
   appointments: propAppointments,
+  isLoading: propIsLoading,
   onOpenCalendar,
   onStartAppointment,
   onViewDetails,
@@ -28,11 +31,12 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
   variants,
 }) => {
   const navigate = useNavigate();
-  const { appointments: hookAppointments, completeAppointment } = useAppointments();
+  const { appointments: hookAppointments, loading: hookLoading, completeAppointment } = useAppointments();
   const appointments = React.useMemo(
     () => propAppointments || hookAppointments,
     [propAppointments, hookAppointments]
   );
+  const isLoading = propIsLoading !== undefined ? propIsLoading : hookLoading;
 
   const [selectedAppointment, setSelectedAppointment] = useState<Appointment | null>(null);
 
@@ -88,7 +92,9 @@ export const TodayScheduleWidget: React.FC<TodayScheduleWidgetProps> = React.mem
           </div>
 
           <div className="today-schedule-widget__list">
-            {appointments.length > 0 ? (
+            {isLoading ? (
+              <AppointmentListItemSkeleton count={3} />
+            ) : appointments.length > 0 ? (
               appointments.map((apt) => (
                 <AppointmentListItem
                   key={apt.id}
