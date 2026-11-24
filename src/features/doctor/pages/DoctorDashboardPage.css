@@ -272,17 +272,10 @@
   }
 }
 
-.doctor-dashboard-grid {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  gap: 24px;
-  align-items: start;
-}
-
-.doctor-schedule-column {
+.doctor-dashboard-main {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .doctor-dinacharya-card {
@@ -293,6 +286,20 @@
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
+  gap: 16px;
+}
+
+.doctor-dinacharya-card--horizontal {
+  display: grid;
+  grid-template-columns: 280px 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 20px 24px;
+}
+
+.doctor-dinacharya-card__body--grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
 
@@ -389,7 +396,11 @@
 }
 
 @media (max-width: 1024px) {
-  .doctor-dashboard-grid {
+  .doctor-dinacharya-card--horizontal {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-dinacharya-card__body--grid {
     grid-template-columns: 1fr;
   }
 }

@@ -17,17 +17,10 @@ import {
   RecentPatientsWidget,
   PatientDetailModal,
   AddPatientModal,
-  StartConsultationModal,
   usePatients,
   type Patient,
   type PatientStatus,
 } from '@/features/patients';
-import {
-  TodayScheduleWidget,
-  AppointmentDetailModal,
-  useAppointments,
-  type Appointment,
-} from '@/features/appointments';
 import { useDoctorStats } from '../hooks/useDoctorStats';
 import { ROUTES } from '@/shared/config/routes';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -38,7 +31,7 @@ import {
 } from '@/shared/ui/DoctorSearchFilterStrip';
 import './DoctorDashboardPage.css';
 
-type DashboardTabFilter = 'all' | 'schedule' | 'patients' | 'uncompleted' | 'completed';
+type DashboardTabFilter = 'all' | 'uncompleted' | 'completed';
 
 export const DoctorDashboardPage: React.FC = React.memo(() => {
   const navigate = useNavigate();
@@ -50,12 +43,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     addPatient,
     updatePatientStatus,
   } = usePatients();
-  const {
-    appointments,
-    loading: appointmentsLoading,
-    refreshAppointments,
-    completeAppointment,
-  } = useAppointments();
   const {
     stats,
     loading: statsLoading,
@@ -77,14 +64,12 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
 
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<DashboardTabFilter>('all');
-  const [selectedSection, setSelectedSection] = useState<'All' | 'Patients' | 'Appointments'>('All');
   const [selectedStatus, setSelectedStatus] = useState<string>('All');
+  const [selectedSource, setSelectedSource] = useState<string>('All');
   const [isSyncing, setIsSyncing] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [isRequestsDrawerOpen, setIsRequestsDrawerOpen] = useState<boolean>(false);
   const [detailPatient, setDetailPatient] = useState<Patient | null>(null);
-  const [selectedAppointmentDetail, setSelectedAppointmentDetail] = useState<Appointment | null>(null);
-  const [activeConsultationAppointment, setActiveConsultationAppointment] = useState<Appointment | null>(null);
   const [updatingPatientId, setUpdatingPatientId] = useState<number | string | null>(null);
   const [successBanner, setSuccessBanner] = useState<string | null>(null);
 
@@ -109,7 +94,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     try {
       await Promise.all([
         fetchPatients(),
-        refreshAppointments(),
         refreshStats(),
       ]);
       setSuccessBanner('Clinic dashboard synced with live records');
@@ -117,7 +101,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     } finally {
       setIsSyncing(false);
     }
-  }, [fetchPatients, refreshAppointments, refreshStats]);
+  }, [fetchPatients, refreshStats]);
 
   const handleTogglePatientStatus = useCallback(
     async (patient: Patient) => {
@@ -138,22 +122,11 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
     [updatePatientStatus, refreshStats]
   );
 
-  const handleConsultationFinished = useCallback(
-    (apt: Appointment) => {
-      setSuccessBanner(`Consultation completed for ${apt.patient}. Clinical records updated.`);
-      setTimeout(() => setSuccessBanner(null), 4000);
-      refreshStats();
-      refreshAppointments();
-      fetchPatients();
-    },
-    [refreshStats, refreshAppointments, fetchPatients]
-  );
-
   const handleReset = useCallback(() => {
     setSearchQuery('');
     setActiveTab('all');
-    setSelectedSection('All');
     setSelectedStatus('All');
+    setSelectedSource('All');
   }, []);
 
   const uncompletedCount = useMemo(
@@ -168,10 +141,13 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
 
   const filteredPatients = useMemo(() => {
     return patients.filter((patient) => {
-      if (activeTab === 'uncompleted' && patient.status !== 'Uncompleted') return false;
+      if (activeTab === 'uncompleted' && patient.status === 'Completed') return false;
       if (activeTab === 'completed' && patient.status !== 'Completed') return false;
 
-      if (selectedStatus !== 'All' && patient.status !== selectedStatus) return false;
+      if (selectedStatus === 'Uncompleted' && patient.status === 'Completed') return false;
+      if (selectedStatus === 'Completed' && patient.status !== 'Completed') return false;
+
+      if (selectedSource !== 'All' && patient.source !== selectedSource) return false;
 
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -183,18 +159,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
 
       return true;
     });
-  }, [patients, activeTab, selectedStatus, searchQuery]);
-
-  const filteredAppointments = useMemo(() => {
-    return appointments.filter((apt) => {
-      if (!searchQuery.trim()) return true;
-      const q = searchQuery.toLowerCase().trim();
-      const matchesName = apt.patient.toLowerCase().includes(q);
-      const matchesType = apt.type.toLowerCase().includes(q);
-      const matchesPhone = apt.phone ? apt.phone.toLowerCase().includes(q) : false;
-      return matchesName || matchesType || matchesPhone;
-    });
-  }, [appointments, searchQuery]);
+  }, [patients, activeTab, selectedStatus, selectedSource, searchQuery]);
 
   const interactiveStats = useMemo(() => {
     return stats.map((item) => {
@@ -209,17 +174,18 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         return {
           ...item,
           onClick: () => {
-            setActiveTab('patients');
-            setSelectedSection('Patients');
+            setActiveTab('all');
+            setSelectedStatus('All');
+            setSelectedSource('All');
           },
         };
       }
-      if (item.id === 'today-appointments') {
+      if (item.id === 'active-patients') {
         return {
           ...item,
           onClick: () => {
-            setActiveTab('schedule');
-            setSelectedSection('Appointments');
+            setActiveTab('uncompleted');
+            setSelectedStatus('Uncompleted');
           },
         };
       }
@@ -228,7 +194,7 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           ...item,
           onClick: () => {
             setActiveTab('completed');
-            setSelectedSection('Patients');
+            setSelectedStatus('Completed');
           },
         };
       }
@@ -237,17 +203,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   }, [stats]);
 
   const selectFilters: FilterSelectConfig[] = useMemo(() => [
-    {
-      id: 'section-filter',
-      value: selectedSection,
-      ariaLabel: 'Filter by view section',
-      onChange: (val) => setSelectedSection(val as 'All' | 'Patients' | 'Appointments'),
-      options: [
-        { value: 'All', label: 'All Sections' },
-        { value: 'Patients', label: 'Patients Directory' },
-        { value: 'Appointments', label: "Today's Schedule" },
-      ],
-    },
     {
       id: 'status-filter',
       value: selectedStatus,
@@ -259,7 +214,18 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
         { value: 'Completed', label: 'Therapy Concluded' },
       ],
     },
-  ], [selectedSection, selectedStatus]);
+    {
+      id: 'source-filter',
+      value: selectedSource,
+      ariaLabel: 'Filter by patient source',
+      onChange: setSelectedSource,
+      options: [
+        { value: 'All', label: 'All Sources' },
+        { value: 'website', label: 'Website Bookings' },
+        { value: 'doctor', label: 'Doctor Added' },
+      ],
+    },
+  ], [selectedStatus, selectedSource]);
 
   const pendingRequestsCount = useMemo(() => {
     const statItem = stats.find((s) => s.id === 'consultation-requests');
@@ -271,69 +237,35 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
   const pills: FilterPillConfig[] = useMemo(() => [
     {
       id: 'all',
-      label: 'Clinical Overview',
-      count: patients.length + appointments.length,
-      isActive: activeTab === 'all',
+      label: 'All Patients',
+      count: patients.length,
+      isActive: activeTab === 'all' && selectedStatus === 'All',
       onClick: () => {
         setActiveTab('all');
-        setSelectedSection('All');
-      },
-    },
-    {
-      id: 'schedule',
-      label: "Today's Schedule",
-      count: appointments.length,
-      isActive: activeTab === 'schedule' || selectedSection === 'Appointments',
-      onClick: () => {
-        setActiveTab('schedule');
-        setSelectedSection('Appointments');
-      },
-    },
-    {
-      id: 'patients',
-      label: 'Patients Directory',
-      count: patients.length,
-      isActive: activeTab === 'patients' || selectedSection === 'Patients',
-      onClick: () => {
-        setActiveTab('patients');
-        setSelectedSection('Patients');
+        setSelectedStatus('All');
       },
     },
     {
       id: 'uncompleted',
-      label: 'Active Care',
+      label: 'Active in Care',
       count: uncompletedCount,
-      isActive: activeTab === 'uncompleted',
+      isActive: activeTab === 'uncompleted' || selectedStatus === 'Uncompleted',
       onClick: () => {
         setActiveTab('uncompleted');
-        setSelectedSection('Patients');
+        setSelectedStatus('Uncompleted');
       },
     },
     {
       id: 'completed',
       label: 'Completed Therapies',
       count: completedCount,
-      isActive: activeTab === 'completed',
+      isActive: activeTab === 'completed' || selectedStatus === 'Completed',
       onClick: () => {
         setActiveTab('completed');
-        setSelectedSection('Patients');
+        setSelectedStatus('Completed');
       },
     },
-  ], [activeTab, selectedSection, patients.length, appointments.length, uncompletedCount, completedCount]);
-
-  const showPatients =
-    selectedSection === 'All' ||
-    selectedSection === 'Patients' ||
-    activeTab === 'patients' ||
-    activeTab === 'uncompleted' ||
-    activeTab === 'completed';
-
-  const showSchedule =
-    (selectedSection === 'All' ||
-      selectedSection === 'Appointments' ||
-      activeTab === 'schedule') &&
-    activeTab !== 'uncompleted' &&
-    activeTab !== 'completed';
+  ], [activeTab, selectedStatus, patients.length, uncompletedCount, completedCount]);
 
   return (
     <div className="doctor-dashboard-content">
@@ -418,88 +350,68 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
       <DoctorStats stats={interactiveStats} loading={statsLoading || isSyncing} />
 
       <DoctorSearchFilterStrip
-        searchPlaceholder="Search today's patients, appointments, phone numbers or chief complaints..."
+        searchPlaceholder="Search patients by name, contact, health condition, or service..."
         searchValue={searchQuery}
         onSearchChange={setSearchQuery}
         selectFilters={selectFilters}
         onReset={handleReset}
         resetTitle="Reset dashboard filters"
         pills={pills}
-        isLoading={patientsLoading || appointmentsLoading || statsLoading || isSyncing}
+        isLoading={patientsLoading || statsLoading || isSyncing}
       />
 
-      <div
-        className="doctor-dashboard-grid"
-        style={{
-          gridTemplateColumns: showPatients && showSchedule ? undefined : '1fr',
-        }}
-      >
-        {showPatients && (
-          <RecentPatientsWidget
-            patients={filteredPatients}
-            isLoading={patientsLoading || isSyncing}
-            searchFilter={searchQuery}
-            onViewAll={() => navigate(ROUTES.DOCTOR_PATIENTS)}
-            onViewDetails={(patient) => setDetailPatient(patient)}
-            onToggleStatus={handleTogglePatientStatus}
-            onAddPatient={() => setIsAddModalOpen(true)}
-            updatingPatientId={updatingPatientId}
-          />
-        )}
+      <div className="doctor-dashboard-main">
+        <RecentPatientsWidget
+          patients={filteredPatients}
+          isLoading={patientsLoading || isSyncing}
+          searchFilter={searchQuery}
+          onViewAll={() => navigate(ROUTES.DOCTOR_PATIENTS)}
+          onViewDetails={(patient) => setDetailPatient(patient)}
+          onToggleStatus={handleTogglePatientStatus}
+          onAddPatient={() => setIsAddModalOpen(true)}
+          updatingPatientId={updatingPatientId}
+        />
 
-        {showSchedule && (
-          <div className="doctor-schedule-column">
-            <TodayScheduleWidget
-              appointments={filteredAppointments}
-              isLoading={appointmentsLoading || isSyncing}
-              onConsultationComplete={handleConsultationFinished}
-              onViewDetails={(apt) => setSelectedAppointmentDetail(apt)}
-              onStartAppointment={(apt) => setActiveConsultationAppointment(apt)}
-              onOpenCalendar={() => setIsRequestsDrawerOpen(true)}
-            />
+        <div className="doctor-dinacharya-card doctor-dinacharya-card--horizontal">
+          <div className="doctor-dinacharya-card__header">
+            <div className="doctor-dinacharya-card__icon-wrap">
+              <Compass size={18} />
+            </div>
+            <div>
+              <h3 className="doctor-dinacharya-card__title">Ayurvedic Sanctuary Protocols</h3>
+              <span className="doctor-dinacharya-card__sub">Hemanta Ritu Seasonal Dinacharya & Clinical Care Directives</span>
+            </div>
+          </div>
 
-            <div className="doctor-dinacharya-card">
-              <div className="doctor-dinacharya-card__header">
-                <div className="doctor-dinacharya-card__icon-wrap">
-                  <Compass size={18} />
-                </div>
-                <div>
-                  <h3 className="doctor-dinacharya-card__title">Ayurvedic Sanctuary Protocols</h3>
-                  <span className="doctor-dinacharya-card__sub">Seasonal Dinacharya & Clinical Pathways</span>
-                </div>
+          <div className="doctor-dinacharya-card__body doctor-dinacharya-card__body--grid">
+            <div className="doctor-dinacharya-item">
+              <ShieldCheck size={14} className="doctor-dinacharya-item__icon" />
+              <div>
+                <strong>Dosha Assessment Focus</strong>
+                <p>Screening Vata imbalance, sleep rhythm disturbances, and digestive Agni weakness.</p>
               </div>
+            </div>
 
-              <div className="doctor-dinacharya-card__body">
-                <div className="doctor-dinacharya-item">
-                  <ShieldCheck size={14} className="doctor-dinacharya-item__icon" />
-                  <div>
-                    <strong>Dosha Assessment Focus</strong>
-                    <p>Screening Vata imbalance, sleep rhythm disturbances, and digestive Agni weakness.</p>
-                  </div>
-                </div>
-
-                <div className="doctor-dinacharya-item">
-                  <HeartPulse size={14} className="doctor-dinacharya-item__icon" />
-                  <div>
-                    <strong>Prescription Formulations</strong>
-                    <p>Brahmi Thailam Shirodhara, warm Mahanarayan Abhyanga, and customized herbal decoctions.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="doctor-dinacharya-card__footer">
-                <button
-                  type="button"
-                  className="doctor-dinacharya-btn"
-                  onClick={() => navigate(ROUTES.DOCTOR_YOGA)}
-                >
-                  <span>Yoga & Meditation Timetable</span>
-                  <ArrowRight size={13} />
-                </button>
+            <div className="doctor-dinacharya-item">
+              <HeartPulse size={14} className="doctor-dinacharya-item__icon" />
+              <div>
+                <strong>Prescription Formulations</strong>
+                <p>Brahmi Thailam Shirodhara, warm Mahanarayan Abhyanga, and customized herbal decoctions.</p>
               </div>
             </div>
           </div>
-        )}
+
+          <div className="doctor-dinacharya-card__footer">
+            <button
+              type="button"
+              className="doctor-dinacharya-btn"
+              onClick={() => navigate(ROUTES.DOCTOR_YOGA)}
+            >
+              <span>Yoga & Meditation Timetable</span>
+              <ArrowRight size={13} />
+            </button>
+          </div>
+        </div>
       </div>
 
       <DoctorQuickRequestsDrawer
@@ -509,36 +421,6 @@ export const DoctorDashboardPage: React.FC = React.memo(() => {
           handleSyncAll();
           setSuccessBanner(`Accepted consultation request for ${req.patientName}`);
           setTimeout(() => setSuccessBanner(null), 3500);
-        }}
-      />
-
-      <AppointmentDetailModal
-        appointment={selectedAppointmentDetail}
-        isOpen={Boolean(selectedAppointmentDetail)}
-        onClose={() => setSelectedAppointmentDetail(null)}
-        onStartConsultation={(apt: Appointment) => {
-          setSelectedAppointmentDetail(null);
-          setActiveConsultationAppointment(apt);
-        }}
-        onMarkCompleted={async (id: string | number) => {
-          await completeAppointment(id);
-          refreshAppointments();
-          refreshStats();
-          setSuccessBanner('Appointment marked completed.');
-          setTimeout(() => setSuccessBanner(null), 3000);
-        }}
-      />
-
-      <StartConsultationModal
-        appointment={activeConsultationAppointment}
-        isOpen={Boolean(activeConsultationAppointment)}
-        onClose={() => setActiveConsultationAppointment(null)}
-        onComplete={async (aptId: string | number, notes?: string) => {
-          await completeAppointment(aptId, notes);
-          if (activeConsultationAppointment) {
-            handleConsultationFinished(activeConsultationAppointment);
-          }
-          setActiveConsultationAppointment(null);
         }}
       />
 

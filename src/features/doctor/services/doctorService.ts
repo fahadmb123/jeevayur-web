@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Calendar, Activity, Inbox } from 'lucide-react';
+import { Users, Activity, CheckCircle2, Inbox } from 'lucide-react';
 import type { DoctorStatItem } from '../types';
 import { appointmentService, type Appointment } from '@/features/appointments';
 import { patientService, type Patient } from '@/features/patients';
@@ -10,7 +10,7 @@ export const INITIAL_STATS: DoctorStatItem[] = [
   {
     id: 'consultation-requests',
     title: 'Inbound Requests',
-    value: '3',
+    value: '0',
     trend: 'Pending review',
     variant: 'orange',
     icon: React.createElement(Inbox, { size: 22 }),
@@ -19,27 +19,27 @@ export const INITIAL_STATS: DoctorStatItem[] = [
   {
     id: 'total-patients',
     title: 'Total Patients',
-    value: '1,248',
-    trend: '+12% this month',
+    value: '0',
+    trend: 'Clinical registry',
     variant: 'green',
     icon: React.createElement(Users, { size: 22 }),
     link: ROUTES.DOCTOR_PATIENTS,
   },
   {
-    id: 'today-appointments',
-    title: "Today's Schedule",
-    value: '12',
-    trend: '4 Remaining',
+    id: 'active-patients',
+    title: 'Active in Care',
+    value: '0',
+    trend: 'Under active therapy',
     variant: 'blue',
-    icon: React.createElement(Calendar, { size: 22 }),
+    icon: React.createElement(Activity, { size: 22 }),
   },
   {
     id: 'active-treatments',
     title: 'Completed Therapies',
-    value: '28',
-    trend: 'In progress',
+    value: '0',
+    trend: 'Restored & concluded',
     variant: 'green',
-    icon: React.createElement(Activity, { size: 22 }),
+    icon: React.createElement(CheckCircle2, { size: 22 }),
   },
 ];
 
@@ -73,7 +73,6 @@ export const doctorService = {
         const pendingCount = s.pendingReviews ?? s.inboundRequests ?? 0;
         const totalPatientsCount = s.totalPatients ?? s.activePatients ?? 0;
         const activeCount = s.activePatients ?? 0;
-        const todayCount = s.todayConsultations ?? 0;
         const completedCount = s.completedTherapies ?? 0;
 
         return [
@@ -96,20 +95,20 @@ export const doctorService = {
             link: ROUTES.DOCTOR_PATIENTS,
           },
           {
-            id: 'today-appointments',
-            title: "Today's Schedule",
-            value: String(todayCount),
-            trend: todayCount > 0 ? `${todayCount} sessions scheduled` : 'No sessions today',
+            id: 'active-patients',
+            title: 'Active in Care',
+            value: String(activeCount),
+            trend: activeCount > 0 ? `${activeCount} under therapy` : 'No active therapies',
             variant: 'blue',
-            icon: React.createElement(Calendar, { size: 22 }),
+            icon: React.createElement(Activity, { size: 22 }),
           },
           {
             id: 'active-treatments',
             title: 'Completed Therapies',
             value: String(completedCount),
-            trend: 'Successfully restored',
+            trend: completedCount > 0 ? `${completedCount} restored & concluded` : 'Ready for records',
             variant: 'green',
-            icon: React.createElement(Activity, { size: 22 }),
+            icon: React.createElement(CheckCircle2, { size: 22 }),
           },
         ];
       }
